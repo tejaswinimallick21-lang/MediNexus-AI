@@ -19,9 +19,9 @@ const CAPABILITIES = [
 // Demo environment only: seeded local accounts by auth role (stripped from production builds via import.meta.env.DEV)
 const DEMO_ROLES: { role: string; title: string; email: string; scope: string }[] = import.meta.env.DEV
   ? [
-      { role: "admin", title: "Admin", email: "admin@medinexus.org", scope: "Data Engineering, Security" },
+      { role: "admin", title: "Admin", email: "admin@medinexus.org", scope: "All workspaces" },
       { role: "hcp", title: "HCP", email: "hcp@medinexus.org", scope: "Clinical, Pharmacy, Laboratory" },
-      { role: "analyst", title: "Analyst", email: "analyst@medinexus.org", scope: "Executive, Patient Access" },
+      { role: "analyst", title: "Analyst", email: "analyst@medinexus.org", scope: "Executive, Command Center, Patient Access" },
     ]
   : [];
 const DEMO_PASSWORD = import.meta.env.DEV ? "MediNexus@2026" : "";

@@ -105,9 +105,34 @@ export function AppShell() {
       <div className={styles.main}>
         <header className={styles.topbar}>
           <div className={styles.crumbs}>
-            <span>MediNexus</span>
-            <Icon.Arrow size={14} />
-            <strong>{current?.label ?? "Platform Overview"}</strong>
+            {location.pathname !== "/" && (
+              <button
+                type="button"
+                className={styles.backButton}
+                onClick={() => {
+                  // Step back within the app when there is history; otherwise return to the overview
+                  const idx = (window.history.state as { idx?: number } | null)?.idx ?? 0;
+                  if (idx > 0) navigate(-1);
+                  else navigate("/");
+                }}
+                aria-label="Go back"
+                title="Back"
+              >
+                <Icon.Arrow size={16} style={{ transform: "rotate(180deg)" }} />
+                <span>Back</span>
+              </button>
+            )}
+            {location.pathname === "/" ? (
+              <strong>Platform Overview</strong>
+            ) : (
+              <>
+                <NavLink to="/" className={styles.crumbLink}>
+                  Platform Overview
+                </NavLink>
+                <Icon.Arrow size={14} />
+                <strong>{current?.label ?? "Page"}</strong>
+              </>
+            )}
           </div>
           <div className={styles.topRight}>
             <span className={`${styles.pill} ${healthy ? styles.pillOk : styles.pillWarn}`}>

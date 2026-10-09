@@ -218,6 +218,39 @@
   color: var(--color-ink);
 }
 
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: var(--space-2);
+  padding: 6px 12px 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+
+.backButton:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary-strong);
+  transform: translateX(-2px);
+}
+
+.crumbLink {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.crumbLink:hover {
+  color: var(--color-primary-strong);
+  text-decoration: underline;
+}
+
 .topRight {
   display: flex;
   align-items: center;
