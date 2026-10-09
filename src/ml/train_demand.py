@@ -1,199 +1,178 @@
 """
-Models 3, 4, 5: Operational & Resource Demand Forecasting Models.
-Trains:
-- Model 3: Pharmacy Medication Demand Regressor
-- Model 4: Laboratory Workload Regressor
-- Model 5: Hospital Bed / Admission Resource Demand Model
+Models 3, 4, 5: Operational demand forecasts (honest re-implementation).
+
+- Model 3: Pharmacy demand: units dispensed per (site, medication) over the next 30 days.
+- Model 4: Laboratory workload: average daily tests per category over the next 7 days.
+- Model 5: Admission demand: average daily network admissions over the next 7 days.
+
+All features end at the forecast date; evaluation uses a later, held-out time period; every
+model is compared with naive persistence baselines. After evaluation the model is refit on all
+labelled history for inference (metrics always describe the held-out period).
 """
 
 import sys
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, Any
+from typing import Any, Callable, Dict, Tuple
+
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.ensemble import HistGradientBoostingRegressor
 
 # Ensure root in sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
-from config.constants import GOLD_DATA_DIR
-from src.utils.database import query_df
+from src.ml.forecasting import (
+    DAILY_FEATURES,
+    HORIZON_DAYS,
+    PHARMACY_FEATURES,
+    PHARMACY_HORIZON,
+    admissions_daily_series,
+    daily_supervised,
+    lab_daily_series,
+    pharmacy_frame,
+    predict_daily,
+    regression_scores,
+    time_split,
+)
 from src.ml.model_registry import register_model
+from src.utils.database import query_df_strict
 from src.utils.logging_utils import get_logger
 
 logger = get_logger("train_demand")
 
 
-def train_pharmacy_demand_model() -> Dict[str, Any]:
-    """
-    Train Model 3: 30-Day Medication Demand Forecasting.
-    """
-    logger.info("Training Pharmacy Demand Model from gold_pharmacy...")
-    df_pharm = query_df("SELECT * FROM gold_pharmacy")
-    if df_pharm.empty:
-        return {"status": "FAILED", "error": "gold_pharmacy empty"}
-
-    features = [
-        "stock_quantity",
-        "reorder_level",
-        "unit_cost",
-        "estimated_daily_burn",
-        "total_dispensed_qty",
-    ]
-
-    for f in features:
-        df_pharm[f] = pd.to_numeric(df_pharm[f], errors="coerce").fillna(10.0)
-
-    # Historical demand target: 30 days projected demand
-    y = (df_pharm["estimated_daily_burn"] * 30.0).round().clip(lower=5)
-    X = df_pharm[features]
-
-    reg = RandomForestRegressor(n_estimators=60, max_depth=6, random_state=42)
-    reg.fit(X, y)
-
-    y_pred = reg.predict(X)
-    mae = round(float(mean_absolute_error(y, y_pred)), 2)
-    r2 = round(float(r2_score(y, y_pred)), 3)
-
-    metrics = {
-        "mae_units": mae,
-        "r2_score": r2,
-        "sample_count": len(X),
-    }
-
-    model_artifact = {
-        "model": reg,
-        "features": features,
-        "metrics": metrics,
-        "version": "1.0.0",
-        "trained_at": datetime.now().isoformat(),
-        "type": "pharmacy_demand_forecaster",
-    }
-
-    path = register_model(
-        model_name="pharmacy_demand_model",
-        version="1.0.0",
-        dataset="gold_pharmacy",
-        features=features,
-        metrics=metrics,
-        model_obj=model_artifact,
-        filename="pharmacy_demand_model.joblib",
+def _daily_regressor() -> HistGradientBoostingRegressor:
+    return HistGradientBoostingRegressor(
+        max_iter=300, learning_rate=0.05, max_depth=3, min_samples_leaf=20, l2_regularization=1.0, random_state=42
     )
 
-    logger.info(f"Pharmacy Demand Model trained. MAE: {mae} units, R2: {r2}")
-    return {"status": "SUCCESS", "model_name": "pharmacy_demand_model", "path": path, "metrics": metrics}
+
+def _train_daily_model(
+    series_fn: Callable[[], Tuple[pd.DataFrame, pd.Timestamp]],
+    model_name: str,
+    filename: str,
+    dataset: str,
+    unit: str,
+) -> Dict[str, Any]:
+    series, end = series_fn()
+    sup = daily_supervised(series)
+    train, test = time_split(sup, end)
+    if len(train) < 100 or test.empty:
+        return {"status": "FAILED", "error": f"Insufficient history for {model_name}"}
+
+    model = _daily_regressor().fit(train[DAILY_FEATURES], train["log_ratio_target"])
+    y = test["target"].to_numpy()
+    pred = predict_daily(model, test)
+    scores = regression_scores(y, pred)
+    naive7 = regression_scores(y, test["mean7"].to_numpy())
+    naive28 = regression_scores(y, test["mean28"].to_numpy())
+
+    per_group = []
+    for group, g in test.assign(pred=pred).groupby("group"):
+        s = regression_scores(g["target"].to_numpy(), g["pred"].to_numpy())
+        b = regression_scores(g["target"].to_numpy(), g["mean7"].to_numpy())
+        per_group.append({"group": group, "mae": s["mae"], "baseline_mae": b["mae"], "mean_actual": round(float(g["target"].mean()), 2)})
+
+    metrics = {
+        "target": f"average daily {unit} over the next {HORIZON_DAYS} days",
+        "mae": scores["mae"],
+        "wape_pct": scores["wape_pct"],
+        "baseline_naive7_mae": naive7["mae"],
+        "baseline_naive7_wape_pct": naive7["wape_pct"],
+        "baseline_naive28_mae": naive28["mae"],
+        "skill_vs_naive7_pct": round((1 - scores["mae"] / max(1e-9, naive7["mae"])) * 100, 1),
+        "beats_baseline": bool(scores["mae"] < naive7["mae"]),
+        "split": f"time-based: test = forecasts made in the last {int((end - test['day'].min()).days)} days",
+        "test_period": f"{test['day'].min().date()} to {test['day'].max().date()}",
+        "train_rows": int(len(train)),
+        "test_rows": int(len(test)),
+        "per_group": per_group,
+        "unit": unit,
+    }
+
+    # Refit on all labelled history for inference
+    labelled = sup.dropna(subset=["target"])
+    final = _daily_regressor().fit(labelled[DAILY_FEATURES], labelled["log_ratio_target"])
+    # Champion/challenger: serve the model only if it beat the naive baseline on held-out data
+    metrics["serving_method"] = "model" if metrics["beats_baseline"] else "baseline_naive7"
+    artifact = {
+        "model": final, "features": DAILY_FEATURES, "metrics": metrics, "version": "2.0.0",
+        "trained_at": datetime.now().isoformat(), "type": "daily_forecaster", "data_through": str(end.date()),
+        "serving_method": metrics["serving_method"],
+    }
+    path = register_model(model_name=model_name, version="2.0.0", dataset=dataset, features=DAILY_FEATURES,
+                          metrics=metrics, model_obj=artifact, filename=filename)
+    logger.info(f"{model_name}: MAE {metrics['mae']} vs naive-7 {metrics['baseline_naive7_mae']} ({metrics['skill_vs_naive7_pct']}% skill)")
+    return {"status": "SUCCESS", "model_name": model_name, "path": path, "metrics": metrics}
 
 
 def train_lab_workload_model() -> Dict[str, Any]:
-    """
-    Train Model 4: Laboratory Workload Volume Regressor.
-    """
-    logger.info("Training Laboratory Workload Model from gold_laboratory...")
-    df_lab = query_df("""
-        SELECT
-            test_date,
-            test_category,
-            COUNT(*) as daily_volume,
-            SUM(is_abnormal) as abnormal_tests,
-            SUM(is_critical) as critical_tests
-        FROM gold_laboratory
-        GROUP BY test_date, test_category
-    """)
-
-    if df_lab.empty:
-        return {"status": "FAILED", "error": "gold_laboratory empty"}
-
-    df_lab["day_of_week"] = pd.to_datetime(df_lab["test_date"]).dt.dayofweek
-    category_dummies = pd.get_dummies(df_lab["test_category"], drop_first=True, dtype=int)
-
-    X = pd.concat([df_lab[["day_of_week", "abnormal_tests", "critical_tests"]], category_dummies], axis=1)
-    y = df_lab["daily_volume"]
-
-    features = list(X.columns)
-
-    reg = RandomForestRegressor(n_estimators=50, max_depth=5, random_state=42)
-    reg.fit(X, y)
-
-    y_pred = reg.predict(X)
-    mae = round(float(mean_absolute_error(y, y_pred)), 2)
-
-    metrics = {
-        "mae_daily_tests": mae,
-        "sample_count": len(X),
-    }
-
-    model_artifact = {
-        "model": reg,
-        "features": features,
-        "metrics": metrics,
-        "version": "1.0.0",
-        "trained_at": datetime.now().isoformat(),
-        "type": "lab_workload_forecaster",
-    }
-
-    path = register_model(
-        model_name="lab_workload_model",
-        version="1.0.0",
-        dataset="gold_laboratory",
-        features=features,
-        metrics=metrics,
-        model_obj=model_artifact,
-        filename="lab_workload_model.joblib",
-    )
-
-    logger.info(f"Lab Workload Model trained. MAE: {mae} tests/day")
-    return {"status": "SUCCESS", "model_name": "lab_workload_model", "path": path, "metrics": metrics}
+    """Model 4: next-7-day average daily test volume per laboratory category."""
+    return _train_daily_model(lab_daily_series, "lab_workload_model", "lab_workload_model.joblib", "gold_laboratory", "tests")
 
 
 def train_resource_demand_model() -> Dict[str, Any]:
-    """
-    Train Model 5: Hospital Resource & Bed Demand Forecaster.
-    """
-    logger.info("Training Resource Demand Model from gold_hospital_operations...")
-    df_ops = query_df("SELECT * FROM gold_hospital_operations")
-    if df_ops.empty:
-        return {"status": "FAILED", "error": "gold_hospital_operations empty"}
+    """Model 5: next-7-day average daily inpatient admissions across the network."""
+    return _train_daily_model(admissions_daily_series, "resource_demand_model", "resource_demand_model.joblib", "gold_admissions", "admissions")
 
-    df_ops["day_of_week"] = pd.to_datetime(df_ops["admission_date"]).dt.dayofweek
-    features = ["day_of_week", "emergency_admissions", "avg_stay_days"]
 
-    X = df_ops[features].fillna(0)
-    y = df_ops["daily_admissions"]
-
-    reg = RandomForestRegressor(n_estimators=50, max_depth=5, random_state=42)
-    reg.fit(X, y)
-
-    y_pred = reg.predict(X)
-    mae = round(float(mean_absolute_error(y, y_pred)), 2)
-
-    metrics = {
-        "mae_daily_admissions": mae,
-        "sample_count": len(X),
-    }
-
-    model_artifact = {
-        "model": reg,
-        "features": features,
-        "metrics": metrics,
-        "version": "1.0.0",
-        "trained_at": datetime.now().isoformat(),
-        "type": "resource_demand_forecaster",
-    }
-
-    path = register_model(
-        model_name="resource_demand_model",
-        version="1.0.0",
-        dataset="gold_hospital_operations",
-        features=features,
-        metrics=metrics,
-        model_obj=model_artifact,
-        filename="resource_demand_model.joblib",
+def _pharmacy_regressor() -> HistGradientBoostingRegressor:
+    return HistGradientBoostingRegressor(
+        loss="poisson", max_iter=300, learning_rate=0.05, max_depth=4, min_samples_leaf=30, l2_regularization=1.0, random_state=42
     )
 
-    logger.info(f"Resource Demand Model trained. MAE: {mae} admissions/day")
-    return {"status": "SUCCESS", "model_name": "resource_demand_model", "path": path, "metrics": metrics}
+
+def train_pharmacy_demand_model() -> Dict[str, Any]:
+    """Model 3: units dispensed per (site, medication) over the next 30 days."""
+    end = pd.Timestamp(query_df_strict("SELECT max(prescription_date) AS d FROM gold_prescriptions").iloc[0]["d"])
+    last_cutoff = end - pd.Timedelta(days=PHARMACY_HORIZON)
+    cutoffs = [last_cutoff - pd.Timedelta(days=30 * k) for k in range(28)]
+    frame = pharmacy_frame(cutoffs, end)
+    frame = frame[(frame["u180"] > 0) | (frame["y30"] > 0)]
+
+    test_cutoffs = sorted(cutoffs)[-3:]
+    test = frame[frame["t"].isin(test_cutoffs)]
+    train = frame[frame["t"] + pd.Timedelta(days=PHARMACY_HORIZON) <= min(test_cutoffs)]
+    if len(train) < 200 or test.empty:
+        return {"status": "FAILED", "error": "Insufficient dispensing history"}
+
+    model = _pharmacy_regressor().fit(train[PHARMACY_FEATURES], train["y30"])
+    y = test["y30"].to_numpy()
+    pred = np.clip(model.predict(test[PHARMACY_FEATURES]), 0, None)
+    scores = regression_scores(y, pred)
+    naive30 = regression_scores(y, test["u30"].to_numpy())
+    naive90 = regression_scores(y, (test["u90"] / 3).to_numpy())
+
+    metrics = {
+        "target": f"units dispensed per site and medication over the next {PHARMACY_HORIZON} days",
+        "mae": scores["mae"],
+        "wape_pct": scores["wape_pct"],
+        "baseline_last30_mae": naive30["mae"],
+        "baseline_last30_wape_pct": naive30["wape_pct"],
+        "baseline_avg90_mae": naive90["mae"],
+        "skill_vs_last30_pct": round((1 - scores["mae"] / max(1e-9, naive30["mae"])) * 100, 1),
+        "beats_baseline": bool(scores["mae"] < naive30["mae"]),
+        "split": "time-based: test = the 3 most recent monthly forecast dates",
+        "test_period": f"{min(test_cutoffs).date()} to {max(test_cutoffs).date()}",
+        "train_rows": int(len(train)),
+        "test_rows": int(len(test)),
+        "unit": "units",
+        "assumption": "A prescription's recorded dispense count is spread evenly over its active period.",
+    }
+
+    labelled = frame[frame["t"] + pd.Timedelta(days=PHARMACY_HORIZON) <= end]
+    final = _pharmacy_regressor().fit(labelled[PHARMACY_FEATURES], labelled["y30"])
+    metrics["serving_method"] = "model" if metrics["beats_baseline"] else "baseline_last30"
+    artifact = {
+        "model": final, "features": PHARMACY_FEATURES, "metrics": metrics, "version": "2.0.0",
+        "trained_at": datetime.now().isoformat(), "type": "pharmacy_demand_forecaster", "data_through": str(end.date()),
+        "serving_method": metrics["serving_method"],
+    }
+    path = register_model(model_name="pharmacy_demand_model", version="2.0.0", dataset="gold_prescriptions",
+                          features=PHARMACY_FEATURES, metrics=metrics, model_obj=artifact, filename="pharmacy_demand_model.joblib")
+    logger.info(f"pharmacy_demand_model: MAE {metrics['mae']} vs last-30 {metrics['baseline_last30_mae']} ({metrics['skill_vs_last30_pct']}% skill)")
+    return {"status": "SUCCESS", "model_name": "pharmacy_demand_model", "path": path, "metrics": metrics}
 
 
 def train_all_models() -> Dict[str, Any]:
@@ -202,20 +181,13 @@ def train_all_models() -> Dict[str, Any]:
     from src.ml.train_los import train_los_model
     from src.ml.train_covid import train_covid_outcome_models
 
-    r0 = train_covid_outcome_models()
-    r1 = train_readmission_model()
-    r2 = train_los_model()
-    r3 = train_pharmacy_demand_model()
-    r4 = train_lab_workload_model()
-    r5 = train_resource_demand_model()
-
     return {
-        "covid_outcomes": r0,
-        "readmission": r1,
-        "los": r2,
-        "pharmacy_demand": r3,
-        "lab_workload": r4,
-        "resource_demand": r5,
+        "covid_outcomes": train_covid_outcome_models(),
+        "readmission": train_readmission_model(),
+        "los": train_los_model(),
+        "pharmacy_demand": train_pharmacy_demand_model(),
+        "lab_workload": train_lab_workload_model(),
+        "resource_demand": train_resource_demand_model(),
     }
 
 

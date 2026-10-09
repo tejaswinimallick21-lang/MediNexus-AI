@@ -204,44 +204,108 @@ def predict_patient_covid_outcomes(patient_id: str) -> Dict[str, Any]:
     }
 
 
-def predict_drug_demand(medication_id: str) -> Dict[str, Any]:
-    """
-    Predict 30-Day Unit Demand for a medication.
-    """
-    artifact = load_model("pharmacy_demand_model")
-    df_med = query_df("SELECT * FROM gold_pharmacy WHERE medication_id = ? LIMIT 1", [medication_id])
+def _serving_note(artifact: Dict[str, Any]) -> Dict[str, Any]:
+    m = artifact.get("metrics", {})
+    method = artifact.get("serving_method", "model")
+    return {
+        "serving_method": method,
+        "method_label": "Gradient-boosting model" if method == "model" else (
+            "Naive baseline: last 7 days repeated" if method == "baseline_naive7" else "Naive baseline: last 30 days repeated"
+        ),
+        "holdout_mae": m.get("mae"),
+        "holdout_baseline_mae": m.get("baseline_naive7_mae", m.get("baseline_last30_mae")),
+        "beats_baseline": m.get("beats_baseline"),
+        "test_period": m.get("test_period"),
+        "data_through": artifact.get("data_through"),
+    }
 
+
+def _daily_forecast(model_name: str, series_fn) -> Dict[str, Any]:
+    from src.ml.forecasting import daily_supervised, predict_daily
+
+    artifact = load_model(model_name)
+    series, end = series_fn()
+    latest = daily_supervised(series).sort_values("day").groupby("group").tail(1)
+    if artifact and artifact.get("serving_method") == "model":
+        forecast = predict_daily(artifact["model"], latest)
+    else:  # champion/challenger chose the naive baseline (or no model yet)
+        forecast = latest["mean7"].to_numpy()
+    rows = [
+        {
+            "group": g,
+            "forecast_daily": round(float(f), 1),
+            "last_7d_daily": round(float(m7), 1),
+            "last_28d_daily": round(float(m28), 1),
+        }
+        for g, f, m7, m28 in zip(latest["group"], forecast, latest["mean7"], latest["mean28"])
+    ]
+    return {
+        "status": "SUCCESS",
+        "horizon_days": 7,
+        "as_of": str(end.date()),
+        "forecasts": rows,
+        **(_serving_note(artifact) if artifact else {"serving_method": "baseline_naive7", "method_label": "Naive baseline (model not trained)"}),
+    }
+
+
+def forecast_lab_workload() -> Dict[str, Any]:
+    """Average daily tests per category for the next 7 days."""
+    from src.ml.forecasting import lab_daily_series
+
+    return _daily_forecast("lab_workload_model", lab_daily_series)
+
+
+def forecast_admissions() -> Dict[str, Any]:
+    """Average daily inpatient admissions across the network for the next 7 days."""
+    from src.ml.forecasting import admissions_daily_series
+
+    return _daily_forecast("resource_demand_model", admissions_daily_series)
+
+
+def predict_drug_demand(medication_id: str, hospital_id: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Forecast 30-day unit demand for one stock line (site + medication). Without a hospital_id the
+    lowest-stock site for that medication is used.
+    """
+    import pandas as pd
+    from src.ml.forecasting import PHARMACY_FEATURES, pharmacy_frame
+
+    where, params = "medication_id = ?", [medication_id]
+    if hospital_id:
+        where += " AND hospital_id = ?"
+        params.append(hospital_id)
+    df_med = query_df(f"SELECT * FROM gold_pharmacy WHERE {where} ORDER BY stock_quantity ASC LIMIT 1", params)
     if df_med.empty:
-        return {"status": "NOT_FOUND", "message": f"Medication {medication_id} not found."}
+        return {"status": "NOT_FOUND", "message": f"Medication {medication_id} is not stocked{' at ' + hospital_id if hospital_id else ''}."}
 
     row = df_med.iloc[0]
-    stock = float(row.get("stock_quantity", 100))
-    daily_burn = float(row.get("estimated_daily_burn", 3.0))
-
-    if artifact:
-        reg = artifact["model"]
-        feature_cols = artifact["features"]
-        X_vec = pd.DataFrame([{
-            "stock_quantity": stock,
-            "reorder_level": float(row.get("reorder_level", 100)),
-            "unit_cost": float(row.get("unit_cost", 0.50)),
-            "estimated_daily_burn": daily_burn,
-            "total_dispensed_qty": float(row.get("total_dispensed_qty", 200)),
-        }])[feature_cols]
-        predicted_30d_demand = int(round(float(reg.predict(X_vec)[0])))
+    artifact = load_model("pharmacy_demand_model")
+    end = pd.Timestamp(query_df("SELECT max(prescription_date) AS d FROM gold_prescriptions").iloc[0]["d"])
+    pair = pd.DataFrame({"hospital_id": [row["hospital_id"]], "medication_id": [row["medication_id"]]})
+    feats = pharmacy_frame([end], end, pairs=pair)
+    if feats.empty:
+        last30, predicted = 0.0, 0.0
     else:
-        # Validated statistical fallback when ML not trained
-        predicted_30d_demand = int(round(daily_burn * 30 * 1.15))
-
-    shortfall = max(0, predicted_30d_demand - int(stock))
+        last30 = float(feats.iloc[0]["u30"])
+        if artifact and artifact.get("serving_method") == "model":
+            predicted = float(artifact["model"].predict(feats[PHARMACY_FEATURES])[0])
+        else:
+            predicted = last30
+    predicted_units = int(round(max(0.0, predicted)))
+    stock = int(float(row.get("stock_quantity", 0)))
+    shortfall = max(0, predicted_units - stock)
 
     return {
         "status": "SUCCESS",
         "medication_id": medication_id,
+        "hospital_id": row.get("hospital_id"),
+        "hospital_name": row.get("hospital_name"),
         "medication_name": row.get("medication_name", "Unknown"),
-        "current_stock": int(stock),
-        "predicted_30d_demand": predicted_30d_demand,
+        "current_stock": stock,
+        "dispensed_last_30d": int(round(last30)),
+        "predicted_30d_demand": predicted_units,
         "projected_shortfall": shortfall,
-        "suggested_order_units": shortfall + int(row.get("reorder_level", 100)) if shortfall > 0 else 0,
+        "suggested_order_units": shortfall + int(float(row.get("reorder_level", 0))) if shortfall > 0 else 0,
         "timestamp": datetime.now().isoformat(),
+        **(_serving_note(artifact) if artifact else {"serving_method": "baseline_last30", "method_label": "Naive baseline (model not trained)"}),
     }

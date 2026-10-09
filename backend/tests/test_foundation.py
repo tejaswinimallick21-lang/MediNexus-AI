@@ -75,7 +75,8 @@ def test_unknown_job_is_404(login):
 @pytest.mark.parametrize("role,page,expected", [
     ("admin", "data", True),
     ("admin", "it", True),
-    ("admin", "doctor", False),       # least privilege: platform admins see no clinical data
+    ("admin", "doctor", True),        # admins oversee every workspace
+    ("admin", "reception", True),
     ("hcp", "doctor", True),
     ("hcp", "pharmacy", True),
     ("hcp", "laboratory", True),
@@ -89,11 +90,12 @@ def test_can_access(role, page, expected):
     assert can_access(role, page) is expected
 
 
-def test_each_page_has_exactly_one_owning_role():
+def test_admin_sees_every_workspace_and_others_only_their_own():
     from backend.app.core.access import PAGES
 
-    assert all(len(roles) == 1 for _, roles in PAGES.values())
-    assert allowed_routes("admin") == ["/data", "/it"]
+    assert allowed_routes("admin") == [route for route, _ in PAGES.values()]
+    assert set(allowed_routes("hcp")) == {"/doctor", "/pharmacy", "/laboratory"}
+    assert set(allowed_routes("analyst")) == {"/executive", "/reception"}
 
 
 # ---- pagination ------------------------------------------------------------------------------

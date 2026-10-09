@@ -84,7 +84,7 @@ def test_bad_cursor(login):
     assert_error(login("analyst").get("/api/reception/appointments", params={"cursor": "@@"}), 400, "invalid_cursor")
 
 
-@pytest.mark.parametrize("role", ["hcp", "admin"])
+@pytest.mark.parametrize("role", ["hcp"])
 def test_other_roles_are_forbidden(login, role):
     assert_error(login(role).get("/api/reception/kpis"), 403, "forbidden")
 

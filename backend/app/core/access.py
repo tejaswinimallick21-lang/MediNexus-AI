@@ -1,7 +1,7 @@
 """
-Access policy: three roles, one account each, every workspace owned by exactly one role.
+Access policy: three roles, one account each.
 
-    admin    Platform administrator   Data Engineering, Security & Infrastructure
+    admin    Platform administrator   every workspace (oversight), plus Data Engineering and Security
     hcp      Healthcare professional  Clinical Workstation, Pharmacy, Laboratory
     analyst  Operations analyst       Executive Operations, Patient Access
 
@@ -19,7 +19,7 @@ ROLE_TITLES: Dict[str, str] = {
 }
 
 ROLE_DESCRIPTIONS: Dict[str, str] = {
-    "admin": "Runs the data platform: Medallion pipeline, data quality, model registry, audit trail and infrastructure.",
+    "admin": "Oversees the whole network: every workspace, plus the data pipeline, model registry, agent governance and audit trail.",
     "hcp": "Clinical decision support: patient 360, risk predictions, care plans, pharmacy stock and laboratory operations.",
     "analyst": "Enterprise performance: occupancy, readmissions, revenue, capacity planning and outpatient patient access.",
 }
@@ -28,17 +28,17 @@ ROLE_DESCRIPTIONS: Dict[str, str] = {
 PAGES: Dict[str, tuple] = {
     "data": ("/data", frozenset({"admin"})),
     "it": ("/it", frozenset({"admin"})),
-    "doctor": ("/doctor", frozenset({"hcp"})),
-    "pharmacy": ("/pharmacy", frozenset({"hcp"})),
-    "laboratory": ("/laboratory", frozenset({"hcp"})),
-    "executive": ("/executive", frozenset({"analyst"})),
-    "reception": ("/reception", frozenset({"analyst"})),
+    "doctor": ("/doctor", frozenset({"hcp", "admin"})),
+    "pharmacy": ("/pharmacy", frozenset({"hcp", "admin"})),
+    "laboratory": ("/laboratory", frozenset({"hcp", "admin"})),
+    "executive": ("/executive", frozenset({"analyst", "admin"})),
+    "reception": ("/reception", frozenset({"analyst", "admin"})),
 }
 
 # AI copilots each role may use
 AGENT_ROLES: Dict[str, FrozenSet[str]] = {
-    "medicare": frozenset({"hcp"}),
-    "pharmalab": frozenset({"hcp"}),
+    "medicare": frozenset({"hcp", "admin"}),
+    "pharmalab": frozenset({"hcp", "admin"}),
     "healthanalyst": frozenset({"analyst", "admin"}),
 }
 
@@ -52,6 +52,8 @@ def allowed_routes(role: str) -> List[str]:
     return [route for route, roles in PAGES.values() if role in roles]
 
 
+DEFAULT_ROUTES = {"admin": "/data", "hcp": "/doctor", "analyst": "/executive"}
+
+
 def default_route(role: str) -> str:
-    routes = allowed_routes(role)
-    return routes[0] if routes else "/"
+    return DEFAULT_ROUTES.get(role, "/")

@@ -14,10 +14,15 @@
     {
       "role": "admin",
       "title": "Platform Administrator",
-      "description": "Runs the data platform: Medallion pipeline, data quality, model registry, audit trail and infrastructure.",
+      "description": "Oversees the whole network: every workspace, plus the data pipeline, model registry, agent governance and audit trail.",
       "routes": [
         "/data",
-        "/it"
+        "/it",
+        "/doctor",
+        "/pharmacy",
+        "/laboratory",
+        "/executive",
+        "/reception"
       ]
     },
     {

@@ -173,11 +173,11 @@ Built-in synthetic institutional documents located in `documents/`:
 ---
 
 ## 11. Role-Based Access Control (RBAC) & Audit Trail
-Sign-in is **email + password** (bcrypt) with a **JWT in an httpOnly cookie**. There are three roles, one account each, and every workspace is owned by exactly one role (`backend/app/core/access.py`). The API re-checks the role on every request.
+Sign-in is **email + password** (bcrypt) with a **JWT in an httpOnly cookie**. There are three roles, one account each (`backend/app/core/access.py`); admins oversee every workspace. The API re-checks the role on every request.
 
 | Role | Login (demo) | Workspaces | Never sees |
 | :--- | :--- | :--- | :--- |
-| **Admin**: Platform Administrator | `admin@medinexus.org` | Data Engineering, Security & Infrastructure | Patient-level clinical data |
+| **Admin**: Platform Administrator | `admin@medinexus.org` | Every workspace, plus Data Engineering and Security & Infrastructure | — (full oversight) |
 | **HCP**: Healthcare Professional | `hcp@medinexus.org` | Clinical Workstation, Pharmacy & Supply Chain, Laboratory Operations | Executive financials |
 | **Analyst**: Operations Analyst | `analyst@medinexus.org` | Executive Operations, Patient Access | Patient names, contact details, diagnoses (pseudonymous IDs only) |
 
