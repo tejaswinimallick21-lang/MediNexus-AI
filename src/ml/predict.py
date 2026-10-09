@@ -18,7 +18,7 @@ CLINICAL_DISCLAIMER = "AI/ML decision support - not a medical diagnosis. Intende
 def _latest_admission_features(patient_id: str) -> pd.DataFrame:
     """Most recent admission row for a patient from the point-in-time feature store."""
     return query_df(
-        "SELECT * FROM gold_patient_risk_features WHERE patient_id = ? ORDER BY admission_date DESC LIMIT 1",
+        "SELECT * FROM gold_patient_risk_features WHERE patient_id = ? ORDER BY admission_date DESC, admission_id DESC LIMIT 1",
         [patient_id],
     )
 
@@ -30,6 +30,35 @@ def _risk_level(proba: float, bands: Dict[str, float]) -> str:
     if proba >= bands.get("moderate", 0.35):
         return "MODERATE"
     return "LOW"
+
+
+def readmission_drivers(row) -> List[str]:
+    """Observed risk factors on an admission row (descriptive context, not model attributions)."""
+    def val(key, default=0):
+        v = row.get(key, default) if hasattr(row, "get") else default
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return default
+
+    factors = []
+    if val("has_cancer") == 1:
+        factors.append("Active oncology history")
+    if val("length_of_stay_days") >= 7:
+        factors.append(f"Prolonged index stay ({val('length_of_stay_days'):.1f} days)")
+    if val("prior_admissions_365d") >= 2:
+        factors.append(f"Frequent admissions in the past year ({int(val('prior_admissions_365d'))})")
+    if val("is_icu") == 1 or val("mechanical_ventilation") == 1:
+        factors.append("ICU care or mechanical ventilation during the stay")
+    if val("critical_lab_count") >= 1:
+        factors.append(f"Critical lab results during the stay ({int(val('critical_lab_count'))})")
+    if val("has_heart_failure") == 1:
+        factors.append("Congestive Heart Failure comorbidity")
+    if val("has_copd") == 1:
+        factors.append("Chronic Obstructive Pulmonary Disease burden")
+    if val("age") >= 65:
+        factors.append(f"Advanced age ({int(val('age'))} years at admission)")
+    return factors or ["No major observed risk drivers on the most recent admission"]
 
 
 def predict_patient_readmission(patient_id: str) -> Dict[str, Any]:
@@ -67,26 +96,7 @@ def predict_patient_readmission(patient_id: str) -> Dict[str, Any]:
     risk_level = _risk_level(proba, bands)
     base_rate = artifact.get("metrics", {}).get("positive_rate")
 
-    # Observed factors on this admission (descriptive context, not model attributions)
-    contributing_factors = []
-    if row.get("has_cancer", 0) == 1:
-        contributing_factors.append("Active oncology history")
-    if float(row.get("length_of_stay_days", 0)) >= 7:
-        contributing_factors.append(f"Prolonged index stay ({row.get('length_of_stay_days')} days)")
-    if row.get("prior_admissions_365d", 0) >= 2:
-        contributing_factors.append(f"Frequent admissions in the past year ({row.get('prior_admissions_365d')})")
-    if row.get("is_icu", 0) == 1 or row.get("mechanical_ventilation", 0) == 1:
-        contributing_factors.append("ICU care or mechanical ventilation during the stay")
-    if row.get("critical_lab_count", 0) >= 1:
-        contributing_factors.append(f"Critical lab results during the stay ({row.get('critical_lab_count')})")
-    if row.get("has_heart_failure") == 1:
-        contributing_factors.append("Congestive Heart Failure comorbidity")
-    if row.get("has_copd") == 1:
-        contributing_factors.append("Chronic Obstructive Pulmonary Disease burden")
-    if row.get("age", 0) >= 65:
-        contributing_factors.append(f"Advanced age ({row.get('age')} years at admission)")
-    if not contributing_factors:
-        contributing_factors = ["No major observed risk drivers on the most recent admission"]
+    contributing_factors = readmission_drivers(row)
 
     return {
         "status": "SUCCESS",

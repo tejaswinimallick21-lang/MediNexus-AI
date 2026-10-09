@@ -1,0 +1,50 @@
+{
+  "items": [
+    {
+      "prescription_date": "2019-10-11",
+      "end_date": null,
+      "medication_name": "Hydrochlorothiazide 25 MG Oral Tablet",
+      "category": "Antihypertensive / Cardiovascular",
+      "dosage": "25 MG",
+      "status": "Active",
+      "indication": "Hypertension"
+    },
+    {
+      "prescription_date": "2018-10-05",
+      "end_date": "2019-10-11",
+      "medication_name": "Hydrochlorothiazide 25 MG Oral Tablet",
+      "category": "Antihypertensive / Cardiovascular",
+      "dosage": "25 MG",
+      "status": "Completed",
+      "indication": "Hypertension"
+    },
+    {
+      "prescription_date": "2017-09-29",
+      "end_date": "2018-10-05",
+      "medication_name": "Hydrochlorothiazide 25 MG Oral Tablet",
+      "category": "Antihypertensive / Cardiovascular",
+      "dosage": "25 MG",
+      "status": "Completed",
+      "indication": "Hypertension"
+    },
+    {
+      "prescription_date": "2016-09-23",
+      "end_date": "2017-09-29",
+      "medication_name": "Hydrochlorothiazide 25 MG Oral Tablet",
+      "category": "Antihypertensive / Cardiovascular",
+      "dosage": "25 MG",
+      "status": "Completed",
+      "indication": "Hypertension"
+    },
+    {
+      "prescription_date": "2015-09-18",
+      "end_date": "2016-09-23",
+      "medication_name": "Hydrochlorothiazide 25 MG Oral Tablet",
+      "category": "Antihypertensive / Cardiovascular",
+      "dosage": "25 MG",
+      "status": "Completed",
+      "indication": "Hypertension"
+    }
+  ],
+  "next_cursor": "bzo1"
+}

@@ -28,6 +28,7 @@ from backend.app.schemas.operations import (
 from backend.app.services import executive as exec_svc
 from backend.tests.conftest import assert_contract, assert_error
 from src.analytics.metrics import compute_lab_kpis
+from src.utils.database import execute_query
 
 
 def contract_list(response, model, fixture):
@@ -96,7 +97,8 @@ def test_pharmacy_forecast_contract(login):
 def test_purchase_order_is_created_and_validated(login):
     c = login("hcp")
     inv = c.get("/api/pharmacy/stock", params={"limit": 1}).json()["items"][0]["inventory_id"]
-    assert_contract(c.post("/api/pharmacy/purchase-orders", json={"inventory_id": inv, "quantity": 12}), PurchaseOrderOut, "pharmacy_purchase_order", status=201)
+    body = assert_contract(c.post("/api/pharmacy/purchase-orders", json={"inventory_id": inv, "quantity": 12}), PurchaseOrderOut, "pharmacy_purchase_order", status=201)
+    execute_query("DELETE FROM purchase_orders WHERE po_id = ?", [body["po_id"]])  # tests never leave data behind
     assert_error(c.post("/api/pharmacy/purchase-orders", json={"inventory_id": inv, "quantity": 0}), 422, "invalid_quantity")
     assert_error(c.post("/api/pharmacy/purchase-orders", json={"inventory_id": "INV_NOPE", "quantity": 1}), 404, "stock_line_not_found")
 

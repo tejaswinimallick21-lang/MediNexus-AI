@@ -1,0 +1,47 @@
+{
+  "patient_id": "P_04436",
+  "name": "Lorene Barrows",
+  "age": 58,
+  "gender": "Female",
+  "blood_group": "B+",
+  "insurance_provider": "Aetna",
+  "city": "Randolph",
+  "is_deceased": false,
+  "death_date": null,
+  "clinical_risk_tier": "High",
+  "total_admissions": 5,
+  "average_los_days": 1.0,
+  "unplanned_readmissions": 0,
+  "total_lab_tests": 24,
+  "abnormal_lab_count": 9,
+  "critical_lab_count": 1,
+  "active_prescriptions": 1,
+  "lifetime_billing": 6377.66,
+  "comorbidities": [
+    "COVID-19",
+    "Malignant neoplasm of breast (disorder)",
+    "Body mass index 30+ - obesity (finding)",
+    "Miscarriage in first trimester",
+    "Hypertension"
+  ],
+  "flags": {
+    "has_hypertension": true,
+    "has_diabetes": false,
+    "has_copd": false,
+    "has_heart_failure": false,
+    "has_ckd": false,
+    "has_cancer": true,
+    "has_obesity": true
+  },
+  "care_gaps": [
+    {
+      "patient_id": "P_04436",
+      "name": "Lorene Barrows",
+      "age": 58,
+      "gap": "high_risk_no_follow_up",
+      "label": "High-risk discharge without follow-up",
+      "detail": "Discharged 2020-05-23; no outpatient visit within 14 days",
+      "last_done": "2020-05-23"
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+[
+  {
+    "patient_id": "P_04436",
+    "name": "Lorene Barrows",
+    "age": 58,
+    "gender": "Female",
+    "admission_id": "ADM_0009583",
+    "discharge_date": "2020-05-23",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "readmission_probability_pct": 63.4,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Active oncology history",
+      "Frequent admissions in the past year (2)"
+    ],
+    "has_follow_up": false
+  },
+  {
+    "patient_id": "P_03280",
+    "name": "Brett Mante",
+    "age": 66,
+    "gender": "Male",
+    "admission_id": "ADM_0009541",
+    "discharge_date": "2020-05-05",
+    "admission_reason": "Malignant tumor of colon",
+    "department_name": "Oncology",
+    "readmission_probability_pct": 59.6,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Active oncology history",
+      "Advanced age (66 years at admission)"
+    ],
+    "has_follow_up": false
+  },
+  {
+    "patient_id": "P_00702",
+    "name": "Cyndy Feest",
+    "age": 98,
+    "gender": "Female",
+    "admission_id": "ADM_0009537",
+    "discharge_date": "2020-05-04",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "readmission_probability_pct": 58.6,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Active oncology history",
+      "Advanced age (98 years at admission)"
+    ],
+    "has_follow_up": false
+  },
+  {
+    "patient_id": "P_03779",
+    "name": "Elisa Y\u00e1\u00f1ez",
+    "age": 62,
+    "gender": "Female",
+    "admission_id": "ADM_0009532",
+    "discharge_date": "2020-05-01",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "readmission_probability_pct": 57.9,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Active oncology history"
+    ],
+    "has_follow_up": false
+  },
+  {
+    "patient_id": "P_02743",
+    "name": "Yuette Hintz",
+    "age": 70,
+    "gender": "Female",
+    "admission_id": "ADM_0009542",
+    "discharge_date": "2020-05-05",
+    "admission_reason": "Chronic congestive heart failure (disorder)",
+    "department_name": "Cardiology",
+    "readmission_probability_pct": 56.7,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Critical lab results during the stay (1)",
+      "Congestive Heart Failure comorbidity",
+      "Advanced age (70 years at admission)"
+    ],
+    "has_follow_up": false
+  },
+  {
+    "patient_id": "P_04888",
+    "name": "Sau Bartoletti",
+    "age": 55,
+    "gender": "Female",
+    "admission_id": "ADM_0009549",
+    "discharge_date": "2020-05-06",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "readmission_probability_pct": 56.3,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Active oncology history"
+    ],
+    "has_follow_up": false
+  },
+  {
+    "patient_id": "P_05051",
+    "name": "Maggie Balistreri",
+    "age": 54,
+    "gender": "Female",
+    "admission_id": "ADM_0009528",
+    "discharge_date": "2020-05-01",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "readmission_probability_pct": 55.4,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Active oncology history"
+    ],
+    "has_follow_up": true
+  },
+  {
+    "patient_id": "P_05757",
+    "name": "Candie Bergnaum",
+    "age": 50,
+    "gender": "Female",
+    "admission_id": "ADM_0009567",
+    "discharge_date": "2020-05-15",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "readmission_probability_pct": 53.2,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Active oncology history",
+      "Frequent admissions in the past year (2)"
+    ],
+    "has_follow_up": false
+  },
+  {
+    "patient_id": "P_03863",
+    "name": "Danae Franecki",
+    "age": 62,
+    "gender": "Female",
+    "admission_id": "ADM_0009565",
+    "discharge_date": "2020-05-15",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "readmission_probability_pct": 51.3,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Active oncology history",
+      "Frequent admissions in the past year (3)"
+    ],
+    "has_follow_up": false
+  },
+  {
+    "patient_id": "P_02670",
+    "name": "Dede Hyatt",
+    "age": 71,
+    "gender": "Female",
+    "admission_id": "ADM_0009555",
+    "discharge_date": "2020-05-10",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "readmission_probability_pct": 51.3,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Active oncology history",
+      "Advanced age (71 years at admission)"
+    ],
+    "has_follow_up": false
+  }
+]

@@ -1,0 +1,69 @@
+[
+  {
+    "admission_id": "ADM_0009583",
+    "admission_date": "2020-05-22",
+    "discharge_date": "2020-05-23",
+    "length_of_stay_days": 1.01,
+    "admission_type": "Elective",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "discharge_disposition": "Home",
+    "is_icu": false,
+    "readmitted_30d": false,
+    "diagnoses": []
+  },
+  {
+    "admission_id": "ADM_0009582",
+    "admission_date": "2020-05-22",
+    "discharge_date": "2020-05-23",
+    "length_of_stay_days": 1.02,
+    "admission_type": "Elective",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "discharge_disposition": "Home",
+    "is_icu": false,
+    "readmitted_30d": false,
+    "diagnoses": []
+  },
+  {
+    "admission_id": "ADM_0006440",
+    "admission_date": "2019-08-02",
+    "discharge_date": "2019-08-03",
+    "length_of_stay_days": 1.02,
+    "admission_type": "Elective",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "discharge_disposition": "Home",
+    "is_icu": false,
+    "readmitted_30d": false,
+    "diagnoses": []
+  },
+  {
+    "admission_id": "ADM_0006441",
+    "admission_date": "2019-08-02",
+    "discharge_date": "2019-08-03",
+    "length_of_stay_days": 1.02,
+    "admission_type": "Elective",
+    "admission_reason": "Malignant neoplasm of breast (disorder)",
+    "department_name": "Oncology",
+    "discharge_disposition": "Home",
+    "is_icu": false,
+    "readmitted_30d": false,
+    "diagnoses": []
+  },
+  {
+    "admission_id": "ADM_0005985",
+    "admission_date": "2017-12-22",
+    "discharge_date": "2017-12-23",
+    "length_of_stay_days": 1.0,
+    "admission_type": "Elective",
+    "admission_reason": "Periodic reevaluation and management of healthy individual (procedure)",
+    "department_name": "Internal Medicine",
+    "discharge_disposition": "Home",
+    "is_icu": false,
+    "readmitted_30d": false,
+    "diagnoses": [
+      "Malignant neoplasm of breast (disorder)"
+    ]
+  }
+]

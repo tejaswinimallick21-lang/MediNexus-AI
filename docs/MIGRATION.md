@@ -11,7 +11,7 @@ Plan and inventory: [MIGRATION_PLAN.md](MIGRATION_PLAN.md). Decisions: 3 auth ro
 | `pharmacist.py` | `/pharmacy` | hcp | ✅ |
 | `administrator.py` | `/executive` | analyst | ✅ |
 | `it_admin.py` | `/it` | admin | ⏳ |
-| `doctor.py` | `/doctor` | hcp | ⏳ |
+| `doctor.py` | `/doctor`, `/doctor/patients/:id` | hcp | ✅ huddle, care gaps, Patient 360 |
 | `data_engineer.py` | `/data` | admin | ⏳ |
 
 Admins can open every workspace.
@@ -37,3 +37,10 @@ Deliberate differences (both UIs): username login → **email** login against th
 ## Laboratory, Pharmacy, Executive
 **Endpoints:** `/api/lab/*` (kpis, workload-by-category, daily-volume, categories, critical-alerts, capacity-plan), `/api/pharmacy/*` (kpis, stock, risk-by-category, stock/{id}/forecast, POST purchase-orders), `/api/executive/*` (kpis, admissions-trend, revenue-by-department, forecasts, readmission-drivers, capacity-plan), `POST /api/agents/{agent}/chat`.
 **Parity:** lab KPIs match `compute_lab_kpis` exactly (pytest). Deliberate corrections vs Streamlit: removed hard-coded "STAT TAT 98.2%", "5 Facilities", "18 Adm/day", "99.6% ROC-AUC", "R² = 1.00"; projected admissions/lab volume/drug demand now come from forecasts with held-out scores and champion/challenger serving; lab bench capacity is an explicit estimate; purchase orders are persisted (`purchase_orders` table) and audited.
+
+---
+
+## Clinical Workstation
+**Endpoints:** `/api/clinical/{kpis,huddle,care-gaps,care-gaps/summary}`, `/api/patients` (search), `/api/patients/{id}` (360), `/{id}/risk`, `/{id}/lab-tests`, `/{id}/labs/series`, `/{id}/labs`, `/{id}/medications`, `/{id}/encounters`.
+**Streamlit showed:** KPIs, high-risk worklist, risk donut, patient selector/search, COVID + readmission + LOS cards, care protocol, lab trajectory, recent labs, prescriptions, admissions/diagnoses, MediCare chat.
+**React shows the same** plus: morning huddle ranked by model risk with follow-up status, care-gap radar (diabetes/HbA1c, hypertension/BP, CKD/eGFR, high-risk discharge without follow-up), per-test trend with reference band, stay timeline. Patient views are audited (`PATIENT_VIEW`).

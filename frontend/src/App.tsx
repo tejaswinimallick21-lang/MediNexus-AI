@@ -5,6 +5,7 @@ import { AppShell } from "./components/AppShell";
 import { RequireAuth } from "./components/RequireAuth";
 import { EmptyState } from "./components/StateViews";
 import { LoginPage } from "./pages/LoginPage";
+import { ClinicalWorkspace } from "./pages/ClinicalPage";
 import { ExecutivePage } from "./pages/ExecutivePage";
 import { LaboratoryPage } from "./pages/LaboratoryPage";
 import { NotMigratedPage } from "./pages/NotMigratedPage";
@@ -19,6 +20,7 @@ const CONSOLE_PAGES: Record<string, ReactNode> = {
   "/laboratory": <LaboratoryPage />,
   "/pharmacy": <PharmacyPage />,
   "/executive": <ExecutivePage />,
+  "/doctor": <ClinicalWorkspace />,
 };
 
 export function App() {

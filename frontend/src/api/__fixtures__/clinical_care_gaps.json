@@ -1,0 +1,50 @@
+{
+  "items": [
+    {
+      "patient_id": "P_00702",
+      "name": "Cyndy Feest",
+      "age": 98,
+      "gap": "high_risk_no_follow_up",
+      "label": "High-risk discharge without follow-up",
+      "detail": "Discharged 2020-05-04; no outpatient visit within 14 days",
+      "last_done": "2020-05-04"
+    },
+    {
+      "patient_id": "P_01788",
+      "name": "Alane Toy",
+      "age": 80,
+      "gap": "high_risk_no_follow_up",
+      "label": "High-risk discharge without follow-up",
+      "detail": "Discharged 2020-05-19; no outpatient visit within 14 days",
+      "last_done": "2020-05-19"
+    },
+    {
+      "patient_id": "P_02670",
+      "name": "Dede Hyatt",
+      "age": 71,
+      "gap": "high_risk_no_follow_up",
+      "label": "High-risk discharge without follow-up",
+      "detail": "Discharged 2020-05-10; no outpatient visit within 14 days",
+      "last_done": "2020-05-10"
+    },
+    {
+      "patient_id": "P_02743",
+      "name": "Yuette Hintz",
+      "age": 70,
+      "gap": "high_risk_no_follow_up",
+      "label": "High-risk discharge without follow-up",
+      "detail": "Discharged 2020-05-05; no outpatient visit within 14 days",
+      "last_done": "2020-05-05"
+    },
+    {
+      "patient_id": "P_03280",
+      "name": "Brett Mante",
+      "age": 66,
+      "gap": "high_risk_no_follow_up",
+      "label": "High-risk discharge without follow-up",
+      "detail": "Discharged 2020-05-05; no outpatient visit within 14 days",
+      "last_done": "2020-05-05"
+    }
+  ],
+  "next_cursor": "bzo1"
+}

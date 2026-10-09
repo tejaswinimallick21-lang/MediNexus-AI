@@ -25,6 +25,19 @@ import {
   StockPageSchema,
   TrendListSchema,
 } from "./schemas/operations";
+import {
+  CareGapPageSchema,
+  CareGapSummaryListSchema,
+  ClinicalKpisSchema,
+  EncounterListSchema,
+  HuddleListSchema,
+  LabPageSchema,
+  LabSeriesSchema,
+  MedicationPageSchema,
+  Patient360Schema,
+  PatientPageSchema,
+  PatientRiskSchema,
+} from "./schemas/clinical";
 
 /**
  * Golden fixture name (written by the backend pytest contract tests into __fixtures__/)
@@ -55,4 +68,15 @@ export const fixtureSchemas: Record<string, ZodTypeAny> = {
   executive_readmission_drivers: ReadmissionDriversSchema,
   executive_capacity_plan: CapacityPlanSchema,
   agent_reply: AgentReplySchema,
+  clinical_kpis: ClinicalKpisSchema,
+  clinical_huddle: HuddleListSchema,
+  clinical_care_gap_summary: CareGapSummaryListSchema,
+  clinical_care_gaps: CareGapPageSchema,
+  patients_search: PatientPageSchema,
+  patient_360: Patient360Schema,
+  patient_risk: PatientRiskSchema,
+  patient_lab_series: LabSeriesSchema,
+  patient_labs: LabPageSchema,
+  patient_medications: MedicationPageSchema,
+  patient_encounters: EncounterListSchema,
 };

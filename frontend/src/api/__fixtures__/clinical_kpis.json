@@ -1,0 +1,8 @@
+{
+  "living_patients": 10000,
+  "high_tier_patients": 432,
+  "recent_discharges": 51,
+  "high_risk_recent_discharges": 14,
+  "open_care_gaps": 45,
+  "data_through": "2020-05-26"
+}

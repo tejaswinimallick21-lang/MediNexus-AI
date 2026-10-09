@@ -1,0 +1,69 @@
+{
+  "covid_scored_as_of": "COVID-19 diagnosis date",
+  "covid_outcomes": [
+    {
+      "outcome": "hospitalized_30d",
+      "label": "Hospitalization within 30 days",
+      "probability_pct": 51.3,
+      "risk_level": "HIGH",
+      "cohort_rate_pct": 21.6,
+      "observed": 0
+    },
+    {
+      "outcome": "icu_30d",
+      "label": "ICU admission within 30 days",
+      "probability_pct": 13.0,
+      "risk_level": "HIGH",
+      "cohort_rate_pct": 4.2,
+      "observed": 0
+    },
+    {
+      "outcome": "ventilated_30d",
+      "label": "Mechanical ventilation within 30 days",
+      "probability_pct": 8.6,
+      "risk_level": "HIGH",
+      "cohort_rate_pct": 3.2,
+      "observed": 0
+    },
+    {
+      "outcome": "died_30d",
+      "label": "Death within 30 days",
+      "probability_pct": 10.6,
+      "risk_level": "HIGH",
+      "cohort_rate_pct": 4.0,
+      "observed": 0
+    }
+  ],
+  "covid_drivers": [
+    "Obesity",
+    "Hypertension",
+    "Cancer history"
+  ],
+  "readmission_available": true,
+  "readmission_probability_pct": 63.4,
+  "readmission_risk_level": "HIGH",
+  "readmission_base_rate_pct": 1.41,
+  "readmission_drivers": [
+    "Active oncology history",
+    "Frequent admissions in the past year (2)"
+  ],
+  "readmission_admission_date": "2020-05-22",
+  "los_predicted_days": 1.0,
+  "los_observed_days": 1.01,
+  "los_interval": "0.5 - 2.1 days (\u00b1 holdout MAE)",
+  "care_plan": {
+    "pathway": "HIGH Risk Management Pathway",
+    "primary_recommendation": "Initiate Comprehensive Transitional Care Protocol (TCP)",
+    "checklist": [
+      "Schedule nurse telephone follow-up within 48 hours post-discharge.",
+      "Mandate specialist follow-up consultation within 7 days.",
+      "Perform complete medication reconciliation before discharge to prevent adverse drug events.",
+      "Order repeat metabolic panel and complete blood count within 5 days."
+    ],
+    "rationale": [
+      "Patient exhibits high 30-day readmission probability (63.4%). Multidisciplinary follow-up significantly reduces acute bounce-backs."
+    ],
+    "disclaimer": "Clinical decision support guidance only. Licensed medical practitioners retain sole responsibility for patient care plans."
+  },
+  "disclaimer": "AI/ML decision support - not a medical diagnosis. Intended exclusively for licensed healthcare provider reference."
+}
