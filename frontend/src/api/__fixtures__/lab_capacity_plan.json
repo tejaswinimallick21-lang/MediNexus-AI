@@ -14,10 +14,10 @@
   "forecast": {
     "serving_method": "baseline_naive7",
     "method_label": "Naive baseline: last 7 days repeated",
-    "holdout_mae": 756.275,
-    "holdout_baseline_mae": 302.09,
+    "holdout_mae": 275.124,
+    "holdout_baseline_mae": 187.785,
     "beats_baseline": false,
-    "test_period": "2020-03-20 to 2020-05-19",
+    "test_period": "2019-05-25 to 2020-05-18",
     "data_through": "2020-05-26"
   }
 }

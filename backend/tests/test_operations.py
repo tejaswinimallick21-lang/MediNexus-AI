@@ -87,6 +87,13 @@ def test_pharmacy_stock_contract_and_risk_filter(login):
     assert body["items"] and all(i["stockout_risk"] == "High Risk" for i in body["items"])
 
 
+def test_pharmacy_class_outlook_contract(login):
+    from backend.app.schemas.operations import ClassOutlook
+
+    body = assert_contract(login("hcp").get("/api/pharmacy/class-outlook"), ClassOutlook, "pharmacy_class_outlook")
+    assert body["simulated_data"] is True and len(body["items"]) >= 5
+
+
 def test_pharmacy_forecast_contract(login):
     c = login("hcp")
     inv = c.get("/api/pharmacy/stock", params={"limit": 1}).json()["items"][0]["inventory_id"]

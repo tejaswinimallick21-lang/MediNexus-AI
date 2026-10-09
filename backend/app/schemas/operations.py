@@ -104,6 +104,20 @@ class DemandForecast(BaseModel):
     forecast: ForecastMeta
 
 
+class ClassOutlookRow(BaseModel):
+    drug_class: str
+    forecast_daily_units: float
+    last_7d_daily_units: float
+    change_pct: float
+
+
+class ClassOutlook(BaseModel):
+    simulated_data: bool
+    as_of: str
+    items: List[ClassOutlookRow]
+    forecast: ForecastMeta
+
+
 class PurchaseOrderIn(BaseModel):
     inventory_id: str
     quantity: int

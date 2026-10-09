@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-10-09T22:32:02.848507",
+  "seed": 7,
+  "years": 3,
+  "date_range": [
+    "2017-05-26",
+    "2020-05-24"
+  ],
+  "counts": {
+    "sim_hospital_profile": 91,
+    "sim_staff_roster": 819,
+    "sim_outpatient_daily": 99645,
+    "sim_pharmacy_daily": 1195740,
+    "sim_equipment_assets": 30423,
+    "sim_equipment_daily": 697515,
+    "sim_equipment_events": 30627
+  },
+  "simulated": true,
+  "anchors": [
+    "91 Synthea hospitals sized by real encounter volume",
+    "ventilator use follows real Synthea ventilated stays"
+  ],
+  "structure": [
+    "weekday pattern",
+    "winter seasonality",
+    "growth trend",
+    "holidays",
+    "COVID-19 shock from 2020-03-10",
+    "lognormal noise"
+  ],
+  "never_generated": [
+    "readmission",
+    "mortality",
+    "ICU",
+    "any clinical outcome"
+  ]
+}

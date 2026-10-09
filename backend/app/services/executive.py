@@ -104,14 +104,16 @@ def get_model_scorecard() -> List[ModelScore]:
             verdict=_verdict(los.get("mae_days"), los.get("baseline_mae_days_median"), higher_is_better=False),
         ))
     for name, label, base_key in [
+        ("outpatient_demand_model", "Outpatient demand (7-day) · simulated ops data", "baseline_naive7_mae"),
+        ("drug_class_demand_model", "Drug-class demand (7-day) · simulated ops data", "baseline_naive7_mae"),
         ("resource_demand_model", "Admission demand (7-day)", "baseline_naive7_mae"),
         ("lab_workload_model", "Lab workload (7-day)", "baseline_naive7_mae"),
-        ("pharmacy_demand_model", "Pharmacy demand (30-day)", "baseline_last30_mae"),
+        ("pharmacy_demand_model", "Stock-line demand (30-day)", "baseline_last30_mae"),
     ]:
         m = active_metrics(name)
         if m:
             scores.append(ModelScore(
-                model=label, purpose=f"Time-based holdout {m.get('test_period', '')}",
+                model=label, purpose=f"{m.get('split', 'Time-based holdout')} · {m.get('test_period', '')}",
                 primary_metric=f"MAE {m.get('mae'):.2f}", baseline=f"Naive {m.get(base_key):.2f}",
                 verdict=_verdict(m.get("mae"), m.get(base_key), higher_is_better=False),
             ))

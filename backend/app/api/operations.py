@@ -11,6 +11,7 @@ from backend.app.schemas.common import ERROR_RESPONSES
 from backend.app.schemas.operations import (
     AgentReply,
     CapacityPlan,
+    ClassOutlook,
     CategoryWorkload,
     ChatIn,
     CriticalAlert,
@@ -84,6 +85,11 @@ def pharmacy_stock(
 @pharmacy_router.get("/risk-by-category", response_model=List[dict])
 def pharmacy_risk_by_category() -> List[dict]:
     return pharmacy.get_risk_by_category()
+
+
+@pharmacy_router.get("/class-outlook", response_model=ClassOutlook)
+def pharmacy_class_outlook() -> ClassOutlook:
+    return pharmacy.get_class_outlook()
 
 
 @pharmacy_router.get("/stock/{inventory_id}/forecast", response_model=DemandForecast)

@@ -10,8 +10,8 @@ export function ForecastNote({ meta }: { meta: ForecastMeta }) {
       <Badge tone={baselineServed ? "warn" : "good"}>{meta.method_label}</Badge>
       {meta.holdout_mae != null && meta.holdout_baseline_mae != null && (
         <span>
-          Held-out error ({meta.test_period}): model {formatNumber(meta.holdout_mae, 2)} vs baseline {formatNumber(meta.holdout_baseline_mae, 2)}.
-          {baselineServed && " The baseline was more accurate, so it is served."}
+          Backtest error ({meta.test_period}): model {formatNumber(meta.holdout_mae, 2)} vs baseline {formatNumber(meta.holdout_baseline_mae, 2)}.
+          {baselineServed ? " The baseline was more accurate, so it is served." : " The model beat the baseline, so it is served."}
         </span>
       )}
     </p>

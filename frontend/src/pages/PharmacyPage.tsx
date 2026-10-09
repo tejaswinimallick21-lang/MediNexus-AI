@@ -13,7 +13,7 @@ import { SkeletonText } from "../components/Skeleton";
 import { EmptyState, ErrorState } from "../components/StateViews";
 import { useApi } from "../hooks/useApi";
 import { useCursorPager } from "../hooks/useCursorPager";
-import { formatNumber, formatUSD } from "../lib/format";
+import { formatDate, formatNumber, formatUSD } from "../lib/format";
 import { Stat } from "./LaboratoryPage";
 
 const RISK_TONE: Record<string, "bad" | "warn" | "good"> = { "High Risk": "bad", "Moderate Risk": "warn", Safe: "good" };
@@ -22,6 +22,7 @@ const URGENCY_TONE: Record<string, "bad" | "warn" | "good"> = { URGENT: "bad", E
 export function PharmacyPage() {
   const kpis = useApi((s) => pharmacyApi.kpis(s), []);
   const riskByCat = useApi((s) => pharmacyApi.riskByCategory(s), []);
+  const outlook = useApi((s) => pharmacyApi.classOutlook(s), []);
   const [risk, setRisk] = useState("High Risk");
   const pager = useCursorPager();
   const stock = useApi((s) => pharmacyApi.stock({ limit: 12, cursor: pager.cursor, risk }, s), [risk, pager.cursor]);
@@ -181,6 +182,34 @@ export function PharmacyPage() {
         />
       </Grid>
 
+      <Grid>
+      <Panel
+        title="Demand outlook by drug class"
+        subtitle={outlook.data ? `Network units / day, next 7 days · as of ${formatDate(outlook.data.as_of)}` : "Network units / day, next 7 days"}
+        icon="Pulse"
+        actions={<Badge tone="info">Simulated operations data</Badge>}
+      >
+        {outlook.error ? (
+          <ErrorState error={outlook.error} onRetry={outlook.reload} />
+        ) : !outlook.data ? (
+          <SkeletonText lines={8} />
+        ) : (
+          <>
+            <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 8 }}>
+              {outlook.data.items.map((r) => (
+                <li key={r.drug_class} style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 12, alignItems: "center", fontSize: 13 }}>
+                  <span>{r.drug_class}</span>
+                  <strong>{formatNumber(r.forecast_daily_units)}</strong>
+                  <Badge tone={r.change_pct > 5 ? "warn" : r.change_pct < -5 ? "info" : "neutral"}>
+                    {r.change_pct > 0 ? "\u25B2" : r.change_pct < 0 ? "\u25BC" : "="} {formatNumber(Math.abs(r.change_pct), 1)}%
+                  </Badge>
+                </li>
+              ))}
+            </ul>
+            <ForecastNote meta={outlook.data.forecast} />
+          </>
+        )}
+      </Panel>
       <Panel title="Risk by therapeutic category" subtitle="High-risk stock lines first" icon="Alert">
           {riskByCat.error ? (
             <ErrorState error={riskByCat.error} onRetry={riskByCat.reload} />
@@ -205,6 +234,7 @@ export function PharmacyPage() {
             <SkeletonText lines={8} />
           )}
         </Panel>
+      </Grid>
     </div>
   );
 }

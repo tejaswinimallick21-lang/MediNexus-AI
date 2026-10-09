@@ -20,7 +20,8 @@ HISTORY_DAYS = 3 * 365      # training history kept for daily series
 HORIZON_DAYS = 7            # daily-series forecast window (t+1 .. t+7)
 TEST_DAYS = 60              # final period held out for evaluation
 PHARMACY_HORIZON = 30
-DAILY_FEATURES = ["log_mean7", "log_mean28", "log_mean91", "trend_7_28", "trend_28_91", "last_vs_mean7", "zero_share_28", "month"]
+DAILY_FEATURES = ["log_mean7", "log_mean28", "log_mean91", "trend_7_28", "trend_28_91", "last_vs_mean7", "zero_share_28", "month",
+                  "doy_sin", "doy_cos", "yoy_change"]
 PHARMACY_FEATURES = ["u30", "u90", "u180", "active_rx", "new_rx_30", "trend_30_90", "unit_cost"]
 
 
@@ -73,6 +74,8 @@ def daily_supervised(series: pd.DataFrame) -> pd.DataFrame:
         f["zero_share_28"] = (n == 0).astype(float).rolling(28, min_periods=28).mean()
         # target: mean of t+1..t+7 (shift so it is aligned with day t)
         f["target"] = n[::-1].rolling(HORIZON_DAYS, min_periods=HORIZON_DAYS).mean()[::-1].shift(-1)
+        # Seasonality from the past: how the same 7-day window moved one year earlier (known at time t)
+        f["yoy_change"] = np.log1p(f["target"].shift(364)) - np.log1p(f["mean7"].shift(364))
         out.append(f)
     df = pd.concat(out, ignore_index=True).dropna(subset=["mean91"])
     df["log_mean7"] = np.log1p(df["mean7"])
@@ -82,8 +85,51 @@ def daily_supervised(series: pd.DataFrame) -> pd.DataFrame:
     df["trend_28_91"] = df["log_mean28"] - df["log_mean91"]
     df["last_vs_mean7"] = np.log1p(df["n"]) - df["log_mean7"]
     df["month"] = pd.to_datetime(df["day"]).dt.month
+    doy = pd.to_datetime(df["day"]).dt.dayofyear
+    df["doy_sin"] = np.sin(2 * np.pi * doy / 365.25)
+    df["doy_cos"] = np.cos(2 * np.pi * doy / 365.25)
     df["log_ratio_target"] = np.log1p(df["target"]) - df["log_mean7"]
     return df
+
+
+def outpatient_daily_series() -> Tuple[pd.DataFrame, pd.Timestamp]:
+    """SIMULATED: outpatient visit demand per hospital (sim_outpatient_daily)."""
+    df = query_df_strict("SELECT CAST(date AS DATE) AS day, hospital_id AS grp, demand AS n FROM sim_outpatient_daily").rename(columns={"grp": "group"})
+    df["day"] = pd.to_datetime(df["day"])
+    return df, df["day"].max()
+
+
+def pharmacy_class_series() -> Tuple[pd.DataFrame, pd.Timestamp]:
+    """SIMULATED: network-wide units dispensed per drug class (sim_pharmacy_daily)."""
+    df = query_df_strict("SELECT CAST(date AS DATE) AS day, drug_class AS grp, SUM(units_dispensed) AS n FROM sim_pharmacy_daily GROUP BY 1, 2").rename(columns={"grp": "group"})
+    df["day"] = pd.to_datetime(df["day"])
+    return df, df["day"].max()
+
+
+def rolling_backtest(sup: pd.DataFrame, end: pd.Timestamp, make_model, folds: int = 6, step_days: int = 60) -> List[Dict]:
+    """
+    Rolling-origin evaluation: for each fold, train on forecasts whose target window closed before the
+    fold starts, then score forecasts made inside the fold. Folds tile the most recent folds × step_days.
+    """
+    labelled = sup.dropna(subset=["target"])
+    results = []
+    for k in range(folds, 0, -1):
+        start = end - pd.Timedelta(days=k * step_days + HORIZON_DAYS)
+        stop = start + pd.Timedelta(days=step_days)
+        train = labelled[labelled["day"] < start - pd.Timedelta(days=HORIZON_DAYS)]
+        test = labelled[(labelled["day"] >= start) & (labelled["day"] < stop)]
+        if len(train) < 200 or test.empty:
+            continue
+        model = make_model().fit(train[DAILY_FEATURES], train["log_ratio_target"])
+        y = test["target"].to_numpy()
+        m = regression_scores(y, predict_daily(model, test))
+        b = regression_scores(y, test["mean7"].to_numpy())
+        results.append({
+            "fold_start": str(start.date()), "fold_end": str((stop - pd.Timedelta(days=1)).date()),
+            "mae": m["mae"], "baseline_mae": b["mae"], "wape_pct": m["wape_pct"], "baseline_wape_pct": b["wape_pct"],
+            "covid_period": bool(stop > pd.Timestamp("2020-03-10")),
+        })
+    return results
 
 
 def predict_daily(model, frame: pd.DataFrame) -> np.ndarray:

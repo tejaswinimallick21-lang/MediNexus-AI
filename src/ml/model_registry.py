@@ -90,6 +90,8 @@ def load_model(model_name: str) -> Optional[Any]:
         "lab_workload_model": "lab_workload_model.joblib",
         "resource_demand_model": "resource_demand_model.joblib",
         "covid_outcome_model": "covid_outcome_model.joblib",
+        "outpatient_demand_model": "outpatient_demand_model.joblib",
+        "drug_class_demand_model": "drug_class_demand_model.joblib",
     }
     fallback_file = MODELS_DIR / filename_map.get(model_name, f"{model_name}.joblib")
     if fallback_file.exists():

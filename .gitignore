@@ -44,3 +44,4 @@ node_modules/
 frontend/dist/
 frontend/.env
 frontend/coverage/
+data/ops/

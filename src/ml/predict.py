@@ -265,6 +265,20 @@ def forecast_lab_workload() -> Dict[str, Any]:
     return _daily_forecast("lab_workload_model", lab_daily_series)
 
 
+def forecast_outpatient_demand() -> Dict[str, Any]:
+    """SIMULATED operations data: average daily outpatient demand per hospital for the next 7 days."""
+    from src.ml.forecasting import outpatient_daily_series
+
+    return _daily_forecast("outpatient_demand_model", outpatient_daily_series)
+
+
+def forecast_drug_class_demand() -> Dict[str, Any]:
+    """SIMULATED operations data: average daily units dispensed per drug class (network) for the next 7 days."""
+    from src.ml.forecasting import pharmacy_class_series
+
+    return _daily_forecast("drug_class_demand_model", pharmacy_class_series)
+
+
 def forecast_admissions() -> Dict[str, Any]:
     """Average daily inpatient admissions across the network for the next 7 days."""
     from src.ml.forecasting import admissions_daily_series

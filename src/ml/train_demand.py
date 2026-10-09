@@ -30,10 +30,11 @@ from src.ml.forecasting import (
     admissions_daily_series,
     daily_supervised,
     lab_daily_series,
+    outpatient_daily_series,
+    pharmacy_class_series,
     pharmacy_frame,
-    predict_daily,
     regression_scores,
-    time_split,
+    rolling_backtest,
 )
 from src.ml.model_registry import register_model
 from src.utils.database import query_df_strict
@@ -54,56 +55,45 @@ def _train_daily_model(
     filename: str,
     dataset: str,
     unit: str,
+    simulated: bool = False,
 ) -> Dict[str, Any]:
     series, end = series_fn()
     sup = daily_supervised(series)
-    train, test = time_split(sup, end)
-    if len(train) < 100 or test.empty:
+    folds = rolling_backtest(sup, end, _daily_regressor)
+    if not folds:
         return {"status": "FAILED", "error": f"Insufficient history for {model_name}"}
 
-    model = _daily_regressor().fit(train[DAILY_FEATURES], train["log_ratio_target"])
-    y = test["target"].to_numpy()
-    pred = predict_daily(model, test)
-    scores = regression_scores(y, pred)
-    naive7 = regression_scores(y, test["mean7"].to_numpy())
-    naive28 = regression_scores(y, test["mean28"].to_numpy())
-
-    per_group = []
-    for group, g in test.assign(pred=pred).groupby("group"):
-        s = regression_scores(g["target"].to_numpy(), g["pred"].to_numpy())
-        b = regression_scores(g["target"].to_numpy(), g["mean7"].to_numpy())
-        per_group.append({"group": group, "mae": s["mae"], "baseline_mae": b["mae"], "mean_actual": round(float(g["target"].mean()), 2)})
-
+    mae = float(np.mean([f["mae"] for f in folds]))
+    base = float(np.mean([f["baseline_mae"] for f in folds]))
+    pre_covid = [f for f in folds if not f["covid_period"]]
     metrics = {
         "target": f"average daily {unit} over the next {HORIZON_DAYS} days",
-        "mae": scores["mae"],
-        "wape_pct": scores["wape_pct"],
-        "baseline_naive7_mae": naive7["mae"],
-        "baseline_naive7_wape_pct": naive7["wape_pct"],
-        "baseline_naive28_mae": naive28["mae"],
-        "skill_vs_naive7_pct": round((1 - scores["mae"] / max(1e-9, naive7["mae"])) * 100, 1),
-        "beats_baseline": bool(scores["mae"] < naive7["mae"]),
-        "split": f"time-based: test = forecasts made in the last {int((end - test['day'].min()).days)} days",
-        "test_period": f"{test['day'].min().date()} to {test['day'].max().date()}",
-        "train_rows": int(len(train)),
-        "test_rows": int(len(test)),
-        "per_group": per_group,
+        "mae": round(mae, 3),
+        "baseline_naive7_mae": round(base, 3),
+        "wape_pct": round(float(np.mean([f["wape_pct"] for f in folds])), 2),
+        "baseline_naive7_wape_pct": round(float(np.mean([f["baseline_wape_pct"] for f in folds])), 2),
+        "skill_vs_naive7_pct": round((1 - mae / max(1e-9, base)) * 100, 1),
+        "pre_covid_skill_pct": round((1 - np.mean([f["mae"] for f in pre_covid]) / max(1e-9, np.mean([f["baseline_mae"] for f in pre_covid]))) * 100, 1) if pre_covid else None,
+        "beats_baseline": bool(mae < base),
+        "split": f"rolling-origin backtest: {len(folds)} folds of 60 days",
+        "test_period": f"{folds[0]['fold_start']} to {folds[-1]['fold_end']}",
+        "folds": folds,
         "unit": unit,
+        "simulated_data": simulated,
     }
 
-    # Refit on all labelled history for inference
     labelled = sup.dropna(subset=["target"])
     final = _daily_regressor().fit(labelled[DAILY_FEATURES], labelled["log_ratio_target"])
-    # Champion/challenger: serve the model only if it beat the naive baseline on held-out data
+    # Champion/challenger: serve the model only if it beat the naive baseline across the backtest
     metrics["serving_method"] = "model" if metrics["beats_baseline"] else "baseline_naive7"
     artifact = {
-        "model": final, "features": DAILY_FEATURES, "metrics": metrics, "version": "2.0.0",
+        "model": final, "features": DAILY_FEATURES, "metrics": metrics, "version": "3.0.0",
         "trained_at": datetime.now().isoformat(), "type": "daily_forecaster", "data_through": str(end.date()),
         "serving_method": metrics["serving_method"],
     }
-    path = register_model(model_name=model_name, version="2.0.0", dataset=dataset, features=DAILY_FEATURES,
+    path = register_model(model_name=model_name, version="3.0.0", dataset=dataset, features=DAILY_FEATURES,
                           metrics=metrics, model_obj=artifact, filename=filename)
-    logger.info(f"{model_name}: MAE {metrics['mae']} vs naive-7 {metrics['baseline_naive7_mae']} ({metrics['skill_vs_naive7_pct']}% skill)")
+    logger.info(f"{model_name}: backtest MAE {metrics['mae']} vs naive-7 {metrics['baseline_naive7_mae']} ({metrics['skill_vs_naive7_pct']}% skill)")
     return {"status": "SUCCESS", "model_name": model_name, "path": path, "metrics": metrics}
 
 
@@ -115,6 +105,18 @@ def train_lab_workload_model() -> Dict[str, Any]:
 def train_resource_demand_model() -> Dict[str, Any]:
     """Model 5: next-7-day average daily inpatient admissions across the network."""
     return _train_daily_model(admissions_daily_series, "resource_demand_model", "resource_demand_model.joblib", "gold_admissions", "admissions")
+
+
+def train_outpatient_demand_model() -> Dict[str, Any]:
+    """Model 7 (simulated operations data): next-7-day average daily outpatient demand per hospital."""
+    return _train_daily_model(outpatient_daily_series, "outpatient_demand_model", "outpatient_demand_model.joblib",
+                              "sim_outpatient_daily", "outpatient visits", simulated=True)
+
+
+def train_drug_class_demand_model() -> Dict[str, Any]:
+    """Model 8 (simulated operations data): next-7-day average daily units dispensed per drug class (network)."""
+    return _train_daily_model(pharmacy_class_series, "drug_class_demand_model", "drug_class_demand_model.joblib",
+                              "sim_pharmacy_daily", "units dispensed", simulated=True)
 
 
 def _pharmacy_regressor() -> HistGradientBoostingRegressor:
@@ -188,6 +190,8 @@ def train_all_models() -> Dict[str, Any]:
         "pharmacy_demand": train_pharmacy_demand_model(),
         "lab_workload": train_lab_workload_model(),
         "resource_demand": train_resource_demand_model(),
+        "outpatient_demand": train_outpatient_demand_model(),
+        "drug_class_demand": train_drug_class_demand_model(),
     }
 
 

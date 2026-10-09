@@ -4,10 +4,10 @@
   "admissions_forecast": {
     "serving_method": "baseline_naive7",
     "method_label": "Naive baseline: last 7 days repeated",
-    "holdout_mae": 9.427,
-    "holdout_baseline_mae": 5.562,
+    "holdout_mae": 6.356,
+    "holdout_baseline_mae": 5.696,
     "beats_baseline": false,
-    "test_period": "2020-03-18 to 2020-05-17",
+    "test_period": "2019-05-23 to 2020-05-16",
     "data_through": "2020-05-24"
   },
   "models": [
@@ -40,22 +40,36 @@
       "verdict": "Beats baseline"
     },
     {
+      "model": "Outpatient demand (7-day) \u00b7 simulated ops data",
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2019-05-23 to 2020-05-16",
+      "primary_metric": "MAE 101.37",
+      "baseline": "Naive 125.58",
+      "verdict": "Beats baseline"
+    },
+    {
+      "model": "Drug-class demand (7-day) \u00b7 simulated ops data",
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2019-05-23 to 2020-05-16",
+      "primary_metric": "MAE 444.35",
+      "baseline": "Naive 887.68",
+      "verdict": "Beats baseline"
+    },
+    {
       "model": "Admission demand (7-day)",
-      "purpose": "Time-based holdout 2020-03-18 to 2020-05-17",
-      "primary_metric": "MAE 9.43",
-      "baseline": "Naive 5.56",
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2019-05-23 to 2020-05-16",
+      "primary_metric": "MAE 6.36",
+      "baseline": "Naive 5.70",
       "verdict": "Baseline wins \u2014 baseline served"
     },
     {
       "model": "Lab workload (7-day)",
-      "purpose": "Time-based holdout 2020-03-20 to 2020-05-19",
-      "primary_metric": "MAE 756.27",
-      "baseline": "Naive 302.09",
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2019-05-25 to 2020-05-18",
+      "primary_metric": "MAE 275.12",
+      "baseline": "Naive 187.78",
       "verdict": "Baseline wins \u2014 baseline served"
     },
     {
-      "model": "Pharmacy demand (30-day)",
-      "purpose": "Time-based holdout 2020-02-26 to 2020-04-26",
+      "model": "Stock-line demand (30-day)",
+      "purpose": "time-based: test = the 3 most recent monthly forecast dates \u00b7 2020-02-26 to 2020-04-26",
       "primary_metric": "MAE 0.22",
       "baseline": "Naive 0.20",
       "verdict": "Baseline wins \u2014 baseline served"

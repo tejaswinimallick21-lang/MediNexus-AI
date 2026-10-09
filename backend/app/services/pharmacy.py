@@ -6,8 +6,8 @@ from typing import List, Optional
 from backend.app.core.errors import APIError
 from backend.app.core.pagination import Page, PageParams, build_page
 from backend.app.core.users import UserRecord
-from backend.app.schemas.operations import DemandForecast, ForecastMeta, PharmacyKpis, PurchaseOrderOut, StockLine
-from src.ml.predict import predict_drug_demand
+from backend.app.schemas.operations import ClassOutlook, ClassOutlookRow, DemandForecast, ForecastMeta, PharmacyKpis, PurchaseOrderOut, StockLine
+from src.ml.predict import forecast_drug_class_demand, predict_drug_demand
 from src.prescriptive.pharmacy_rules import get_pharmacy_prescriptive_actions
 from src.security.audit import log_audit_event
 from src.utils.database import execute_query, query_df_strict
@@ -116,6 +116,23 @@ def get_demand_forecast(inventory_id: str) -> DemandForecast:
         buffer_assessment=plan["buffer_assessment"] if dos < 999 else "No dispensing in the last 180 days; stock is not being drawn down.",
         forecast=ForecastMeta(**{k: demand.get(k) for k in ForecastMeta.model_fields}),
     )
+
+
+def get_class_outlook() -> ClassOutlook:
+    """Network demand outlook per drug class (trained on SIMULATED operations data, labelled as such)."""
+    f = forecast_drug_class_demand()
+    rows = sorted(
+        (
+            ClassOutlookRow(
+                drug_class=r["group"], forecast_daily_units=r["forecast_daily"], last_7d_daily_units=r["last_7d_daily"],
+                change_pct=round((r["forecast_daily"] - r["last_7d_daily"]) / max(1e-9, r["last_7d_daily"]) * 100, 1),
+            )
+            for r in f["forecasts"]
+        ),
+        key=lambda r: r.forecast_daily_units,
+        reverse=True,
+    )
+    return ClassOutlook(simulated_data=True, as_of=f["as_of"], items=rows, forecast=ForecastMeta(**{k: f.get(k) for k in ForecastMeta.model_fields}))
 
 
 def _ensure_po_table() -> None:

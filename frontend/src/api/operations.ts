@@ -5,6 +5,7 @@ import {
   AgentReplySchema,
   CapacityPlanSchema,
   CategoryWorkloadListSchema,
+  ClassOutlookSchema,
   CriticalAlertPageSchema,
   DemandForecastSchema,
   ExecutiveForecastsSchema,
@@ -37,6 +38,7 @@ export const pharmacyApi = {
     request("/pharmacy/stock", StockPageSchema, { query: q, signal: s }),
   riskByCategory: (s?: AbortSignal) =>
     request("/pharmacy/risk-by-category", z.array(z.object({ category: z.string(), high: z.number(), moderate: z.number(), safe: z.number() })), { signal: s }),
+  classOutlook: (s?: AbortSignal) => request("/pharmacy/class-outlook", ClassOutlookSchema, { signal: s }),
   forecast: (inventoryId: string, s?: AbortSignal) => request(`/pharmacy/stock/${enc(inventoryId)}/forecast`, DemandForecastSchema, { signal: s }),
   purchaseOrder: (inventory_id: string, quantity: number) =>
     request("/pharmacy/purchase-orders", PurchaseOrderSchema, { method: "POST", body: { inventory_id, quantity } }),

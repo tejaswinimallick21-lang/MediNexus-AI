@@ -94,6 +94,12 @@ export const DemandForecastSchema = z.object({
   forecast: ForecastMetaSchema,
 });
 export type DemandForecast = z.infer<typeof DemandForecastSchema>;
+export const ClassOutlookSchema = z.object({
+  simulated_data: z.boolean(),
+  as_of: z.string(),
+  items: z.array(z.object({ drug_class: z.string(), forecast_daily_units: num, last_7d_daily_units: num, change_pct: num })),
+  forecast: ForecastMetaSchema,
+});
 export const PurchaseOrderSchema = z.object({
   po_id: z.string(),
   inventory_id: z.string(),
