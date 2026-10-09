@@ -3,7 +3,7 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 
 import { ApiError } from "../api/client";
 import { dataApi } from "../api/dataPlatform";
-import type { Forecast, Prediction, Profile, UploadDetail, UploadSummary } from "../api/schemas/dataPlatform";
+import type { Forecast, Lineage, Prediction, Profile, Relationship, UploadDetail, UploadSummary } from "../api/schemas/dataPlatform";
 import { AreaTrend } from "../components/Charts";
 import { Badge, Button, SelectField } from "../components/Controls";
 import { DataTable, type Column } from "../components/DataTable";
@@ -25,52 +25,164 @@ function formatBytes(n: number): string {
 }
 
 export function DataEngineeringPage() {
-  const uploads = useApi((s) => dataApi.uploads({ limit: 50 }, s), []);
+  const uploads = useApi((s) => dataApi.uploads({ limit: 100 }, s), []);
   const [selected, setSelected] = useState<string | null>(null);
+  const [checked, setChecked] = useState<Set<string>>(new Set());
+  const [linking, setLinking] = useState<string[] | null>(null);
+  const [confirmBulk, setConfirmBulk] = useState(false);
+  const [confirmRow, setConfirmRow] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string>();
   const items = uploads.data?.items;
+  const reload = uploads.reload;
+  const anyProcessing = !!items?.some((u) => u.status === "processing");
 
   useEffect(() => {
     if (!selected && items?.length) setSelected(items[0].upload_id);
   }, [items, selected]);
+
+  // Keep statuses fresh while something is still processing
+  useEffect(() => {
+    if (!anyProcessing) return;
+    const t = setInterval(reload, 3000);
+    return () => clearInterval(t);
+  }, [anyProcessing, reload]);
+
+  const byId = useMemo(() => new Map((items ?? []).map((u) => [u.upload_id, u])), [items]);
+  const checkedReady = [...checked].filter((id) => byId.get(id)?.status === "ready");
+  const checkedDeletable = [...checked].filter((id) => byId.get(id) && byId.get(id)!.status !== "processing");
+
+  function toggle(id: string) {
+    setChecked((s) => {
+      const n = new Set(s);
+      if (n.has(id)) n.delete(id);
+      else n.add(id);
+      return n;
+    });
+    setConfirmBulk(false);
+  }
+
+  async function remove(ids: string[]) {
+    setDeleteError(undefined);
+    const failed: string[] = [];
+    for (const id of ids) {
+      try {
+        await dataApi.remove(id);
+      } catch (err) {
+        failed.push(`${byId.get(id)?.filename ?? id}: ${err instanceof ApiError ? err.detail : "could not delete"}`);
+      }
+    }
+    if (failed.length) setDeleteError(failed.join(" · "));
+    setChecked((s) => new Set([...s].filter((id) => !ids.includes(id))));
+    if (selected && ids.includes(selected)) setSelected(null);
+    if (linking?.some((id) => ids.includes(id))) setLinking(null);
+    setConfirmBulk(false);
+    setConfirmRow(null);
+    reload();
+  }
 
   return (
     <div>
       <PageHeader
         eyebrow="Platform administrator"
         title="Data Engineering"
-        subtitle="Upload a dataset and watch it move through Bronze → Silver → Gold, then get ML insights. Each upload runs in its own sandbox."
+        subtitle="Upload datasets, link related tables and watch them move through Bronze → Silver → Gold, then get ML insights. Every upload runs in its own sandbox."
       />
       <div className={styles.top}>
         <UploadPanel
           onUploaded={(id) => {
             setSelected(id);
-            uploads.reload();
+            reload();
           }}
         />
-        <Panel title="Upload sandboxes" subtitle="Most recent first" icon="Database">
+        <Panel
+          title="Upload sandboxes"
+          subtitle="Tick tables to link them or delete them · not used by live workspaces"
+          icon="Database"
+          actions={items && items.length > 0 ? <span className={styles.countTag}>{items.length}</span> : undefined}
+        >
+          {checked.size > 0 && (
+            <div className={styles.selectionBar}>
+              {confirmBulk ? (
+                <>
+                  <span className={styles.confirmText}>
+                    Permanently delete {checkedDeletable.length} sandbox{checkedDeletable.length === 1 ? "" : "es"}? Live hospital data is not affected.
+                  </span>
+                  <Button variant="primary" onClick={() => remove(checkedDeletable)}>
+                    Delete
+                  </Button>
+                  <Button variant="ghost" onClick={() => setConfirmBulk(false)}>
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <span>{checked.size} selected</span>
+                  <Button variant="primary" disabled={checkedReady.length < 2} onClick={() => setLinking(checkedReady)} title="Select at least two ready tables">
+                    <Icon.Sparkle size={14} /> Link & consolidate{checkedReady.length >= 2 ? ` ${checkedReady.length}` : ""}
+                  </Button>
+                  <Button variant="ghost" disabled={!checkedDeletable.length} onClick={() => setConfirmBulk(true)}>
+                    <Icon.Trash size={14} /> Delete selected
+                  </Button>
+                  <Button variant="ghost" onClick={() => setChecked(new Set())}>
+                    Clear
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
+          {deleteError && <p className={styles.error}>{deleteError}</p>}
           {uploads.error ? (
-            <ErrorState error={uploads.error} onRetry={uploads.reload} />
+            <ErrorState error={uploads.error} onRetry={reload} />
           ) : !items ? (
             <SkeletonText lines={5} />
           ) : items.length === 0 ? (
-            <EmptyState title="No uploads yet" hint="Drop a CSV, Parquet or JSON file to start." />
+            <EmptyState title="No uploads yet" hint="Drop CSV, Parquet or JSON files to start." />
           ) : (
             <ul className={styles.uploadList}>
               {items.map((u) => (
-                <li key={u.upload_id}>
-                  <button type="button" className={u.upload_id === selected ? styles.uploadOn : ""} onClick={() => setSelected(u.upload_id)}>
-                    <span className={styles.fileIcon}>
-                      <Icon.Database size={16} />
-                    </span>
-                    <span className={styles.uploadText}>
-                      <strong title={u.filename}>{u.filename}</strong>
-                      <span>
-                        {formatDate(u.created_at)} · {formatBytes(u.size_bytes)}
-                        {u.rows != null && ` · ${formatNumber(u.rows)} rows`}
-                      </span>
-                    </span>
-                    <StatusBadge u={u} />
-                  </button>
+                <li key={u.upload_id} className={styles.uploadRow}>
+                  <input
+                    type="checkbox"
+                    className={styles.check}
+                    checked={checked.has(u.upload_id)}
+                    onChange={() => toggle(u.upload_id)}
+                    aria-label={`Select ${u.filename}`}
+                  />
+                  {confirmRow === u.upload_id ? (
+                    <div className={styles.rowConfirm}>
+                      <span>Delete {u.filename}? Live data is not affected.</span>
+                      <Button variant="primary" onClick={() => remove([u.upload_id])}>
+                        Delete
+                      </Button>
+                      <Button variant="ghost" onClick={() => setConfirmRow(null)}>
+                        Cancel
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <button type="button" className={`${styles.uploadItem} ${u.upload_id === selected ? styles.uploadOn : ""}`} onClick={() => setSelected(u.upload_id)}>
+                        <span className={styles.fileIcon}>{u.filename.endsWith("_consolidated.parquet") ? <Icon.Sparkle size={16} /> : <Icon.Database size={16} />}</span>
+                        <span className={styles.uploadText}>
+                          <strong title={u.filename}>{u.filename}</strong>
+                          <span>
+                            {formatDate(u.created_at)} · {formatBytes(u.size_bytes)}
+                            {u.rows != null && ` · ${formatNumber(u.rows)} rows`}
+                          </span>
+                        </span>
+                        <StatusBadge u={u} />
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.rowDelete}
+                        onClick={() => setConfirmRow(u.upload_id)}
+                        disabled={u.status === "processing"}
+                        aria-label={`Delete ${u.filename}`}
+                        title="Delete this sandbox"
+                      >
+                        <Icon.Trash size={15} />
+                      </button>
+                    </>
+                  )}
                 </li>
               ))}
             </ul>
@@ -78,18 +190,199 @@ export function DataEngineeringPage() {
         </Panel>
       </div>
 
-      {selected ? (
+      {linking && (
+        <LinkPanel
+          key={linking.join(",")}
+          uploadIds={linking}
+          onClose={() => setLinking(null)}
+          onCreated={(id) => {
+            setLinking(null);
+            setChecked(new Set());
+            setSelected(id);
+            reload();
+          }}
+        />
+      )}
+
+      {selected && byId.has(selected) ? (
         <UploadView
           key={selected}
           uploadId={selected}
-          onChanged={uploads.reload}
+          onChanged={reload}
           onDeleted={() => {
             setSelected(null);
-            uploads.reload();
+            reload();
           }}
         />
       ) : null}
     </div>
+  );
+}
+
+// ---- Linking ---------------------------------------------------------------------------------
+
+function LinkPanel({ uploadIds, onClose, onCreated }: { uploadIds: string[]; onClose: () => void; onCreated: (id: string) => void }) {
+  const disc = useApi((s) => (void s, dataApi.discoverLinks(uploadIds)), [uploadIds.join(",")]);
+  const [base, setBase] = useState<string>("");
+  const [off, setOff] = useState<Set<number>>(new Set());
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string>();
+  const d = disc.data;
+  const baseTable = base || d?.suggested_base || d?.tables[0]?.name || "";
+
+  async function run() {
+    if (!d) return;
+    setBusy(true);
+    setError(undefined);
+    try {
+      const rels = d.relationships.filter((_, i) => !off.has(i));
+      const res = await dataApi.consolidate(uploadIds, baseTable, rels);
+      onCreated(res.upload.upload_id);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.detail : "Could not start consolidation.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Panel
+      title="Link & consolidate"
+      subtitle="Relationships are found from shared keys and confirmed by the values themselves"
+      icon="Sparkle"
+      actions={
+        <Button variant="ghost" onClick={onClose}>
+          <Icon.Close size={14} /> Close
+        </Button>
+      }
+      className={styles.linkPanel}
+    >
+      {disc.error ? (
+        <ErrorState error={disc.error} onRetry={disc.reload} />
+      ) : !d ? (
+        <div className={styles.discovering}>
+          <SkeletonText lines={4} />
+          <p className={styles.muted}>Comparing key columns across {uploadIds.length} tables…</p>
+        </div>
+      ) : (
+        <div className={styles.linkGrid}>
+          <RelationshipGraph tables={d.tables.map((t) => ({ name: t.name, rows: t.rows }))} relationships={d.relationships.filter((_, i) => !off.has(i))} base={baseTable} />
+          <div className={styles.linkSide}>
+            <SelectField
+              id="link-base"
+              label="One output row per"
+              value={baseTable}
+              onChange={setBase}
+              options={d.tables.map((t) => ({ value: t.name, label: `${t.name} (${formatNumber(t.rows)} rows)${t.name === d.suggested_base ? " · suggested" : ""}` }))}
+            />
+            <p className={styles.muted}>
+              Lookup tables are joined onto each <strong>{baseTable}</strong> row. Detail tables with many rows per {baseTable} are summarised (counts,
+              totals, most common values), counting only rows dated on or before the {baseTable} row when both have dates, so nothing from the future leaks in.
+            </p>
+            {d.relationships.length === 0 ? (
+              <EmptyState title="No relationships found" hint="The selected tables share no key columns whose values match." />
+            ) : (
+              <ul className={styles.relList}>
+                {d.relationships.map((r, i) => (
+                  <li key={i} className={off.has(i) ? styles.relOff : ""}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={!off.has(i)}
+                        onChange={() =>
+                          setOff((s) => {
+                            const n = new Set(s);
+                            if (n.has(i)) n.delete(i);
+                            else n.add(i);
+                            return n;
+                          })
+                        }
+                      />
+                      <span>
+                        <code>
+                          {r.from_table}.{r.from_column}
+                        </code>{" "}
+                        →{" "}
+                        <code>
+                          {r.to_table}.{r.to_column}
+                        </code>
+                        <em>
+                          {r.kind === "one_to_one" ? "one-to-one" : "many-to-one"} · {formatPercent(r.containment_pct, 0)} of values match
+                          {r.name_match ? " · names match" : ""}
+                        </em>
+                      </span>
+                    </label>
+                    <Badge tone={r.confidence >= 0.9 ? "good" : r.confidence >= 0.7 ? "info" : "warn"}>{formatNumber(r.confidence * 100, 0)}%</Badge>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {error && <p className={styles.error}>{error}</p>}
+            <Button variant="primary" onClick={run} disabled={busy || !baseTable || d.relationships.length === off.size}>
+              {busy ? "Starting…" : `Consolidate into one ${baseTable} table`}
+            </Button>
+          </div>
+        </div>
+      )}
+    </Panel>
+  );
+}
+
+/** Tables on a circle, base in the centre; edges point from the many side to the one side. */
+function RelationshipGraph({ tables, relationships, base }: { tables: { name: string; rows: number }[]; relationships: Relationship[]; base: string }) {
+  const W = 520;
+  const H = 340;
+  const others = tables.filter((t) => t.name !== base);
+  const pos = new Map<string, { x: number; y: number }>();
+  pos.set(base, { x: W / 2, y: H / 2 });
+  others.forEach((t, i) => {
+    const a = (i / Math.max(1, others.length)) * Math.PI * 2 - Math.PI / 2;
+    pos.set(t.name, { x: W / 2 + Math.cos(a) * 190, y: H / 2 + Math.sin(a) * 120 });
+  });
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className={styles.graph} role="img" aria-label="Relationship map">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#0284c7" />
+        </marker>
+      </defs>
+      {relationships.map((r, i) => {
+        const a = pos.get(r.from_table);
+        const b = pos.get(r.to_table);
+        if (!a || !b) return null;
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const len = Math.hypot(dx, dy) || 1;
+        const pad = 46;
+        const x1 = a.x + (dx / len) * pad;
+        const y1 = a.y + (dy / len) * pad * 0.6;
+        const x2 = b.x - (dx / len) * pad;
+        const y2 = b.y - (dy / len) * pad * 0.6;
+        return (
+          <g key={i}>
+            <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#0284c7" strokeWidth={1.6} strokeDasharray={r.kind === "one_to_one" ? "5 4" : undefined} markerEnd="url(#arrow)" opacity={0.75} />
+            <text x={(x1 + x2) / 2} y={(y1 + y2) / 2 - 5} textAnchor="middle" className={styles.graphEdge}>
+              {r.from_column === r.to_column ? r.from_column : `${r.from_column}→${r.to_column}`}
+            </text>
+          </g>
+        );
+      })}
+      {tables.map((t) => {
+        const p = pos.get(t.name)!;
+        const isBase = t.name === base;
+        return (
+          <g key={t.name} transform={`translate(${p.x},${p.y})`}>
+            <rect x={-62} y={-22} width={124} height={44} rx={12} className={isBase ? styles.nodeBase : styles.node} />
+            <text y={-3} textAnchor="middle" className={isBase ? styles.nodeTextBase : styles.nodeText}>
+              {t.name.length > 16 ? `${t.name.slice(0, 15)}…` : t.name}
+            </text>
+            <text y={13} textAnchor="middle" className={isBase ? styles.nodeSubBase : styles.nodeSub}>
+              {formatCompact(t.rows)} rows{isBase ? " · grain" : ""}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
   );
 }
 
@@ -231,7 +524,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: "profile", label: "Data profile" },
   { id: "predict", label: "Predict a column" },
   { id: "forecast", label: "Forecast" },
-  { id: "summary", label: "Summary" },
+  { id: "summary", label: "Insights report" },
 ];
 
 function UploadView({ uploadId, onChanged, onDeleted }: { uploadId: string; onChanged: () => void; onDeleted: () => void }) {
@@ -256,20 +549,27 @@ function UploadView({ uploadId, onChanged, onDeleted }: { uploadId: string; onCh
     <section className={styles.view} aria-label={`Upload ${d.filename}`}>
       <div className={styles.viewHead}>
         <div>
-          <h2>{d.filename}</h2>
+          <h2>
+            {d.filename} <span className={styles.sandboxTag}>{d.kind === "consolidated" ? "Linked tables · " : ""}Sandbox · not used by live workspaces</span>
+          </h2>
           <p>
-            Uploaded {formatDate(d.created_at)} by {d.uploaded_by} · {formatBytes(d.size_bytes)} · SHA-256 <code>{d.sha256.slice(0, 12)}…</code>
+            {d.kind === "consolidated" ? "Consolidated" : "Uploaded"} {formatDate(d.created_at)} by {d.uploaded_by} · {formatBytes(d.size_bytes)} · SHA-256 <code>{d.sha256.slice(0, 12)}…</code>
           </p>
         </div>
         <div className={styles.viewActions}>
           {d.status === "ready" && (
-            <a className={styles.download} href={dataApi.cleanCsvUrl(d.upload_id)} download>
-              <Icon.Arrow size={14} style={{ transform: "rotate(90deg)" }} /> Download clean CSV
-            </a>
+            <>
+              <a className={styles.download} href={dataApi.reportUrl(d.upload_id)} target="_blank" rel="noopener noreferrer">
+                <Icon.Clipboard size={14} /> Insights report
+              </a>
+              <a className={styles.secondaryLink} href={dataApi.cleanCsvUrl(d.upload_id)} download>
+                <Icon.Arrow size={14} style={{ transform: "rotate(90deg)" }} /> Clean CSV
+              </a>
+            </>
           )}
           {confirm ? (
             <span className={styles.confirm}>
-              Delete this sandbox?
+              Permanently delete this sandbox? Live hospital data is not affected.
               <Button
                 variant="primary"
                 onClick={async () => {
@@ -292,6 +592,7 @@ function UploadView({ uploadId, onChanged, onDeleted }: { uploadId: string; onCh
       </div>
 
       <MedallionStepper d={d} progress={job?.progress_pct} />
+      {d.kind === "consolidated" && d.lineage && <LineagePanel lineage={d.lineage} />}
 
       {processing && (
         <Panel title="Processing" subtitle={job?.stage ?? d.stage} icon="Pulse">
@@ -586,14 +887,20 @@ type JobState = ReturnType<typeof useJob>;
 
 function PredictTab({ d, busy, job, onStarted }: { d: UploadDetail; busy: boolean; job: JobState; onStarted: () => void }) {
   const targets = useMemo(() => (d.cleaning?.columns ?? []).filter((c) => ["numeric", "category", "boolean"].includes(c.kind) && !c.pii_masked), [d.cleaning]);
-  const [target, setTarget] = useState(d.predictions[0]?.target ?? targets[0]?.name ?? "");
+  const [target, setTarget] = useState(d.predictions[0]?.target ?? d.suggested_targets[0] ?? targets[0]?.name ?? "");
+  const shown = d.predictions.find((p) => p.target === target);
+  const [exclude, setExclude] = useState<string[]>(() => (shown?.excluded ?? []).filter((e) => e.reason === "excluded by you").map((e) => e.column));
   const [error, setError] = useState<string>();
-  const shown = d.predictions.find((p) => p.target === target) ?? d.predictions[0];
 
-  async function run() {
+  useEffect(() => {
+    const p = d.predictions.find((x) => x.target === target);
+    setExclude((p?.excluded ?? []).filter((e) => e.reason === "excluded by you").map((e) => e.column));
+  }, [target, d.predictions]);
+
+  async function run(nextExclude = exclude) {
     setError(undefined);
     try {
-      await dataApi.predict(d.upload_id, target);
+      await dataApi.predict(d.upload_id, target, nextExclude);
       onStarted();
     } catch (err) {
       setError(err instanceof ApiError ? err.detail : "Could not start training.");
@@ -602,26 +909,58 @@ function PredictTab({ d, busy, job, onStarted }: { d: UploadDetail; busy: boolea
 
   return (
     <div className={styles.stack}>
-      <Panel title="Predict a column" subtitle="Trains a gradient-boosting model and compares it with a simple baseline on held-out rows" icon="Radar">
+      <Panel title="Predict a column" subtitle="Picks classification or regression from the column, compares a linear model with gradient boosting, and checks both against a simple baseline" icon="Radar">
+        {d.suggested_targets.length > 0 && (
+          <div className={styles.suggest}>
+            <span>Suggested outcomes:</span>
+            {d.suggested_targets.map((s) => (
+              <button key={s} type="button" className={s === target ? styles.chipOn : styles.chip} onClick={() => setTarget(s)}>
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
         <div className={styles.formRow}>
           <SelectField id="pred-target" label="Column to predict" value={target} onChange={setTarget} options={targets.map((c) => ({ value: c.name, label: `${c.name} (${c.kind})` }))} />
-          <Button variant="primary" onClick={run} disabled={busy || !target}>
-            {busy ? "Running…" : "Train and evaluate"}
+          <Button variant="primary" onClick={() => run()} disabled={busy || !target}>
+            {busy ? "Running…" : shown ? "Re-run" : "Train and evaluate"}
           </Button>
         </div>
+        {exclude.length > 0 && (
+          <div className={styles.suggest}>
+            <span>Left out by you:</span>
+            {exclude.map((c) => (
+              <button key={c} type="button" className={styles.chipOn} onClick={() => setExclude((x) => x.filter((y) => y !== c))} title="Include again (then re-run)">
+                {c} ×
+              </button>
+            ))}
+          </div>
+        )}
         {busy && job && <p className={styles.muted}>{job.stage} · {job.progress_pct}%</p>}
         {job?.status === "failed" && job.error && <p className={styles.error}>{job.error}</p>}
         {error && <p className={styles.error}>{error}</p>}
         <p className={styles.muted}>
-          Identifiers, pseudonymised columns and any column that alone predicts the target almost perfectly (likely leakage) are excluded automatically.
+          Identifiers, pseudonymised columns, sibling outcomes (e.g. a 7-day flag when predicting 30-day) and any column that alone predicts the target almost perfectly are excluded automatically.
         </p>
       </Panel>
-      {shown ? <PredictionResult p={shown} /> : !busy && <EmptyState title="No model trained yet" hint="Pick a column and train." />}
+      {shown ? (
+        <PredictionResult
+          p={shown}
+          busy={busy}
+          onExclude={(col) => {
+            const next = [...new Set([...exclude, col])];
+            setExclude(next);
+            void run(next);
+          }}
+        />
+      ) : (
+        !busy && <EmptyState title="No model trained for this column yet" hint="Pick a column and train." />
+      )}
     </div>
   );
 }
 
-function PredictionResult({ p }: { p: Prediction }) {
+function PredictionResult({ p, busy, onExclude }: { p: Prediction; busy: boolean; onExclude: (column: string) => void }) {
   const max = Math.max(...p.drivers.map((x) => x.importance), 1e-9);
   return (
     <div className={styles.twoCol}>
@@ -633,7 +972,28 @@ function PredictionResult({ p }: { p: Prediction }) {
           </strong>
           <p>{p.verdict}</p>
         </div>
+        {p.timing_warnings.map((w) => (
+          <div key={w.feature} className={styles.timing}>
+            <Icon.Alert size={16} />
+            <span>{w.note}</span>
+            <Button variant="ghost" onClick={() => onExclude(w.feature)} disabled={busy}>
+              Exclude &amp; re-run
+            </Button>
+          </div>
+        ))}
         <dl className={styles.dl}>
+          {p.selected_model && (
+            <>
+              <dt>Model</dt>
+              <dd>
+                {p.selected_model}{" "}
+                <span className={styles.muted}>
+                  (chosen on validation:{" "}
+                  {p.model_comparison.map((m) => `${m.model} ${m.validation_score == null ? "—" : formatNumber(m.validation_score, p.primary_metric === "MAE" ? 2 : 3)}`).join(" vs ")})
+                </span>
+              </dd>
+            </>
+          )}
           <dt>Baseline</dt>
           <dd>{p.baseline_label}</dd>
           <dt>Validation</dt>
@@ -655,6 +1015,20 @@ function PredictionResult({ p }: { p: Prediction }) {
           <dt>Features used</dt>
           <dd>{p.features_used.length}</dd>
         </dl>
+        {p.effects.length > 0 && (
+          <>
+            <h4 className={styles.subhead}>What drives the prediction</h4>
+            <ul className={styles.effects}>
+              {p.effects.map((e) => (
+                <li key={e.feature} className={styles[`effect_${e.direction}`]}>
+                  <span className={styles.effectIcon}>{e.direction === "up" ? "▲" : e.direction === "down" ? "▼" : "◆"}</span>
+                  <span>{e.detail}</span>
+                </li>
+              ))}
+            </ul>
+            <p className={styles.muted}>Associations the model learned, not proof of cause and effect.</p>
+          </>
+        )}
         <h4 className={styles.subhead}>Top drivers (permutation importance on test rows)</h4>
         {p.drivers.length ? (
           <ul className={styles.drivers}>
@@ -789,7 +1163,16 @@ function ForecastResult({ f }: { f: Forecast }) {
 
 function SummaryTab({ d }: { d: UploadDetail }) {
   return (
-    <Panel title="Plain-English summary" subtitle="Every sentence is computed from the results above" icon="Sparkle">
+    <Panel
+      title="Insights report"
+      subtitle="Every sentence is computed from the results in the other tabs"
+      icon="Sparkle"
+      actions={
+        <a className={styles.download} href={dataApi.reportUrl(d.upload_id)} target="_blank" rel="noopener noreferrer">
+          <Icon.Clipboard size={14} /> Open full report
+        </a>
+      }
+    >
       {d.summary.length ? (
         <ul className={styles.summary}>
           {d.summary.map((s) => (
@@ -799,7 +1182,46 @@ function SummaryTab({ d }: { d: UploadDetail }) {
       ) : (
         <Skeleton height={60} />
       )}
-      <p className={styles.muted}>Run a prediction or forecast to add their findings here.</p>
+      <p className={styles.muted}>
+        The full report adds data lineage, the cleaning log, model comparison and caveats. It opens in a new tab; use the browser&apos;s Save or Print → PDF to keep a copy.
+      </p>
+    </Panel>
+  );
+}
+
+function LineagePanel({ lineage }: { lineage: Lineage }) {
+  return (
+    <Panel
+      title="How the tables were linked"
+      subtitle={`One row per ${lineage.base}${lineage.base_date ? ` · dated by ${lineage.base_date}` : ""}${lineage.rows ? ` · ${formatNumber(lineage.rows)} rows × ${lineage.columns} columns` : ""}`}
+      icon="Sparkle"
+    >
+      <div className={styles.sources}>
+        {lineage.sources.map((s) => (
+          <span key={s.upload_id} className={s.name === lineage.base ? styles.sourceBase : styles.source}>
+            <strong>{s.name}</strong> {formatCompact(s.rows)} rows
+          </span>
+        ))}
+      </div>
+      {lineage.steps.length > 0 && (
+        <ol className={styles.lineageSteps}>
+          {lineage.steps.map((s) => (
+            <li key={s.table}>
+              <Badge tone={s.relation.startsWith("aggregated") ? "info" : "neutral"}>{s.relation}</Badge>
+              <span>
+                <strong>{s.table}</strong> · <code>{s.on}</code> · {formatPercent(s.matched_pct, 0)} matched · +{s.columns_added} columns
+                {s.point_in_time ? " · point-in-time" : ""}
+                {s.note ? <em> · {s.note}</em> : null}
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
+      {lineage.warnings.map((w) => (
+        <p key={w} className={styles.warnLine}>
+          <Icon.Alert size={14} /> {w}
+        </p>
+      ))}
     </Panel>
   );
 }

@@ -88,6 +88,11 @@ export const PredictionSchema = z.object({
   beats_baseline: z.boolean(),
   verdict: z.string(),
   drivers: z.array(z.object({ feature: z.string(), importance: num })),
+  selected_model: optStr,
+  model_comparison: z.array(z.object({ model: z.string(), validation_score: optNum, selected: z.boolean() })),
+  effects: z.array(z.object({ feature: z.string(), direction: z.enum(["up", "down", "mixed", "categorical"]), detail: z.string() })),
+  timing_warnings: z.array(z.object({ feature: z.string(), note: z.string() })),
+  positive_rate_pct: optNum,
   classes: optNum,
   accuracy: optNum,
   baseline_accuracy: optNum,
@@ -121,6 +126,39 @@ export const ForecastSchema = z.object({
 });
 export type Forecast = z.infer<typeof ForecastSchema>;
 
+export const RelationshipSchema = z.object({
+  from_table: z.string(),
+  from_column: z.string(),
+  to_table: z.string(),
+  to_column: z.string(),
+  kind: z.enum(["many_to_one", "one_to_one"]),
+  containment_pct: num,
+  name_match: z.boolean(),
+  confidence: num,
+});
+export type Relationship = z.infer<typeof RelationshipSchema>;
+
+export const LinkDiscoverySchema = z.object({
+  tables: z.array(z.object({ upload_id: z.string(), name: z.string(), filename: z.string(), rows: num, columns: num })),
+  relationships: z.array(RelationshipSchema),
+  suggested_base: optStr,
+});
+export type LinkDiscovery = z.infer<typeof LinkDiscoverySchema>;
+
+const LineageSchema = z.object({
+  sources: z.array(z.object({ upload_id: z.string(), name: z.string(), filename: z.string(), rows: num })),
+  base: z.string(),
+  base_date: optStr,
+  rows: optNum,
+  columns: optNum,
+  relationships: z.array(RelationshipSchema),
+  steps: z
+    .array(z.object({ table: z.string(), relation: z.string(), on: z.string(), matched_pct: num, columns_added: num, point_in_time: z.boolean().nullable().optional(), note: z.string() }))
+    ,
+  warnings: z.array(z.string()),
+});
+export type Lineage = z.infer<typeof LineageSchema>;
+
 export const UploadDetailSchema = UploadSummarySchema.extend({
   error: optStr,
   job_id: optStr,
@@ -131,6 +169,9 @@ export const UploadDetailSchema = UploadSummarySchema.extend({
   summary: z.array(z.string()),
   preview_columns: z.array(z.string()),
   preview_rows: z.array(z.array(z.string().nullable())),
+  kind: z.enum(["upload", "consolidated"]),
+  lineage: LineageSchema.nullable().optional(),
+  suggested_targets: z.array(z.string()),
 });
 export type UploadDetail = z.infer<typeof UploadDetailSchema>;
 

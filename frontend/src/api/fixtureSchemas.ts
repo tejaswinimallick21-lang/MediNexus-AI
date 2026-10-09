@@ -52,7 +52,7 @@ import {
   AssistantSessionPageSchema,
   AssistantSessionSchema,
 } from "./schemas/assistant";
-import { UploadAcceptedSchema, UploadDetailSchema, UploadPageSchema } from "./schemas/dataPlatform";
+import { LinkDiscoverySchema, UploadAcceptedSchema, UploadDetailSchema, UploadPageSchema } from "./schemas/dataPlatform";
 
 /**
  * Golden fixture name (written by the backend pytest contract tests into __fixtures__/)
@@ -108,4 +108,7 @@ export const fixtureSchemas: Record<string, ZodTypeAny> = {
   data_upload_detail: UploadDetailSchema,
   data_upload_insights: UploadDetailSchema,
   data_uploads: UploadPageSchema,
+  data_link_discovery: LinkDiscoverySchema,
+  data_consolidated_detail: UploadDetailSchema,
+  data_consolidated_insights: UploadDetailSchema,
 };

@@ -144,8 +144,18 @@ def _standardise_categories(s: pd.Series) -> Tuple[pd.Series, int]:
     return mapped, changed
 
 
+_ORG = re.compile(
+    r"hospital|clinic|cent(?:er|re)|medical|health|pharma|insurance|assurance|medicare|medicaid|shield|cross|mutual|"
+    r"(?:inc|ltd|llc|corp|plc|co|plan|payer|group|trust|foundation|university|labs?|care|national|united)", re.I)
+
+
 def _is_pii(name: str, s: pd.Series) -> bool:
     if _PII_NAME.search(name):
+        # A bare "name" column of organisations (hospitals, payers) is not personal data
+        if re.fullmatch(r"(full_)?name", name):
+            sample = s.dropna().astype(str).head(500)
+            if not sample.empty and sample.str.contains(_ORG).mean() > 0.3:
+                return False
         return True
     sample = s.dropna().astype(str).str.strip().head(500)
     if sample.empty:

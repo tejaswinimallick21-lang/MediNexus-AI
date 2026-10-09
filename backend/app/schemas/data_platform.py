@@ -1,6 +1,6 @@
 """Schemas for the Data Engineering workspace: upload sandbox, cleaning report and ML insights."""
 
-from typing import List, Literal, Optional
+from typing import Annotated, List, Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -137,6 +137,23 @@ class Driver(BaseModel):
     importance: float
 
 
+class ModelCandidate(BaseModel):
+    model: str
+    validation_score: Optional[float] = None
+    selected: bool
+
+
+class Effect(BaseModel):
+    feature: str
+    direction: Literal["up", "down", "mixed", "categorical"]
+    detail: str
+
+
+class TimingWarning(BaseModel):
+    feature: str
+    note: str
+
+
 class Prediction(BaseModel):
     target: str
     task: Literal["classification", "regression"]
@@ -153,6 +170,11 @@ class Prediction(BaseModel):
     beats_baseline: bool
     verdict: str
     drivers: List[Driver]
+    selected_model: Optional[str] = None
+    model_comparison: List[ModelCandidate] = []
+    effects: List[Effect] = []
+    timing_warnings: List[TimingWarning] = []
+    positive_rate_pct: Optional[float] = None
     classes: Optional[int] = None
     accuracy: Optional[float] = None
     baseline_accuracy: Optional[float] = None
@@ -202,6 +224,59 @@ class UploadSummary(BaseModel):
     quality_score: Optional[float] = None
 
 
+class Relationship(BaseModel):
+    from_table: str
+    from_column: str
+    to_table: str
+    to_column: str
+    kind: Literal["many_to_one", "one_to_one"]
+    containment_pct: float
+    name_match: bool
+    confidence: float
+
+
+class LinkTable(BaseModel):
+    upload_id: str
+    name: str
+    filename: str
+    rows: int
+    columns: int
+
+
+class LinkDiscovery(BaseModel):
+    tables: List[LinkTable]
+    relationships: List[Relationship]
+    suggested_base: Optional[str] = None
+
+
+class LineageSource(BaseModel):
+    upload_id: str
+    name: str
+    filename: str
+    rows: int
+
+
+class LineageStep(BaseModel):
+    table: str
+    relation: str
+    on: str
+    matched_pct: float
+    columns_added: int
+    point_in_time: Optional[bool] = None
+    note: str = ""
+
+
+class Lineage(BaseModel):
+    sources: List[LineageSource]
+    base: str
+    base_date: Optional[str] = None
+    rows: Optional[int] = None
+    columns: Optional[int] = None
+    relationships: List[Relationship] = []
+    steps: List[LineageStep] = []
+    warnings: List[str] = []
+
+
 class UploadDetail(UploadSummary):
     error: Optional[str] = None
     job_id: Optional[str] = None
@@ -212,6 +287,9 @@ class UploadDetail(UploadSummary):
     summary: List[str] = []
     preview_columns: List[str] = []
     preview_rows: List[List[Optional[str]]] = []
+    kind: Literal["upload", "consolidated"] = "upload"
+    lineage: Optional[Lineage] = None
+    suggested_targets: List[str] = []
 
 
 class UploadAccepted(BaseModel):
@@ -225,6 +303,19 @@ class JobAccepted(BaseModel):
 
 class PredictIn(BaseModel):
     target: str = Field(..., min_length=1, max_length=120)
+    exclude: List[str] = Field(default_factory=list, max_length=200, description="Columns to leave out of the model")
+
+
+UploadIdStr = Annotated[str, Field(pattern="^[0-9a-f]{32}$")]
+
+
+class LinkIn(BaseModel):
+    upload_ids: List[UploadIdStr] = Field(..., min_length=2, max_length=10)
+
+
+class ConsolidateIn(LinkIn):
+    base_table: Optional[str] = Field(None, max_length=120, description="Grain of the output: one row per row of this table")
+    relationships: Optional[List[Relationship]] = Field(None, description="Omit to use every discovered relationship")
 
 
 class ForecastIn(BaseModel):

@@ -59,6 +59,11 @@
       "rate_pct": 1.3
     },
     {
+      "label": "Encounter for problem",
+      "count": 2049,
+      "rate_pct": 0.9
+    },
+    {
       "label": "Chronic intractable migraine without aura",
       "count": 745,
       "rate_pct": 0.9
@@ -69,13 +74,8 @@
       "rate_pct": 0.9
     },
     {
-      "label": "Encounter for problem",
-      "count": 2049,
-      "rate_pct": 0.9
-    },
-    {
-      "label": "COVID-19",
-      "count": 2376,
+      "label": "Chronic pain",
+      "count": 705,
       "rate_pct": 0.4
     }
   ]

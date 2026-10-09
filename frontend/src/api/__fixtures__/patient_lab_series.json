@@ -1,17 +1,17 @@
 {
-  "test_name": "Systolic Blood Pressure",
+  "test_name": "Diastolic Blood Pressure",
   "unit": "mm[Hg]",
-  "reference_range": "90.0 - 120.0",
+  "reference_range": "60.0 - 80.0",
   "points": [
     {
       "test_date": "2019-10-11",
-      "test_value": 103.0,
-      "abnormal_flag": "Normal"
+      "test_value": 84.0,
+      "abnormal_flag": "High"
     },
     {
       "test_date": "2020-01-25",
-      "test_value": 133.0,
-      "abnormal_flag": "High"
+      "test_value": 74.0,
+      "abnormal_flag": "Normal"
     }
   ]
 }

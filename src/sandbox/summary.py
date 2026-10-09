@@ -18,6 +18,16 @@ def summarise(manifest: Dict[str, Any]) -> List[str]:
     profile: Dict[str, Any] = manifest.get("profile") or {}
     q = cleaning.get("quality") or {}
 
+    lin = manifest.get("lineage") or {}
+    if manifest.get("kind") == "consolidated" and lin.get("steps") is not None:
+        joined = [s["table"] for s in lin["steps"]]
+        pit = [s["table"] for s in lin["steps"] if s.get("point_in_time")]
+        out.append(
+            f"{len(lin.get('sources', []))} tables were linked into one row per {lin.get('base')} ({_n(lin.get('rows', 0))} rows, {lin.get('columns')} columns): "
+            + ", ".join(joined) + " joined" + (f"; {', '.join(pit)} counted point-in-time (no future rows)" if pit else "") + "."
+        )
+        out += list(lin.get("warnings", []))
+
     if cleaning:
         removed = cleaning.get("rows_in", 0) - cleaning.get("rows_out", 0)
         fixes = [s for s in cleaning.get("steps", []) if s.get("affected") and s["step"] not in ("Report missing values",)]
@@ -62,7 +72,13 @@ def summarise(manifest: Dict[str, Any]) -> List[str]:
             f"Predicting {p['target']}: the model scores {p['primary_metric']} {p['score']:.3g} vs {p['baseline_score']:.3g} for the baseline ({p['baseline_label']}), so it {verdict} the baseline"
             + (f"; top drivers are {drivers}." if drivers and p.get("beats_baseline") else ".")
         )
-        leaks = [e["column"] for e in p.get("excluded", []) if e["reason"].startswith(("suspected leakage", "name overlaps"))]
+        if p.get("selected_model"):
+            out.append(f"For {p['target']}, {p['selected_model'].lower()} was selected over the alternative on a validation slice of the training data.")
+        for e in p.get("effects", [])[:3]:
+            out.append(e["detail"])
+        for w in p.get("timing_warnings", []):
+            out.append("Check: " + w["note"])
+        leaks = [e["column"] for e in p.get("excluded", []) if e["reason"].startswith(("suspected leakage", "name overlaps", "sibling outcome"))]
         if leaks:
             one = len(leaks) == 1
             out.append(f"{', '.join(leaks)} {'was' if one else 'were'} excluded as suspected leakage: {'it gives' if one else 'they give'} away {p['target']} rather than predict it.")

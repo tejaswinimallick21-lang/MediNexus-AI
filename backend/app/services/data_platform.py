@@ -9,6 +9,8 @@ data/raw or to the live lakehouse tables; promotion is a separate, approved step
 import hashlib
 import json
 import os
+import re
+import secrets
 import shutil
 import threading
 import uuid
@@ -25,7 +27,9 @@ from backend.app.core.pagination import Page, PageParams, build_page
 from backend.app.core.users import UserRecord
 from backend.app.jobs import runner
 from backend.app.schemas.data_platform import (
+    ConsolidateIn,
     ForecastIn,
+    LinkDiscovery,
     JobAccepted,
     UploadAccepted,
     UploadDetail,
@@ -34,8 +38,10 @@ from backend.app.schemas.data_platform import (
 from config.constants import DATA_DIR, GOLD_TABLES
 from src.sandbox.cleaning import clean, read_table
 from src.sandbox.forecast import forecast as run_forecast
-from src.sandbox.modeling import predict_column
+from src.sandbox.linking import consolidate, discover, table_name
+from src.sandbox.modeling import predict_column, suggest_targets
 from src.sandbox.profiling import profile as run_profile
+from src.sandbox.report import render_report
 from src.sandbox.summary import summarise
 from src.security.audit import log_audit_event
 from src.utils.database import query_df_strict
@@ -48,9 +54,28 @@ PREVIEW_ROWS = 20
 _manifest_lock = threading.Lock()
 
 
+def _pseudonym_key() -> str:
+    """One platform-wide key, so the same identifier maps to the same token in every upload (linkable)."""
+    env = os.getenv("MEDINEXUS_PSEUDONYM_KEY")
+    if env:
+        return env
+    path = UPLOADS_DIR / ".pseudonym_key"
+    UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
+    with _manifest_lock:
+        if not path.exists():
+            path.write_text(secrets.token_hex(32), encoding="utf-8")
+            try:
+                os.chmod(path, 0o600)
+            except OSError:
+                pass
+        return path.read_text(encoding="utf-8").strip()
+
+
 # ---- manifest storage --------------------------------------------------------------------------
 
 def _dir(upload_id: str) -> Path:
+    if not re.fullmatch(r"[0-9a-f]{32}", upload_id or ""):
+        raise APIError(404, "upload_not_found", "No such upload.")
     return UPLOADS_DIR / upload_id
 
 
@@ -142,12 +167,18 @@ def _write_parquet(df: pd.DataFrame, path: Path) -> None:
         safe.to_parquet(path, index=False)
 
 
-def _pipeline_job(upload_id: str, raw_path: Path, filename: str, salt: str):
+def _pipeline_job(upload_id: str, raw_path: Path, filename: str, salt: str, build=None):
     def run(ctx: runner.JobContext) -> Dict[str, Any]:
         try:
+            if build is not None:
+                ctx.progress(5, "Linking and consolidating the source tables")
+                _update(upload_id, stage="Linking and consolidating")
+                built = build(ctx)
+                _write_parquet(built, raw_path)
+                _update(upload_id, size_bytes=raw_path.stat().st_size, sha256=hashlib.sha256(raw_path.read_bytes()).hexdigest())
             ctx.progress(10, "Bronze: reading the raw file")
             _update(upload_id, stage="Bronze: reading the raw file")
-            df = read_table(raw_path.read_bytes(), filename)
+            df = read_table(raw_path.read_bytes(), raw_path.name)
             ctx.progress(30, f"Silver: cleaning {len(df):,} rows × {df.shape[1]} columns")
             _update(upload_id, stage="Silver: cleaning")
             res = clean(df, salt)
@@ -194,7 +225,7 @@ async def create_upload(file: UploadFile, user: UserRecord) -> UploadAccepted:
         "stage": "Queued", "predictions": {}, "forecast": None, "summary": [],
     }
     _update(upload_id, **manifest)
-    job = runner.submit("sandbox_pipeline", user.email, _pipeline_job(upload_id, raw_path, name, salt=uuid.uuid4().hex))
+    job = runner.submit("sandbox_pipeline", user.email, _pipeline_job(upload_id, raw_path, name, salt=_pseudonym_key()))
     _update(upload_id, job_id=job.job_id)
     log_audit_event(username=user.email, role=user.role, action="SANDBOX_UPLOAD", resource=upload_id, status="SUCCESS",
                     details=f"{name} ({len(data):,} bytes, sha256 {manifest['sha256'][:12]}…)")
@@ -226,7 +257,8 @@ def get_upload(upload_id: str) -> UploadDetail:
     return UploadDetail(
         **_summary(m).model_dump(), error=m.get("error"), job_id=m.get("job_id"), cleaning=m.get("cleaning"), profile=m.get("profile"),
         predictions=list((m.get("predictions") or {}).values()), forecast=m.get("forecast"), summary=m.get("summary") or [],
-        preview_columns=cols, preview_rows=rows,
+        preview_columns=cols, preview_rows=rows, kind=m.get("kind", "upload"), lineage=m.get("lineage"),
+        suggested_targets=suggest_targets((m.get("cleaning") or {}).get("columns", [])) if m.get("cleaning") else [],
     )
 
 
@@ -264,7 +296,7 @@ def _require_ready(upload_id: str) -> Dict[str, Any]:
     return m
 
 
-def start_prediction(upload_id: str, target: str, user: UserRecord) -> JobAccepted:
+def start_prediction(upload_id: str, target: str, user: UserRecord, exclude: Optional[List[str]] = None) -> JobAccepted:
     m = _require_ready(upload_id)
     kinds = _kinds(m)
     if target not in kinds:
@@ -275,7 +307,11 @@ def start_prediction(upload_id: str, target: str, user: UserRecord) -> JobAccept
     def run(ctx: runner.JobContext) -> Dict[str, Any]:
         try:
             ctx.progress(15, f"Training a model to predict {target}")
-            result = predict_column(_load_clean(upload_id), kinds, target, _pii(m))
+            data = _load_clean(upload_id)
+            dropped = [c for c in (exclude or []) if c in data.columns and c != target]
+            used_kinds = {k: v for k, v in kinds.items() if k not in dropped}
+            result = predict_column(data.drop(columns=dropped), used_kinds, target, _pii(m))
+            result["excluded"] = [{"column": c, "reason": "excluded by you"} for c in dropped] + result["excluded"]
             ctx.progress(90, "Comparing with the baseline")
             preds = dict(_read(upload_id).get("predictions") or {})
             preds[target] = result
@@ -288,7 +324,7 @@ def start_prediction(upload_id: str, target: str, user: UserRecord) -> JobAccept
 
     job = runner.submit("sandbox_predict", user.email, run)
     _update(upload_id, job_id=job.job_id)
-    log_audit_event(username=user.email, role=user.role, action="SANDBOX_PREDICT", resource=upload_id, status="SUCCESS", details=f"target={target}")
+    log_audit_event(username=user.email, role=user.role, action="SANDBOX_PREDICT", resource=upload_id, status="SUCCESS", details=f"target={target}; excluded={','.join(exclude or []) or 'none'}")
     return JobAccepted(job_id=job.job_id)
 
 
@@ -317,3 +353,71 @@ def start_forecast(upload_id: str, body: ForecastIn, user: UserRecord) -> JobAcc
     log_audit_event(username=user.email, role=user.role, action="SANDBOX_FORECAST", resource=upload_id, status="SUCCESS",
                     details=f"{body.date_column} / {body.value_column or 'row count'}")
     return JobAccepted(job_id=job.job_id)
+
+
+# ---- linking several uploads ------------------------------------------------------------------
+
+def _source_tables(upload_ids: List[str]) -> List[Dict[str, Any]]:
+    if len(set(upload_ids)) < 2:
+        raise APIError(422, "need_two_tables", "Select at least two uploads to link.")
+    if len(set(upload_ids)) > 10:
+        raise APIError(422, "too_many_tables", "Link up to 10 uploads at a time.")
+    tables, taken = [], set()
+    for uid in dict.fromkeys(upload_ids):
+        m = _read(uid)
+        if m["status"] != "ready":
+            raise APIError(409, "upload_not_ready", f"{m['filename']} has not finished processing.")
+        name = table_name(m["filename"], taken)
+        taken.add(name)
+        tables.append({"name": name, "upload_id": uid, "filename": m["filename"], "df": _load_clean(uid), "kinds": _kinds(m)})
+    return tables
+
+
+def discover_links(upload_ids: List[str]) -> LinkDiscovery:
+    tables = _source_tables(upload_ids)
+    found = discover(tables)
+    return LinkDiscovery(
+        tables=[{"upload_id": t["upload_id"], "name": t["name"], "filename": t["filename"], "rows": len(t["df"]), "columns": t["df"].shape[1]} for t in tables],
+        relationships=found["relationships"], suggested_base=found["suggested_base"],
+    )
+
+
+def start_consolidation(body: ConsolidateIn, user: UserRecord) -> UploadAccepted:
+    tables = _source_tables(body.upload_ids)
+    names = {t["name"] for t in tables}
+    base = body.base_table or discover(tables)["suggested_base"]
+    if base not in names:
+        raise APIError(422, "unknown_base", f"'{base}' is not one of the selected tables.")
+    relationships = [r.model_dump() for r in body.relationships] if body.relationships else None
+    if relationships and any(r["from_table"] not in names or r["to_table"] not in names for r in relationships):
+        raise APIError(422, "unknown_table", "A relationship refers to a table that is not selected.")
+
+    upload_id = uuid.uuid4().hex
+    folder = _dir(upload_id)
+    folder.mkdir(parents=True, exist_ok=False)
+    sources = [{"upload_id": t["upload_id"], "name": t["name"], "filename": t["filename"], "rows": len(t["df"])} for t in tables]
+    _update(upload_id, upload_id=upload_id, filename=f"{base}_consolidated.parquet", size_bytes=0, sha256="",
+            uploaded_by=user.email, created_at=datetime.now().isoformat(timespec="seconds"), status="processing", stage="Queued",
+            predictions={}, forecast=None, summary=[], kind="consolidated", lineage={"sources": sources, "base": base})
+
+    def build(ctx: runner.JobContext) -> pd.DataFrame:
+        rels = relationships or discover(tables)["relationships"]
+        ctx.progress(7, f"Joining {len(tables)} tables at the grain of {base}")
+        out, lineage = consolidate(tables, base, rels)
+        _update(upload_id, lineage={"sources": sources, "relationships": rels, **lineage})
+        return out
+
+    job = runner.submit("sandbox_consolidate", user.email,
+                        _pipeline_job(upload_id, folder / "raw.parquet", f"{base}_consolidated.parquet", salt=_pseudonym_key(), build=build))
+    _update(upload_id, job_id=job.job_id)
+    log_audit_event(username=user.email, role=user.role, action="SANDBOX_CONSOLIDATE", resource=upload_id, status="SUCCESS",
+                    details=f"base={base}; sources={', '.join(s['filename'] for s in sources)}")
+    return UploadAccepted(upload=_summary(_read(upload_id)), job_id=job.job_id)
+
+
+def report_html(upload_id: str, user: UserRecord) -> str:
+    m = _read(upload_id)
+    if m["status"] != "ready":
+        raise APIError(409, "upload_not_ready", "This upload has not finished processing.")
+    log_audit_event(username=user.email, role=user.role, action="SANDBOX_REPORT", resource=upload_id, status="SUCCESS", details=m["filename"])
+    return render_report(m)

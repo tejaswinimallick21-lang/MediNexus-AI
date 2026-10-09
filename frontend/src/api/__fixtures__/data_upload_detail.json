@@ -1,10 +1,10 @@
 {
-  "upload_id": "437b7c46487c43a0bfc2ad229add064a",
+  "upload_id": "425896c1f03c41cea60aa239d7179f5e",
   "filename": "admissions_export.csv",
   "size_bytes": 34438,
   "sha256": "e6e676e329ca227d0d13f67491aa321151d5cc3c867eb2522ba03d25d2f8b5a6",
   "uploaded_by": "admin@medinexus.org",
-  "created_at": "2026-10-09T23:52:00",
+  "created_at": "2026-10-10T00:17:30",
   "status": "ready",
   "stage": "Ready",
   "rows": 400,
@@ -124,7 +124,7 @@
         "missing_pct": 0.0,
         "unique": 400,
         "pii_masked": true,
-        "example": "PII_d0793b7f8f"
+        "example": "PII_0ea965e3b4"
       },
       {
         "name": "contact",
@@ -132,7 +132,7 @@
         "missing_pct": 0.0,
         "unique": 400,
         "pii_masked": true,
-        "example": "PII_39ae7b8354"
+        "example": "PII_01232438fb"
       },
       {
         "name": "readmitted",
@@ -476,8 +476,8 @@
       null,
       "Oncology",
       "8236.72",
-      "PII_d0793b7f8f",
-      "PII_39ae7b8354",
+      "PII_0ea965e3b4",
+      "PII_01232438fb",
       "True",
       "1"
     ],
@@ -487,8 +487,8 @@
       null,
       "Cardiology",
       "1968.87",
-      "PII_82013517d9",
-      "PII_3317bb407e",
+      "PII_84f16891f6",
+      "PII_8a9724574d",
       "False",
       "0"
     ],
@@ -498,8 +498,8 @@
       "45.0",
       "Oncology",
       "3966.93",
-      "PII_d5b0520b2b",
-      "PII_c9ff6a66c9",
+      "PII_fab1725575",
+      "PII_99c52eaa6f",
       "False",
       "0"
     ],
@@ -509,8 +509,8 @@
       "52.0",
       "Oncology",
       "3938.51",
-      "PII_73265cb7c6",
-      "PII_4d95e1c231",
+      "PII_4b88484ad9",
+      "PII_7dcf312001",
       "False",
       "0"
     ],
@@ -520,8 +520,8 @@
       "20.0",
       "Oncology",
       "2685.86",
-      "PII_8275671c1c",
-      "PII_1451f19345",
+      "PII_b216986870",
+      "PII_827c50bf4e",
       "False",
       "0"
     ],
@@ -531,8 +531,8 @@
       "19.0",
       "General",
       "2477.28",
-      "PII_dd4d187377",
-      "PII_5c86b623e7",
+      "PII_491d603206",
+      "PII_a5f92144db",
       "False",
       "0"
     ],
@@ -542,8 +542,8 @@
       "35.0",
       "Oncology",
       "3808.57",
-      "PII_2803418e67",
-      "PII_b675bbcbab",
+      "PII_4a8ed01423",
+      "PII_0e86dd97af",
       "False",
       "0"
     ],
@@ -553,8 +553,8 @@
       "56.0",
       "Cardiology",
       "4287.52",
-      "PII_ccceb2456b",
-      "PII_840f130ec1",
+      "PII_44f3a95749",
+      "PII_4b0dc8da54",
       "False",
       "0"
     ],
@@ -564,8 +564,8 @@
       "52.0",
       "Oncology",
       "3932.25",
-      "PII_ebdc06ff48",
-      "PII_5a41733fc9",
+      "PII_a702da5cbf",
+      "PII_43c5da5e71",
       "False",
       "0"
     ],
@@ -575,8 +575,8 @@
       "79.0",
       "Cardiology",
       "4760.44",
-      "PII_5ee94bf16d",
-      "PII_7fd51326c9",
+      "PII_5c8efb4719",
+      "PII_d32bd5d49f",
       "True",
       "1"
     ],
@@ -586,8 +586,8 @@
       "27.0",
       "General",
       "3034.01",
-      "PII_e24f7d9dc1",
-      "PII_722c5704f7",
+      "PII_754f43f59f",
+      "PII_3801d3df48",
       "False",
       "0"
     ],
@@ -597,8 +597,8 @@
       "64.0",
       "General",
       "4992.79",
-      "PII_8082b3edb7",
-      "PII_b0ea82d912",
+      "PII_6f1dba7432",
+      "PII_53c9e78269",
       "False",
       "0"
     ],
@@ -608,8 +608,8 @@
       "46.0",
       "General",
       "3978.58",
-      "PII_9911819eae",
-      "PII_d72325a07b",
+      "PII_b7c5e2ac9a",
+      "PII_137d7c65c4",
       "False",
       "0"
     ],
@@ -619,8 +619,8 @@
       "64.0",
       "Cardiology",
       "4342.64",
-      "PII_02bcc89ebe",
-      "PII_28ba3ca9b6",
+      "PII_1af17f8363",
+      "PII_2f494b2d85",
       "True",
       "1"
     ],
@@ -630,8 +630,8 @@
       "24.0",
       "Cardiology",
       "3388.85",
-      "PII_024904991f",
-      "PII_dc624458cb",
+      "PII_6128114212",
+      "PII_9f03953b1e",
       "False",
       "0"
     ],
@@ -641,8 +641,8 @@
       "46.0",
       "Oncology",
       "4268.55",
-      "PII_e82ca765e5",
-      "PII_06d1302a26",
+      "PII_b4b742da77",
+      "PII_906695afa4",
       "False",
       "0"
     ],
@@ -652,8 +652,8 @@
       "28.0",
       "Oncology",
       "3414.23",
-      "PII_1ad978ae87",
-      "PII_9a71da255b",
+      "PII_7e5bf5a0f5",
+      "PII_fe6c2db13c",
       "False",
       "0"
     ],
@@ -663,8 +663,8 @@
       "43.0",
       "General",
       "3956.65",
-      "PII_de22ffcbfa",
-      "PII_5e6bce3811",
+      "PII_0ee8c72102",
+      "PII_79e6362f7c",
       "False",
       "0"
     ],
@@ -674,8 +674,8 @@
       "31.0",
       "Oncology",
       "3586.7",
-      "PII_5f752e4bba",
-      "PII_5cd0d0fb7f",
+      "PII_cdcaa5fdd4",
+      "PII_e697997fa7",
       "False",
       "0"
     ],
@@ -685,10 +685,18 @@
       "69.0",
       "General",
       "4922.98",
-      "PII_72cb05237a",
-      "PII_604492bc0d",
+      "PII_cb00f61738",
+      "PII_50acccff8e",
       "False",
       "0"
     ]
+  ],
+  "kind": "upload",
+  "lineage": null,
+  "suggested_targets": [
+    "readmitted",
+    "readmitted_flag_copy",
+    "total_cost",
+    "ward"
   ]
 }

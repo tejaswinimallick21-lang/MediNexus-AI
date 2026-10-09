@@ -3,13 +3,23 @@
 from pathlib import Path as FsPath
 
 from fastapi import APIRouter, Depends, File, Path, Response, UploadFile
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 
 from backend.app.core.deps import current_user, require_page
 from backend.app.core.pagination import Page, PageParams, page_params
 from backend.app.core.users import UserRecord
 from backend.app.schemas.common import ERROR_RESPONSES
-from backend.app.schemas.data_platform import ForecastIn, JobAccepted, PredictIn, UploadAccepted, UploadDetail, UploadSummary
+from backend.app.schemas.data_platform import (
+    ConsolidateIn,
+    ForecastIn,
+    JobAccepted,
+    LinkDiscovery,
+    LinkIn,
+    PredictIn,
+    UploadAccepted,
+    UploadDetail,
+    UploadSummary,
+)
 from backend.app.services import data_platform
 
 router = APIRouter(prefix="/data", tags=["data-engineering"], responses=ERROR_RESPONSES, dependencies=[Depends(require_page("data"))])
@@ -46,9 +56,27 @@ def download_clean(upload_id: str = UploadId, user: UserRecord = Depends(current
 
 @router.post("/uploads/{upload_id}/predict", response_model=JobAccepted, status_code=202)
 def predict(body: PredictIn, upload_id: str = UploadId, user: UserRecord = Depends(current_user)) -> JobAccepted:
-    return data_platform.start_prediction(upload_id, body.target, user)
+    return data_platform.start_prediction(upload_id, body.target, user, body.exclude)
 
 
 @router.post("/uploads/{upload_id}/forecast", response_model=JobAccepted, status_code=202)
 def forecast(body: ForecastIn, upload_id: str = UploadId, user: UserRecord = Depends(current_user)) -> JobAccepted:
     return data_platform.start_forecast(upload_id, body, user)
+
+
+@router.get("/uploads/{upload_id}/report.html", response_class=HTMLResponse)
+def report(upload_id: str = UploadId, user: UserRecord = Depends(current_user)) -> HTMLResponse:
+    html = data_platform.report_html(upload_id, user)
+    name = FsPath(data_platform.get_upload(upload_id).filename).stem + "_insights_report.html"
+    # Opens in the browser; the page's own Save / Print to PDF works offline (no scripts, no external assets)
+    return HTMLResponse(html, headers={"Content-Disposition": f'inline; filename="{name}"', "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'"})
+
+
+@router.post("/links/discover", response_model=LinkDiscovery)
+def discover_links(body: LinkIn) -> LinkDiscovery:
+    return data_platform.discover_links(body.upload_ids)
+
+
+@router.post("/links/consolidate", response_model=UploadAccepted, status_code=202)
+def consolidate(body: ConsolidateIn, user: UserRecord = Depends(current_user)) -> UploadAccepted:
+    return data_platform.start_consolidation(body, user)

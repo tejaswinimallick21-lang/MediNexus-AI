@@ -1,0 +1,1647 @@
+{
+  "upload_id": "6d83c77ed0184a7ea64869e3b8a98624",
+  "filename": "admissions_consolidated.parquet",
+  "size_bytes": 37059,
+  "sha256": "abe0b9f40e65c63f22ac6416a8ea1f430bed10d6f9c305fc851aa5bc47e96ee7",
+  "uploaded_by": "admin@medinexus.org",
+  "created_at": "2026-10-10T00:17:16",
+  "status": "ready",
+  "stage": "Ready",
+  "rows": 900,
+  "columns": 16,
+  "quality_score": 100.0,
+  "error": null,
+  "job_id": null,
+  "cleaning": {
+    "rows_in": 900,
+    "rows_out": 900,
+    "steps": [
+      {
+        "step": "Standardise column names",
+        "detail": "snake_case, unique names",
+        "affected": 10,
+        "note": null
+      },
+      {
+        "step": "Trim whitespace and blank markers",
+        "detail": "'', NA, N/A, null \u2192 missing",
+        "affected": 0,
+        "note": null
+      },
+      {
+        "step": "Infer and convert data types",
+        "detail": "numbers, dates, booleans, categories, identifiers",
+        "affected": 0,
+        "note": "values that could not be converted are set to missing"
+      },
+      {
+        "step": "Standardise category spellings",
+        "detail": "case and spacing variants merged",
+        "affected": 0,
+        "note": null
+      },
+      {
+        "step": "Remove impossible values",
+        "detail": "ages outside 0\u2013120, dates in the future",
+        "affected": 0,
+        "note": null
+      },
+      {
+        "step": "Pseudonymise personal identifiers",
+        "detail": "none detected",
+        "affected": 0,
+        "note": null
+      },
+      {
+        "step": "Generalise quasi-identifiers",
+        "detail": "none detected",
+        "affected": 0,
+        "note": null
+      },
+      {
+        "step": "Remove exact duplicate rows",
+        "detail": "identical across every column",
+        "affected": 0,
+        "note": null
+      },
+      {
+        "step": "Drop near-empty columns",
+        "detail": "none \u226595% missing",
+        "affected": 0,
+        "note": null
+      },
+      {
+        "step": "Report missing values",
+        "detail": "left as missing; models impute inside their training folds",
+        "affected": 0,
+        "note": null
+      }
+    ],
+    "columns": [
+      {
+        "name": "admission_id",
+        "kind": "identifier",
+        "missing_pct": 0.0,
+        "unique": 900,
+        "pii_masked": false,
+        "example": "A00000"
+      },
+      {
+        "name": "patient_id",
+        "kind": "text",
+        "missing_pct": 0.0,
+        "unique": 282,
+        "pii_masked": false,
+        "example": "P0088"
+      },
+      {
+        "name": "admit_date",
+        "kind": "datetime",
+        "missing_pct": 0.0,
+        "unique": 330,
+        "pii_masked": false,
+        "example": "2024-10-01 00:00:00"
+      },
+      {
+        "name": "ward",
+        "kind": "category",
+        "missing_pct": 0.0,
+        "unique": 3,
+        "pii_masked": false,
+        "example": "ICU"
+      },
+      {
+        "name": "readmitted_30d",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 2,
+        "pii_masked": false,
+        "example": "0"
+      },
+      {
+        "name": "readmitted_7d",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 2,
+        "pii_masked": false,
+        "example": "0"
+      },
+      {
+        "name": "patients_age",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 68,
+        "pii_masked": false,
+        "example": "30.0"
+      },
+      {
+        "name": "patients_comorbidity_count",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 6,
+        "pii_masked": false,
+        "example": "0"
+      },
+      {
+        "name": "patients_gender",
+        "kind": "category",
+        "missing_pct": 0.0,
+        "unique": 2,
+        "pii_masked": false,
+        "example": "F"
+      },
+      {
+        "name": "billing_bill_id",
+        "kind": "identifier",
+        "missing_pct": 0.0,
+        "unique": 900,
+        "pii_masked": false,
+        "example": "B00000"
+      },
+      {
+        "name": "billing_total_cost",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 899,
+        "pii_masked": false,
+        "example": "7323.85"
+      },
+      {
+        "name": "diagnoses_n_rows",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 3,
+        "pii_masked": false,
+        "example": "1"
+      },
+      {
+        "name": "diagnoses_category_distinct",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 3,
+        "pii_masked": false,
+        "example": "1"
+      },
+      {
+        "name": "diagnoses_category_cardiac_count",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 4,
+        "pii_masked": false,
+        "example": "1"
+      },
+      {
+        "name": "diagnoses_category_respiratory_count",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 4,
+        "pii_masked": false,
+        "example": "0"
+      },
+      {
+        "name": "diagnoses_category_renal_count",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 4,
+        "pii_masked": false,
+        "example": "0"
+      }
+    ],
+    "quality": {
+      "completeness": 100.0,
+      "validity": 100.0,
+      "uniqueness": 100.0,
+      "consistency": 100.0,
+      "overall": 100.0
+    }
+  },
+  "profile": {
+    "rows": 900,
+    "columns": 16,
+    "numeric": [
+      {
+        "column": "readmitted_30d",
+        "mean": 0.19666666666666666,
+        "std": 0.39747816152448995,
+        "min": 0.0,
+        "p25": 0.0,
+        "median": 0.0,
+        "p75": 0.0,
+        "max": 1.0,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "0\u20130.08333",
+            "count": 723
+          },
+          {
+            "bin": "0.08333\u20130.1667",
+            "count": 0
+          },
+          {
+            "bin": "0.1667\u20130.25",
+            "count": 0
+          },
+          {
+            "bin": "0.25\u20130.3333",
+            "count": 0
+          },
+          {
+            "bin": "0.3333\u20130.4167",
+            "count": 0
+          },
+          {
+            "bin": "0.4167\u20130.5",
+            "count": 0
+          },
+          {
+            "bin": "0.5\u20130.5833",
+            "count": 0
+          },
+          {
+            "bin": "0.5833\u20130.6667",
+            "count": 0
+          },
+          {
+            "bin": "0.6667\u20130.75",
+            "count": 0
+          },
+          {
+            "bin": "0.75\u20130.8333",
+            "count": 0
+          },
+          {
+            "bin": "0.8333\u20130.9167",
+            "count": 0
+          },
+          {
+            "bin": "0.9167\u20131",
+            "count": 177
+          }
+        ]
+      },
+      {
+        "column": "readmitted_7d",
+        "mean": 0.08555555555555555,
+        "std": 0.27970663644099775,
+        "min": 0.0,
+        "p25": 0.0,
+        "median": 0.0,
+        "p75": 0.0,
+        "max": 1.0,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "0\u20130.08333",
+            "count": 823
+          },
+          {
+            "bin": "0.08333\u20130.1667",
+            "count": 0
+          },
+          {
+            "bin": "0.1667\u20130.25",
+            "count": 0
+          },
+          {
+            "bin": "0.25\u20130.3333",
+            "count": 0
+          },
+          {
+            "bin": "0.3333\u20130.4167",
+            "count": 0
+          },
+          {
+            "bin": "0.4167\u20130.5",
+            "count": 0
+          },
+          {
+            "bin": "0.5\u20130.5833",
+            "count": 0
+          },
+          {
+            "bin": "0.5833\u20130.6667",
+            "count": 0
+          },
+          {
+            "bin": "0.6667\u20130.75",
+            "count": 0
+          },
+          {
+            "bin": "0.75\u20130.8333",
+            "count": 0
+          },
+          {
+            "bin": "0.8333\u20130.9167",
+            "count": 0
+          },
+          {
+            "bin": "0.9167\u20131",
+            "count": 77
+          }
+        ]
+      },
+      {
+        "column": "patients_age",
+        "mean": 53.41111111111111,
+        "std": 19.817273298505395,
+        "min": 20.0,
+        "p25": 38.0,
+        "median": 52.0,
+        "p75": 69.0,
+        "max": 89.0,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "20\u201325.75",
+            "count": 85
+          },
+          {
+            "bin": "25.75\u201331.5",
+            "count": 70
+          },
+          {
+            "bin": "31.5\u201337.25",
+            "count": 66
+          },
+          {
+            "bin": "37.25\u201343",
+            "count": 73
+          },
+          {
+            "bin": "43\u201348.75",
+            "count": 106
+          },
+          {
+            "bin": "48.75\u201354.5",
+            "count": 73
+          },
+          {
+            "bin": "54.5\u201360.25",
+            "count": 77
+          },
+          {
+            "bin": "60.25\u201366",
+            "count": 64
+          },
+          {
+            "bin": "66\u201371.75",
+            "count": 87
+          },
+          {
+            "bin": "71.75\u201377.5",
+            "count": 66
+          },
+          {
+            "bin": "77.5\u201383.25",
+            "count": 58
+          },
+          {
+            "bin": "83.25\u201389",
+            "count": 75
+          }
+        ]
+      },
+      {
+        "column": "patients_comorbidity_count",
+        "mean": 2.347777777777778,
+        "std": 1.7075471542392613,
+        "min": 0.0,
+        "p25": 1.0,
+        "median": 2.0,
+        "p75": 4.0,
+        "max": 5.0,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "0\u20130.4167",
+            "count": 178
+          },
+          {
+            "bin": "0.4167\u20130.8333",
+            "count": 0
+          },
+          {
+            "bin": "0.8333\u20131.25",
+            "count": 138
+          },
+          {
+            "bin": "1.25\u20131.667",
+            "count": 0
+          },
+          {
+            "bin": "1.667\u20132.083",
+            "count": 179
+          },
+          {
+            "bin": "2.083\u20132.5",
+            "count": 0
+          },
+          {
+            "bin": "2.5\u20132.917",
+            "count": 0
+          },
+          {
+            "bin": "2.917\u20133.333",
+            "count": 139
+          },
+          {
+            "bin": "3.333\u20133.75",
+            "count": 0
+          },
+          {
+            "bin": "3.75\u20134.167",
+            "count": 130
+          },
+          {
+            "bin": "4.167\u20134.583",
+            "count": 0
+          },
+          {
+            "bin": "4.583\u20135",
+            "count": 136
+          }
+        ]
+      },
+      {
+        "column": "billing_total_cost",
+        "mean": 4854.364011111111,
+        "std": 2482.3693413820097,
+        "min": 507.28,
+        "p25": 2750.6375,
+        "median": 5002.975,
+        "p75": 7000.8625,
+        "max": 8987.35,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "507.3\u20131214",
+            "count": 73
+          },
+          {
+            "bin": "1214\u20131921",
+            "count": 80
+          },
+          {
+            "bin": "1921\u20132627",
+            "count": 63
+          },
+          {
+            "bin": "2627\u20133334",
+            "count": 79
+          },
+          {
+            "bin": "3334\u20134041",
+            "count": 68
+          },
+          {
+            "bin": "4041\u20134747",
+            "count": 65
+          },
+          {
+            "bin": "4747\u20135454",
+            "count": 71
+          },
+          {
+            "bin": "5454\u20136161",
+            "count": 83
+          },
+          {
+            "bin": "6161\u20136867",
+            "count": 78
+          },
+          {
+            "bin": "6867\u20137574",
+            "count": 79
+          },
+          {
+            "bin": "7574\u20138281",
+            "count": 76
+          },
+          {
+            "bin": "8281\u20138987",
+            "count": 85
+          }
+        ]
+      },
+      {
+        "column": "diagnoses_n_rows",
+        "mean": 1.968888888888889,
+        "std": 0.8253813185356532,
+        "min": 1.0,
+        "p25": 1.0,
+        "median": 2.0,
+        "p75": 3.0,
+        "max": 3.0,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "1\u20131.167",
+            "count": 321
+          },
+          {
+            "bin": "1.167\u20131.333",
+            "count": 0
+          },
+          {
+            "bin": "1.333\u20131.5",
+            "count": 0
+          },
+          {
+            "bin": "1.5\u20131.667",
+            "count": 0
+          },
+          {
+            "bin": "1.667\u20131.833",
+            "count": 0
+          },
+          {
+            "bin": "1.833\u20132",
+            "count": 0
+          },
+          {
+            "bin": "2\u20132.167",
+            "count": 286
+          },
+          {
+            "bin": "2.167\u20132.333",
+            "count": 0
+          },
+          {
+            "bin": "2.333\u20132.5",
+            "count": 0
+          },
+          {
+            "bin": "2.5\u20132.667",
+            "count": 0
+          },
+          {
+            "bin": "2.667\u20132.833",
+            "count": 0
+          },
+          {
+            "bin": "2.833\u20133",
+            "count": 293
+          }
+        ]
+      },
+      {
+        "column": "diagnoses_category_distinct",
+        "mean": 1.5744444444444445,
+        "std": 0.6110212055078331,
+        "min": 1.0,
+        "p25": 1.0,
+        "median": 2.0,
+        "p75": 2.0,
+        "max": 3.0,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "1\u20131.167",
+            "count": 441
+          },
+          {
+            "bin": "1.167\u20131.333",
+            "count": 0
+          },
+          {
+            "bin": "1.333\u20131.5",
+            "count": 0
+          },
+          {
+            "bin": "1.5\u20131.667",
+            "count": 0
+          },
+          {
+            "bin": "1.667\u20131.833",
+            "count": 0
+          },
+          {
+            "bin": "1.833\u20132",
+            "count": 0
+          },
+          {
+            "bin": "2\u20132.167",
+            "count": 401
+          },
+          {
+            "bin": "2.167\u20132.333",
+            "count": 0
+          },
+          {
+            "bin": "2.333\u20132.5",
+            "count": 0
+          },
+          {
+            "bin": "2.5\u20132.667",
+            "count": 0
+          },
+          {
+            "bin": "2.667\u20132.833",
+            "count": 0
+          },
+          {
+            "bin": "2.833\u20133",
+            "count": 58
+          }
+        ]
+      },
+      {
+        "column": "diagnoses_category_cardiac_count",
+        "mean": 0.6666666666666666,
+        "std": 0.7318166133366709,
+        "min": 0.0,
+        "p25": 0.0,
+        "median": 1.0,
+        "p75": 1.0,
+        "max": 3.0,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "0\u20130.25",
+            "count": 427
+          },
+          {
+            "bin": "0.25\u20130.5",
+            "count": 0
+          },
+          {
+            "bin": "0.5\u20130.75",
+            "count": 0
+          },
+          {
+            "bin": "0.75\u20131",
+            "count": 0
+          },
+          {
+            "bin": "1\u20131.25",
+            "count": 360
+          },
+          {
+            "bin": "1.25\u20131.5",
+            "count": 0
+          },
+          {
+            "bin": "1.5\u20131.75",
+            "count": 0
+          },
+          {
+            "bin": "1.75\u20132",
+            "count": 0
+          },
+          {
+            "bin": "2\u20132.25",
+            "count": 99
+          },
+          {
+            "bin": "2.25\u20132.5",
+            "count": 0
+          },
+          {
+            "bin": "2.5\u20132.75",
+            "count": 0
+          },
+          {
+            "bin": "2.75\u20133",
+            "count": 14
+          }
+        ]
+      },
+      {
+        "column": "diagnoses_category_respiratory_count",
+        "mean": 0.6622222222222223,
+        "std": 0.7034167056079914,
+        "min": 0.0,
+        "p25": 0.0,
+        "median": 1.0,
+        "p75": 1.0,
+        "max": 3.0,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "0\u20130.25",
+            "count": 417
+          },
+          {
+            "bin": "0.25\u20130.5",
+            "count": 0
+          },
+          {
+            "bin": "0.5\u20130.75",
+            "count": 0
+          },
+          {
+            "bin": "0.75\u20131",
+            "count": 0
+          },
+          {
+            "bin": "1\u20131.25",
+            "count": 379
+          },
+          {
+            "bin": "1.25\u20131.5",
+            "count": 0
+          },
+          {
+            "bin": "1.5\u20131.75",
+            "count": 0
+          },
+          {
+            "bin": "1.75\u20132",
+            "count": 0
+          },
+          {
+            "bin": "2\u20132.25",
+            "count": 95
+          },
+          {
+            "bin": "2.25\u20132.5",
+            "count": 0
+          },
+          {
+            "bin": "2.5\u20132.75",
+            "count": 0
+          },
+          {
+            "bin": "2.75\u20133",
+            "count": 9
+          }
+        ]
+      },
+      {
+        "column": "diagnoses_category_renal_count",
+        "mean": 0.64,
+        "std": 0.7081744919941082,
+        "min": 0.0,
+        "p25": 0.0,
+        "median": 1.0,
+        "p75": 1.0,
+        "max": 3.0,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "0\u20130.25",
+            "count": 439
+          },
+          {
+            "bin": "0.25\u20130.5",
+            "count": 0
+          },
+          {
+            "bin": "0.5\u20130.75",
+            "count": 0
+          },
+          {
+            "bin": "0.75\u20131",
+            "count": 0
+          },
+          {
+            "bin": "1\u20131.25",
+            "count": 353
+          },
+          {
+            "bin": "1.25\u20131.5",
+            "count": 0
+          },
+          {
+            "bin": "1.5\u20131.75",
+            "count": 0
+          },
+          {
+            "bin": "1.75\u20132",
+            "count": 0
+          },
+          {
+            "bin": "2\u20132.25",
+            "count": 101
+          },
+          {
+            "bin": "2.25\u20132.5",
+            "count": 0
+          },
+          {
+            "bin": "2.5\u20132.75",
+            "count": 0
+          },
+          {
+            "bin": "2.75\u20133",
+            "count": 7
+          }
+        ]
+      }
+    ],
+    "categories": [
+      {
+        "column": "ward",
+        "distinct": 3,
+        "top": [
+          {
+            "value": "Cardiology",
+            "count": 310,
+            "share_pct": 34.4
+          },
+          {
+            "value": "General",
+            "count": 296,
+            "share_pct": 32.9
+          },
+          {
+            "value": "ICU",
+            "count": 294,
+            "share_pct": 32.7
+          }
+        ]
+      },
+      {
+        "column": "patients_gender",
+        "distinct": 2,
+        "top": [
+          {
+            "value": "F",
+            "count": 458,
+            "share_pct": 50.9
+          },
+          {
+            "value": "M",
+            "count": 442,
+            "share_pct": 49.1
+          }
+        ]
+      }
+    ],
+    "correlations": [
+      {
+        "a": "diagnoses_n_rows",
+        "b": "diagnoses_category_distinct",
+        "rho": 0.761
+      },
+      {
+        "a": "readmitted_30d",
+        "b": "readmitted_7d",
+        "rho": 0.618
+      },
+      {
+        "a": "diagnoses_category_distinct",
+        "b": "diagnoses_category_respiratory_count",
+        "rho": 0.38
+      },
+      {
+        "a": "diagnoses_n_rows",
+        "b": "diagnoses_category_respiratory_count",
+        "rho": 0.379
+      },
+      {
+        "a": "diagnoses_n_rows",
+        "b": "diagnoses_category_cardiac_count",
+        "rho": 0.366
+      },
+      {
+        "a": "diagnoses_n_rows",
+        "b": "diagnoses_category_renal_count",
+        "rho": 0.35
+      },
+      {
+        "a": "diagnoses_category_distinct",
+        "b": "diagnoses_category_renal_count",
+        "rho": 0.347
+      },
+      {
+        "a": "diagnoses_category_distinct",
+        "b": "diagnoses_category_cardiac_count",
+        "rho": 0.332
+      }
+    ],
+    "date_coverage": {
+      "column": "admit_date",
+      "start": "2024-01-01",
+      "end": "2024-12-30"
+    },
+    "segments": {
+      "available": true,
+      "reason": null,
+      "rows_used": 900,
+      "k": 6,
+      "silhouette": 0.29,
+      "structure": "weak",
+      "clusters": [
+        {
+          "cluster": 6,
+          "size": 168,
+          "share_pct": 18.7,
+          "traits": [
+            "lower billing_total_cost (2131 vs 5003 overall)",
+            "lower patients_comorbidity_count (1 vs 2 overall)",
+            "lower patients_age (48 vs 52 overall)"
+          ]
+        },
+        {
+          "cluster": 5,
+          "size": 165,
+          "share_pct": 18.3,
+          "traits": [
+            "lower patients_age (36 vs 52 overall)",
+            "higher billing_total_cost (6859 vs 5003 overall)",
+            "lower patients_comorbidity_count (1 vs 2 overall)"
+          ]
+        },
+        {
+          "cluster": 1,
+          "size": 161,
+          "share_pct": 17.9,
+          "traits": [
+            "higher patients_age (71 vs 52 overall)",
+            "higher billing_total_cost (6486 vs 5003 overall)",
+            "lower patients_comorbidity_count (1 vs 2 overall)"
+          ]
+        },
+        {
+          "cluster": 3,
+          "size": 142,
+          "share_pct": 15.8,
+          "traits": [
+            "higher patients_comorbidity_count (4 vs 2 overall)",
+            "higher billing_total_cost (7340 vs 5003 overall)",
+            "higher patients_age (57 vs 52 overall)"
+          ]
+        },
+        {
+          "cluster": 2,
+          "size": 139,
+          "share_pct": 15.4,
+          "traits": [
+            "lower patients_age (34 vs 52 overall)",
+            "higher patients_comorbidity_count (4 vs 2 overall)",
+            "lower billing_total_cost (2770 vs 5003 overall)"
+          ]
+        },
+        {
+          "cluster": 4,
+          "size": 125,
+          "share_pct": 13.9,
+          "traits": [
+            "higher patients_age (75 vs 52 overall)",
+            "higher patients_comorbidity_count (4 vs 2 overall)",
+            "lower billing_total_cost (3242 vs 5003 overall)"
+          ]
+        }
+      ],
+      "anomaly_share_pct": 0.33,
+      "anomalies": 3
+    },
+    "drift": {
+      "available": false,
+      "reason": "Fewer than 3 numeric columns in common with any live Gold table, so a comparison would not be meaningful.",
+      "reference_table": null,
+      "columns": []
+    }
+  },
+  "predictions": [
+    {
+      "target": "readmitted_30d",
+      "task": "classification",
+      "rows_used": 900,
+      "train_rows": 720,
+      "test_rows": 180,
+      "split": "time-based: train on the earliest 80% by admit_date, test on the latest 20%",
+      "features_used": [
+        "admit_date__month",
+        "admit_date__dow",
+        "ward",
+        "patients_age",
+        "patients_comorbidity_count",
+        "patients_gender",
+        "diagnoses_n_rows",
+        "diagnoses_category_distinct",
+        "diagnoses_category_cardiac_count",
+        "diagnoses_category_respiratory_count",
+        "diagnoses_category_renal_count"
+      ],
+      "excluded": [
+        {
+          "column": "billing_total_cost",
+          "reason": "excluded by you"
+        },
+        {
+          "column": "admission_id",
+          "reason": "identifier: unique per row, carries no general signal"
+        },
+        {
+          "column": "patient_id",
+          "reason": "free text (not used by this model)"
+        },
+        {
+          "column": "readmitted_7d",
+          "reason": "sibling outcome: the same measure as 'readmitted_30d' over a different window \u2014 it would give the answer away"
+        },
+        {
+          "column": "billing_bill_id",
+          "reason": "identifier: unique per row, carries no general signal"
+        }
+      ],
+      "primary_metric": "ROC-AUC",
+      "score": 0.5931,
+      "baseline_score": 0.5,
+      "baseline_label": "always predict '0'",
+      "beats_baseline": true,
+      "verdict": "Model beats the baseline",
+      "drivers": [
+        {
+          "feature": "patients_age",
+          "importance": 0.0647
+        },
+        {
+          "feature": "patients_comorbidity_count",
+          "importance": 0.0382
+        },
+        {
+          "feature": "diagnoses_category_respiratory_count",
+          "importance": 0.0109
+        },
+        {
+          "feature": "ward",
+          "importance": 0.0039
+        },
+        {
+          "feature": "patients_gender",
+          "importance": 0.0035
+        },
+        {
+          "feature": "diagnoses_category_cardiac_count",
+          "importance": 0.0021
+        }
+      ],
+      "selected_model": "Logistic regression",
+      "model_comparison": [
+        {
+          "model": "Logistic regression",
+          "validation_score": 0.6853,
+          "selected": true
+        },
+        {
+          "model": "Gradient boosting",
+          "validation_score": 0.5868,
+          "selected": false
+        }
+      ],
+      "effects": [
+        {
+          "feature": "patients_age",
+          "direction": "up",
+          "detail": "Higher patients_age raises the predicted probability of readmitted_30d = 1: 12.6% in its lowest quarter vs 27.3% in its highest."
+        },
+        {
+          "feature": "patients_comorbidity_count",
+          "direction": "up",
+          "detail": "Higher patients_comorbidity_count raises the predicted probability of readmitted_30d = 1: 13.5% in its lowest quarter vs 26.5% in its highest."
+        },
+        {
+          "feature": "diagnoses_category_respiratory_count",
+          "direction": "down",
+          "detail": "Higher diagnoses_category_respiratory_count lowers the predicted probability of readmitted_30d = 1: 22.2% in its lowest quarter vs 17.2% in its highest."
+        },
+        {
+          "feature": "ward",
+          "direction": "categorical",
+          "detail": "The predicted probability of readmitted_30d = 1 is highest when ward = Cardiology (21.9%) and lowest when ward = General (16.3%)."
+        },
+        {
+          "feature": "patients_gender",
+          "direction": "categorical",
+          "detail": "The predicted probability of readmitted_30d = 1 is highest when patients_gender = M (19.6%) and lowest when patients_gender = F (19.2%)."
+        },
+        {
+          "feature": "diagnoses_category_cardiac_count",
+          "direction": "up",
+          "detail": "Higher diagnoses_category_cardiac_count raises the predicted probability of readmitted_30d = 1: 17.4% in its lowest quarter vs 21.3% in its highest."
+        }
+      ],
+      "timing_warnings": [],
+      "positive_rate_pct": 19.67,
+      "classes": 2,
+      "accuracy": 0.7444,
+      "baseline_accuracy": 0.7444,
+      "macro_f1": 0.4268,
+      "roc_auc": 0.5931,
+      "positive_class": "1",
+      "mae": null,
+      "baseline_mae": null,
+      "r2": null
+    }
+  ],
+  "forecast": null,
+  "summary": [
+    "4 tables were linked into one row per admissions (900 rows, 16 columns): patients, billing, diagnoses joined; diagnoses counted point-in-time (no future rows).",
+    "admissions_consolidated.parquet arrived with 900 rows and 16 usable columns; quality score 100/100 (completeness 100%, validity 100%).",
+    "Strongest relationship: diagnoses_n_rows and diagnoses_category_distinct move together (Spearman \u03c1 = 0.76); correlation is not causation.",
+    "The rows form 6 segments (weak separation, silhouette 0.29); the largest (19%) has lower billing_total_cost (2131 vs 5003 overall); lower patients_comorbidity_count (1 vs 2 overall).",
+    "0.3% of rows look unusual compared with the rest and are worth a manual check.",
+    "Predicting readmitted_30d: the model scores ROC-AUC 0.593 vs 0.5 for the baseline (always predict '0'), so it beats the baseline; top drivers are patients_age, patients_comorbidity_count, diagnoses_category_respiratory_count.",
+    "For readmitted_30d, logistic regression was selected over the alternative on a validation slice of the training data.",
+    "Higher patients_age raises the predicted probability of readmitted_30d = 1: 12.6% in its lowest quarter vs 27.3% in its highest.",
+    "Higher patients_comorbidity_count raises the predicted probability of readmitted_30d = 1: 13.5% in its lowest quarter vs 26.5% in its highest.",
+    "Higher diagnoses_category_respiratory_count lowers the predicted probability of readmitted_30d = 1: 22.2% in its lowest quarter vs 17.2% in its highest.",
+    "readmitted_7d was excluded as suspected leakage: it gives away readmitted_30d rather than predict it."
+  ],
+  "preview_columns": [
+    "admission_id",
+    "patient_id",
+    "admit_date",
+    "ward",
+    "readmitted_30d",
+    "readmitted_7d",
+    "patients_age",
+    "patients_comorbidity_count",
+    "patients_gender",
+    "billing_bill_id",
+    "billing_total_cost",
+    "diagnoses_n_rows",
+    "diagnoses_category_distinct",
+    "diagnoses_category_cardiac_count",
+    "diagnoses_category_respiratory_count",
+    "diagnoses_category_renal_count"
+  ],
+  "preview_rows": [
+    [
+      "A00000",
+      "P0088",
+      "2024-10-01",
+      "ICU",
+      "0",
+      "0",
+      "30.0",
+      "0",
+      "F",
+      "B00000",
+      "7323.85",
+      "1",
+      "1",
+      "1",
+      "0",
+      "0"
+    ],
+    [
+      "A00001",
+      "P0180",
+      "2024-11-29",
+      "Cardiology",
+      "1",
+      "0",
+      "44.0",
+      "4",
+      "M",
+      "B00001",
+      "7439.28",
+      "1",
+      "1",
+      "0",
+      "1",
+      "0"
+    ],
+    [
+      "A00002",
+      "P0149",
+      "2024-11-27",
+      "ICU",
+      "0",
+      "0",
+      "62.0",
+      "2",
+      "M",
+      "B00002",
+      "3218.15",
+      "3",
+      "2",
+      "1",
+      "2",
+      "0"
+    ],
+    [
+      "A00003",
+      "P0162",
+      "2024-12-13",
+      "Cardiology",
+      "1",
+      "0",
+      "53.0",
+      "2",
+      "M",
+      "B00003",
+      "3802.74",
+      "1",
+      "1",
+      "0",
+      "1",
+      "0"
+    ],
+    [
+      "A00004",
+      "P0086",
+      "2024-11-29",
+      "ICU",
+      "0",
+      "0",
+      "24.0",
+      "2",
+      "F",
+      "B00004",
+      "5047.31",
+      "2",
+      "1",
+      "0",
+      "0",
+      "2"
+    ],
+    [
+      "A00005",
+      "P0156",
+      "2024-10-12",
+      "Cardiology",
+      "0",
+      "0",
+      "46.0",
+      "0",
+      "F",
+      "B00005",
+      "8015.63",
+      "3",
+      "2",
+      "2",
+      "1",
+      "0"
+    ],
+    [
+      "A00006",
+      "P0157",
+      "2024-01-02",
+      "General",
+      "0",
+      "0",
+      "76.0",
+      "5",
+      "M",
+      "B00006",
+      "4172.32",
+      "3",
+      "2",
+      "2",
+      "0",
+      "1"
+    ],
+    [
+      "A00007",
+      "P0030",
+      "2024-04-16",
+      "Cardiology",
+      "0",
+      "0",
+      "75.0",
+      "4",
+      "F",
+      "B00007",
+      "5498.99",
+      "2",
+      "1",
+      "0",
+      "2",
+      "0"
+    ],
+    [
+      "A00008",
+      "P0219",
+      "2024-02-16",
+      "Cardiology",
+      "0",
+      "0",
+      "39.0",
+      "2",
+      "F",
+      "B00008",
+      "1269.99",
+      "2",
+      "1",
+      "0",
+      "0",
+      "2"
+    ],
+    [
+      "A00009",
+      "P0170",
+      "2024-11-29",
+      "ICU",
+      "0",
+      "0",
+      "62.0",
+      "2",
+      "F",
+      "B00009",
+      "1531.36",
+      "1",
+      "1",
+      "0",
+      "1",
+      "0"
+    ],
+    [
+      "A00010",
+      "P0142",
+      "2024-03-07",
+      "ICU",
+      "0",
+      "0",
+      "30.0",
+      "3",
+      "F",
+      "B00010",
+      "8408.71",
+      "3",
+      "2",
+      "0",
+      "1",
+      "2"
+    ],
+    [
+      "A00011",
+      "P0296",
+      "2024-10-23",
+      "ICU",
+      "0",
+      "0",
+      "49.0",
+      "0",
+      "F",
+      "B00011",
+      "1576.7",
+      "2",
+      "2",
+      "1",
+      "1",
+      "0"
+    ],
+    [
+      "A00012",
+      "P0074",
+      "2024-11-11",
+      "Cardiology",
+      "0",
+      "0",
+      "30.0",
+      "2",
+      "F",
+      "B00012",
+      "6326.95",
+      "3",
+      "3",
+      "1",
+      "1",
+      "1"
+    ],
+    [
+      "A00013",
+      "P0218",
+      "2024-06-21",
+      "ICU",
+      "0",
+      "0",
+      "73.0",
+      "5",
+      "F",
+      "B00013",
+      "1292.33",
+      "3",
+      "2",
+      "1",
+      "0",
+      "2"
+    ],
+    [
+      "A00014",
+      "P0052",
+      "2024-07-16",
+      "General",
+      "0",
+      "0",
+      "43.0",
+      "0",
+      "M",
+      "B00014",
+      "8815.08",
+      "2",
+      "2",
+      "0",
+      "1",
+      "1"
+    ],
+    [
+      "A00015",
+      "P0139",
+      "2024-02-05",
+      "ICU",
+      "0",
+      "0",
+      "33.0",
+      "3",
+      "M",
+      "B00015",
+      "6140.11",
+      "1",
+      "1",
+      "0",
+      "0",
+      "1"
+    ],
+    [
+      "A00016",
+      "P0266",
+      "2024-12-20",
+      "Cardiology",
+      "0",
+      "0",
+      "57.0",
+      "1",
+      "M",
+      "B00016",
+      "6789.18",
+      "3",
+      "3",
+      "1",
+      "1",
+      "1"
+    ],
+    [
+      "A00017",
+      "P0132",
+      "2024-12-21",
+      "Cardiology",
+      "1",
+      "0",
+      "78.0",
+      "4",
+      "F",
+      "B00017",
+      "2846.66",
+      "3",
+      "2",
+      "0",
+      "1",
+      "2"
+    ],
+    [
+      "A00018",
+      "P0129",
+      "2024-07-23",
+      "Cardiology",
+      "0",
+      "0",
+      "27.0",
+      "0",
+      "F",
+      "B00018",
+      "7081.83",
+      "1",
+      "1",
+      "0",
+      "1",
+      "0"
+    ],
+    [
+      "A00019",
+      "P0260",
+      "2024-03-18",
+      "General",
+      "1",
+      "0",
+      "71.0",
+      "3",
+      "F",
+      "B00019",
+      "7686.25",
+      "1",
+      "1",
+      "0",
+      "0",
+      "1"
+    ]
+  ],
+  "kind": "consolidated",
+  "lineage": {
+    "sources": [
+      {
+        "upload_id": "44322d74dbb84ed88f2561c1b09c73b7",
+        "name": "patients",
+        "filename": "patients.csv",
+        "rows": 300
+      },
+      {
+        "upload_id": "59c5d687c8d242c6b77ce411d0d21ff5",
+        "name": "admissions",
+        "filename": "admissions.csv",
+        "rows": 900
+      },
+      {
+        "upload_id": "1c1318d30abc46e5b2870fb313dc259f",
+        "name": "diagnoses",
+        "filename": "diagnoses.csv",
+        "rows": 2672
+      },
+      {
+        "upload_id": "7a57c7a06caa418fbb8c92588130e6e2",
+        "name": "billing",
+        "filename": "billing.csv",
+        "rows": 900
+      }
+    ],
+    "base": "admissions",
+    "base_date": "admit_date",
+    "rows": 900,
+    "columns": 16,
+    "relationships": [
+      {
+        "from_table": "admissions",
+        "from_column": "patient_id",
+        "to_table": "patients",
+        "to_column": "patient_id",
+        "kind": "many_to_one",
+        "containment_pct": 100.0,
+        "name_match": true,
+        "confidence": 1.0
+      },
+      {
+        "from_table": "admissions",
+        "from_column": "admission_id",
+        "to_table": "billing",
+        "to_column": "admission_id",
+        "kind": "one_to_one",
+        "containment_pct": 100.0,
+        "name_match": true,
+        "confidence": 1.0
+      },
+      {
+        "from_table": "diagnoses",
+        "from_column": "admission_id",
+        "to_table": "admissions",
+        "to_column": "admission_id",
+        "kind": "many_to_one",
+        "containment_pct": 100.0,
+        "name_match": true,
+        "confidence": 1.0
+      },
+      {
+        "from_table": "diagnoses",
+        "from_column": "admission_id",
+        "to_table": "billing",
+        "to_column": "admission_id",
+        "kind": "many_to_one",
+        "containment_pct": 100.0,
+        "name_match": true,
+        "confidence": 1.0
+      }
+    ],
+    "steps": [
+      {
+        "table": "patients",
+        "relation": "lookup (many-to-one)",
+        "on": "admissions.patient_id = patients.patient_id",
+        "matched_pct": 100.0,
+        "columns_added": 3,
+        "point_in_time": null,
+        "note": ""
+      },
+      {
+        "table": "billing",
+        "relation": "lookup (one-to-one)",
+        "on": "admissions.admission_id = billing.admission_id",
+        "matched_pct": 100.0,
+        "columns_added": 2,
+        "point_in_time": null,
+        "note": ""
+      },
+      {
+        "table": "diagnoses",
+        "relation": "aggregated (one-to-many)",
+        "on": "diagnoses.admission_id = admissions.admission_id",
+        "matched_pct": 100.0,
+        "columns_added": 5,
+        "point_in_time": true,
+        "note": "only diagnoses.diag_date on or before admissions.admit_date"
+      }
+    ],
+    "warnings": []
+  },
+  "suggested_targets": [
+    "readmitted_30d",
+    "readmitted_7d",
+    "patients_gender",
+    "billing_total_cost",
+    "ward"
+  ]
+}

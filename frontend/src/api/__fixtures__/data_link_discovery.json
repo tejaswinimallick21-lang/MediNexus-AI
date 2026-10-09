@@ -1,0 +1,75 @@
+{
+  "tables": [
+    {
+      "upload_id": "44322d74dbb84ed88f2561c1b09c73b7",
+      "name": "patients",
+      "filename": "patients.csv",
+      "rows": 300,
+      "columns": 4
+    },
+    {
+      "upload_id": "59c5d687c8d242c6b77ce411d0d21ff5",
+      "name": "admissions",
+      "filename": "admissions.csv",
+      "rows": 900,
+      "columns": 6
+    },
+    {
+      "upload_id": "1c1318d30abc46e5b2870fb313dc259f",
+      "name": "diagnoses",
+      "filename": "diagnoses.csv",
+      "rows": 2672,
+      "columns": 4
+    },
+    {
+      "upload_id": "7a57c7a06caa418fbb8c92588130e6e2",
+      "name": "billing",
+      "filename": "billing.csv",
+      "rows": 900,
+      "columns": 3
+    }
+  ],
+  "relationships": [
+    {
+      "from_table": "admissions",
+      "from_column": "patient_id",
+      "to_table": "patients",
+      "to_column": "patient_id",
+      "kind": "many_to_one",
+      "containment_pct": 100.0,
+      "name_match": true,
+      "confidence": 1.0
+    },
+    {
+      "from_table": "admissions",
+      "from_column": "admission_id",
+      "to_table": "billing",
+      "to_column": "admission_id",
+      "kind": "one_to_one",
+      "containment_pct": 100.0,
+      "name_match": true,
+      "confidence": 1.0
+    },
+    {
+      "from_table": "diagnoses",
+      "from_column": "admission_id",
+      "to_table": "admissions",
+      "to_column": "admission_id",
+      "kind": "many_to_one",
+      "containment_pct": 100.0,
+      "name_match": true,
+      "confidence": 1.0
+    },
+    {
+      "from_table": "diagnoses",
+      "from_column": "admission_id",
+      "to_table": "billing",
+      "to_column": "admission_id",
+      "kind": "many_to_one",
+      "containment_pct": 100.0,
+      "name_match": true,
+      "confidence": 1.0
+    }
+  ],
+  "suggested_base": "admissions"
+}
