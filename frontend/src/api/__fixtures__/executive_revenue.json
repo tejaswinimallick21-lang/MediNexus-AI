@@ -1,0 +1,52 @@
+[
+  {
+    "department": "Pulmonology",
+    "revenue": 41198767.01,
+    "admissions": 2143
+  },
+  {
+    "department": "Internal Medicine",
+    "revenue": 36113324.12,
+    "admissions": 3022
+  },
+  {
+    "department": "Oncology",
+    "revenue": 7435126.94,
+    "admissions": 947
+  },
+  {
+    "department": "Cardiology",
+    "revenue": 7011612.33,
+    "admissions": 708
+  },
+  {
+    "department": "Orthopedics",
+    "revenue": 6738367.34,
+    "admissions": 71
+  },
+  {
+    "department": "Critical Care",
+    "revenue": 4925886.21,
+    "admissions": 375
+  },
+  {
+    "department": "General Surgery",
+    "revenue": 1996540.5,
+    "admissions": 1399
+  },
+  {
+    "department": "Neurology",
+    "revenue": 329234.83,
+    "admissions": 755
+  },
+  {
+    "department": "Behavioral Health",
+    "revenue": 99535.79,
+    "admissions": 162
+  },
+  {
+    "department": "Obstetrics & Gynecology",
+    "revenue": 12118.78,
+    "admissions": 2
+  }
+]

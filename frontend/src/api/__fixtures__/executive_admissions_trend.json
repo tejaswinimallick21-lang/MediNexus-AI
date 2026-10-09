@@ -1,0 +1,122 @@
+[
+  {
+    "period": "2018-06",
+    "value": 10.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2018-07",
+    "value": 14.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2018-08",
+    "value": 11.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2018-09",
+    "value": 9.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2018-10",
+    "value": 7.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2018-11",
+    "value": 7.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2018-12",
+    "value": 10.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2019-01",
+    "value": 17.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2019-02",
+    "value": 13.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2019-03",
+    "value": 12.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2019-04",
+    "value": 25.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2019-05",
+    "value": 42.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2019-06",
+    "value": 110.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2019-07",
+    "value": 93.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2019-08",
+    "value": 83.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2019-09",
+    "value": 83.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2019-10",
+    "value": 67.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2019-11",
+    "value": 91.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2019-12",
+    "value": 94.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2020-01",
+    "value": 113.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2020-02",
+    "value": 464.0,
+    "secondary": 11.0
+  },
+  {
+    "period": "2020-03",
+    "value": 2032.0,
+    "secondary": 14.0
+  },
+  {
+    "period": "2020-04",
+    "value": 68.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2020-05",
+    "value": 52.0,
+    "secondary": 0.0
+  }
+]

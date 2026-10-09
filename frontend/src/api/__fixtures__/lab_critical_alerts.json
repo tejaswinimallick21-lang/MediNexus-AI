@@ -1,0 +1,55 @@
+{
+  "items": [
+    {
+      "lab_id": "LAB_01204102",
+      "patient_id": "P_03995",
+      "test_name": "Creatinine",
+      "test_value": 6.9,
+      "unit": "mg/dL",
+      "reference_range": "0.6 - 1.3",
+      "test_date": "2020-05-26",
+      "department_name": null
+    },
+    {
+      "lab_id": "LAB_01204101",
+      "patient_id": "P_03995",
+      "test_name": "eGFR",
+      "test_value": 10.6,
+      "unit": "mL/min/{1.73_m2}",
+      "reference_range": "60.0 - 120.0",
+      "test_date": "2020-05-26",
+      "department_name": null
+    },
+    {
+      "lab_id": "LAB_01203940",
+      "patient_id": "P_11704",
+      "test_name": "Body Mass Index",
+      "test_value": 14.9,
+      "unit": "kg/m2",
+      "reference_range": "18.5 - 24.9",
+      "test_date": "2020-05-25",
+      "department_name": null
+    },
+    {
+      "lab_id": "LAB_01203755",
+      "patient_id": "P_03889",
+      "test_name": "Creatinine",
+      "test_value": 8.3,
+      "unit": "mg/dL",
+      "reference_range": "0.6 - 1.3",
+      "test_date": "2020-05-25",
+      "department_name": null
+    },
+    {
+      "lab_id": "LAB_01203754",
+      "patient_id": "P_03889",
+      "test_name": "eGFR",
+      "test_value": 10.2,
+      "unit": "mL/min/{1.73_m2}",
+      "reference_range": "60.0 - 120.0",
+      "test_date": "2020-05-25",
+      "department_name": null
+    }
+  ],
+  "next_cursor": "bzo1"
+}

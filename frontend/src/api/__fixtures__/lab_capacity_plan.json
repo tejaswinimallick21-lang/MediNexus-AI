@@ -1,0 +1,23 @@
+{
+  "category": "Blood Gas",
+  "forecast_daily_tests": 0.0,
+  "last_7d_daily": 0.0,
+  "estimated_capacity_daily": 1560,
+  "utilization_pct": 0.0,
+  "critical_rate_pct": 31.2,
+  "operational_status": "STABLE",
+  "actions": [
+    "Workload within normal operational parameters. Proceed with standard preventive maintenance schedule.",
+    "Alert Laboratory Director: Critical result alert frequency is abnormally elevated."
+  ],
+  "assessment": "Expected daily volume (0 tests) represents 0.0% of single-shift rated analyzer capacity. Capacity is estimated (75th-percentile daily volume over the past year + 25% headroom).",
+  "forecast": {
+    "serving_method": "baseline_naive7",
+    "method_label": "Naive baseline: last 7 days repeated",
+    "holdout_mae": 756.275,
+    "holdout_baseline_mae": 302.09,
+    "beats_baseline": false,
+    "test_period": "2020-03-20 to 2020-05-19",
+    "data_through": "2020-05-26"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "inventory_id": "INV_000334",
+  "medication_name": "Nitroglycerin 0.4 MG/ACTUAT Mucosal Spray",
+  "hospital_name": "HALLMARK IMAGING ASSOCIATES  PC",
+  "current_stock": 0,
+  "dispensed_last_30d": 2,
+  "predicted_30d_demand": 2,
+  "projected_shortfall": 2,
+  "urgency": "URGENT",
+  "recommended_order_quantity": 6,
+  "estimated_procurement_cost": 789.6,
+  "actions": [
+    "Issue IMMEDIATE emergency procurement order for 6 units of Nitroglycerin 0.4 MG/ACTUAT Mucosal Spray.",
+    "Notify prescribing physicians to consider equivalent therapeutic alternatives if available.",
+    "Restructure inpatient dispensing to standard unit-dose rounds to minimize ward stock wastage."
+  ],
+  "buffer_assessment": "Current stock provides approximately 0.0 days of supply based on projected burn rate.",
+  "forecast": {
+    "serving_method": "baseline_last30",
+    "method_label": "Naive baseline: last 30 days repeated",
+    "holdout_mae": 0.217,
+    "holdout_baseline_mae": 0.201,
+    "beats_baseline": false,
+    "test_period": "2020-02-26 to 2020-04-26",
+    "data_through": "2020-05-26"
+  }
+}

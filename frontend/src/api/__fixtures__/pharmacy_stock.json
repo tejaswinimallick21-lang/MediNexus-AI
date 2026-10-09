@@ -1,0 +1,125 @@
+{
+  "items": [
+    {
+      "inventory_id": "INV_000334",
+      "medication_id": "MED_0010",
+      "medication_name": "Nitroglycerin 0.4 MG/ACTUAT Mucosal Spray",
+      "category": "Cardiac",
+      "hospital_id": "HOSP_0771",
+      "hospital_name": "HALLMARK IMAGING ASSOCIATES  PC",
+      "stock_quantity": 0,
+      "reorder_level": 3,
+      "days_of_supply": 0.0,
+      "stockout_risk": "High Risk"
+    },
+    {
+      "inventory_id": "INV_000362",
+      "medication_id": "MED_0055",
+      "medication_name": "Levora 0.15/30 28 Day Pack",
+      "category": "Contraceptive",
+      "hospital_id": "HOSP_0860",
+      "hospital_name": "HEYWOOD HOSPITAL -",
+      "stock_quantity": 0,
+      "reorder_level": 3,
+      "days_of_supply": 0.0,
+      "stockout_risk": "High Risk"
+    },
+    {
+      "inventory_id": "INV_000649",
+      "medication_id": "MED_0044",
+      "medication_name": "Jolivette 28 Day Pack",
+      "category": "Contraceptive",
+      "hospital_id": "HOSP_1449",
+      "hospital_name": "NORTH SHORE MEDICAL CENTER -",
+      "stock_quantity": 0,
+      "reorder_level": 4,
+      "days_of_supply": 0.0,
+      "stockout_risk": "High Risk"
+    },
+    {
+      "inventory_id": "INV_000792",
+      "medication_id": "MED_0021",
+      "medication_name": "0.4 ML Enoxaparin sodium 100 MG/ML Prefilled Syringe",
+      "category": "Anticoagulant / Antiplatelet",
+      "hospital_id": "HOSP_4720",
+      "hospital_name": "SHRINERS' HOSPITAL FOR CHILDREN - BOSTON  THE",
+      "stock_quantity": 0,
+      "reorder_level": 3,
+      "days_of_supply": 0.0,
+      "stockout_risk": "High Risk"
+    },
+    {
+      "inventory_id": "INV_000813",
+      "medication_id": "MED_0021",
+      "medication_name": "0.4 ML Enoxaparin sodium 100 MG/ML Prefilled Syringe",
+      "category": "Anticoagulant / Antiplatelet",
+      "hospital_id": "HOSP_4774",
+      "hospital_name": "SOUTH SHORE HOSPITAL",
+      "stock_quantity": 1,
+      "reorder_level": 5,
+      "days_of_supply": 2.9,
+      "stockout_risk": "High Risk"
+    },
+    {
+      "inventory_id": "INV_000826",
+      "medication_id": "MED_0020",
+      "medication_name": "Acetaminophen 500 MG Oral Tablet",
+      "category": "Analgesic",
+      "hospital_id": "HOSP_4795",
+      "hospital_name": "SOUTHCOAST HOSPITAL GROUP  INC",
+      "stock_quantity": 1,
+      "reorder_level": 5,
+      "days_of_supply": 3.3,
+      "stockout_risk": "High Risk"
+    },
+    {
+      "inventory_id": "INV_000267",
+      "medication_id": "MED_0024",
+      "medication_name": "1 ML Enoxaparin sodium 150 MG/ML Prefilled Syringe",
+      "category": "Anticoagulant / Antiplatelet",
+      "hospital_id": "HOSP_0641",
+      "hospital_name": "FALMOUTH HOSPITAL",
+      "stock_quantity": 1,
+      "reorder_level": 4,
+      "days_of_supply": 3.5,
+      "stockout_risk": "High Risk"
+    },
+    {
+      "inventory_id": "INV_000509",
+      "medication_id": "MED_0021",
+      "medication_name": "0.4 ML Enoxaparin sodium 100 MG/ML Prefilled Syringe",
+      "category": "Anticoagulant / Antiplatelet",
+      "hospital_id": "HOSP_1188",
+      "hospital_name": "MERCY MEDICAL CTR",
+      "stock_quantity": 1,
+      "reorder_level": 4,
+      "days_of_supply": 4.2,
+      "stockout_risk": "High Risk"
+    },
+    {
+      "inventory_id": "INV_000094",
+      "medication_id": "MED_0007",
+      "medication_name": "NDA020503 200 ACTUAT Albuterol 0.09 MG/ACTUAT Metered Dose Inhaler",
+      "category": "Respiratory",
+      "hospital_id": "HOSP_0223",
+      "hospital_name": "BETH ISRAEL DEACONESS HOSPITAL-MILTON INC",
+      "stock_quantity": 1,
+      "reorder_level": 4,
+      "days_of_supply": 5.2,
+      "stockout_risk": "High Risk"
+    },
+    {
+      "inventory_id": "INV_000350",
+      "medication_id": "MED_0007",
+      "medication_name": "NDA020503 200 ACTUAT Albuterol 0.09 MG/ACTUAT Metered Dose Inhaler",
+      "category": "Respiratory",
+      "hospital_id": "HOSP_0846",
+      "hospital_name": "HEALTHALLIANCE HOSPITALS  INC",
+      "stock_quantity": 1,
+      "reorder_level": 4,
+      "days_of_supply": 5.2,
+      "stockout_risk": "High Risk"
+    }
+  ],
+  "next_cursor": "bzoxMA"
+}

@@ -1,0 +1,252 @@
+[
+  {
+    "period": "2020-03-28",
+    "value": 3383.0,
+    "secondary": 367.0
+  },
+  {
+    "period": "2020-03-29",
+    "value": 2672.0,
+    "secondary": 257.0
+  },
+  {
+    "period": "2020-03-30",
+    "value": 2077.0,
+    "secondary": 199.0
+  },
+  {
+    "period": "2020-03-31",
+    "value": 1631.0,
+    "secondary": 152.0
+  },
+  {
+    "period": "2020-04-01",
+    "value": 1080.0,
+    "secondary": 76.0
+  },
+  {
+    "period": "2020-04-02",
+    "value": 1093.0,
+    "secondary": 71.0
+  },
+  {
+    "period": "2020-04-03",
+    "value": 823.0,
+    "secondary": 62.0
+  },
+  {
+    "period": "2020-04-04",
+    "value": 655.0,
+    "secondary": 43.0
+  },
+  {
+    "period": "2020-04-05",
+    "value": 616.0,
+    "secondary": 25.0
+  },
+  {
+    "period": "2020-04-06",
+    "value": 706.0,
+    "secondary": 28.0
+  },
+  {
+    "period": "2020-04-07",
+    "value": 597.0,
+    "secondary": 24.0
+  },
+  {
+    "period": "2020-04-08",
+    "value": 508.0,
+    "secondary": 15.0
+  },
+  {
+    "period": "2020-04-09",
+    "value": 339.0,
+    "secondary": 7.0
+  },
+  {
+    "period": "2020-04-10",
+    "value": 595.0,
+    "secondary": 5.0
+  },
+  {
+    "period": "2020-04-11",
+    "value": 450.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2020-04-12",
+    "value": 312.0,
+    "secondary": 3.0
+  },
+  {
+    "period": "2020-04-13",
+    "value": 363.0,
+    "secondary": 2.0
+  },
+  {
+    "period": "2020-04-14",
+    "value": 465.0,
+    "secondary": 3.0
+  },
+  {
+    "period": "2020-04-15",
+    "value": 466.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2020-04-16",
+    "value": 360.0,
+    "secondary": 2.0
+  },
+  {
+    "period": "2020-04-17",
+    "value": 509.0,
+    "secondary": 5.0
+  },
+  {
+    "period": "2020-04-18",
+    "value": 505.0,
+    "secondary": 6.0
+  },
+  {
+    "period": "2020-04-19",
+    "value": 484.0,
+    "secondary": 4.0
+  },
+  {
+    "period": "2020-04-20",
+    "value": 390.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2020-04-21",
+    "value": 449.0,
+    "secondary": 4.0
+  },
+  {
+    "period": "2020-04-22",
+    "value": 399.0,
+    "secondary": 3.0
+  },
+  {
+    "period": "2020-04-23",
+    "value": 512.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2020-04-24",
+    "value": 558.0,
+    "secondary": 4.0
+  },
+  {
+    "period": "2020-04-25",
+    "value": 419.0,
+    "secondary": 4.0
+  },
+  {
+    "period": "2020-04-26",
+    "value": 491.0,
+    "secondary": 4.0
+  },
+  {
+    "period": "2020-04-27",
+    "value": 615.0,
+    "secondary": 2.0
+  },
+  {
+    "period": "2020-04-28",
+    "value": 532.0,
+    "secondary": 5.0
+  },
+  {
+    "period": "2020-04-29",
+    "value": 403.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2020-04-30",
+    "value": 397.0,
+    "secondary": 3.0
+  },
+  {
+    "period": "2020-05-01",
+    "value": 483.0,
+    "secondary": 3.0
+  },
+  {
+    "period": "2020-05-02",
+    "value": 469.0,
+    "secondary": 3.0
+  },
+  {
+    "period": "2020-05-03",
+    "value": 316.0,
+    "secondary": 3.0
+  },
+  {
+    "period": "2020-05-04",
+    "value": 385.0,
+    "secondary": 5.0
+  },
+  {
+    "period": "2020-05-05",
+    "value": 496.0,
+    "secondary": 5.0
+  },
+  {
+    "period": "2020-05-06",
+    "value": 358.0,
+    "secondary": 6.0
+  },
+  {
+    "period": "2020-05-07",
+    "value": 503.0,
+    "secondary": 4.0
+  },
+  {
+    "period": "2020-05-08",
+    "value": 477.0,
+    "secondary": 5.0
+  },
+  {
+    "period": "2020-05-09",
+    "value": 484.0,
+    "secondary": 3.0
+  },
+  {
+    "period": "2020-05-10",
+    "value": 426.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2020-05-11",
+    "value": 320.0,
+    "secondary": 4.0
+  },
+  {
+    "period": "2020-05-12",
+    "value": 385.0,
+    "secondary": 5.0
+  },
+  {
+    "period": "2020-05-13",
+    "value": 370.0,
+    "secondary": 2.0
+  },
+  {
+    "period": "2020-05-14",
+    "value": 503.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2020-05-15",
+    "value": 389.0,
+    "secondary": 4.0
+  },
+  {
+    "period": "2020-05-16",
+    "value": 297.0,
+    "secondary": 4.0
+  }
+]

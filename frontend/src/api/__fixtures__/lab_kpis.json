@@ -1,0 +1,8 @@
+{
+  "total_tests": 1204289,
+  "abnormal_tests": 477671,
+  "critical_tests": 123507,
+  "abnormal_pct": 39.7,
+  "critical_pct": 10.3,
+  "tests_last_30d": 12682
+}

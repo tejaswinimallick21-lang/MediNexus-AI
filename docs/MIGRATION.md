@@ -3,16 +3,18 @@
 Plan and inventory: [MIGRATION_PLAN.md](MIGRATION_PLAN.md). Decisions: 3 auth roles (admin / hcp / analyst) + persona; USD with US grouping; tokens from the existing teal/slate palette.
 
 ## Status
-| Streamlit page | React route | Status |
-|---|---|---|
-| shell (`app.py` sidebar) + `welcome.py` + `login.py` | `/`, `/login`, app shell | ✅ Foundation |
-| `receptionist.py` | `/reception` | ⏳ |
-| `laboratory.py` | `/laboratory` | ⏳ |
-| `pharmacist.py` | `/pharmacy` | ⏳ |
-| `administrator.py` | `/executive` | ⏳ |
-| `it_admin.py` | `/it` | ⏳ |
-| `doctor.py` | `/doctor` | ⏳ |
-| `data_engineer.py` | `/data` | ⏳ |
+| Legacy Streamlit page | React route | Role | Status |
+|---|---|---|---|
+| shell + `welcome.py` + `login.py` | `/`, `/login` | all | ✅ |
+| `receptionist.py` | `/reception` (Patient Access) | analyst | ✅ de-identified |
+| `laboratory.py` | `/laboratory` | hcp | ✅ |
+| `pharmacist.py` | `/pharmacy` | hcp | ✅ |
+| `administrator.py` | `/executive` | analyst | ✅ |
+| `it_admin.py` | `/it` | admin | ⏳ |
+| `doctor.py` | `/doctor` | hcp | ⏳ |
+| `data_engineer.py` | `/data` | admin | ⏳ |
+
+Admins can open every workspace.
 
 ## How parity is tested
 - **Backend contract:** `backend/tests/test_*.py` call each endpoint, validate the JSON against the endpoint's Pydantic model, and write the payload to `frontend/src/api/__fixtures__/<name>.json`.
@@ -29,3 +31,9 @@ Plan and inventory: [MIGRATION_PLAN.md](MIGRATION_PLAN.md). Decisions: 3 auth ro
 - `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me` → session, role card, allowed consoles
 
 Deliberate differences (both UIs): username login → **email** login against the seeded store; self sign-up and the password-less **role switcher removed** (security fix). Persona-to-console access is unchanged.
+
+---
+
+## Laboratory, Pharmacy, Executive
+**Endpoints:** `/api/lab/*` (kpis, workload-by-category, daily-volume, categories, critical-alerts, capacity-plan), `/api/pharmacy/*` (kpis, stock, risk-by-category, stock/{id}/forecast, POST purchase-orders), `/api/executive/*` (kpis, admissions-trend, revenue-by-department, forecasts, readmission-drivers, capacity-plan), `POST /api/agents/{agent}/chat`.
+**Parity:** lab KPIs match `compute_lab_kpis` exactly (pytest). Deliberate corrections vs Streamlit: removed hard-coded "STAT TAT 98.2%", "5 Facilities", "18 Adm/day", "99.6% ROC-AUC", "R² = 1.00"; projected admissions/lab volume/drug demand now come from forecasts with held-out scores and champion/challenger serving; lab bench capacity is an explicit estimate; purchase orders are persisted (`purchase_orders` table) and audited.

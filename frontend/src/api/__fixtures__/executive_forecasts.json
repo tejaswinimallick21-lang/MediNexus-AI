@@ -1,0 +1,64 @@
+{
+  "admissions_next_7d_daily": 1.6,
+  "admissions_last_7d_daily": 1.6,
+  "admissions_forecast": {
+    "serving_method": "baseline_naive7",
+    "method_label": "Naive baseline: last 7 days repeated",
+    "holdout_mae": 9.427,
+    "holdout_baseline_mae": 5.562,
+    "beats_baseline": false,
+    "test_period": "2020-03-18 to 2020-05-17",
+    "data_through": "2020-05-24"
+  },
+  "models": [
+    {
+      "model": "COVID-19 hospitalization",
+      "purpose": "Risk at diagnosis (pre-diagnosis history only)",
+      "primary_metric": "ROC-AUC 0.73",
+      "baseline": "Age only 0.70",
+      "verdict": "Beats baseline"
+    },
+    {
+      "model": "COVID-19 30-day mortality",
+      "purpose": "Risk at diagnosis (pre-diagnosis history only)",
+      "primary_metric": "ROC-AUC 0.88",
+      "baseline": "Age only 0.87",
+      "verdict": "Marginal over baseline"
+    },
+    {
+      "model": "Unplanned 30-day readmission",
+      "purpose": "Scored at discharge \u00b7 121 positive cases",
+      "primary_metric": "ROC-AUC 0.80 (CV 0.79 \u00b1 0.03)",
+      "baseline": "Age + LOS 0.68",
+      "verdict": "Beats baseline"
+    },
+    {
+      "model": "Length of stay",
+      "purpose": "Scored at admission",
+      "primary_metric": "MAE 1.11 days",
+      "baseline": "Median 2.81 days",
+      "verdict": "Beats baseline"
+    },
+    {
+      "model": "Admission demand (7-day)",
+      "purpose": "Time-based holdout 2020-03-18 to 2020-05-17",
+      "primary_metric": "MAE 9.43",
+      "baseline": "Naive 5.56",
+      "verdict": "Baseline wins \u2014 baseline served"
+    },
+    {
+      "model": "Lab workload (7-day)",
+      "purpose": "Time-based holdout 2020-03-20 to 2020-05-19",
+      "primary_metric": "MAE 756.27",
+      "baseline": "Naive 302.09",
+      "verdict": "Baseline wins \u2014 baseline served"
+    },
+    {
+      "model": "Pharmacy demand (30-day)",
+      "purpose": "Time-based holdout 2020-02-26 to 2020-04-26",
+      "primary_metric": "MAE 0.22",
+      "baseline": "Naive 0.20",
+      "verdict": "Baseline wins \u2014 baseline served"
+    }
+  ]
+}

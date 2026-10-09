@@ -74,7 +74,7 @@ def list_critical_alerts(params: PageParams, category: Optional[str] = None) -> 
         CriticalAlert(
             lab_id=r.lab_id, patient_id=r.patient_id, test_name=r.test_name,
             test_value=None if r.test_value != r.test_value else round(float(r.test_value), 2),
-            unit=r.unit if isinstance(r.unit, str) else None,
+            unit=r.unit if isinstance(r.unit, str) and r.unit != "standard" else None,  # "standard" = imputed placeholder
             reference_range=r.reference_range if isinstance(r.reference_range, str) else None,
             test_date=str(r.test_date),
             department_name=r.department_name if isinstance(r.department_name, str) else None,
@@ -90,16 +90,17 @@ def get_capacity_plan(category: str) -> LabCapacityPlan:
     forecast = forecast_lab_workload()
     row = next((f for f in forecast["forecasts"] if f["group"] == category), None)
     projected = row["forecast_daily"] if row else 0.0
-    # Bench capacity is not recorded in the data: estimate it as 1.2 × the 95th-percentile daily volume of the past year
+    # Bench capacity is not recorded in the data: estimate a typical busy day (75th-percentile daily volume over the
+    # past year) plus 25% headroom. The 95th percentile would be dominated by the 2020 COVID-19 surge peak.
     stats = query_df_strict("""
         WITH end_d AS (SELECT max(CAST(test_date AS DATE)) AS d FROM gold_laboratory),
         daily AS (
             SELECT CAST(test_date AS DATE) AS day, COUNT(*) AS n FROM gold_laboratory, end_d
             WHERE test_category = ? AND CAST(test_date AS DATE) > end_d.d - INTERVAL 365 DAY GROUP BY 1)
-        SELECT (SELECT quantile_cont(n, 0.95) FROM daily) AS p95,
+        SELECT (SELECT quantile_cont(n, 0.75) FROM daily) AS p75,
                (SELECT AVG(is_critical) * 100 FROM gold_laboratory WHERE test_category = ?) AS crit_rate
     """, [category, category]).iloc[0]
-    capacity = max(1, int(round(float(stats["p95"] or 0) * 1.2)))
+    capacity = max(1, int(round(float(stats["p75"] or 0) * 1.25)))
     plan = get_laboratory_prescriptive_plan(
         category=category,
         projected_daily_tests=int(round(projected)),
@@ -115,6 +116,6 @@ def get_capacity_plan(category: str) -> LabCapacityPlan:
         critical_rate_pct=round(float(stats["crit_rate"] or 0), 1),
         operational_status=plan["operational_status"],
         actions=plan["recommended_staffing_actions"],
-        assessment=plan["analyzer_capacity_assessment"] + " Capacity is estimated (1.2 × 95th-percentile daily volume, past year).",
+        assessment=plan["analyzer_capacity_assessment"] + " Capacity is estimated (75th-percentile daily volume over the past year + 25% headroom).",
         forecast=ForecastMeta(**{k: forecast.get(k) for k in ForecastMeta.model_fields}),
     )

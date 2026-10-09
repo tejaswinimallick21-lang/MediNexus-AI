@@ -1,0 +1,11 @@
+{
+  "total_admissions": 9584,
+  "patients_admitted": 4024,
+  "unplanned_readmission_rate_pct": 1.26,
+  "average_los_days": 4.2,
+  "occupancy_rate_pct": 39.5,
+  "total_revenue": 105860513.85,
+  "collection_rate_pct": 39.9,
+  "hospitals": 91,
+  "data_through": "2020-05-24"
+}
