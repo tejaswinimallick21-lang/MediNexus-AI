@@ -13,13 +13,18 @@ from backend.app.services.auth import authenticate
 from config.roles import ROLE_PERMISSIONS
 
 
+# Legacy Streamlit pages are keyed by persona; map the three platform roles onto them until Streamlit is retired.
+ROLE_TO_LEGACY_PERSONA = {"admin": "Data Engineer", "hcp": "Doctor", "analyst": "Hospital Administrator"}
+
+
 def start_session(user) -> None:
-    """Populate the session keys the Streamlit pages read (role = persona, as before)."""
+    """Populate the session keys the Streamlit pages read."""
+    persona = ROLE_TO_LEGACY_PERSONA[user.role]
     profile = {
         "username": user.email,
         "email": user.email,
         "name": user.name,
-        "role": user.persona,
+        "role": persona,
         "auth_role": user.role,
         "department": user.department,
     }
@@ -27,11 +32,11 @@ def start_session(user) -> None:
     st.session_state["user"] = profile
     st.session_state["username"] = user.email
     st.session_state["name"] = user.name
-    st.session_state["role"] = user.persona
+    st.session_state["role"] = persona
     st.session_state["auth_role"] = user.role
     st.session_state["department"] = user.department
-    st.session_state["current_page"] = ROLE_PERMISSIONS.get(user.persona, {}).get("default_page", "welcome")
-    if user.persona == "Data Engineer":
+    st.session_state["current_page"] = ROLE_PERMISSIONS.get(persona, {}).get("default_page", "welcome")
+    if persona == "Data Engineer":
         st.session_state["pipeline_completed"] = False
 
 

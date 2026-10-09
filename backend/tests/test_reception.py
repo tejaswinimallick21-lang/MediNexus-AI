@@ -27,9 +27,9 @@ def test_status_distribution_sums_to_total():
 
 # ---- service behaviour ----------------------------------------------------------------------
 
-def test_appointments_never_expose_clinical_reasons():
+def test_appointments_expose_no_identifiers_or_clinical_reasons():
     page = svc.list_appointments(PageParams(limit=50))
-    assert "reason_for_visit" not in AppointmentRow.model_fields
+    assert not {"reason_for_visit", "patient_name", "contact"} & set(AppointmentRow.model_fields)
     assert all(r.visit_type in {"Wellness visit", "Ambulatory visit", "Outpatient visit"} for r in page.items)
 
 
@@ -50,26 +50,26 @@ def test_wait_insights_are_computed_and_flagged_simulated():
 # ---- endpoint contracts ---------------------------------------------------------------------
 
 def test_kpis_contract(login):
-    assert_contract(login("Receptionist").get("/api/reception/kpis"), ReceptionKpis, "reception_kpis")
+    assert_contract(login("analyst").get("/api/reception/kpis"), ReceptionKpis, "reception_kpis")
 
 
 def test_status_distribution_contract(login):
-    assert_contract(login("Receptionist").get("/api/reception/status-distribution"), StatusDistribution, "reception_status_distribution")
+    assert_contract(login("analyst").get("/api/reception/status-distribution"), StatusDistribution, "reception_status_distribution")
 
 
 def test_wait_insights_contract(login):
-    assert_contract(login("Receptionist").get("/api/reception/wait-insights"), WaitInsights, "reception_wait_insights")
+    assert_contract(login("analyst").get("/api/reception/wait-insights"), WaitInsights, "reception_wait_insights")
 
 
 def test_filters_contract(login):
-    assert_contract(login("Receptionist").get("/api/reception/filters"), ReceptionFilters, "reception_filters")
+    assert_contract(login("analyst").get("/api/reception/filters"), ReceptionFilters, "reception_filters")
 
 
 def test_appointments_contract(login):
     from backend.app.core.pagination import Page
 
     body = assert_contract(
-        login("Receptionist").get("/api/reception/appointments", params={"limit": 5, "status": "Completed"}),
+        login("analyst").get("/api/reception/appointments", params={"limit": 5, "status": "Completed"}),
         Page[AppointmentRow],
         "reception_appointments",
     )
@@ -77,16 +77,16 @@ def test_appointments_contract(login):
 
 
 def test_appointments_limit_is_capped(login):
-    assert_error(login("Receptionist").get("/api/reception/appointments", params={"limit": 500}), 422, "validation_error")
+    assert_error(login("analyst").get("/api/reception/appointments", params={"limit": 500}), 422, "validation_error")
 
 
 def test_bad_cursor(login):
-    assert_error(login("Receptionist").get("/api/reception/appointments", params={"cursor": "@@"}), 400, "invalid_cursor")
+    assert_error(login("analyst").get("/api/reception/appointments", params={"cursor": "@@"}), 400, "invalid_cursor")
 
 
-@pytest.mark.parametrize("persona", ["Doctor", "Hospital Administrator", "Data Engineer"])
-def test_other_roles_are_forbidden(login, persona):
-    assert_error(login(persona).get("/api/reception/kpis"), 403, "forbidden")
+@pytest.mark.parametrize("role", ["hcp", "admin"])
+def test_other_roles_are_forbidden(login, role):
+    assert_error(login(role).get("/api/reception/kpis"), 403, "forbidden")
 
 
 def test_requires_sign_in(client):

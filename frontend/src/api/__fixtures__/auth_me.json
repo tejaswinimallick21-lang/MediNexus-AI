@@ -1,11 +1,12 @@
 {
-  "email": "receptionist@medinexus.org",
-  "name": "Receptionist",
-  "role": "hcp",
-  "persona": "Receptionist",
-  "department": "Outpatient Registration & Care Flow",
+  "email": "analyst@medinexus.org",
+  "name": "Operations Analyst",
+  "role": "analyst",
+  "role_title": "Operations Analyst",
+  "department": "Hospital Operations",
   "allowed_routes": [
+    "/executive",
     "/reception"
   ],
-  "default_route": "/reception"
+  "default_route": "/executive"
 }

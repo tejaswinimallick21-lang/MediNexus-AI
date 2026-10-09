@@ -2,8 +2,7 @@
   "items": [
     {
       "appointment_id": "APT_0300655",
-      "patient_name": "Augustine McLaughlin",
-      "contact": "+1-555-975-5518",
+      "patient_id": "P_05638",
       "appointment_date": "2020-05-27",
       "appointment_time": "19:46",
       "doctor_name": "Dr. Walker Konopelski",
@@ -14,8 +13,7 @@
     },
     {
       "appointment_id": "APT_0300619",
-      "patient_name": "Marsha Harber",
-      "contact": "+1-555-703-4157",
+      "patient_id": "P_05004",
       "appointment_date": "2020-05-26",
       "appointment_time": "00:05",
       "doctor_name": "Dr. Marlo Haag",
@@ -26,8 +24,7 @@
     },
     {
       "appointment_id": "APT_0300620",
-      "patient_name": "Otha Mante",
-      "contact": "+1-555-349-4865",
+      "patient_id": "P_03889",
       "appointment_date": "2020-05-26",
       "appointment_time": "00:59",
       "doctor_name": "Dr. Maria Hermiston",
@@ -38,8 +35,7 @@
     },
     {
       "appointment_id": "APT_0300621",
-      "patient_name": "Maris Lubowitz",
-      "contact": "+1-555-531-1101",
+      "patient_id": "P_08866",
       "appointment_date": "2020-05-26",
       "appointment_time": "01:48",
       "doctor_name": "Dr. Lyndsey Schultz",
@@ -50,8 +46,7 @@
     },
     {
       "appointment_id": "APT_0300622",
-      "patient_name": "Carmel Quitzon",
-      "contact": "+1-555-287-6775",
+      "patient_id": "P_00895",
       "appointment_date": "2020-05-26",
       "appointment_time": "02:36",
       "doctor_name": "Dr. Edwardo McCullough",

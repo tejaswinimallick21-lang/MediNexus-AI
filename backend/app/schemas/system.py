@@ -10,12 +10,11 @@ class SystemStatus(BaseModel):
     version: str
 
 
-class PersonaCard(BaseModel):
-    persona: str
+class RoleCard(BaseModel):
     role: str
     title: str
     description: str
-    route: str
+    routes: List[str]
 
 
 class PlatformOverview(BaseModel):
@@ -23,4 +22,4 @@ class PlatformOverview(BaseModel):
     tagline: str
     version: str
     pipeline_stages: List[str]
-    personas: List[PersonaCard]
+    roles: List[RoleCard]

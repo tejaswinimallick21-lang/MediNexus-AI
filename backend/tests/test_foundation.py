@@ -13,15 +13,15 @@ from backend.app.jobs import runner
 from backend.app.schemas.auth import UserOut
 from backend.app.schemas.common import ErrorOut
 from backend.app.schemas.system import PlatformOverview, SystemStatus
-from backend.tests.conftest import PERSONA_EMAILS, TEST_PASSWORD, assert_contract, assert_error
+from backend.tests.conftest import ROLE_EMAILS, TEST_PASSWORD, assert_contract, assert_error
 
 
 # ---- contracts -------------------------------------------------------------------------------
 
 def test_login_contract_and_cookie(client):
-    r = client.post("/api/auth/login", json={"email": PERSONA_EMAILS["Receptionist"], "password": TEST_PASSWORD})
+    r = client.post("/api/auth/login", json={"email": ROLE_EMAILS["analyst"], "password": TEST_PASSWORD})
     body = assert_contract(r, UserOut, "auth_me")
-    assert body["role"] == "hcp" and body["persona"] == "Receptionist"
+    assert body["role"] == "analyst" and body["allowed_routes"] == ["/executive", "/reception"]
     cookie = r.headers["set-cookie"].lower()
     assert "httponly" in cookie and "samesite=lax" in cookie
 
@@ -31,13 +31,13 @@ def test_me_requires_session(client):
 
 
 def test_me_after_login(login):
-    c = login("Doctor")
-    assert UserOut.model_validate(c.get("/api/auth/me").json()).allowed_routes == ["/doctor"]
+    c = login("hcp")
+    assert UserOut.model_validate(c.get("/api/auth/me").json()).allowed_routes == ["/doctor", "/pharmacy", "/laboratory"]
 
 
 def test_bad_credentials(client):
     body = assert_error(
-        client.post("/api/auth/login", json={"email": PERSONA_EMAILS["Doctor"], "password": "wrong"}), 401, "invalid_credentials"
+        client.post("/api/auth/login", json={"email": ROLE_EMAILS["hcp"], "password": "wrong"}), 401, "invalid_credentials"
     )
     ErrorOut.model_validate(body)
 
@@ -47,7 +47,7 @@ def test_invalid_email_is_validation_error(client):
 
 
 def test_logout_clears_session(login):
-    c = login("Pharmacist")
+    c = login("hcp")
     assert c.post("/api/auth/logout").status_code == 204
     assert_error(c.get("/api/auth/me"), 401, "not_authenticated")
 
@@ -63,31 +63,37 @@ def test_system_status_contract(client):
 
 def test_platform_overview_contract(client):
     body = assert_contract(client.get("/api/platform/overview"), PlatformOverview, "platform_overview")
-    assert len(body["personas"]) == 7
+    assert [r["role"] for r in body["roles"]] == ["admin", "hcp", "analyst"]
 
 
 def test_unknown_job_is_404(login):
-    assert_error(login("Doctor").get("/api/jobs/does-not-exist"), 404, "job_not_found")
+    assert_error(login("hcp").get("/api/jobs/does-not-exist"), 404, "job_not_found")
 
 
 # ---- access policy ---------------------------------------------------------------------------
 
-@pytest.mark.parametrize("role,persona,page,expected", [
-    ("hcp", "Receptionist", "reception", True),
-    ("hcp", "Receptionist", "doctor", False),       # privacy: no clinical pages for the front desk
-    ("hcp", "Doctor", "doctor", True),
-    ("analyst", "Hospital Administrator", "executive", True),
-    ("admin", "Data Engineer", "data", True),
-    ("admin", "IT Administrator", "it", True),
-    ("hcp", "Data Engineer", "data", False),        # persona/role mismatch is always denied
+@pytest.mark.parametrize("role,page,expected", [
+    ("admin", "data", True),
+    ("admin", "it", True),
+    ("admin", "doctor", False),       # least privilege: platform admins see no clinical data
+    ("hcp", "doctor", True),
+    ("hcp", "pharmacy", True),
+    ("hcp", "laboratory", True),
+    ("hcp", "executive", False),
+    ("analyst", "executive", True),
+    ("analyst", "reception", True),
+    ("analyst", "doctor", False),
+    ("analyst", "unknown-page", False),
 ])
-def test_can_access(role, persona, page, expected):
-    assert can_access(role, persona, page) is expected
+def test_can_access(role, page, expected):
+    assert can_access(role, page) is expected
 
 
-def test_allowed_routes_match_streamlit_rbac():
-    assert allowed_routes("admin", "Data Engineer") == ["/it", "/data"]
-    assert allowed_routes("hcp", "Laboratory Technician") == ["/laboratory"]
+def test_each_page_has_exactly_one_owning_role():
+    from backend.app.core.access import PAGES
+
+    assert all(len(roles) == 1 for _, roles in PAGES.values())
+    assert allowed_routes("admin") == ["/data", "/it"]
 
 
 # ---- pagination ------------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 """
-Request dependencies: the signed-in user and per-page role + persona checks.
+Request dependencies: the signed-in user and per-page role checks.
 """
 
 from typing import Callable
 
 from fastapi import Depends, Request
 
-from backend.app.core.access import can_access
+from backend.app.core.access import AGENT_ROLES, can_access
 from backend.app.core.config import settings
 from backend.app.core.errors import APIError
 from backend.app.core.security import decode_session_token
@@ -23,20 +23,25 @@ def current_user(request: Request) -> UserRecord:
     return user
 
 
+def _deny(user: UserRecord, resource: str) -> None:
+    log_audit_event(
+        username=user.email, role=user.role, action="ACCESS_DENIED",
+        resource=resource, status="BLOCKED", details=f"Role '{user.role}' attempted to access {resource}",
+    )
+    raise APIError(403, "forbidden", f"Your role is not authorized for this resource.")
+
+
 def require_page(page: str) -> Callable[..., UserRecord]:
-    """Dependency factory: the user must hold a role AND persona allowed on `page`."""
+    """Dependency factory: the user's role must own `page`."""
 
     def _check(user: UserRecord = Depends(current_user)) -> UserRecord:
-        if not can_access(user.role, user.persona, page):
-            log_audit_event(
-                username=user.email,
-                role=user.persona,
-                action="ACCESS_DENIED",
-                resource=f"API_{page.upper()}",
-                status="BLOCKED",
-                details=f"{user.role}/{user.persona} attempted to access {page}",
-            )
-            raise APIError(403, "forbidden", f"Your role is not authorized for {page}.")
+        if not can_access(user.role, page):
+            _deny(user, f"API_{page.upper()}")
         return user
 
     return _check
+
+
+def require_agent(agent: str, user: UserRecord) -> None:
+    if user.role not in AGENT_ROLES.get(agent, frozenset()):
+        _deny(user, f"AGENT_{agent.upper()}")

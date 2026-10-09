@@ -14,6 +14,6 @@ export const CONSOLE_ROUTES: ConsoleRoute[] = [
   { path: "/executive", label: "Executive Operations", short: "Executive", icon: "Building" },
   { path: "/pharmacy", label: "Pharmacy & Supply Chain", short: "Pharmacy", icon: "Pill" },
   { path: "/laboratory", label: "Laboratory Operations", short: "Laboratory", icon: "Flask" },
-  { path: "/reception", label: "Reception & Patient Flow", short: "Reception", icon: "Clipboard" },
+  { path: "/reception", label: "Patient Access", short: "Patient Access", icon: "Clipboard" },
   { path: "/it", label: "Security & Infrastructure", short: "Security", icon: "Shield" },
 ];

@@ -22,8 +22,7 @@ const STATUS_TONE: Record<string, "good" | "warn" | "bad" | "neutral"> = {
 
 const COLUMNS: Column<AppointmentRow>[] = [
   { key: "id", header: "Appointment", render: (r) => <code>{r.appointment_id}</code> },
-  { key: "patient", header: "Patient", render: (r) => r.patient_name ?? "—" },
-  { key: "contact", header: "Contact", render: (r) => r.contact ?? "—" },
+  { key: "patient", header: "Patient ref.", render: (r) => <code>{r.patient_id}</code> },
   { key: "date", header: "Date", render: (r) => formatDate(r.appointment_date) },
   { key: "time", header: "Time", render: (r) => r.appointment_time ?? "—", numeric: true },
   { key: "doctor", header: "Clinician", render: (r) => r.doctor_name ?? "—" },
@@ -61,14 +60,14 @@ export function ReceptionPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Front desk"
-        title="Reception & Patient Flow"
-        subtitle="Appointment volumes, attendance, waiting-room performance and the live check-in queue."
-        badge="Administrative data only"
+        eyebrow="Operations"
+        title="Patient Access"
+        subtitle="Outpatient volumes, attendance, no-shows and waiting-room performance across the network."
+        badge="De-identified operational data"
       />
       <Notice>
-        <strong>Privacy governance (POL-HOSP-003).</strong> Diagnoses, visit reasons and laboratory results are withheld from front-desk
-        roles. The queue shows the non-clinical visit type only.
+        <strong>Minimum necessary (POL-HOSP-003).</strong> Operations analysts see pseudonymous patient references only: names,
+        contact details, diagnoses and visit reasons are withheld. The log shows the non-clinical visit type.
       </Notice>
 
       <KpiGrid
@@ -136,7 +135,7 @@ export function ReceptionPage() {
       </Grid>
 
       <Panel
-        title="Appointment queue & check-in log"
+        title="Appointment log"
         subtitle="Most recent first"
         icon="Clipboard"
         actions={

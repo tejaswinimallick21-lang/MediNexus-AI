@@ -1,9 +1,10 @@
 """
-Outpatient reception services (Streamlit receptionist page and /api/reception/*).
+Patient Access services (/api/reception/*, analyst role): outpatient volumes, attendance,
+waiting-room performance and the appointment log.
 
-Privacy (POL-HOSP-003): the front desk never receives diagnoses. With Synthea data the raw
-`reason_for_visit` is clinical (e.g. "COVID-19"), so it is never selected here; the
-non-clinical visit type is shown instead.
+Minimum necessary: operations analysts never receive patient names, contact details, diagnoses
+or visit reasons. Rows carry a pseudonymous patient ID; with Synthea data the raw
+`reason_for_visit` is clinical (e.g. "COVID-19"), so only the non-clinical visit type is returned.
 """
 
 from typing import List, Optional
@@ -104,7 +105,7 @@ def list_appointments(
             args.append(value)
     df = query_df_strict(
         f"""
-        SELECT appointment_id, patient_name, contact, appointment_date, appointment_time,
+        SELECT appointment_id, patient_id, appointment_date, appointment_time,
                doctor_name, department_name, visit_type, status, waiting_time_minutes
         FROM gold_appointments
         WHERE {' AND '.join(where)}
@@ -116,8 +117,7 @@ def list_appointments(
     rows = [
         AppointmentRow(
             appointment_id=r.appointment_id,
-            patient_name=r.patient_name,
-            contact=r.contact,
+            patient_id=r.patient_id,
             appointment_date=r.appointment_date,
             appointment_time=r.appointment_time,
             doctor_name=r.doctor_name,

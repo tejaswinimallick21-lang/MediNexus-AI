@@ -32,8 +32,7 @@ export const ReceptionFiltersSchema = z.object({
 
 export const AppointmentRowSchema = z.object({
   appointment_id: z.string(),
-  patient_name: z.string().nullable(),
-  contact: z.string().nullable(),
+  patient_id: z.string(),
   appointment_date: z.string(),
   appointment_time: z.string().nullable(),
   doctor_name: z.string().nullable(),

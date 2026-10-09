@@ -1,6 +1,6 @@
 """
 User store loaded from the .gitignored seed file (backend/seed_users.json).
-Create it with: python -m backend.scripts.create_seed_users
+Create it with: npm run seed  (python -m backend.scripts.create_seed_users)
 """
 
 import json
@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Optional
 
-from backend.app.core.access import PERSONA_ROLE, ROLES
+from backend.app.core.access import ROLES
 from backend.app.core.config import settings
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
@@ -21,7 +21,6 @@ class UserRecord:
     email: str
     name: str
     role: str
-    persona: str
     department: str
     password_hash: str
 
@@ -41,25 +40,20 @@ def load_users(path: Optional[Path] = None) -> Dict[str, UserRecord]:
         if path in _cache:
             return _cache[path]
         if not path.exists():
-            raise SeedFileError(
-                f"Seed file not found: {path}. Create it with `python -m backend.scripts.create_seed_users`."
-            )
+            raise SeedFileError(f"Seed file not found: {path}. Create it with `npm run seed`.")
         raw = json.loads(path.read_text(encoding="utf-8"))
         users: Dict[str, UserRecord] = {}
         for entry in raw.get("users", []):
             email = str(entry["email"]).strip().lower()
-            role, persona = entry["role"], entry["persona"]
+            role = entry["role"]
             if not EMAIL_RE.match(email):
                 raise SeedFileError(f"Invalid email in seed file: {email}")
             if role not in ROLES:
                 raise SeedFileError(f"Unknown role '{role}' for {email}; expected one of {ROLES}")
-            if PERSONA_ROLE.get(persona) != role:
-                raise SeedFileError(f"Persona '{persona}' does not belong to role '{role}' ({email})")
             users[email] = UserRecord(
                 email=email,
                 name=entry["name"],
                 role=role,
-                persona=persona,
                 department=entry.get("department", ""),
                 password_hash=entry["password_hash"],
             )

@@ -36,11 +36,10 @@ class ReceptionFilters(BaseModel):
 
 
 class AppointmentRow(BaseModel):
-    """Front-desk view: no diagnoses, reasons or lab data (POL-HOSP-003)."""
+    """Operations view: pseudonymous patient ID only; no names, contact details, diagnoses or visit reasons."""
 
     appointment_id: str
-    patient_name: Optional[str]
-    contact: Optional[str]
+    patient_id: str
     appointment_date: str
     appointment_time: Optional[str]
     doctor_name: Optional[str]

@@ -22,7 +22,7 @@ class UserOut(BaseModel):
     email: str
     name: str
     role: Literal["admin", "hcp", "analyst"]
-    persona: str
+    role_title: str
     department: str
     allowed_routes: List[str]
     default_route: str

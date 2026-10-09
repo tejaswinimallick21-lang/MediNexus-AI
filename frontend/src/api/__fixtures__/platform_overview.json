@@ -10,55 +10,34 @@
     "Prescription",
     "Action"
   ],
-  "personas": [
+  "roles": [
     {
-      "persona": "Data Engineer",
       "role": "admin",
-      "title": "Lead Data & Analytics Engineer",
-      "description": "Manages dataset generation, Medallion Bronze/Silver/Gold ingestion, quality validation, ML pipeline, and data monitoring.",
-      "route": "/data"
+      "title": "Platform Administrator",
+      "description": "Runs the data platform: Medallion pipeline, data quality, model registry, audit trail and infrastructure.",
+      "routes": [
+        "/data",
+        "/it"
+      ]
     },
     {
-      "persona": "Doctor",
       "role": "hcp",
-      "title": "Attending Physician / Specialist",
-      "description": "Accesses patient clinical 360, diagnostic trends, lab outcomes, predictive readmission risks, and prescriptive clinical plans.",
-      "route": "/doctor"
+      "title": "Healthcare Professional",
+      "description": "Clinical decision support: patient 360, risk predictions, care plans, pharmacy stock and laboratory operations.",
+      "routes": [
+        "/doctor",
+        "/pharmacy",
+        "/laboratory"
+      ]
     },
     {
-      "persona": "Hospital Administrator",
       "role": "analyst",
-      "title": "Executive Hospital Administrator",
-      "description": "Enterprise-level operational intelligence: occupancy, revenue, readmission rates, resource surge forecasts, and capacity planning.",
-      "route": "/executive"
-    },
-    {
-      "persona": "Pharmacist",
-      "role": "hcp",
-      "title": "Chief Clinical Pharmacist",
-      "description": "Monitors drug inventory, stockout risks, prescription utilization, demand forecasts, and procurement recommendations.",
-      "route": "/pharmacy"
-    },
-    {
-      "persona": "Laboratory Technician",
-      "role": "hcp",
-      "title": "Laboratory Operations Specialist",
-      "description": "Tracks investigation throughput, critical abnormal result alerts, analyzer turnaround time, and staffing demand forecasts.",
-      "route": "/laboratory"
-    },
-    {
-      "persona": "Receptionist",
-      "role": "hcp",
-      "title": "Front-Desk Patient Flow Coordinator",
-      "description": "Manages appointment bookings, cancellations, check-in flow, and waiting times. Strictly restricted from clinical diagnoses and lab records.",
-      "route": "/reception"
-    },
-    {
-      "persona": "IT Administrator",
-      "role": "admin",
-      "title": "Enterprise IT & Security Administrator",
-      "description": "Monitors system health, database schemas, pipeline status, audit event streams, and security access logs.",
-      "route": "/it"
+      "title": "Operations Analyst",
+      "description": "Enterprise performance: occupancy, readmissions, revenue, capacity planning and outpatient patient access.",
+      "routes": [
+        "/executive",
+        "/reception"
+      ]
     }
   ]
 }

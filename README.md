@@ -173,21 +173,17 @@ Built-in synthetic institutional documents located in `documents/`:
 ---
 
 ## 11. Role-Based Access Control (RBAC) & Audit Trail
-Sign-in is **email + password** (bcrypt) with a **JWT in an httpOnly cookie**, shared by both UIs through `backend/app/services/auth.py`. Each user has one of three auth roles plus a persona; a console opens only when both allow it (`backend/app/core/access.py`, derived from `config/roles.py`).
+Sign-in is **email + password** (bcrypt) with a **JWT in an httpOnly cookie**. There are three roles, one account each, and every workspace is owned by exactly one role (`backend/app/core/access.py`). The API re-checks the role on every request.
 
-| Persona | Email | Auth role | Consoles |
+| Role | Login (demo) | Workspaces | Never sees |
 | :--- | :--- | :--- | :--- |
-| Data Engineer | `data.engineer@medinexus.org` | admin | Data Engineering, IT & Security |
-| IT Administrator | `it.admin@medinexus.org` | admin | IT & Security, Data Engineering |
-| Doctor | `doctor@medinexus.org` | hcp | Doctor |
-| Pharmacist | `pharmacist@medinexus.org` | hcp | Pharmacy |
-| Laboratory Specialist | `lab@medinexus.org` | hcp | Laboratory |
-| Receptionist | `receptionist@medinexus.org` | hcp | Reception (no clinical data) |
-| Hospital Administrator | `admin@medinexus.org` | analyst | Executive |
+| **Admin**: Platform Administrator | `admin@medinexus.org` | Data Engineering, Security & Infrastructure | Patient-level clinical data |
+| **HCP**: Healthcare Professional | `hcp@medinexus.org` | Clinical Workstation, Pharmacy & Supply Chain, Laboratory Operations | Executive financials |
+| **Analyst**: Operations Analyst | `analyst@medinexus.org` | Executive Operations, Patient Access | Patient names, contact details, diagnoses (pseudonymous IDs only) |
 
-* Users come from the **.gitignored** `backend/seed_users.json`, created from the committed template by `npm run seed` (dev password `MediNexus@2026`; pass `--password` for anything shared).
-* Self sign-up and the password-less sidebar role switcher were removed; switch persona by signing out and in.
-* **Enterprise Audit Log**: every login (and failed login), denied access, patient access, model inference, and pipeline execution is logged in the DuckDB `audit_logs` table and written to `logs/audit.log`.
+* Users come from the **.gitignored** `backend/seed_users.json`, created by `npm run seed` (demo password `MediNexus@2026`; pass `--password` for anything shared). In development builds the sign-in page has a role dropdown that fills these in; production builds omit it.
+* Patient Access (former Receptionist console) is an analyst workspace: volumes, attendance, no-shows and waits with de-identified rows.
+* **Enterprise Audit Log**: every login (and failed login), denied access, agent query, model inference and pipeline execution is logged in DuckDB `audit_logs` and `logs/audit.log`.
 
 ---
 

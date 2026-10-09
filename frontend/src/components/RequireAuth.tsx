@@ -16,7 +16,7 @@ export function RequireAuth({ route, children }: { route?: string; children: Rea
     return (
       <EmptyState
         title="Access denied"
-        hint={`Your role (${user.persona}) is not authorized for this console. The attempt is recorded server-side when data is requested.`}
+        hint={`Your role (${user.role_title}) is not authorized for this workspace.`}
       />
     );
   }

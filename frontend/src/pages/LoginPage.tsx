@@ -17,25 +17,11 @@ const CAPABILITIES = [
 ] as const;
 
 // Demo environment only: seeded local accounts by auth role (stripped from production builds via import.meta.env.DEV)
-const DEMO_ROLES: { role: string; accounts: { persona: string; email: string }[] }[] = import.meta.env.DEV
+const DEMO_ROLES: { role: string; title: string; email: string; scope: string }[] = import.meta.env.DEV
   ? [
-      {
-        role: "Admin",
-        accounts: [
-          { persona: "Data Engineer", email: "data.engineer@medinexus.org" },
-          { persona: "IT Administrator", email: "it.admin@medinexus.org" },
-        ],
-      },
-      {
-        role: "Healthcare Professional",
-        accounts: [
-          { persona: "Doctor", email: "doctor@medinexus.org" },
-          { persona: "Pharmacist", email: "pharmacist@medinexus.org" },
-          { persona: "Laboratory Specialist", email: "lab@medinexus.org" },
-          { persona: "Receptionist", email: "receptionist@medinexus.org" },
-        ],
-      },
-      { role: "Analyst", accounts: [{ persona: "Hospital Administrator", email: "admin@medinexus.org" }] },
+      { role: "admin", title: "Admin", email: "admin@medinexus.org", scope: "Data Engineering, Security" },
+      { role: "hcp", title: "HCP", email: "hcp@medinexus.org", scope: "Clinical, Pharmacy, Laboratory" },
+      { role: "analyst", title: "Analyst", email: "analyst@medinexus.org", scope: "Executive, Patient Access" },
     ]
   : [];
 const DEMO_PASSWORD = import.meta.env.DEV ? "MediNexus@2026" : "";
@@ -144,7 +130,7 @@ export function LoginPage() {
               </span>
               <select
                 className={styles.roleSelect}
-                value={DEMO_ROLES.some((g) => g.accounts.some((a) => a.email === email)) ? email : ""}
+                value={DEMO_ROLES.some((r) => r.email === email) ? email : ""}
                 onChange={(e) => {
                   setEmail(e.target.value);
                   setPassword(e.target.value ? DEMO_PASSWORD : "");
@@ -152,14 +138,10 @@ export function LoginPage() {
                 }}
               >
                 <option value="">Choose a role to fill in credentials…</option>
-                {DEMO_ROLES.map((group) => (
-                  <optgroup key={group.role} label={group.role}>
-                    {group.accounts.map((a) => (
-                      <option key={a.email} value={a.email}>
-                        {a.persona} — {a.email}
-                      </option>
-                    ))}
-                  </optgroup>
+                {DEMO_ROLES.map((r) => (
+                  <option key={r.role} value={r.email}>
+                    {r.title} — {r.scope}
+                  </option>
                 ))}
               </select>
             </label>

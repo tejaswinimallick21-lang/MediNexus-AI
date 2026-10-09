@@ -1,12 +1,8 @@
 {
-  "_comment": "Template only (no passwords). Run `python -m backend.scripts.create_seed_users` to write the .gitignored backend/seed_users.json with bcrypt hashes.",
+  "_comment": "Template only (no passwords). Run `npm run seed` (python -m backend.scripts.create_seed_users) to write the .gitignored backend/seed_users.json with bcrypt hashes.",
   "users": [
-    {"email": "data.engineer@medinexus.org", "name": "Data Engineer", "role": "admin", "persona": "Data Engineer", "department": "Data Platform & Engineering"},
-    {"email": "it.admin@medinexus.org", "name": "IT Administrator", "role": "admin", "persona": "IT Administrator", "department": "Information Security & Infrastructure"},
-    {"email": "doctor@medinexus.org", "name": "Doctor", "role": "hcp", "persona": "Doctor", "department": "Internal Medicine & Cardiology"},
-    {"email": "pharmacist@medinexus.org", "name": "Pharmacist", "role": "hcp", "persona": "Pharmacist", "department": "Central Clinical Pharmacy"},
-    {"email": "lab@medinexus.org", "name": "Laboratory Specialist", "role": "hcp", "persona": "Laboratory Technician", "department": "Pathology & Diagnostics"},
-    {"email": "receptionist@medinexus.org", "name": "Receptionist", "role": "hcp", "persona": "Receptionist", "department": "Outpatient Registration & Care Flow"},
-    {"email": "admin@medinexus.org", "name": "Hospital Administrator", "role": "analyst", "persona": "Hospital Administrator", "department": "Executive Operations"}
+    {"email": "admin@medinexus.org", "name": "Platform Admin", "role": "admin", "department": "Data Platform & Infrastructure"},
+    {"email": "hcp@medinexus.org", "name": "Clinician", "role": "hcp", "department": "Clinical Services"},
+    {"email": "analyst@medinexus.org", "name": "Operations Analyst", "role": "analyst", "department": "Hospital Operations"}
   ]
 }

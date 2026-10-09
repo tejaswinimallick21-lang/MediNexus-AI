@@ -4,7 +4,7 @@ export const UserSchema = z.object({
   email: z.string(),
   name: z.string(),
   role: z.enum(["admin", "hcp", "analyst"]),
-  persona: z.string(),
+  role_title: z.string(),
   department: z.string(),
   allowed_routes: z.array(z.string()),
   default_route: z.string(),
@@ -24,8 +24,8 @@ export const PlatformOverviewSchema = z.object({
   tagline: z.string(),
   version: z.string(),
   pipeline_stages: z.array(z.string()),
-  personas: z.array(
-    z.object({ persona: z.string(), role: z.string(), title: z.string(), description: z.string(), route: z.string() }),
+  roles: z.array(
+    z.object({ role: z.enum(["admin", "hcp", "analyst"]), title: z.string(), description: z.string(), routes: z.array(z.string()) }),
   ),
 });
 export type PlatformOverview = z.infer<typeof PlatformOverviewSchema>;

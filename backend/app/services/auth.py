@@ -1,10 +1,10 @@
 """
-Authentication service shared by the FastAPI auth router and the Streamlit login page.
+Authentication service used by the FastAPI auth router.
 """
 
 from typing import Optional
 
-from backend.app.core.access import allowed_routes, default_route
+from backend.app.core.access import ROLE_TITLES, allowed_routes, default_route
 from backend.app.core.security import verify_password
 from backend.app.core.users import UserRecord, get_user
 from backend.app.schemas.auth import UserOut
@@ -17,7 +17,7 @@ def authenticate(email: str, password: str) -> Optional[UserRecord]:
     ok = user is not None and verify_password(password, user.password_hash)
     log_audit_event(
         username=(email or "").strip().lower(),
-        role=user.persona if user else "Unknown",
+        role=user.role if user else "unknown",
         action="LOGIN" if ok else "LOGIN_FAILED",
         resource="SYSTEM_AUTH",
         status="SUCCESS" if ok else "FAILED",
@@ -28,7 +28,7 @@ def authenticate(email: str, password: str) -> Optional[UserRecord]:
 
 def record_logout(user: UserRecord) -> None:
     log_audit_event(
-        username=user.email, role=user.persona, action="LOGOUT",
+        username=user.email, role=user.role, action="LOGOUT",
         resource="SYSTEM_AUTH", status="SUCCESS", details="Signed out",
     )
 
@@ -38,8 +38,8 @@ def to_user_out(user: UserRecord) -> UserOut:
         email=user.email,
         name=user.name,
         role=user.role,
-        persona=user.persona,
+        role_title=ROLE_TITLES[user.role],
         department=user.department,
-        allowed_routes=allowed_routes(user.role, user.persona),
-        default_route=default_route(user.role, user.persona),
+        allowed_routes=allowed_routes(user.role),
+        default_route=default_route(user.role),
     )

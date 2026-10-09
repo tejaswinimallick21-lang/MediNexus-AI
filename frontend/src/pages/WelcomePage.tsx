@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { systemApi } from "../api/auth";
 import { EcgTrace } from "../components/EcgTrace";
-import { Icon } from "../components/Icons";
+import { Icon, type IconName } from "../components/Icons";
 import { Reveal, Stagger, TiltCard } from "../components/Motion";
 import { NeuralGlobe } from "../components/NeuralGlobe";
 import { Skeleton } from "../components/Skeleton";
@@ -12,6 +12,8 @@ import { useApi } from "../hooks/useApi";
 import { useAuth } from "../hooks/useAuth";
 import { CONSOLE_ROUTES } from "../routes";
 import styles from "./WelcomePage.module.css";
+
+const ROLE_ICON: Record<string, IconName> = { admin: "Database", hcp: "Stethoscope", analyst: "Building" };
 
 export function WelcomePage() {
   const { user } = useAuth();
@@ -34,19 +36,13 @@ export function WelcomePage() {
             <span>Every decision, informed.</span>
           </motion.h1>
           <p className={styles.lede}>
-            {overview.data?.tagline ?? "Role-Based Healthcare Data-to-Decision Intelligence Platform"}: from raw records to audited
-            insight, validated prediction and clear next actions for every role.
+            From raw clinical records to audited insight, validated prediction and clear next actions for administrators,
+            clinicians and operations teams.
           </p>
           <div className={styles.ctaRow}>
-            {user ? (
-              <Link to={user.default_route} className={styles.cta}>
-                Open my workspace <Icon.Arrow size={16} />
-              </Link>
-            ) : (
-              <Link to="/login" className={styles.cta}>
-                Sign in <Icon.Arrow size={16} />
-              </Link>
-            )}
+            <Link to={user ? user.default_route : "/login"} className={styles.cta}>
+              {user ? "Open my workspace" : "Sign in"} <Icon.Arrow size={16} />
+            </Link>
             <span className={styles.ecgWrap}>
               <EcgTrace width={220} height={44} />
             </span>
@@ -77,38 +73,50 @@ export function WelcomePage() {
       </section>
 
       <div className={styles.sectionHead}>
-        <h2>Workspaces</h2>
-        <p>Each role sees only the data it needs; access is enforced on every request.</p>
+        <h2>Roles & workspaces</h2>
+        <p>Three roles, each owning its workspaces. Access is enforced by the API on every request.</p>
       </div>
 
       {overview.loading || !overview.data ? (
         <div className={styles.personas}>
-          {Array.from({ length: 7 }, (_, i) => (
-            <Skeleton key={i} height={150} radius={16} />
+          {Array.from({ length: 3 }, (_, i) => (
+            <Skeleton key={i} height={210} radius={16} />
           ))}
         </div>
       ) : (
         <Stagger className={styles.personas}>
-          {overview.data.personas.map((p) => {
-            const allowed = user?.allowed_routes.includes(p.route);
-            const Glyph = Icon[CONSOLE_ROUTES.find((r) => r.path === p.route)?.icon ?? "Logo"];
+          {overview.data.roles.map((r) => {
+            const mine = user?.role === r.role;
+            const Glyph = Icon[ROLE_ICON[r.role]];
             return (
-              <Reveal key={p.persona}>
+              <Reveal key={r.role}>
                 <Link
-                  to={user ? (allowed ? p.route : "/") : "/login"}
-                  className={`${styles.personaLink} ${user && !allowed ? styles.locked : ""}`}
-                  aria-disabled={user ? !allowed : undefined}
+                  to={user ? (mine ? user.default_route : "/") : "/login"}
+                  className={`${styles.personaLink} ${user && !mine ? styles.locked : ""}`}
+                  aria-disabled={user ? !mine : undefined}
                 >
                   <TiltCard className={styles.persona}>
                     <div className={styles.personaTop}>
                       <span className={styles.personaIcon}>
                         <Glyph size={20} />
                       </span>
-                      {user && !allowed ? <Icon.Lock size={16} /> : <Icon.Arrow size={16} />}
+                      {user && !mine ? <Icon.Lock size={16} /> : <Icon.Arrow size={16} />}
                     </div>
-                    <span className={styles.personaName}>{p.persona}</span>
-                    <span className={styles.personaDesc}>{p.description}</span>
-                    <span className={styles.personaRole}>{p.role}</span>
+                    <span className={styles.personaName}>{r.title}</span>
+                    <span className={styles.personaDesc}>{r.description}</span>
+                    <ul className={styles.workspaces}>
+                      {r.routes.map((path) => {
+                        const route = CONSOLE_ROUTES.find((c) => c.path === path);
+                        if (!route) return null;
+                        const RouteGlyph = Icon[route.icon];
+                        return (
+                          <li key={path}>
+                            <RouteGlyph size={14} /> {route.label}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                    <span className={styles.personaRole}>{r.role}</span>
                   </TiltCard>
                 </Link>
               </Reveal>

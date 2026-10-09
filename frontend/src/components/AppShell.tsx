@@ -8,8 +8,6 @@ import { CONSOLE_ROUTES } from "../routes";
 import { Icon } from "./Icons";
 import styles from "./AppShell.module.css";
 
-const ROLE_LABEL = { admin: "Administrator", hcp: "Healthcare Professional", analyst: "Analyst" } as const;
-
 function initials(name: string): string {
   return name
     .split(/\s+/)
@@ -119,8 +117,8 @@ export function AppShell() {
               <div className={styles.userChip}>
                 <span className={styles.avatar}>{initials(user.name)}</span>
                 <span className={styles.userText}>
-                  <strong>{user.persona}</strong>
-                  <span>{ROLE_LABEL[user.role]}</span>
+                  <strong>{user.name}</strong>
+                  <span>{user.role_title}</span>
                 </span>
                 <button
                   type="button"

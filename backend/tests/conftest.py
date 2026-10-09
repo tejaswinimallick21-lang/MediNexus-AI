@@ -31,14 +31,10 @@ from backend.app.main import app  # noqa: E402
 
 FIXTURE_DIR = PROJECT_ROOT / "frontend" / "src" / "api" / "__fixtures__"
 
-PERSONA_EMAILS = {
-    "Data Engineer": "data.engineer@medinexus.org",
-    "IT Administrator": "it.admin@medinexus.org",
-    "Doctor": "doctor@medinexus.org",
-    "Pharmacist": "pharmacist@medinexus.org",
-    "Laboratory Technician": "lab@medinexus.org",
-    "Receptionist": "receptionist@medinexus.org",
-    "Hospital Administrator": "admin@medinexus.org",
+ROLE_EMAILS = {
+    "admin": "admin@medinexus.org",
+    "hcp": "hcp@medinexus.org",
+    "analyst": "analyst@medinexus.org",
 }
 
 
@@ -50,10 +46,10 @@ def client():
 
 @pytest.fixture()
 def login(client):
-    """login("Receptionist") signs the test client in as that persona."""
+    """login("analyst") signs the test client in with that role."""
 
-    def _login(persona: str) -> TestClient:
-        r = client.post("/api/auth/login", json={"email": PERSONA_EMAILS[persona], "password": TEST_PASSWORD})
+    def _login(role: str) -> TestClient:
+        r = client.post("/api/auth/login", json={"email": ROLE_EMAILS[role], "password": TEST_PASSWORD})
         assert r.status_code == 200, r.text
         return client
 
