@@ -1,0 +1,16 @@
+{
+  "statuses": [
+    "Cancelled",
+    "Completed",
+    "No-Show",
+    "Unknown"
+  ],
+  "departments": [
+    "Internal Medicine"
+  ],
+  "visit_types": [
+    "ambulatory",
+    "outpatient",
+    "wellness"
+  ]
+}

@@ -28,8 +28,9 @@ h2,
 h3,
 h4 {
   margin: 0;
+  font-family: var(--font-display);
   color: var(--color-ink);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 button,
@@ -44,8 +45,12 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-secondary);
+  outline: 2px solid var(--color-primary-bright);
   outline-offset: 2px;
+}
+
+::selection {
+  background: rgba(20, 184, 166, 0.25);
 }
 
 .visually-hidden {
@@ -55,4 +60,13 @@ a {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }

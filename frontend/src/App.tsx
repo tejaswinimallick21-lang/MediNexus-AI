@@ -6,11 +6,14 @@ import { RequireAuth } from "./components/RequireAuth";
 import { EmptyState } from "./components/StateViews";
 import { LoginPage } from "./pages/LoginPage";
 import { NotMigratedPage } from "./pages/NotMigratedPage";
+import { ReceptionPage } from "./pages/ReceptionPage";
 import { WelcomePage } from "./pages/WelcomePage";
 import { CONSOLE_ROUTES } from "./routes";
 
-/** Migrated console pages register here (path → element). */
-const CONSOLE_PAGES: Record<string, ReactNode> = {};
+/** Console pages (path → element). */
+const CONSOLE_PAGES: Record<string, ReactNode> = {
+  "/reception": <ReceptionPage />,
+};
 
 export function App() {
   return (

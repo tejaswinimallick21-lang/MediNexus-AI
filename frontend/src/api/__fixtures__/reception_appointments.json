@@ -1,0 +1,65 @@
+{
+  "items": [
+    {
+      "appointment_id": "APT_0300655",
+      "patient_name": "Augustine McLaughlin",
+      "contact": "+1-555-975-5518",
+      "appointment_date": "2020-05-27",
+      "appointment_time": "19:46",
+      "doctor_name": "Dr. Walker Konopelski",
+      "department_name": "Internal Medicine",
+      "visit_type": "Wellness visit",
+      "status": "Completed",
+      "waiting_time_minutes": 20
+    },
+    {
+      "appointment_id": "APT_0300619",
+      "patient_name": "Marsha Harber",
+      "contact": "+1-555-703-4157",
+      "appointment_date": "2020-05-26",
+      "appointment_time": "00:05",
+      "doctor_name": "Dr. Marlo Haag",
+      "department_name": "Internal Medicine",
+      "visit_type": "Wellness visit",
+      "status": "Completed",
+      "waiting_time_minutes": 20
+    },
+    {
+      "appointment_id": "APT_0300620",
+      "patient_name": "Otha Mante",
+      "contact": "+1-555-349-4865",
+      "appointment_date": "2020-05-26",
+      "appointment_time": "00:59",
+      "doctor_name": "Dr. Maria Hermiston",
+      "department_name": "Internal Medicine",
+      "visit_type": "Outpatient visit",
+      "status": "Completed",
+      "waiting_time_minutes": 35
+    },
+    {
+      "appointment_id": "APT_0300621",
+      "patient_name": "Maris Lubowitz",
+      "contact": "+1-555-531-1101",
+      "appointment_date": "2020-05-26",
+      "appointment_time": "01:48",
+      "doctor_name": "Dr. Lyndsey Schultz",
+      "department_name": "Internal Medicine",
+      "visit_type": "Ambulatory visit",
+      "status": "Completed",
+      "waiting_time_minutes": 17
+    },
+    {
+      "appointment_id": "APT_0300622",
+      "patient_name": "Carmel Quitzon",
+      "contact": "+1-555-287-6775",
+      "appointment_date": "2020-05-26",
+      "appointment_time": "02:36",
+      "doctor_name": "Dr. Edwardo McCullough",
+      "department_name": "Internal Medicine",
+      "visit_type": "Wellness visit",
+      "status": "Completed",
+      "waiting_time_minutes": 49
+    }
+  ],
+  "next_cursor": "bzo1"
+}

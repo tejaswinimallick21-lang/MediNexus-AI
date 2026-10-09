@@ -1,24 +1,39 @@
 import type { ReactNode } from "react";
 
 import type { ApiError } from "../api/client";
+import { Icon, type IconName } from "./Icons";
+import { CountUp, Reveal, Stagger, TiltCard } from "./Motion";
 import { Skeleton } from "./Skeleton";
 import { ErrorState } from "./StateViews";
 import styles from "./Kpi.module.css";
 
 export interface KpiItem {
   label: string;
-  value: string;
+  value: number;
+  format: (n: number) => string;
   hint?: string;
   tone?: "neutral" | "good" | "warn" | "bad";
+  icon?: IconName;
 }
 
-export function KpiCard({ label, value, hint, tone = "neutral" }: KpiItem) {
+export function KpiCard({ label, value, format, hint, tone = "neutral", icon }: KpiItem) {
+  const Glyph = icon ? Icon[icon] : null;
   return (
-    <div className={styles.card}>
-      <span className={styles.label}>{label}</span>
-      <span className={styles.value}>{value}</span>
+    <TiltCard className={styles.card} max={6}>
+      <div className={styles.top}>
+        <span className={styles.label}>{label}</span>
+        {Glyph && (
+          <span className={`${styles.icon} ${styles[`icon_${tone}`]}`}>
+            <Glyph size={18} />
+          </span>
+        )}
+      </div>
+      <span className={styles.value}>
+        <CountUp value={value} format={format} />
+      </span>
       {hint && <span className={`${styles.hint} ${styles[tone]}`}>{hint}</span>}
-    </div>
+      <span className={`${styles.bar} ${styles[`bar_${tone}`]}`} aria-hidden="true" />
+    </TiltCard>
   );
 }
 
@@ -43,17 +58,20 @@ export function KpiGrid({
         {Array.from({ length: count }, (_, i) => (
           <div key={i} className={styles.card}>
             <Skeleton width="55%" height={12} />
-            <Skeleton width="40%" height={28} />
+            <Skeleton width="45%" height={32} />
+            <Skeleton width="35%" height={10} />
           </div>
         ))}
       </div>
     );
   }
   return (
-    <div className={styles.grid}>
+    <Stagger className={styles.grid}>
       {items.map((item) => (
-        <KpiCard key={item.label} {...item} />
+        <Reveal key={item.label}>
+          <KpiCard {...item} />
+        </Reveal>
       ))}
-    </div>
+    </Stagger>
   );
 }

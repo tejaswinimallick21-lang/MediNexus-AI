@@ -5,10 +5,19 @@ import { systemApi } from "../api/auth";
 import { useApi } from "../hooks/useApi";
 import { useAuth } from "../hooks/useAuth";
 import { CONSOLE_ROUTES } from "../routes";
-import { Skeleton } from "./Skeleton";
+import { Icon } from "./Icons";
 import styles from "./AppShell.module.css";
 
-const ROLE_LABEL = { admin: "Admin", hcp: "Healthcare Professional", analyst: "Analyst" } as const;
+const ROLE_LABEL = { admin: "Administrator", hcp: "Healthcare Professional", analyst: "Analyst" } as const;
+
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
 
 export function AppShell() {
   const { user, logout } = useAuth();
@@ -16,89 +25,134 @@ export function AppShell() {
   const navigate = useNavigate();
   const status = useApi((signal) => systemApi.status(signal), []);
 
+  // Full-bleed pages (sign-in) render without the console chrome
+  if (location.pathname === "/login") {
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div key="login" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <Outlet />
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
+
   const routes = CONSOLE_ROUTES.filter((r) => user?.allowed_routes.includes(r.path));
+  const current = CONSOLE_ROUTES.find((r) => location.pathname.startsWith(r.path));
+  const healthy = status.data?.gold_ready && status.data?.ml_ready;
 
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
-          <span className={styles.logo} aria-hidden="true">🏥</span>
+          <span className={styles.logo}>
+            <Icon.Logo size={22} />
+          </span>
           <div>
-            <div className={styles.brandName}>MediNexus AI</div>
-            <div className={styles.brandTag}>HEALTHCARE DECISION PLATFORM</div>
+            <div className={styles.brandName}>MediNexus<span>AI</span></div>
+            <div className={styles.brandTag}>Clinical Intelligence Cloud</div>
           </div>
         </div>
 
         {user ? (
           <>
-            <div className={styles.card}>
-              <div className={styles.cardLabel}>Active role</div>
-              <div className={styles.cardTitle}>{user.persona}</div>
-              <div className={styles.cardMeta}>{ROLE_LABEL[user.role]} · {user.department}</div>
-            </div>
-            <div className={styles.sectionLabel}>Authorized consoles</div>
+            <div className={styles.sectionLabel}>Workspaces</div>
             <nav className={styles.nav} aria-label="Consoles">
-              {routes.map((r) => (
-                <NavLink key={r.path} to={r.path} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ""}`}>
-                  <span aria-hidden="true">{r.icon}</span> {r.label}
-                </NavLink>
-              ))}
+              {routes.map((r) => {
+                const Glyph = Icon[r.icon];
+                return (
+                  <NavLink key={r.path} to={r.path} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ""}`}>
+                    {({ isActive }) => (
+                      <>
+                        {isActive && <motion.span layoutId="nav-active" className={styles.activeBg} transition={{ type: "spring", stiffness: 400, damping: 34 }} />}
+                        <Glyph size={18} />
+                        <span>{r.label}</span>
+                      </>
+                    )}
+                  </NavLink>
+                );
+              })}
               <NavLink to="/" end className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ""}`}>
-                <span aria-hidden="true">🏠</span> Platform Overview
+                {({ isActive }) => (
+                  <>
+                    {isActive && <motion.span layoutId="nav-active" className={styles.activeBg} transition={{ type: "spring", stiffness: 400, damping: 34 }} />}
+                    <Icon.Home size={18} />
+                    <span>Platform Overview</span>
+                  </>
+                )}
               </NavLink>
             </nav>
-            <button
-              type="button"
-              className={styles.signOut}
-              onClick={async () => {
-                await logout();
-                navigate("/login");
-              }}
-            >
-              🚪 Sign out
-            </button>
           </>
         ) : (
-          <div className={styles.card}>
-            <div className={styles.cardLabel}>Guest session</div>
-            <div className={styles.cardMeta}>Sign in to open your role console.</div>
-            <NavLink to="/login" className={`${styles.navLink} ${styles.active} ${styles.signIn}`}>
-              🔑 Sign in
-            </NavLink>
-          </div>
+          <NavLink to="/login" className={styles.signInCta}>
+            <Icon.Key size={18} /> Sign in to your workspace
+          </NavLink>
         )}
 
-        <div className={styles.status} aria-live="polite">
-          <div className={styles.cardLabel}>Platform readiness</div>
+        <div className={styles.statusCard} aria-live="polite">
+          <div className={styles.sectionLabel}>Platform health</div>
           {status.data ? (
-            <>
-              <div>Lakehouse Gold: <b className={status.data.gold_ready ? styles.ok : styles.bad}>{status.data.gold_ready ? "Ready ✓" : "Uninitialized"}</b></div>
-              <div>ML Registry: <b className={status.data.ml_ready ? styles.ok : styles.bad}>{status.data.ml_ready ? "Active ✓" : "Untrained"}</b></div>
-              <div>AI Engine: <b className={styles.info}>{status.data.llm_provider}</b></div>
-              <div className={styles.version}>Version {status.data.version}</div>
-            </>
-          ) : status.error ? (
-            <div className={styles.bad}>API unreachable</div>
+            <ul className={styles.statusList}>
+              <li><span className={status.data.gold_ready ? styles.dotOk : styles.dotBad} />Lakehouse Gold</li>
+              <li><span className={status.data.ml_ready ? styles.dotOk : styles.dotBad} />Model registry</li>
+              <li><span className={styles.dotInfo} />{status.data.llm_provider}</li>
+            </ul>
           ) : (
-            <Skeleton height={48} />
+            <span className={styles.muted}>{status.error ? "API unreachable" : "Checking…"}</span>
           )}
+          <span className={styles.version}>v{status.data?.version ?? "—"}</span>
         </div>
       </aside>
 
-      <main className={styles.main}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.18, ease: "easeOut" }}
-            className={styles.content}
-          >
-            <Outlet />
-          </motion.div>
-        </AnimatePresence>
-      </main>
+      <div className={styles.main}>
+        <header className={styles.topbar}>
+          <div className={styles.crumbs}>
+            <span>MediNexus</span>
+            <Icon.Arrow size={14} />
+            <strong>{current?.label ?? "Platform Overview"}</strong>
+          </div>
+          <div className={styles.topRight}>
+            <span className={`${styles.pill} ${healthy ? styles.pillOk : styles.pillWarn}`}>
+              <span className={styles.pulse} />
+              {healthy ? "All systems operational" : status.data ? "Pipeline attention needed" : "Connecting"}
+            </span>
+            {user && (
+              <div className={styles.userChip}>
+                <span className={styles.avatar}>{initials(user.name)}</span>
+                <span className={styles.userText}>
+                  <strong>{user.persona}</strong>
+                  <span>{ROLE_LABEL[user.role]}</span>
+                </span>
+                <button
+                  type="button"
+                  className={styles.iconButton}
+                  aria-label="Sign out"
+                  title="Sign out"
+                  onClick={async () => {
+                    await logout();
+                    navigate("/login");
+                  }}
+                >
+                  <Icon.Logout size={18} />
+                </button>
+              </div>
+            )}
+          </div>
+        </header>
+
+        <main className={styles.content}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
+        </main>
+      </div>
     </div>
   );
 }

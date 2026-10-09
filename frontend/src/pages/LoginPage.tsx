@@ -1,10 +1,44 @@
+import { motion } from "framer-motion";
 import { useState, type FormEvent } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { ApiError } from "../api/client";
-import { Button } from "../components/Controls";
+import { DnaHelix } from "../components/DnaHelix";
+import { EcgTrace } from "../components/EcgTrace";
+import { Icon } from "../components/Icons";
 import { useAuth } from "../hooks/useAuth";
 import styles from "./LoginPage.module.css";
+
+const CAPABILITIES = [
+  { title: "Data Intelligence", text: "Medallion lakehouse with audited data quality", icon: "Database" },
+  { title: "Predictive Analytics", text: "Validated risk, stay and demand models", icon: "Pulse" },
+  { title: "Healthcare Analytics", text: "Role-aware clinical and operational consoles", icon: "Stethoscope" },
+  { title: "Generative AI", text: "Grounded copilots with cited evidence", icon: "Sparkle" },
+] as const;
+
+// Demo environment only: seeded local accounts by auth role (stripped from production builds via import.meta.env.DEV)
+const DEMO_ROLES: { role: string; accounts: { persona: string; email: string }[] }[] = import.meta.env.DEV
+  ? [
+      {
+        role: "Admin",
+        accounts: [
+          { persona: "Data Engineer", email: "data.engineer@medinexus.org" },
+          { persona: "IT Administrator", email: "it.admin@medinexus.org" },
+        ],
+      },
+      {
+        role: "Healthcare Professional",
+        accounts: [
+          { persona: "Doctor", email: "doctor@medinexus.org" },
+          { persona: "Pharmacist", email: "pharmacist@medinexus.org" },
+          { persona: "Laboratory Specialist", email: "lab@medinexus.org" },
+          { persona: "Receptionist", email: "receptionist@medinexus.org" },
+        ],
+      },
+      { role: "Analyst", accounts: [{ persona: "Hospital Administrator", email: "admin@medinexus.org" }] },
+    ]
+  : [];
+const DEMO_PASSWORD = import.meta.env.DEV ? "MediNexus@2026" : "";
 
 export function LoginPage() {
   const { user, login } = useAuth();
@@ -14,6 +48,7 @@ export function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string>();
   const [submitting, setSubmitting] = useState(false);
 
@@ -34,31 +69,148 @@ export function LoginPage() {
   }
 
   return (
-    <div className={styles.wrap}>
-      <form className={styles.card} onSubmit={onSubmit} noValidate>
-        <h1 className={styles.title}>MediNexus Access Portal</h1>
-        <p className={styles.subtitle}>Sign in with your work email. Your role decides which consoles you can open.</p>
+    <div className={styles.page}>
+      <section className={styles.brandPanel}>
+        <div className={styles.helix}>
+          <DnaHelix width={380} height={620} />
+        </div>
+        <div className={styles.brandInner}>
+          <div className={styles.logoRow}>
+            <span className={styles.logo}>M</span>
+            <div>
+              <div className={styles.logoName}>MediNexus AI</div>
+              <div className={styles.logoTag}>Healthcare Intelligence</div>
+            </div>
+          </div>
 
-        <label className={styles.field}>
-          <span>Email</span>
-          <input type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </label>
-        <label className={styles.field}>
-          <span>Password</span>
-          <input type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        </label>
+          <motion.h1
+            className={styles.headline}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Transform Healthcare Data Into <span>Actionable Intelligence</span>
+          </motion.h1>
+          <motion.p className={styles.lede} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25, duration: 0.6 }}>
+            Unify clinical data, population analytics, predictive insights and AI-powered decision support in one enterprise platform.
+          </motion.p>
 
-        {error && (
-          <p className={styles.error} role="alert">
-            {error}
-          </p>
-        )}
+          <div className={styles.capabilities}>
+            {CAPABILITIES.map((c, i) => {
+              const Glyph = Icon[c.icon];
+              return (
+                <motion.div
+                  key={c.title}
+                  className={styles.capability}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 + i * 0.08, duration: 0.5 }}
+                >
+                  <Glyph size={18} />
+                  <div>
+                    <strong>{c.title}</strong>
+                    <span>{c.text}</span>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
 
-        <Button type="submit" variant="primary" disabled={submitting || !email || !password}>
-          {submitting ? "Signing in…" : "Sign in"}
-        </Button>
-        <p className={styles.help}>Accounts come from the seeded user file (see README › Authentication).</p>
-      </form>
+          <div className={styles.ecg}>
+            <EcgTrace width={440} height={70} />
+            <span className={styles.ecgLabel}>
+              <span className={styles.liveDot} /> Live clinical signal
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.formPanel}>
+        <motion.form
+          className={styles.card}
+          onSubmit={onSubmit}
+          noValidate
+          initial={{ opacity: 0, y: 20, rotateX: 8 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <h2 className={styles.welcome}>Welcome back</h2>
+          <p className={styles.sub}>Sign in to MediNexus AI</p>
+
+          {DEMO_ROLES.length > 0 && (
+            <label className={styles.field}>
+              <span>
+                Demo role <em className={styles.demoTag}>Demo environment</em>
+              </span>
+              <select
+                className={styles.roleSelect}
+                value={DEMO_ROLES.some((g) => g.accounts.some((a) => a.email === email)) ? email : ""}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setPassword(e.target.value ? DEMO_PASSWORD : "");
+                  setError(undefined);
+                }}
+              >
+                <option value="">Choose a role to fill in credentials…</option>
+                {DEMO_ROLES.map((group) => (
+                  <optgroup key={group.role} label={group.role}>
+                    {group.accounts.map((a) => (
+                      <option key={a.email} value={a.email}>
+                        {a.persona} — {a.email}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </label>
+          )}
+
+          <label className={styles.field}>
+            <span>Work Email</span>
+            <input
+              type="email"
+              autoComplete="username"
+              placeholder="name@medinexus.org"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <label className={styles.field}>
+            <span>Password</span>
+            <div className={styles.passwordWrap}>
+              <input
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button type="button" className={styles.reveal} onClick={() => setShowPassword((s) => !s)}>
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </label>
+
+          {error && (
+            <p className={styles.error} role="alert">
+              <Icon.Alert size={16} /> {error}
+            </p>
+          )}
+
+          <button type="submit" className={styles.submit} disabled={submitting || !email || !password}>
+            {submitting ? "Signing in…" : "Sign In"}
+          </button>
+
+          <div className={styles.footer}>
+            <span>
+              <Icon.Lock size={13} /> {import.meta.env.DEV ? "Demo environment" : "Secured session"}
+            </span>
+            <span>Forgot password? Contact your administrator</span>
+          </div>
+
+        </motion.form>
+      </section>
     </div>
   );
 }

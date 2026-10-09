@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "label": "Completed",
+      "count": 299136
+    },
+    {
+      "label": "Cancelled",
+      "count": 19673
+    },
+    {
+      "label": "No-Show",
+      "count": 16250
+    },
+    {
+      "label": "Unknown",
+      "count": 1674
+    }
+  ]
+}

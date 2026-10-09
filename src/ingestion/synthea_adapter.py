@@ -660,7 +660,8 @@ def convert_synthea_to_raw(
     n_missed = int(len(df_apt) * 0.12)
     missed = df_apt.sample(n=n_missed, random_state=seed).copy()
     missed["appointment_id"] = [f"APT_S{i + 1:07d}" for i in range(n_missed)]
-    missed["appointment_date"] = (pd.to_datetime(missed["appointment_date"]) + pd.to_timedelta(rng.integers(-14, 14, n_missed), unit="D")).dt.strftime("%Y-%m-%d")
+    shifted = pd.to_datetime(missed["appointment_date"]) + pd.to_timedelta(rng.integers(-14, 14, n_missed), unit="D")
+    missed["appointment_date"] = shifted.clip(upper=data_end.normalize()).dt.strftime("%Y-%m-%d")  # never after the data ends
     missed["status"] = rng.choice(["No-Show", "Cancelled"], size=n_missed, p=[0.45, 0.55])
     missed["waiting_time_minutes"] = 0
     missed["visit_cost"] = 0.0

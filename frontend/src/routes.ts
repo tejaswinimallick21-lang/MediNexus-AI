@@ -1,18 +1,19 @@
-/** Console routes in sidebar order. `migrated` flips to true as each Streamlit page is replaced. */
+import type { IconName } from "./components/Icons";
+
+/** Console routes in sidebar order. */
 export interface ConsoleRoute {
   path: string;
   label: string;
-  icon: string;
-  streamlitPage: string;
-  migrated: boolean;
+  short: string;
+  icon: IconName;
 }
 
 export const CONSOLE_ROUTES: ConsoleRoute[] = [
-  { path: "/data", label: "Data Engineering", icon: "⚙️", streamlitPage: "data_engineer", migrated: false },
-  { path: "/doctor", label: "Doctor Dashboard", icon: "🩺", streamlitPage: "doctor", migrated: false },
-  { path: "/executive", label: "Executive Dashboard", icon: "🏢", streamlitPage: "administrator", migrated: false },
-  { path: "/pharmacy", label: "Pharmacy Dashboard", icon: "💊", streamlitPage: "pharmacist", migrated: false },
-  { path: "/laboratory", label: "Laboratory Dashboard", icon: "🔬", streamlitPage: "laboratory", migrated: false },
-  { path: "/reception", label: "Reception Dashboard", icon: "📋", streamlitPage: "receptionist", migrated: false },
-  { path: "/it", label: "IT & Security Admin", icon: "🛡️", streamlitPage: "it_admin", migrated: false },
+  { path: "/data", label: "Data Engineering", short: "Data Platform", icon: "Database" },
+  { path: "/doctor", label: "Clinical Workstation", short: "Clinical", icon: "Stethoscope" },
+  { path: "/executive", label: "Executive Operations", short: "Executive", icon: "Building" },
+  { path: "/pharmacy", label: "Pharmacy & Supply Chain", short: "Pharmacy", icon: "Pill" },
+  { path: "/laboratory", label: "Laboratory Operations", short: "Laboratory", icon: "Flask" },
+  { path: "/reception", label: "Reception & Patient Flow", short: "Reception", icon: "Clipboard" },
+  { path: "/it", label: "Security & Infrastructure", short: "Security", icon: "Shield" },
 ];

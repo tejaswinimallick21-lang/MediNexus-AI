@@ -1,23 +1,38 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: var(--space-4);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-6);
 }
 
 .wrap {
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-6);
 }
 
 .card {
+  position: relative;
+  overflow: hidden;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-5);
   display: grid;
   gap: var(--space-2);
   align-content: start;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .label {
@@ -25,14 +40,45 @@
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.icon_neutral {
+  background: #e0f2fe;
+  color: var(--color-secondary);
+}
+
+.icon_good {
+  background: var(--color-success-soft);
+  color: var(--color-success-text);
+}
+
+.icon_warn {
+  background: var(--color-warning-soft);
+  color: var(--color-warning-text);
+}
+
+.icon_bad {
+  background: var(--color-danger-soft);
+  color: var(--color-danger-text);
 }
 
 .value {
+  font-family: var(--font-display);
   color: var(--color-ink);
   font-size: var(--text-2xl);
   font-weight: var(--weight-black);
-  line-height: 1.1;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
 }
 
 .hint {
@@ -54,4 +100,28 @@
 
 .bad {
   color: var(--color-danger-text);
+}
+
+.bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+}
+
+.bar_neutral {
+  background: var(--gradient-brand);
+}
+
+.bar_good {
+  background: linear-gradient(90deg, #10b981, #14b8a6);
+}
+
+.bar_warn {
+  background: linear-gradient(90deg, #f59e0b, #f97316);
+}
+
+.bar_bad {
+  background: linear-gradient(90deg, #ef4444, #f43f5e);
 }
