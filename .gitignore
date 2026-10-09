@@ -1,0 +1,46 @@
+# Environment and secrets
+.env
+*.env
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pytest_cache/
+.coverage
+htmlcov/
+
+# DuckDB lock/wal files
+*.duckdb.wal
+*.duckdb.tmp
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Generated data, database and model artifacts (rebuilt by the pipeline)
+data/raw/
+data/bronze/
+data/silver/
+data/gold/
+data/synthea/
+data/legacy_raw/
+data/ml_results/
+database/*.duckdb
+models/*.joblib
+logs/
+
+# Backend secrets
+backend/seed_users.json
+
+# Frontend
+node_modules/
+frontend/dist/
+frontend/.env
+frontend/coverage/

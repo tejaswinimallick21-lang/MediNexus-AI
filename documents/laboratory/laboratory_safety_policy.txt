@@ -1,0 +1,16 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Clinical Laboratory Biosafety and Analyzer Maintenance Protocols
+DOCUMENT ID: POL-LAB-002
+REVISION: 2.0
+EFFECTIVE DATE: 2025-01-01
+
+1. BIOSAFETY LEVEL 2 (BSL-2) PRECAUTIONS
+All personnel handling patient blood, fluid, or tissue specimens must wear designated personal protective equipment (PPE): fluid-resistant lab coats, disposable nitrile gloves, and eye/face shields during vortexing or centrifuge uncapping.
+
+2. PREVENTIVE ANALYZER MAINTENANCE
+- Daily Maintenance: Automated probe washes, baseline calibration checks, and liquid waste disposal must be performed every morning between 05:00 and 06:30 before peak morning specimen batches.
+- Weekly Maintenance: Deep de-proteinization, optical cuvette inspection, and multi-point reagent calibrations.
+- Equipment downtime exceeding 60 minutes requires activating the secondary backup analyzer array.
+
+3. BIOHAZARD SPILL RESPONSE
+Minor blood spills (< 50 mL): Saturate with 1:10 freshly diluted sodium hypochlorite (bleach) solution, allow 15 minutes contact time, wipe with absorbent pads, and dispose in red biohazard receptacles.

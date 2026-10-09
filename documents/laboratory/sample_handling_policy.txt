@@ -1,0 +1,19 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Clinical Laboratory Sample Handling and Critical Value Notification Policy
+DOCUMENT ID: POL-LAB-001
+REVISION: 3.5
+EFFECTIVE DATE: 2025-01-01
+
+1. SPECIMEN RECEIPT AND REJECTION CRITERIA
+All specimen containers must feature dual barcode identifiers (Patient ID and Encounter Accession ID). Specimens that are unlabelled, hemolyzed, clotted in EDTA tubes, or received past temperature stability limits must be rejected with immediate cancellation notification.
+
+2. TURNAROUND TIME (TAT) BENCHMARKS
+- Emergency Department STAT panels: <= 45 minutes from receipt to electronic result verification.
+- Inpatient Routine Chemistry and Hematology: <= 120 minutes.
+- Outpatient Routine Panels: <= 240 minutes.
+
+3. CRITICAL VALUE ESCALATION PROTOCOL
+When an automated analyzer reports a critical result (e.g. Potassium > 6.0 mEq/L or < 2.8 mEq/L; Troponin-I > 0.5 ng/mL; Glucose < 45 mg/dL or > 400 mg/dL):
+- The medical laboratory technologist must repeat verification on the analyzer within 5 minutes.
+- The reading must be telephoned directly to the attending physician or registered nurse within 15 minutes.
+- Read-back confirmation with receiver name and badge number must be documented in the Laboratory Information System.

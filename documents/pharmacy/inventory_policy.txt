@@ -1,0 +1,19 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Pharmacy Inventory Replenishment and Critical Shortage Protocol
+DOCUMENT ID: POL-PHARM-002
+REVISION: 2.2
+EFFECTIVE DATE: 2025-01-01
+
+1. REORDER THRESHOLD DETERMINATION
+Reorder thresholds are computed dynamically based on the formula:
+Reorder Point = (Lead Time in Days * Average Daily Consumption) + Safety Buffer Stock (14 days minimum).
+
+2. CRITICAL SHORTAGE AND STOCKOUT MANAGEMENT
+When days of supply fall below 7 days or stock drops below 50% of the reorder point (critical stockout):
+- The Pharmacy Information System automatically flags the item as 'High Risk'.
+- The Clinical Pharmacy Director convenes therapeutic alternative review within 4 hours.
+- Wholesaler secondary distributor expedited orders must be authorized immediately.
+- Ward stock levels are reduced to 24-hour rations to prevent hoarding.
+
+3. PHYSICAL AUDIT CYCLES
+A comprehensive ABC cycle count is conducted weekly for top 20% high-volume and high-cost formulary items. Discrepancies exceeding 2% must be investigated for diversion or unrecorded wastage.

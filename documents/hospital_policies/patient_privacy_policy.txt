@@ -1,0 +1,15 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Healthcare Data Privacy and Role-Based Access Governance
+DOCUMENT ID: POL-HOSP-003
+REVISION: 4.0
+EFFECTIVE DATE: 2025-01-01
+
+1. PRINCIPLE OF MINIMUM NECESSARY ACCESS
+Access to protected healthcare information is governed strictly by organizational roles.
+Non-clinical personnel, including Front Desk Receptionists, are restricted from accessing diagnostic ICD codes, laboratory biomarker values, and detailed clinical notes.
+
+2. AUDIT TRAIL MONITORING
+Every access, search query, record modification, and analytical model invocation is logged in the immutable system audit trail with timestamp, user ID, role, and action type. IT Security reviews unusual export or query volumes weekly.
+
+3. DISCLOSURE RESTRICTIONS
+Patient identifiers and contact details must never be exported outside authorized hospital enterprise networks. Synthetic test datasets must be used for all non-production development and demonstration environments.

@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-10-09T19:30:12.979306",
+  "source": "synthea",
+  "source_dir": "C:\\Users\\tejas\\Downloads\\MediNexus-AI-main\\MediNexus-AI-main\\data\\synthea\\csv",
+  "data_through": "2020-05-27",
+  "seed": 42,
+  "counts": {
+    "hospitals": 5209,
+    "departments": 5795,
+    "doctors": 5214,
+    "patients": 12537,
+    "admissions": 9699,
+    "diagnoses": 115689,
+    "laboratory_results": 1216331,
+    "medications": 169,
+    "prescriptions": 435574,
+    "appointments": 340100,
+    "billing": 9679,
+    "pharmacy_inventory": 950
+  },
+  "simulated_fields": {
+    "patients": [
+      "blood_group",
+      "contact",
+      "emergency_contact"
+    ],
+    "admissions": [
+      "room_number"
+    ],
+    "appointments": [
+      "waiting_time_minutes",
+      "No-Show/Cancelled rows (is_simulated=1)"
+    ],
+    "billing": [
+      "payment_status"
+    ],
+    "pharmacy_inventory": [
+      "stock_quantity",
+      "batch_number",
+      "expiry_date",
+      "last_restocked_date (all sized from real prescription demand)"
+    ]
+  },
+  "derived_downstream": [
+    "readmitted_30d (Gold, from admission dates)",
+    "COVID-19 outcomes (Gold, from event dates)"
+  ],
+  "quality_defects_injected": [
+    "Intentional duplicate rows (~1-1.5%)",
+    "Inconsistent date representations (MM/DD/YYYY, DD-MM-YYYY, ISO)",
+    "Irregular casing (UPPER, lower, leading/trailing whitespace)",
+    "Missing values in optional fields (~3%)",
+    "Invalid categorical token anomalies ('UNKNOWN_VAL')",
+    "Occasional invalid numerical values for outlier detection"
+  ],
+  "archived_previous_raw_to": null
+}

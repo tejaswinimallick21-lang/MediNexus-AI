@@ -1,0 +1,18 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Outpatient Appointment Scheduling and Attendance Policy
+DOCUMENT ID: POL-HOSP-002
+REVISION: 2.1
+EFFECTIVE DATE: 2025-01-01
+
+1. APPOINTMENT BOOKING AND CONFIRMATION
+All scheduled clinic visits require automated SMS/call confirmation 48 hours and 24 hours prior to the appointment.
+
+2. CANCELLATION AND RESCHEDULING PROTOCOL
+Patients must provide at least 24 hours advance notification for cancellation. Same-day cancellations will be logged as 'Late Cancellation' and offered telemedicine alternatives where clinically permissible.
+
+3. NO-SHOW MITIGATION
+Patients with two or more consecutive 'No-Show' occurrences must be contacted by patient navigation staff to evaluate transport, financial, or cognitive access barriers before re-booking.
+
+4. CLINICAL RECEPTION AND WAITING TIME THRESHOLDS
+Front desk staff must register arrived patients within 5 minutes.
+Target waiting room duration is under 20 minutes from check-in to clinical examination room triage. If wait times exceed 30 minutes, front desk personnel must proactively communicate delays to patients.

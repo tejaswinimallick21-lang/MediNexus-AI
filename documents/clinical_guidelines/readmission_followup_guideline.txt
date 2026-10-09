@@ -1,0 +1,21 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Clinical Practice Guideline: Prevention of Preventable Readmissions in Chronic Disease
+DOCUMENT ID: CPG-CLIN-001
+REVISION: 2.4
+EFFECTIVE DATE: 2025-01-01
+
+1. EXECUTIVE SUMMARY
+This guideline provides evidence-based recommendations for post-discharge transitional care in patients admitted with congestive heart failure (CHF), chronic obstructive pulmonary disease (COPD), diabetes mellitus, and acute kidney injury.
+
+2. CHRONIC HEART FAILURE (CHF) PROTOCOL
+- Discharge Criteria: Patient must be clinically euvolemic on oral diuretics for at least 24 hours prior to discharge.
+- Prescriptive Action: Schedule serum electrolytes and creatinine check at 5-7 days post-discharge.
+- Patient Self-Management: Instruct patient to contact clinic if daily body weight increases by > 2 lbs in 24 hours or > 5 lbs in one week.
+
+3. COPD EXACERBATION PROTOCOL
+- Review proper inhaler technique with respiratory therapist prior to discharge.
+- Prescribe 48-hour follow-up telehealth check-in to confirm antibiotic/corticosteroid adherence.
+- Ensure smoking cessation counselling and pulse oximeter distribution.
+
+4. MULTI-COMORBIDITY ESCALATION TRIGGERS
+Patients with 2 or more chronic comorbidities and prior acute admissions must have a dedicated Care Navigator assigned. If AI readmission risk exceeds 70%, daily remote symptom monitoring is recommended for 14 days.

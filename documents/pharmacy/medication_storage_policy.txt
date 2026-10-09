@@ -1,0 +1,16 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Inpatient Medication Storage and Cold Chain Integrity Policy
+DOCUMENT ID: POL-PHARM-001
+REVISION: 3.0
+EFFECTIVE DATE: 2025-01-01
+
+1. TEMPERATURE CONTROL STANDARDS
+- Refrigerated Medications (e.g., Insulin Glargine, Ceftriaxone reconstituted vials): Maintain strictly between 2°C to 8°C (36°F to 46°F).
+- Room Temperature Formulations (e.g., Metformin, Lisinopril, Atorvastatin): Store between 15°C to 25°C (59°F to 77°F) with excursion tolerance up to 30°C.
+- Continuous temperature monitoring devices log ambient readings every 15 minutes. Automatic audible and SMS alerts trigger upon continuous 30-minute deviation.
+
+2. HIGH-ALERT MEDICATIONS
+High-alert medications including concentrated electrolytes, IV anticoagulants, and neuromuscular blockers must be stored in segregated, brightly labeled bins in automated dispensing cabinets with secondary witness verification required for removal.
+
+3. EXPIRED DRUG PROTOCOL
+Any medication within 30 days of manufacturer expiration must be physically quarantined in the red disposal bin and logged in the inventory management system.

@@ -1,0 +1,25 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Inpatient Discharge Planning and Transitional Care Policy
+DOCUMENT ID: POL-HOSP-001
+REVISION: 3.2
+EFFECTIVE DATE: 2025-01-01
+
+1. PURPOSE AND SCOPE
+This policy outlines standardized procedures for safe, effective, and coordinated discharge of adult inpatients across all MediNexus healthcare facilities to mitigate preventable 30-day readmissions.
+
+2. MULTIDISCIPLINARY DISCHARGE ROUNDS
+Every inpatient care team must initiate discharge planning within 24 hours of admission.
+Daily interdisciplinary rounds at 09:00 AM must identify patients anticipated for discharge within 48 hours. Target time for physical discharge departure is 11:00 AM to facilitate incoming bed availability.
+
+3. HIGH-RISK READMISSION PATHWAY
+Patients identified as 'High Risk' by the clinical predictive intelligence system (probability >= 70%) must be placed on the Enhanced Transitional Protocol:
+- Clinical Nurse Specialist phone follow-up within 48 hours of discharge.
+- In-person outpatient specialist or primary care follow-up appointment secured within 7 days.
+- Discharge summary transmitted electronically to primary provider within 12 hours.
+- Direct-to-bedside delivery of 30-day essential maintenance medications.
+
+4. MEDICATION RECONCILIATION
+The attending physician and clinical pharmacist must conduct independent medication reconciliations:
+- Review pre-admission drug regimen against inpatient treatment modifications.
+- Explicitly annotate discontinued medications with clinical rationale.
+- Educate the patient or caregiver regarding new dosages, timing, and adverse reaction indicators.
