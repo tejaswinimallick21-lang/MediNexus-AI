@@ -82,6 +82,7 @@ def main() -> None:
     parser.add_argument("--wait", type=float, default=3.5)
     parser.add_argument("--prefix", default="")
     parser.add_argument("--click", help="CSS selector to click after each page loads (e.g. to open a panel)")
+    parser.add_argument("--js", help="JavaScript expression to run after each page loads (e.g. to pick a tab)")
     args = parser.parse_args()
 
     out = Path(args.out)
@@ -112,6 +113,9 @@ def main() -> None:
         for path in args.paths:
             cdp.call("Page.navigate", url=f"{args.base}{path}")
             time.sleep(args.wait)
+            if args.js:
+                cdp.call("Runtime.evaluate", expression=args.js)
+                time.sleep(args.wait)
             if args.click:
                 cdp.call("Runtime.evaluate", expression=f"document.querySelector({json.dumps(args.click)})?.click()")
                 time.sleep(args.wait)

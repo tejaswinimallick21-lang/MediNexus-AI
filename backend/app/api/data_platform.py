@@ -1,0 +1,54 @@
+"""Data Engineering workspace routes (/api/data/*): admin only."""
+
+from pathlib import Path as FsPath
+
+from fastapi import APIRouter, Depends, File, Path, Response, UploadFile
+from fastapi.responses import FileResponse
+
+from backend.app.core.deps import current_user, require_page
+from backend.app.core.pagination import Page, PageParams, page_params
+from backend.app.core.users import UserRecord
+from backend.app.schemas.common import ERROR_RESPONSES
+from backend.app.schemas.data_platform import ForecastIn, JobAccepted, PredictIn, UploadAccepted, UploadDetail, UploadSummary
+from backend.app.services import data_platform
+
+router = APIRouter(prefix="/data", tags=["data-engineering"], responses=ERROR_RESPONSES, dependencies=[Depends(require_page("data"))])
+UploadId = Path(..., pattern="^[0-9a-f]{32}$")
+
+
+@router.post("/uploads", response_model=UploadAccepted, status_code=202)
+async def upload(file: UploadFile = File(...), user: UserRecord = Depends(current_user)) -> UploadAccepted:
+    return await data_platform.create_upload(file, user)
+
+
+@router.get("/uploads", response_model=Page[UploadSummary])
+def uploads(params: PageParams = Depends(page_params)) -> Page[UploadSummary]:
+    return data_platform.list_uploads(params)
+
+
+@router.get("/uploads/{upload_id}", response_model=UploadDetail)
+def upload_detail(upload_id: str = UploadId) -> UploadDetail:
+    return data_platform.get_upload(upload_id)
+
+
+@router.delete("/uploads/{upload_id}", status_code=204, response_class=Response)
+def delete_upload(upload_id: str = UploadId, user: UserRecord = Depends(current_user)) -> Response:
+    data_platform.delete_upload(upload_id, user)
+    return Response(status_code=204)
+
+
+@router.get("/uploads/{upload_id}/clean.csv", response_class=FileResponse)
+def download_clean(upload_id: str = UploadId, user: UserRecord = Depends(current_user)) -> FileResponse:
+    path = data_platform.clean_csv_path(upload_id, user)
+    name = FsPath(data_platform.get_upload(upload_id).filename).stem + "_clean.csv"
+    return FileResponse(path, media_type="text/csv", filename=name)
+
+
+@router.post("/uploads/{upload_id}/predict", response_model=JobAccepted, status_code=202)
+def predict(body: PredictIn, upload_id: str = UploadId, user: UserRecord = Depends(current_user)) -> JobAccepted:
+    return data_platform.start_prediction(upload_id, body.target, user)
+
+
+@router.post("/uploads/{upload_id}/forecast", response_model=JobAccepted, status_code=202)
+def forecast(body: ForecastIn, upload_id: str = UploadId, user: UserRecord = Depends(current_user)) -> JobAccepted:
+    return data_platform.start_forecast(upload_id, body, user)

@@ -45,3 +45,4 @@ frontend/dist/
 frontend/.env
 frontend/coverage/
 data/ops/
+data/uploads/

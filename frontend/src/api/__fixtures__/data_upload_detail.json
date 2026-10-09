@@ -1,0 +1,694 @@
+{
+  "upload_id": "437b7c46487c43a0bfc2ad229add064a",
+  "filename": "admissions_export.csv",
+  "size_bytes": 34438,
+  "sha256": "e6e676e329ca227d0d13f67491aa321151d5cc3c867eb2522ba03d25d2f8b5a6",
+  "uploaded_by": "admin@medinexus.org",
+  "created_at": "2026-10-09T23:52:00",
+  "status": "ready",
+  "stage": "Ready",
+  "rows": 400,
+  "columns": 9,
+  "quality_score": 95.4,
+  "error": null,
+  "job_id": null,
+  "cleaning": {
+    "rows_in": 405,
+    "rows_out": 400,
+    "steps": [
+      {
+        "step": "Standardise column names",
+        "detail": "snake_case, unique names",
+        "affected": 9,
+        "note": null
+      },
+      {
+        "step": "Trim whitespace and blank markers",
+        "detail": "'', NA, N/A, null \u2192 missing",
+        "affected": 77,
+        "note": null
+      },
+      {
+        "step": "Infer and convert data types",
+        "detail": "numbers, dates, booleans, categories, identifiers",
+        "affected": 0,
+        "note": "values that could not be converted are set to missing"
+      },
+      {
+        "step": "Standardise category spellings",
+        "detail": "case and spacing variants merged",
+        "affected": 143,
+        "note": null
+      },
+      {
+        "step": "Remove impossible values",
+        "detail": "ages outside 0\u2013120, dates in the future",
+        "affected": 4,
+        "note": null
+      },
+      {
+        "step": "Pseudonymise personal identifiers",
+        "detail": "ssn, contact",
+        "affected": 2,
+        "note": null
+      },
+      {
+        "step": "Generalise quasi-identifiers",
+        "detail": "none detected",
+        "affected": 0,
+        "note": null
+      },
+      {
+        "step": "Remove exact duplicate rows",
+        "detail": "identical across every column",
+        "affected": 5,
+        "note": null
+      },
+      {
+        "step": "Drop near-empty columns",
+        "detail": "empty_col",
+        "affected": 1,
+        "note": null
+      },
+      {
+        "step": "Report missing values",
+        "detail": "left as missing; models impute inside their training folds",
+        "affected": 2,
+        "note": null
+      }
+    ],
+    "columns": [
+      {
+        "name": "patient_id",
+        "kind": "identifier",
+        "missing_pct": 0.0,
+        "unique": 400,
+        "pii_masked": false,
+        "example": "PX00000"
+      },
+      {
+        "name": "admit_date",
+        "kind": "datetime",
+        "missing_pct": 0.0,
+        "unique": 114,
+        "pii_masked": false,
+        "example": "2024-01-01 00:00:00"
+      },
+      {
+        "name": "age",
+        "kind": "numeric",
+        "missing_pct": 0.5,
+        "unique": 71,
+        "pii_masked": false,
+        "example": "45.0"
+      },
+      {
+        "name": "ward",
+        "kind": "category",
+        "missing_pct": 0.0,
+        "unique": 3,
+        "pii_masked": false,
+        "example": "Oncology"
+      },
+      {
+        "name": "total_cost",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 400,
+        "pii_masked": false,
+        "example": "8236.72"
+      },
+      {
+        "name": "ssn",
+        "kind": "identifier",
+        "missing_pct": 0.0,
+        "unique": 400,
+        "pii_masked": true,
+        "example": "PII_d0793b7f8f"
+      },
+      {
+        "name": "contact",
+        "kind": "identifier",
+        "missing_pct": 0.0,
+        "unique": 400,
+        "pii_masked": true,
+        "example": "PII_39ae7b8354"
+      },
+      {
+        "name": "readmitted",
+        "kind": "boolean",
+        "missing_pct": 0.0,
+        "unique": 2,
+        "pii_masked": false,
+        "example": "True"
+      },
+      {
+        "name": "readmitted_flag_copy",
+        "kind": "numeric",
+        "missing_pct": 0.0,
+        "unique": 2,
+        "pii_masked": false,
+        "example": "1"
+      }
+    ],
+    "quality": {
+      "completeness": 90.0,
+      "validity": 99.9,
+      "uniqueness": 98.8,
+      "consistency": 96.5,
+      "overall": 95.4
+    }
+  },
+  "profile": {
+    "rows": 400,
+    "columns": 9,
+    "numeric": [
+      {
+        "column": "age",
+        "mean": 53.118090452261306,
+        "std": 20.647888533122224,
+        "min": 18.0,
+        "p25": 35.0,
+        "median": 53.0,
+        "p75": 70.0,
+        "max": 89.0,
+        "missing_pct": 0.5,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "18\u201323.92",
+            "count": 35
+          },
+          {
+            "bin": "23.92\u201329.83",
+            "count": 31
+          },
+          {
+            "bin": "29.83\u201335.75",
+            "count": 37
+          },
+          {
+            "bin": "35.75\u201341.67",
+            "count": 29
+          },
+          {
+            "bin": "41.67\u201347.58",
+            "count": 34
+          },
+          {
+            "bin": "47.58\u201353.5",
+            "count": 35
+          },
+          {
+            "bin": "53.5\u201359.42",
+            "count": 29
+          },
+          {
+            "bin": "59.42\u201365.33",
+            "count": 40
+          },
+          {
+            "bin": "65.33\u201371.25",
+            "count": 39
+          },
+          {
+            "bin": "71.25\u201377.17",
+            "count": 27
+          },
+          {
+            "bin": "77.17\u201383.08",
+            "count": 29
+          },
+          {
+            "bin": "83.08\u201389",
+            "count": 33
+          }
+        ]
+      },
+      {
+        "column": "total_cost",
+        "mean": 4145.988775,
+        "std": 884.5906553193118,
+        "min": 1840.38,
+        "p25": 3439.8975,
+        "median": 4155.455,
+        "p75": 4823.365,
+        "max": 8236.72,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "1840\u20132373",
+            "count": 4
+          },
+          {
+            "bin": "2373\u20132906",
+            "count": 27
+          },
+          {
+            "bin": "2906\u20133439",
+            "count": 69
+          },
+          {
+            "bin": "3439\u20133972",
+            "count": 74
+          },
+          {
+            "bin": "3972\u20134506",
+            "count": 83
+          },
+          {
+            "bin": "4506\u20135039",
+            "count": 74
+          },
+          {
+            "bin": "5039\u20135572",
+            "count": 54
+          },
+          {
+            "bin": "5572\u20136105",
+            "count": 13
+          },
+          {
+            "bin": "6105\u20136638",
+            "count": 1
+          },
+          {
+            "bin": "6638\u20137171",
+            "count": 0
+          },
+          {
+            "bin": "7171\u20137704",
+            "count": 0
+          },
+          {
+            "bin": "7704\u20138237",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "column": "readmitted_flag_copy",
+        "mean": 0.35,
+        "std": 0.47696960070847344,
+        "min": 0.0,
+        "p25": 0.0,
+        "median": 0.0,
+        "p75": 1.0,
+        "max": 1.0,
+        "missing_pct": 0.0,
+        "extreme_outliers": 0,
+        "histogram": [
+          {
+            "bin": "0\u20130.08333",
+            "count": 260
+          },
+          {
+            "bin": "0.08333\u20130.1667",
+            "count": 0
+          },
+          {
+            "bin": "0.1667\u20130.25",
+            "count": 0
+          },
+          {
+            "bin": "0.25\u20130.3333",
+            "count": 0
+          },
+          {
+            "bin": "0.3333\u20130.4167",
+            "count": 0
+          },
+          {
+            "bin": "0.4167\u20130.5",
+            "count": 0
+          },
+          {
+            "bin": "0.5\u20130.5833",
+            "count": 0
+          },
+          {
+            "bin": "0.5833\u20130.6667",
+            "count": 0
+          },
+          {
+            "bin": "0.6667\u20130.75",
+            "count": 0
+          },
+          {
+            "bin": "0.75\u20130.8333",
+            "count": 0
+          },
+          {
+            "bin": "0.8333\u20130.9167",
+            "count": 0
+          },
+          {
+            "bin": "0.9167\u20131",
+            "count": 140
+          }
+        ]
+      }
+    ],
+    "categories": [
+      {
+        "column": "ward",
+        "distinct": 3,
+        "top": [
+          {
+            "value": "Cardiology",
+            "count": 157,
+            "share_pct": 39.2
+          },
+          {
+            "value": "Oncology",
+            "count": 146,
+            "share_pct": 36.5
+          },
+          {
+            "value": "General",
+            "count": 97,
+            "share_pct": 24.2
+          }
+        ]
+      },
+      {
+        "column": "readmitted",
+        "distinct": 2,
+        "top": [
+          {
+            "value": "False",
+            "count": 260,
+            "share_pct": 65.0
+          },
+          {
+            "value": "True",
+            "count": 140,
+            "share_pct": 35.0
+          }
+        ]
+      }
+    ],
+    "correlations": [
+      {
+        "a": "age",
+        "b": "total_cost",
+        "rho": 0.945
+      },
+      {
+        "a": "age",
+        "b": "readmitted_flag_copy",
+        "rho": 0.762
+      },
+      {
+        "a": "total_cost",
+        "b": "readmitted_flag_copy",
+        "rho": 0.731
+      }
+    ],
+    "date_coverage": {
+      "column": "admit_date",
+      "start": "2024-01-01",
+      "end": "2024-04-29"
+    },
+    "segments": {
+      "available": true,
+      "reason": null,
+      "rows_used": 400,
+      "k": 2,
+      "silhouette": 0.58,
+      "structure": "clear",
+      "clusters": [
+        {
+          "cluster": 2,
+          "size": 202,
+          "share_pct": 50.5,
+          "traits": [
+            "higher age (70 vs 53 overall)",
+            "higher total_cost (4814 vs 4155 overall)"
+          ]
+        },
+        {
+          "cluster": 1,
+          "size": 198,
+          "share_pct": 49.5,
+          "traits": [
+            "lower age (35 vs 53 overall)",
+            "lower total_cost (3430 vs 4155 overall)"
+          ]
+        }
+      ],
+      "anomaly_share_pct": 5.25,
+      "anomalies": 21
+    },
+    "drift": {
+      "available": false,
+      "reason": "Fewer than 3 numeric columns in common with any live Gold table, so a comparison would not be meaningful.",
+      "reference_table": null,
+      "columns": []
+    }
+  },
+  "predictions": [],
+  "forecast": null,
+  "summary": [
+    "admissions_export.csv arrived with 405 rows and 9 usable columns; quality score 95/100 (completeness 90%, validity 100%).",
+    "Cleaning removed 5 duplicate rows and made 7 kinds of fixes.",
+    "Personal identifiers were pseudonymised before analysis: ssn, contact.",
+    "Strongest relationship: age and total_cost move together (Spearman \u03c1 = 0.94); correlation is not causation.",
+    "The rows form 2 segments (clear separation, silhouette 0.58); the largest (50%) has higher age (70 vs 53 overall); higher total_cost (4814 vs 4155 overall).",
+    "5.2% of rows look unusual compared with the rest and are worth a manual check."
+  ],
+  "preview_columns": [
+    "patient_id",
+    "admit_date",
+    "age",
+    "ward",
+    "total_cost",
+    "ssn",
+    "contact",
+    "readmitted",
+    "readmitted_flag_copy"
+  ],
+  "preview_rows": [
+    [
+      "PX00000",
+      "2024-01-01",
+      null,
+      "Oncology",
+      "8236.72",
+      "PII_d0793b7f8f",
+      "PII_39ae7b8354",
+      "True",
+      "1"
+    ],
+    [
+      "PX00001",
+      "2024-01-01",
+      null,
+      "Cardiology",
+      "1968.87",
+      "PII_82013517d9",
+      "PII_3317bb407e",
+      "False",
+      "0"
+    ],
+    [
+      "PX00002",
+      "2024-01-01",
+      "45.0",
+      "Oncology",
+      "3966.93",
+      "PII_d5b0520b2b",
+      "PII_c9ff6a66c9",
+      "False",
+      "0"
+    ],
+    [
+      "PX00003",
+      "2024-01-02",
+      "52.0",
+      "Oncology",
+      "3938.51",
+      "PII_73265cb7c6",
+      "PII_4d95e1c231",
+      "False",
+      "0"
+    ],
+    [
+      "PX00004",
+      "2024-01-02",
+      "20.0",
+      "Oncology",
+      "2685.86",
+      "PII_8275671c1c",
+      "PII_1451f19345",
+      "False",
+      "0"
+    ],
+    [
+      "PX00005",
+      "2024-01-03",
+      "19.0",
+      "General",
+      "2477.28",
+      "PII_dd4d187377",
+      "PII_5c86b623e7",
+      "False",
+      "0"
+    ],
+    [
+      "PX00006",
+      "2024-01-03",
+      "35.0",
+      "Oncology",
+      "3808.57",
+      "PII_2803418e67",
+      "PII_b675bbcbab",
+      "False",
+      "0"
+    ],
+    [
+      "PX00007",
+      "2024-01-04",
+      "56.0",
+      "Cardiology",
+      "4287.52",
+      "PII_ccceb2456b",
+      "PII_840f130ec1",
+      "False",
+      "0"
+    ],
+    [
+      "PX00008",
+      "2024-01-04",
+      "52.0",
+      "Oncology",
+      "3932.25",
+      "PII_ebdc06ff48",
+      "PII_5a41733fc9",
+      "False",
+      "0"
+    ],
+    [
+      "PX00009",
+      "2024-01-04",
+      "79.0",
+      "Cardiology",
+      "4760.44",
+      "PII_5ee94bf16d",
+      "PII_7fd51326c9",
+      "True",
+      "1"
+    ],
+    [
+      "PX00010",
+      "2024-01-04",
+      "27.0",
+      "General",
+      "3034.01",
+      "PII_e24f7d9dc1",
+      "PII_722c5704f7",
+      "False",
+      "0"
+    ],
+    [
+      "PX00011",
+      "2024-01-04",
+      "64.0",
+      "General",
+      "4992.79",
+      "PII_8082b3edb7",
+      "PII_b0ea82d912",
+      "False",
+      "0"
+    ],
+    [
+      "PX00012",
+      "2024-01-05",
+      "46.0",
+      "General",
+      "3978.58",
+      "PII_9911819eae",
+      "PII_d72325a07b",
+      "False",
+      "0"
+    ],
+    [
+      "PX00013",
+      "2024-01-05",
+      "64.0",
+      "Cardiology",
+      "4342.64",
+      "PII_02bcc89ebe",
+      "PII_28ba3ca9b6",
+      "True",
+      "1"
+    ],
+    [
+      "PX00014",
+      "2024-01-05",
+      "24.0",
+      "Cardiology",
+      "3388.85",
+      "PII_024904991f",
+      "PII_dc624458cb",
+      "False",
+      "0"
+    ],
+    [
+      "PX00015",
+      "2024-01-06",
+      "46.0",
+      "Oncology",
+      "4268.55",
+      "PII_e82ca765e5",
+      "PII_06d1302a26",
+      "False",
+      "0"
+    ],
+    [
+      "PX00016",
+      "2024-01-06",
+      "28.0",
+      "Oncology",
+      "3414.23",
+      "PII_1ad978ae87",
+      "PII_9a71da255b",
+      "False",
+      "0"
+    ],
+    [
+      "PX00017",
+      "2024-01-06",
+      "43.0",
+      "General",
+      "3956.65",
+      "PII_de22ffcbfa",
+      "PII_5e6bce3811",
+      "False",
+      "0"
+    ],
+    [
+      "PX00018",
+      "2024-01-07",
+      "31.0",
+      "Oncology",
+      "3586.7",
+      "PII_5f752e4bba",
+      "PII_5cd0d0fb7f",
+      "False",
+      "0"
+    ],
+    [
+      "PX00019",
+      "2024-01-07",
+      "69.0",
+      "General",
+      "4922.98",
+      "PII_72cb05237a",
+      "PII_604492bc0d",
+      "False",
+      "0"
+    ]
+  ]
+}

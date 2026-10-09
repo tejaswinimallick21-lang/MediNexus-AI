@@ -31,6 +31,8 @@ interface RequestOptions {
   method?: "GET" | "POST" | "PATCH" | "DELETE";
   query?: Query;
   body?: unknown;
+  /** Multipart upload; the browser sets the boundary header. */
+  form?: FormData;
   signal?: AbortSignal;
 }
 
@@ -42,7 +44,7 @@ export async function request<T>(path: string, schema: ZodType<T>, opts: Request
       method: opts.method ?? "GET",
       credentials: "include",
       headers: opts.body !== undefined ? { "Content-Type": "application/json" } : undefined,
-      body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
+      body: opts.form ?? (opts.body !== undefined ? JSON.stringify(opts.body) : undefined),
       signal: opts.signal,
     });
   } catch (err) {

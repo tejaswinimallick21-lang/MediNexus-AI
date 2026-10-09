@@ -7,6 +7,7 @@ import { EmptyState } from "./components/StateViews";
 import { LoginPage } from "./pages/LoginPage";
 import { ClinicalWorkspace } from "./pages/ClinicalPage";
 import { CommandCenterPage } from "./pages/CommandCenterPage";
+import { DataEngineeringPage } from "./pages/DataEngineeringPage";
 import { ExecutivePage } from "./pages/ExecutivePage";
 import { LaboratoryPage } from "./pages/LaboratoryPage";
 import { NotMigratedPage } from "./pages/NotMigratedPage";
@@ -17,6 +18,7 @@ import { CONSOLE_ROUTES } from "./routes";
 
 /** Console pages (path → element). */
 const CONSOLE_PAGES: Record<string, ReactNode> = {
+  "/data": <DataEngineeringPage />,
   "/reception": <ReceptionPage />,
   "/laboratory": <LaboratoryPage />,
   "/pharmacy": <PharmacyPage />,

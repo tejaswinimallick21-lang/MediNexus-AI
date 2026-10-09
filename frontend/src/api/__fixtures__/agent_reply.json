@@ -4,7 +4,7 @@
   "facts": [
     "Overall Hospital 30-Day Readmission Rate is 1.26% across 9,584.0 documented encounters.",
     "Average Inpatient Length of Stay (ALOS) across facilities is 4.2 days.",
-    "Readmission Rate by Inflow Channel: Elective: 1.35%, Emergency: 0.75%, Unknown: 0.0%, Urgent: 0.0%",
+    "Readmission Rate by Inflow Channel: Elective: 1.35%, Emergency: 0.75%, Urgent: 0.0%, Unknown: 0.0%",
     "Highest Readmission Departments: Behavioral Health (5.56%), Oncology (3.91%), Orthopedics (2.82%), Internal Medicine (1.36%)"
   ],
   "predictions": [
@@ -23,5 +23,5 @@
     "Policy: POL-HOSP-001 (Inpatient Discharge Planning Policy)"
   ],
   "notes": "",
-  "latency_ms": 238.0
+  "latency_ms": 253.1
 }
