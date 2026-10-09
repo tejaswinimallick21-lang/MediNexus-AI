@@ -1,0 +1,6 @@
+{
+  "gold_ready": true,
+  "ml_ready": true,
+  "llm_provider": "Deterministic Local Engine",
+  "version": "2.4.0"
+}

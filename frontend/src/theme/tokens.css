@@ -1,0 +1,87 @@
+/*
+ * MediNexus design tokens.
+ * Derived from the Streamlit theme (app.py CSS, .streamlit/config.toml, src/utils/helpers.PALETTE).
+ * Swap brand values here; components only reference these variables.
+ */
+:root {
+  /* Brand */
+  --color-primary: #0d9488;        /* medical teal */
+  --color-primary-strong: #0f766e;
+  --color-primary-soft: #ccfbf1;
+  --color-secondary: #0284c7;      /* clinical blue */
+  --color-accent: #6366f1;         /* indigo */
+  --color-accent-bright: #2dd4bf;
+  --color-info-bright: #38bdf8;
+
+  /* Status */
+  --color-success: #10b981;
+  --color-success-soft: #d1fae5;
+  --color-success-text: #047857;
+  --color-warning: #f59e0b;
+  --color-warning-soft: #fef3c7;
+  --color-warning-text: #b45309;
+  --color-danger: #ef4444;
+  --color-danger-soft: #fee2e2;
+  --color-danger-text: #b91c1c;
+
+  /* Neutrals (slate) */
+  --color-ink: #0f172a;
+  --color-ink-2: #1e293b;
+  --color-ink-3: #334155;
+  --color-text: #0f172a;
+  --color-text-muted: #64748b;
+  --color-text-subtle: #94a3b8;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-surface: #ffffff;
+  --color-surface-2: #f8fafc;
+  --color-surface-3: #f1f5f9;
+  --color-sidebar: #0f172a;
+  --color-sidebar-card: #1e293b;
+  --color-sidebar-border: #334155;
+  --color-sidebar-text: #f1f5f9;
+
+  /* Chart series (categorical, in order) */
+  --chart-1: #0284c7;
+  --chart-2: #0d9488;
+  --chart-3: #f59e0b;
+  --chart-4: #ef4444;
+  --chart-5: #6366f1;
+  --chart-grid: #f1f5f9;
+
+  /* Typography */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-md: 0.9375rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.75rem;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-black: 800;
+
+  /* Spacing (4px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* Shape & depth */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+
+  /* Layout */
+  --sidebar-width: 264px;
+  --content-max: 1360px;
+}

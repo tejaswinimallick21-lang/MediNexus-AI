@@ -3,6 +3,7 @@ System Settings and Environment Configuration for MediNexus AI.
 """
 
 import os
+import sys
 from pathlib import Path
 from typing import Dict, Any
 
@@ -38,14 +39,15 @@ if ENV_PATH.exists():
                 k, v = line.split("=", 1)
                 os.environ.setdefault(k.strip(), v.strip())
 
-# Check Streamlit Cloud secrets if running hosted on Streamlit Cloud
+# Check Streamlit Cloud secrets only when running under Streamlit (the FastAPI backend never imports it)
 _st_secrets = {}
-try:
-    import streamlit as st
-    if hasattr(st, "secrets"):
-        _st_secrets = dict(st.secrets)
-except Exception:
-    pass
+if "streamlit" in sys.modules:
+    try:
+        import streamlit as st
+        if hasattr(st, "secrets"):
+            _st_secrets = dict(st.secrets)
+    except Exception:
+        pass
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "") or str(_st_secrets.get("GEMINI_API_KEY", ""))
 ENABLE_GEMINI = bool(GEMINI_API_KEY and len(GEMINI_API_KEY) > 10)

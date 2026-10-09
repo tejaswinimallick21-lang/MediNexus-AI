@@ -1,0 +1,64 @@
+{
+  "app_name": "MediNexus AI",
+  "tagline": "Role-Based Healthcare Data-to-Decision Intelligence Platform",
+  "version": "2.4.0",
+  "pipeline_stages": [
+    "Data",
+    "Trust",
+    "Intelligence",
+    "Prediction",
+    "Prescription",
+    "Action"
+  ],
+  "personas": [
+    {
+      "persona": "Data Engineer",
+      "role": "admin",
+      "title": "Lead Data & Analytics Engineer",
+      "description": "Manages dataset generation, Medallion Bronze/Silver/Gold ingestion, quality validation, ML pipeline, and data monitoring.",
+      "route": "/data"
+    },
+    {
+      "persona": "Doctor",
+      "role": "hcp",
+      "title": "Attending Physician / Specialist",
+      "description": "Accesses patient clinical 360, diagnostic trends, lab outcomes, predictive readmission risks, and prescriptive clinical plans.",
+      "route": "/doctor"
+    },
+    {
+      "persona": "Hospital Administrator",
+      "role": "analyst",
+      "title": "Executive Hospital Administrator",
+      "description": "Enterprise-level operational intelligence: occupancy, revenue, readmission rates, resource surge forecasts, and capacity planning.",
+      "route": "/executive"
+    },
+    {
+      "persona": "Pharmacist",
+      "role": "hcp",
+      "title": "Chief Clinical Pharmacist",
+      "description": "Monitors drug inventory, stockout risks, prescription utilization, demand forecasts, and procurement recommendations.",
+      "route": "/pharmacy"
+    },
+    {
+      "persona": "Laboratory Technician",
+      "role": "hcp",
+      "title": "Laboratory Operations Specialist",
+      "description": "Tracks investigation throughput, critical abnormal result alerts, analyzer turnaround time, and staffing demand forecasts.",
+      "route": "/laboratory"
+    },
+    {
+      "persona": "Receptionist",
+      "role": "hcp",
+      "title": "Front-Desk Patient Flow Coordinator",
+      "description": "Manages appointment bookings, cancellations, check-in flow, and waiting times. Strictly restricted from clinical diagnoses and lab records.",
+      "route": "/reception"
+    },
+    {
+      "persona": "IT Administrator",
+      "role": "admin",
+      "title": "Enterprise IT & Security Administrator",
+      "description": "Monitors system health, database schemas, pipeline status, audit event streams, and security access logs.",
+      "route": "/it"
+    }
+  ]
+}

@@ -4,6 +4,7 @@ Database management and DuckDB connector for MediNexus AI.
 
 import duckdb
 import threading
+import time
 from pathlib import Path
 from typing import Optional, Any, List, Dict
 import pandas as pd
@@ -12,6 +13,14 @@ from config.constants import DATABASE_PATH, DATABASE_DIR
 
 _DB_LOCK = threading.RLock()
 
+# DuckDB allows one writing process at a time. Streamlit and the FastAPI backend share the
+# database file, so connections retry briefly when the other process holds the lock.
+_LOCK_RETRY_SECONDS = 15.0
+
+
+class DataUnavailableError(RuntimeError):
+    """Raised when a strict query cannot be answered (missing table, lock timeout, bad SQL)."""
+
 
 def get_db_path() -> str:
     """Return string representation of the DuckDB database path."""
@@ -19,10 +28,39 @@ def get_db_path() -> str:
     return str(DATABASE_PATH)
 
 
+def connect(read_only: bool = False) -> duckdb.DuckDBPyConnection:
+    """Open a DuckDB connection, retrying while another process holds the file lock."""
+    deadline = time.monotonic() + _LOCK_RETRY_SECONDS
+    delay = 0.05
+    while True:
+        try:
+            return duckdb.connect(get_db_path(), read_only=read_only and DATABASE_PATH.exists())
+        except duckdb.IOException as e:
+            if "lock" not in str(e).lower() or time.monotonic() >= deadline:
+                raise
+            time.sleep(delay)
+            delay = min(delay * 2, 0.5)
+
+
+def query_df_strict(query: str, params: Optional[List[Any]] = None) -> pd.DataFrame:
+    """Read-only query that raises DataUnavailableError instead of returning an empty frame."""
+    with _DB_LOCK:
+        try:
+            con = connect(read_only=True)
+        except Exception as e:
+            raise DataUnavailableError(f"Database unavailable: {e}") from e
+        try:
+            return con.execute(query, params or []).df()
+        except Exception as e:
+            raise DataUnavailableError(str(e)) from e
+        finally:
+            con.close()
+
+
 def init_database() -> None:
     """Initialize metadata and audit tables in DuckDB."""
     with _DB_LOCK:
-        con = duckdb.connect(get_db_path())
+        con = connect()
         try:
             # Metadata table for Bronze ingestion runs
             con.execute("""
@@ -105,7 +143,7 @@ def init_database() -> None:
 def execute_query(query: str, params: Optional[List[Any]] = None) -> None:
     """Execute a query without expecting a return dataframe."""
     with _DB_LOCK:
-        con = duckdb.connect(get_db_path())
+        con = connect()
         try:
             if params:
                 con.execute(query, params)
@@ -118,7 +156,7 @@ def execute_query(query: str, params: Optional[List[Any]] = None) -> None:
 def query_df(query: str, params: Optional[List[Any]] = None) -> pd.DataFrame:
     """Execute a query and return result as a pandas DataFrame."""
     with _DB_LOCK:
-        con = duckdb.connect(get_db_path())
+        con = connect()
         try:
             if params:
                 return con.execute(query, params).df()
@@ -133,7 +171,7 @@ def query_df(query: str, params: Optional[List[Any]] = None) -> pd.DataFrame:
 def table_exists(table_name: str) -> bool:
     """Check if a table or view exists in DuckDB."""
     with _DB_LOCK:
-        con = duckdb.connect(get_db_path())
+        con = connect()
         try:
             res = con.execute(
                 "SELECT COUNT(*) FROM information_schema.tables WHERE table_name = ?",
@@ -151,7 +189,7 @@ def get_table_row_count(table_name: str) -> int:
     if not table_exists(table_name):
         return 0
     with _DB_LOCK:
-        con = duckdb.connect(get_db_path())
+        con = connect()
         try:
             res = con.execute(f"SELECT COUNT(*) FROM {table_name}").fetchone()
             return int(res[0]) if res else 0
@@ -166,7 +204,7 @@ def save_df_to_table(table_name: str, df: pd.DataFrame, overwrite: bool = True) 
     if df.empty:
         return
     with _DB_LOCK:
-        con = duckdb.connect(get_db_path())
+        con = connect()
         try:
             con.register("temp_df_view", df)
             if overwrite:

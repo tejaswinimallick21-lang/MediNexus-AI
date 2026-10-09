@@ -1,0 +1,32 @@
+import type { ReactNode } from "react";
+import { Route, Routes } from "react-router-dom";
+
+import { AppShell } from "./components/AppShell";
+import { RequireAuth } from "./components/RequireAuth";
+import { EmptyState } from "./components/StateViews";
+import { LoginPage } from "./pages/LoginPage";
+import { NotMigratedPage } from "./pages/NotMigratedPage";
+import { WelcomePage } from "./pages/WelcomePage";
+import { CONSOLE_ROUTES } from "./routes";
+
+/** Migrated console pages register here (path → element). */
+const CONSOLE_PAGES: Record<string, ReactNode> = {};
+
+export function App() {
+  return (
+    <Routes>
+      <Route element={<AppShell />}>
+        <Route index element={<WelcomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        {CONSOLE_ROUTES.map((route) => (
+          <Route
+            key={route.path}
+            path={`${route.path}/*`}
+            element={<RequireAuth route={route.path}>{CONSOLE_PAGES[route.path] ?? <NotMigratedPage route={route} />}</RequireAuth>}
+          />
+        ))}
+        <Route path="*" element={<EmptyState title="Page not found" hint="Use the sidebar to open a console." />} />
+      </Route>
+    </Routes>
+  );
+}

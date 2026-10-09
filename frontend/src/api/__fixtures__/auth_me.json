@@ -1,0 +1,11 @@
+{
+  "email": "receptionist@medinexus.org",
+  "name": "Receptionist",
+  "role": "hcp",
+  "persona": "Receptionist",
+  "department": "Outpatient Registration & Care Flow",
+  "allowed_routes": [
+    "/reception"
+  ],
+  "default_route": "/reception"
+}

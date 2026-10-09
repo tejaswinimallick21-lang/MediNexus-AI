@@ -15,11 +15,10 @@ BASE_PATH = Path(__file__).resolve().parent
 if str(BASE_PATH) not in sys.path:
     sys.path.insert(0, str(BASE_PATH))
 
-from config.settings import APP_NAME, APP_TAGLINE, APP_VERSION, DEMO_USERS, ACTIVE_LLM_PROVIDER
 from config.roles import ROLE_PERMISSIONS
 from src.security.rbac import check_page_access, get_allowed_pages
 from src.security.audit import log_audit_event
-from src.utils.database import query_df, table_exists
+from backend.app.services.system import get_system_status
 
 # Import page renderers
 from pages.welcome import render_welcome_page
@@ -178,33 +177,6 @@ if "current_page" not in st.session_state:
     st.session_state["current_page"] = "welcome"
 
 
-def switch_user_persona(username_key):
-    """Helper to switch persona and route to their default page."""
-    user_profile = DEMO_USERS.get(username_key)
-    if user_profile:
-        st.session_state["authenticated"] = True
-        st.session_state["user"] = user_profile
-        st.session_state["username"] = user_profile["username"]
-        st.session_state["name"] = user_profile["name"]
-        st.session_state["role"] = user_profile["role"]
-        st.session_state["department"] = user_profile["department"]
-
-        log_audit_event(
-            username=user_profile["username"],
-            role=user_profile["role"],
-            action="ROLE_SWITCH",
-            resource="SYSTEM_AUTH",
-            status="SUCCESS",
-            details=f"Switched role to {user_profile['role']}",
-        )
-
-        role_meta = ROLE_PERMISSIONS.get(user_profile["role"], {})
-        st.session_state["current_page"] = role_meta.get("default_page", "welcome")
-        if username_key == "data_engineer" or user_profile.get("role") == "Data Engineer":
-            st.session_state["pipeline_completed"] = False
-        st.rerun()
-
-
 # 4. Sidebar Branding & Navigation
 with st.sidebar:
     st.markdown("""
@@ -257,24 +229,8 @@ with st.sidebar:
                     st.session_state["current_page"] = p_key
                     st.rerun()
 
-        # Quick Switch Persona in Sidebar (Data Engineer FIRST, NO personal names)
+        # Switching persona = sign out and sign in as another seeded user (no password-less switcher)
         st.markdown("---")
-        st.markdown("<p style='color: #38BDF8 !important; font-size: 0.78rem; font-weight: 800; margin-bottom: 4px; letter-spacing: 0.8px;'>🔄 SWITCH DEMO ROLE</p>", unsafe_allow_html=True)
-        role_map = {
-            "⚙️ Data Engineer": "data_engineer",
-            "🩺 Doctor": "dr_chen",
-            "🏢 Hospital Administrator": "admin_holloway",
-            "💊 Pharmacist": "pharmacist_patel",
-            "🔬 Laboratory Specialist": "lab_tech_kim",
-            "📋 Receptionist": "receptionist_davis",
-            "🛡️ IT Administrator": "it_admin_torvalds",
-        }
-        options_list = ["(Select to switch role...)"] + list(role_map.keys())
-        sw_role = st.selectbox("Role Switcher:", options=options_list, index=0, label_visibility="collapsed")
-        if sw_role in role_map:
-            switch_user_persona(role_map[sw_role])
-
-        st.markdown("<br>", unsafe_allow_html=True)
         if st.button("🚪 Sign Out", use_container_width=True):
             log_audit_event(
                 username=st.session_state.get("username", "user"),
@@ -310,8 +266,8 @@ with st.sidebar:
 
     # System Status Indicator
     st.markdown("<br>", unsafe_allow_html=True)
-    gold_ready = table_exists("gold_patient_360")
-    ml_ready = table_exists("model_registry")
+    status = get_system_status()
+    gold_ready, ml_ready, ACTIVE_LLM_PROVIDER, APP_VERSION = status.gold_ready, status.ml_ready, status.llm_provider, status.version
 
     st.markdown(f"""
         <div style="background: #1E293B; border-radius: 8px; padding: 12px; font-size: 0.8rem; border: 1px solid #475569; color: #FFFFFF !important;">

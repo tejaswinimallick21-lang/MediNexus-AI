@@ -173,19 +173,21 @@ Built-in synthetic institutional documents located in `documents/`:
 ---
 
 ## 11. Role-Based Access Control (RBAC) & Audit Trail
-Seven preconfigured healthcare personas:
-| Persona | User ID | Role | Accessible Layers | Primary Console |
-| :--- | :--- | :--- | :--- | :--- |
-| **Elena Rostova** | `data_engineer` | Lead Data & Analytics Engineer | Raw, Bronze, Silver, Gold | Data Engineering Console |
-| **Dr. Sarah Chen, MD** | `dr_chen` | Attending Physician (Doctor) | Gold Clinical | Clinical Decision Support |
-| **Rajesh Patel, PharmD**| `pharmacist_patel` | Chief Clinical Pharmacist | Gold Pharmacy | Pharmacy & Supply Chain |
-| **Marcus Kim, MLS** | `lab_tech_kim` | Laboratory Operations Specialist | Gold Laboratory | Diagnostic Laboratory |
-| **Claire Davis** | `receptionist_davis` | Outpatient Receptionist | Gold Appointments | Outpatient Reception Flow |
-| **Arthur Holloway, MHA**| `admin_holloway` | Hospital Administrator | Gold Operations | Executive Dashboard |
-| **Linus Sterling** | `it_admin_torvalds`| IT Security & Infrastructure Admin | Metadata & Gold Tables | Enterprise IT & Security |
+Sign-in is **email + password** (bcrypt) with a **JWT in an httpOnly cookie**, shared by both UIs through `backend/app/services/auth.py`. Each user has one of three auth roles plus a persona; a console opens only when both allow it (`backend/app/core/access.py`, derived from `config/roles.py`).
 
-* Default demo password for all accounts: `MediNexus@2026`
-* **Enterprise Audit Log**: Every login, search query, patient access, model inference, and pipeline execution is logged in the DuckDB `audit_logs` table and written to `logs/audit.log`.
+| Persona | Email | Auth role | Consoles |
+| :--- | :--- | :--- | :--- |
+| Data Engineer | `data.engineer@medinexus.org` | admin | Data Engineering, IT & Security |
+| IT Administrator | `it.admin@medinexus.org` | admin | IT & Security, Data Engineering |
+| Doctor | `doctor@medinexus.org` | hcp | Doctor |
+| Pharmacist | `pharmacist@medinexus.org` | hcp | Pharmacy |
+| Laboratory Specialist | `lab@medinexus.org` | hcp | Laboratory |
+| Receptionist | `receptionist@medinexus.org` | hcp | Reception (no clinical data) |
+| Hospital Administrator | `admin@medinexus.org` | analyst | Executive |
+
+* Users come from the **.gitignored** `backend/seed_users.json`, created from the committed template by `npm run seed` (dev password `MediNexus@2026`; pass `--password` for anything shared).
+* Self sign-up and the password-less sidebar role switcher were removed; switch persona by signing out and in.
+* **Enterprise Audit Log**: every login (and failed login), denied access, patient access, model inference, and pipeline execution is logged in the DuckDB `audit_logs` table and written to `logs/audit.log`.
 
 ---
 
@@ -246,6 +248,24 @@ Open your browser to `http://localhost:8501`.
 
 ---
 
+### Step 6: Run the React Frontend + FastAPI Backend (migration in progress)
+The Streamlit app is being replaced page by page by a React frontend (`frontend/`, Vite + TypeScript) talking to a FastAPI backend (`backend/`). Both UIs call the same `backend/app/services`, so numbers match. Progress and parity notes: `docs/MIGRATION.md`.
+
+```bash
+pip install fastapi uvicorn pyjwt bcrypt python-multipart   # backend deps (also in requirements.txt)
+npm install && npm --prefix frontend install                 # once
+npm run seed                                                 # once: writes backend/seed_users.json
+npm run backend      # FastAPI on http://localhost:8000 (docs at /docs)
+npm run frontend     # React on http://localhost:5173 (proxies /api to the backend)
+npm run dev          # both together
+npm test             # pytest (backend + parity) and Vitest (frontend contracts)
+```
+Optional environment: `MEDINEXUS_JWT_SECRET` (otherwise a per-process dev key is used and sessions reset on restart), `MEDINEXUS_ENV=production` (disables the dev-only CORS origin), `MEDINEXUS_COOKIE_SECURE=true` behind HTTPS, `frontend/.env` → `VITE_API_BASE` (defaults to `/api`).
+
+> DuckDB allows one writing process at a time. Streamlit and FastAPI share `database/healthcare.duckdb`; connections retry for up to 15 s on a lock. Run the pipeline from one UI at a time.
+
+---
+
 ## 14. Project Directory Structure
 ```
 MediNexus_AI/
@@ -303,6 +323,3 @@ MediNexus_AI/
 
 ## 15. Regulatory Notice & Healthcare Disclaimer
 > **IMPORTANT NOTICE:** MediNexus AI is a demonstration decision-support intelligence platform utilizing synthetically generated healthcare data. It is developed strictly for research, educational, and workflow evaluation purposes. It does not provide medical diagnoses, treatment plans, or autonomous prescribing authority. All clinical decision-making must be performed by certified, licensed healthcare professionals.
-#   M e d i N e x u s - A I 
- 
- 
