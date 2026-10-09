@@ -1,0 +1,29 @@
+[
+  {
+    "key": "medicare",
+    "name": "Nexa Care",
+    "tagline": "Clinical assistant grounded in Patient 360, risk models and care guidelines",
+    "prompts": [
+      "Show me the highest-risk patients",
+      "Summarize patient P_04436",
+      "What does the heart failure follow-up guideline say?"
+    ],
+    "routes": [
+      "/doctor"
+    ]
+  },
+  {
+    "key": "pharmalab",
+    "name": "Nexa Care \u00b7 Lab & Pharmacy",
+    "tagline": "Laboratory and formulary data plus lab safety and cold-chain policy",
+    "prompts": [
+      "Which medicines require immediate replenishment?",
+      "Which laboratory alerts need escalation?",
+      "What are the temperature standards for refrigerated medications?"
+    ],
+    "routes": [
+      "/pharmacy",
+      "/laboratory"
+    ]
+  }
+]

@@ -2,7 +2,6 @@ import { executiveApi } from "../api/operations";
 import type { ModelScore } from "../api/schemas/operations";
 import { BarLineChart, RankedBars } from "../components/Charts";
 import { Badge } from "../components/Controls";
-import { CopilotPanel } from "../components/CopilotPanel";
 import { DataTable, type Column } from "../components/DataTable";
 import { ForecastNote } from "../components/ForecastNote";
 import { KpiGrid } from "../components/Kpi";
@@ -151,12 +150,6 @@ export function ExecutivePage() {
         </Panel>
       </div>
 
-      <CopilotPanel
-          agent="healthanalyst"
-          name="Nexa Insight"
-          tagline="Executive analytics assistant grounded in Gold marts and hospital policy"
-          prompts={["Why did readmissions increase across inpatient wards?", "Provide bed capacity and surge forecast", "What are the inpatient discharge guidelines?"]}
-        />
     </div>
   );
 }

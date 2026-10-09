@@ -33,6 +33,14 @@ def test_model_registry_lifecycle():
         filename="test_dummy.joblib",
     )
 
-    loaded = load_model("test_dummy_model")
-    assert loaded is not None
-    assert loaded["weights"] == [0.1, 0.5, 0.9]
+    try:
+        loaded = load_model("test_dummy_model")
+        assert loaded is not None
+        assert loaded["weights"] == [0.1, 0.5, 0.9]
+    finally:
+        # Leave the dev registry as we found it
+        from pathlib import Path
+        from src.utils.database import execute_query
+
+        execute_query("DELETE FROM model_registry WHERE model_name = 'test_dummy_model'")
+        Path(path).unlink(missing_ok=True)

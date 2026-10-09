@@ -11,6 +11,7 @@ and the websocket-client package. Signs in through the API so protected routes r
 import argparse
 import base64
 import json
+import re
 import os
 import shutil
 import subprocess
@@ -80,6 +81,7 @@ def main() -> None:
     parser.add_argument("--full", action="store_true", help="Capture the full scroll height")
     parser.add_argument("--wait", type=float, default=3.5)
     parser.add_argument("--prefix", default="")
+    parser.add_argument("--click", help="CSS selector to click after each page loads (e.g. to open a panel)")
     args = parser.parse_args()
 
     out = Path(args.out)
@@ -110,6 +112,9 @@ def main() -> None:
         for path in args.paths:
             cdp.call("Page.navigate", url=f"{args.base}{path}")
             time.sleep(args.wait)
+            if args.click:
+                cdp.call("Runtime.evaluate", expression=f"document.querySelector({json.dumps(args.click)})?.click()")
+                time.sleep(args.wait)
             params = {"format": "png"}
             if args.full:
                 metrics = cdp.call("Page.getLayoutMetrics")
@@ -117,7 +122,7 @@ def main() -> None:
                 cdp.call("Emulation.setDeviceMetricsOverride", width=args.width, height=h, deviceScaleFactor=1, mobile=False)
                 time.sleep(1.0)
             data = cdp.call("Page.captureScreenshot", **params)["data"]
-            name = args.prefix + ("home" if path == "/" else path.strip("/").replace("/", "_")) + ".png"
+            name = args.prefix + ("home" if path == "/" else re.sub(r"[/?=&]+", "_", path.strip("/"))) + ".png"
             (out / name).write_bytes(base64.b64decode(data))
             print(f"saved {out / name}")
             if args.full:

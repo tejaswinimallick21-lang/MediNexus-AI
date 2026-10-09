@@ -52,3 +52,17 @@ export function formatMonth(value: string): string {
   const m = /^(\d{4})-(\d{2})/.exec(value);
   return m ? `${MONTHS[Number(m[2]) - 1]} ${m[1]}` : value;
 }
+
+const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
+const usdCompact = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 });
+
+/** 195514 → "195.5K" (chart axes and tight tiles). */
+export function formatCompact(value: number | null | undefined): string {
+  return isNum(value) ? compact.format(value) : "—";
+}
+
+/** 12534916073 → "$12.5B"; amounts under $100K keep whole-dollar precision. */
+export function formatUSDCompact(value: number | null | undefined): string {
+  if (!isNum(value)) return "—";
+  return Math.abs(value) < 100_000 ? usdWhole.format(value) : usdCompact.format(value);
+}

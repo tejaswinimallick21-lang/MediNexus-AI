@@ -342,3 +342,7 @@
     display: none;
   }
 }
+
+.nav .sectionLabel {
+  margin: var(--space-4) 0 var(--space-1);
+}

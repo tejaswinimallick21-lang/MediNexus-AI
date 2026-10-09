@@ -39,6 +39,19 @@ import {
   PatientPageSchema,
   PatientRiskSchema,
 } from "./schemas/clinical";
+import {
+  HospitalOptionListSchema,
+  ModelMonitorListSchema,
+  ReadmissionEconomicsSchema,
+  WhatIfResultSchema,
+} from "./schemas/command";
+import {
+  AssistantAgentListSchema,
+  AssistantExchangeSchema,
+  AssistantMessageListSchema,
+  AssistantSessionPageSchema,
+  AssistantSessionSchema,
+} from "./schemas/assistant";
 
 /**
  * Golden fixture name (written by the backend pytest contract tests into __fixtures__/)
@@ -81,4 +94,13 @@ export const fixtureSchemas: Record<string, ZodTypeAny> = {
   patient_labs: LabPageSchema,
   patient_medications: MedicationPageSchema,
   patient_encounters: EncounterListSchema,
+  command_hospitals: HospitalOptionListSchema,
+  command_what_if: WhatIfResultSchema,
+  command_readmission_economics: ReadmissionEconomicsSchema,
+  command_models: ModelMonitorListSchema,
+  assistant_agents: AssistantAgentListSchema,
+  assistant_session: AssistantSessionSchema,
+  assistant_sessions: AssistantSessionPageSchema,
+  assistant_messages: AssistantMessageListSchema,
+  assistant_exchange: AssistantExchangeSchema,
 };

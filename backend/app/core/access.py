@@ -3,7 +3,7 @@ Access policy: three roles, one account each.
 
     admin    Platform administrator   every workspace (oversight), plus Data Engineering and Security
     hcp      Healthcare professional  Clinical Workstation, Pharmacy, Laboratory
-    analyst  Operations analyst       Executive Operations, Patient Access
+    analyst  Operations analyst       Executive Operations, Analyst Command Center, Patient Access
 
 Both the API (per-request checks) and the React app (navigation) read this module.
 """
@@ -32,6 +32,7 @@ PAGES: Dict[str, tuple] = {
     "pharmacy": ("/pharmacy", frozenset({"hcp", "admin"})),
     "laboratory": ("/laboratory", frozenset({"hcp", "admin"})),
     "executive": ("/executive", frozenset({"analyst", "admin"})),
+    "command": ("/command-center", frozenset({"analyst", "admin"})),
     "reception": ("/reception", frozenset({"analyst", "admin"})),
 }
 
@@ -52,7 +53,7 @@ def allowed_routes(role: str) -> List[str]:
     return [route for route, roles in PAGES.values() if role in roles]
 
 
-DEFAULT_ROUTES = {"admin": "/data", "hcp": "/doctor", "analyst": "/executive"}
+DEFAULT_ROUTES = {"admin": "/", "hcp": "/doctor", "analyst": "/executive"}  # admin lands on Platform Overview
 
 
 def default_route(role: str) -> str:

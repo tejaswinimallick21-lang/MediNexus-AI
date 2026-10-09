@@ -5,6 +5,7 @@ import { systemApi } from "../api/auth";
 import { useApi } from "../hooks/useApi";
 import { useAuth } from "../hooks/useAuth";
 import { CONSOLE_ROUTES } from "../routes";
+import { AssistantDock } from "./AssistantDock";
 import { Icon } from "./Icons";
 import styles from "./AppShell.module.css";
 
@@ -53,8 +54,17 @@ export function AppShell() {
 
         {user ? (
           <>
-            <div className={styles.sectionLabel}>Workspaces</div>
             <nav className={styles.nav} aria-label="Consoles">
+              <NavLink to="/" end className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ""}`}>
+                {({ isActive }) => (
+                  <>
+                    {isActive && <motion.span layoutId="nav-active" className={styles.activeBg} transition={{ type: "spring", stiffness: 400, damping: 34 }} />}
+                    <Icon.Home size={18} />
+                    <span>Platform Overview</span>
+                  </>
+                )}
+              </NavLink>
+              <div className={styles.sectionLabel}>Workspaces</div>
               {routes.map((r) => {
                 const Glyph = Icon[r.icon];
                 return (
@@ -69,15 +79,6 @@ export function AppShell() {
                   </NavLink>
                 );
               })}
-              <NavLink to="/" end className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ""}`}>
-                {({ isActive }) => (
-                  <>
-                    {isActive && <motion.span layoutId="nav-active" className={styles.activeBg} transition={{ type: "spring", stiffness: 400, damping: 34 }} />}
-                    <Icon.Home size={18} />
-                    <span>Platform Overview</span>
-                  </>
-                )}
-              </NavLink>
             </nav>
           </>
         ) : (
@@ -151,6 +152,7 @@ export function AppShell() {
           </AnimatePresence>
         </main>
       </div>
+      {user && <AssistantDock />}
     </div>
   );
 }

@@ -1,0 +1,21 @@
+{
+  "period_start": "2019-05-26",
+  "period_end": "2020-05-24",
+  "discharges": 3367,
+  "unplanned_readmissions": 31,
+  "readmission_rate_pct": 0.92,
+  "avg_cost_per_stay": 15191.81,
+  "avg_los_days": 8.7,
+  "model_roc_auc": 0.7953,
+  "model_flag_share_pct": 10.0,
+  "model_capture_pct": 34.6,
+  "model_precision_pct": 5.1,
+  "model_test_positives": 26,
+  "default_effectiveness_pct": 20.0,
+  "default_cost_per_enrolled": 150.0,
+  "notes": [
+    "Cost of a readmission stay is the average billed amount per inpatient stay in the same 12 months.",
+    "Model capture and flag rates are held-out estimates from only 26 readmissions, so they carry wide uncertainty.",
+    "Programme effectiveness and cost per enrolled patient are planning assumptions; adjust them to your programme."
+  ]
+}

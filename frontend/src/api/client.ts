@@ -28,7 +28,7 @@ export function buildQuery(params?: Query): string {
 }
 
 interface RequestOptions {
-  method?: "GET" | "POST" | "DELETE";
+  method?: "GET" | "POST" | "PATCH" | "DELETE";
   query?: Query;
   body?: unknown;
   signal?: AbortSignal;

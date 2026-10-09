@@ -22,6 +22,7 @@
         "/pharmacy",
         "/laboratory",
         "/executive",
+        "/command-center",
         "/reception"
       ]
     },
@@ -41,6 +42,7 @@
       "description": "Enterprise performance: occupancy, readmissions, revenue, capacity planning and outpatient patient access.",
       "routes": [
         "/executive",
+        "/command-center",
         "/reception"
       ]
     }

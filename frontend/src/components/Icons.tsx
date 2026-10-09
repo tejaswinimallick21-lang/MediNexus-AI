@@ -139,6 +139,62 @@ export const Icon = {
       <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z" />
     </Svg>
   ),
+  Radar: (p: IconProps) => (
+    <Svg {...p}>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="5" />
+      <path d="M12 12l6-6M12 3v2M21 12h-2" />
+    </Svg>
+  ),
+  Chat: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M20 12.5a7.5 7.5 0 01-11.1 6.6L4 20.5l1.4-4.5A7.5 7.5 0 1120 12.5z" />
+      <path d="M9 11h6M9 14h4" />
+    </Svg>
+  ),
+  Plus: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M12 5v14M5 12h14" />
+    </Svg>
+  ),
+  Trash: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10.5 11v5M13.5 11v5" />
+    </Svg>
+  ),
+  Close: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M6 6l12 12M18 6L6 18" />
+    </Svg>
+  ),
+  Expand: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7" />
+    </Svg>
+  ),
+  Collapse: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M4 14h6v6M20 10h-6V4M10 14l-7 7M14 10l7-7" />
+    </Svg>
+  ),
+  Sidebar: (p: IconProps) => (
+    <Svg {...p}>
+      <rect x="3.5" y="4.5" width="17" height="15" rx="2" />
+      <path d="M9.5 4.5v15" />
+    </Svg>
+  ),
+  Pencil: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M4 20l1-4.5L16 4.5l3.5 3.5L8.5 19z M13.5 7l3.5 3.5" />
+    </Svg>
+  ),
+  Sliders: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M4 7h10M18 7h2M4 17h4M12 17h8" />
+      <circle cx="16" cy="7" r="2" />
+      <circle cx="10" cy="17" r="2" />
+    </Svg>
+  ),
 };
 
 export type IconName = keyof typeof Icon;

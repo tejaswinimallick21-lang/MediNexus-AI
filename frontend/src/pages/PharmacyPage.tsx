@@ -4,7 +4,6 @@ import { ApiError } from "../api/client";
 import { pharmacyApi } from "../api/operations";
 import type { StockLine } from "../api/schemas/operations";
 import { Badge, Button, FieldRow, SelectField } from "../components/Controls";
-import { CopilotPanel } from "../components/CopilotPanel";
 import { DataTable, type Column } from "../components/DataTable";
 import { ForecastNote } from "../components/ForecastNote";
 import { KpiGrid } from "../components/Kpi";
@@ -174,15 +173,6 @@ export function PharmacyPage() {
             <SkeletonText lines={8} />
           )}
         </Panel>
-        <CopilotPanel
-          agent="pharmalab"
-          name="Nexa Care · Pharmacy"
-          tagline="Formulary, stock and cold-chain policy assistant"
-          prompts={["Which medicines require immediate replenishment?", "What are the temperature standards for refrigerated medications?", "What is our inventory reorder policy?"]}
-        />
-      </Grid>
-
-      <Grid>
       <Panel
         title="Demand outlook by drug class"
         subtitle={outlook.data ? `Network units / day, next 7 days · as of ${formatDate(outlook.data.as_of)}` : "Network units / day, next 7 days"}
@@ -210,6 +200,8 @@ export function PharmacyPage() {
           </>
         )}
       </Panel>
+      </Grid>
+
       <Panel title="Risk by therapeutic category" subtitle="High-risk stock lines first" icon="Alert">
           {riskByCat.error ? (
             <ErrorState error={riskByCat.error} onRetry={riskByCat.reload} />
@@ -234,7 +226,6 @@ export function PharmacyPage() {
             <SkeletonText lines={8} />
           )}
         </Panel>
-      </Grid>
     </div>
   );
 }

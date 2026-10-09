@@ -14,7 +14,7 @@ import {
   type TooltipProps,
 } from "recharts";
 
-import { formatNumber } from "../lib/format";
+import { formatCompact, formatNumber } from "../lib/format";
 import styles from "./Charts.module.css";
 
 export const SERIES = ["#0284c7", "#14b8a6", "#f59e0b", "#ef4444", "#6366f1", "#94a3b8"];
@@ -140,7 +140,7 @@ export function AreaTrend<T extends Record<string, unknown>>({
         </defs>
         <CartesianGrid vertical={false} stroke="var(--chart-grid)" />
         <XAxis dataKey={x} tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: "#5b6b82" }} tickFormatter={xFormatter} minTickGap={24} />
-        <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: "#5b6b82" }} tickFormatter={(v) => formatNumber(v)} />
+        <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: "#5b6b82" }} tickFormatter={(v) => formatCompact(v)} />
         <Tooltip content={<ChartTooltip />} />
         {series.map((s, i) => (
           <Area key={s.key} dataKey={s.key} name={s.name} type="monotone" stroke={SERIES[i]} strokeWidth={2.2} fill={`url(#area-${i})`} animationDuration={1100} />

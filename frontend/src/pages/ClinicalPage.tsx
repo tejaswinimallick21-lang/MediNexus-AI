@@ -5,7 +5,6 @@ import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { clinicalApi, patientApi } from "../api/clinical";
 import type { PatientSummary } from "../api/schemas/clinical";
 import { Badge, Button, FieldRow, SelectField } from "../components/Controls";
-import { CopilotPanel } from "../components/CopilotPanel";
 import { DataTable, type Column } from "../components/DataTable";
 import { Icon } from "../components/Icons";
 import { KpiGrid } from "../components/Kpi";
@@ -184,7 +183,6 @@ function ClinicalHome() {
         </Panel>
       </Grid>
 
-      <Grid>
         <Panel
           title="Patient finder"
           subtitle="Search by name or patient ID"
@@ -232,13 +230,6 @@ function ClinicalHome() {
             }
           />
         </Panel>
-        <CopilotPanel
-          agent="medicare"
-          name="Nexa Care"
-          tagline="Clinical assistant grounded in Patient 360, risk models and care guidelines"
-          prompts={["Show me the highest-risk patients", "Summarize patient P_04436", "What does the heart failure follow-up guideline say?"]}
-        />
-      </Grid>
     </div>
   );
 }

@@ -4,7 +4,6 @@ import { labApi } from "../api/operations";
 import type { CriticalAlert } from "../api/schemas/operations";
 import { AreaTrend, RankedBars } from "../components/Charts";
 import { Badge, Button, SelectField } from "../components/Controls";
-import { CopilotPanel } from "../components/CopilotPanel";
 import { DataTable, type Column } from "../components/DataTable";
 import { ForecastNote } from "../components/ForecastNote";
 import { KpiGrid } from "../components/Kpi";
@@ -102,7 +101,6 @@ export function LaboratoryPage() {
         </Panel>
       </Grid>
 
-      <Grid>
         <Panel
           title="Capacity planner"
           subtitle="Next 7 days vs estimated bench capacity"
@@ -143,13 +141,6 @@ export function LaboratoryPage() {
           )}
         </Panel>
 
-        <CopilotPanel
-          agent="pharmalab"
-          name="Nexa Care · Lab & Pharmacy"
-          tagline="Grounded in laboratory and formulary data plus lab safety policies"
-          prompts={["Which laboratory alerts need escalation?", "What are the sample handling requirements?", "Which medicines require immediate replenishment?"]}
-        />
-      </Grid>
 
       <Panel title="Critical value escalation feed" subtitle="Most recent first · POL-LAB-001 requires verbal physician notification" icon="Alert">
         <DataTable

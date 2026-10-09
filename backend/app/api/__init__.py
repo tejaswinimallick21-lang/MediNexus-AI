@@ -1,6 +1,6 @@
 """API routers."""
 
-from backend.app.api import auth, clinical, jobs, operations, reception, system
+from backend.app.api import assistant, auth, clinical, command, jobs, operations, reception, system
 
 routers = [
     auth.router,
@@ -13,4 +13,6 @@ routers = [
     operations.agents_router,
     clinical.clinical_router,
     clinical.patients_router,
+    command.router,
+    assistant.router,
 ]

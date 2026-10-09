@@ -6,6 +6,7 @@
   "department": "Hospital Operations",
   "allowed_routes": [
     "/executive",
+    "/command-center",
     "/reception"
   ],
   "default_route": "/executive"

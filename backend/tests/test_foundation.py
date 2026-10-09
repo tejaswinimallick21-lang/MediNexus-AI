@@ -21,7 +21,7 @@ from backend.tests.conftest import ROLE_EMAILS, TEST_PASSWORD, assert_contract, 
 def test_login_contract_and_cookie(client):
     r = client.post("/api/auth/login", json={"email": ROLE_EMAILS["analyst"], "password": TEST_PASSWORD})
     body = assert_contract(r, UserOut, "auth_me")
-    assert body["role"] == "analyst" and body["allowed_routes"] == ["/executive", "/reception"]
+    assert body["role"] == "analyst" and body["allowed_routes"] == ["/executive", "/command-center", "/reception"]
     cookie = r.headers["set-cookie"].lower()
     assert "httponly" in cookie and "samesite=lax" in cookie
 
@@ -33,6 +33,11 @@ def test_me_requires_session(client):
 def test_me_after_login(login):
     c = login("hcp")
     assert UserOut.model_validate(c.get("/api/auth/me").json()).allowed_routes == ["/doctor", "/pharmacy", "/laboratory"]
+
+
+def test_admin_lands_on_platform_overview(login):
+    me = UserOut.model_validate(login("admin").get("/api/auth/me").json())
+    assert me.default_route == "/" and "/data" in me.allowed_routes
 
 
 def test_bad_credentials(client):
@@ -95,7 +100,7 @@ def test_admin_sees_every_workspace_and_others_only_their_own():
 
     assert allowed_routes("admin") == [route for route, _ in PAGES.values()]
     assert set(allowed_routes("hcp")) == {"/doctor", "/pharmacy", "/laboratory"}
-    assert set(allowed_routes("analyst")) == {"/executive", "/reception"}
+    assert set(allowed_routes("analyst")) == {"/executive", "/command-center", "/reception"}
 
 
 # ---- pagination ------------------------------------------------------------------------------

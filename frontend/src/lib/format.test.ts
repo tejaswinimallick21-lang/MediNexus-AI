@@ -1,4 +1,4 @@
-import { formatDate, formatMonth, formatNumber, formatPercent, formatUSD } from "./format";
+import { formatCompact, formatDate, formatMonth, formatNumber, formatPercent, formatUSD, formatUSDCompact } from "./format";
 
 describe("format", () => {
   it("groups numbers US-style", () => {
@@ -23,5 +23,17 @@ describe("format", () => {
     expect(formatDate("2020-01-05T23:30:00")).toBe("05 Jan 2020");
     expect(formatDate("")).toBe("—");
     expect(formatMonth("2020-03")).toBe("Mar 2020");
+  });
+});
+
+describe("compact formatting", () => {
+  it("abbreviates large values", () => {
+    expect(formatCompact(195514)).toBe("195.5K");
+    expect(formatUSDCompact(12_534_916_073)).toBe("$12.5B");
+    expect(formatUSDCompact(-69_695_406)).toBe("-$69.7M");
+  });
+  it("keeps small amounts exact", () => {
+    expect(formatUSDCompact(15_192)).toBe("$15,192");
+    expect(formatCompact(null)).toBe("—");
   });
 });
