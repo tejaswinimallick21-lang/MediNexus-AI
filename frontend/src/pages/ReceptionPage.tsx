@@ -69,6 +69,11 @@ export function ReceptionPage() {
         <strong>Minimum necessary (POL-HOSP-003).</strong> Operations analysts see pseudonymous patient references only: names,
         contact details, diagnoses and visit reasons are withheld. The log shows the non-clinical visit type.
       </Notice>
+      <Notice tone="info">
+        <strong>Where these numbers come from.</strong> Completed visits are the outpatient, ambulatory and wellness encounters in the Synthea
+        data. Synthea does not record missed appointments or waiting times, so <strong>no-shows, cancellations and waiting times are simulated</strong>{" "}
+        (about 12% extra missed visits and a typical 18-minute wait). Treat those rates as illustrative assumptions, not measurements.
+      </Notice>
 
       <KpiGrid
         loading={kpis.loading}
