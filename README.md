@@ -7,6 +7,8 @@
 
 ---
 
+> **New machine?** Follow [docs/SETUP.md](docs/SETUP.md): clone, add your keys to `.env`, download the Synthea export, then `python scripts/bootstrap.py` and `npm run dev`.
+
 ## 1. Project Overview
 **MediNexus AI** is a role-aware clinical and operational decision intelligence platform. It ingests fragmented, heterogeneous healthcare data, runs it through an automated, quality-audited **Medallion Architecture (Bronze ➔ Silver ➔ Gold)**, trains predictive machine learning models, applies prescriptive clinical and operational rules, and serves role-tailored decision consoles to seven distinct healthcare stakeholders.
 
