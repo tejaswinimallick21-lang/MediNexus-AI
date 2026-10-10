@@ -18,7 +18,7 @@
     "Tool get_network_kpis"
   ],
   "notes": "",
-  "latency_ms": 121.6,
+  "latency_ms": 125.7,
   "engine": "Rules engine (no LLM key)",
   "tool_calls": [
     {

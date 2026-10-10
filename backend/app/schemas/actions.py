@@ -33,3 +33,23 @@ class ActionInbox(BaseModel):
 
 class DecisionIn(BaseModel):
     note: Optional[str] = Field(None, max_length=500)
+
+
+class SweepRun(BaseModel):
+    run_id: str
+    trigger: str
+    started_at: str
+    finished_at: Optional[str] = None
+    status: str
+    found: int
+    proposed: int
+    ai_used: bool
+    by_kind: Dict[str, int] = {}
+    error: Optional[str] = None
+
+
+class SweepStatus(BaseModel):
+    schedule: str
+    next_run_at: str
+    running_job_id: Optional[str] = None
+    runs: List[SweepRun]

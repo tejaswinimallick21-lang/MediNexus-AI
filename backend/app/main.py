@@ -5,6 +5,7 @@ Run from the project root:  python -m uvicorn backend.app.main:app --reload --po
 """
 
 import logging
+import threading
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -23,7 +24,12 @@ async def lifespan(_: FastAPI):
     load_users()  # fail fast with a clear message when the seed file is missing
     if settings.jwt_secret_is_ephemeral:
         logger.warning("MEDINEXUS_JWT_SECRET not set: using a per-process signing key (sessions reset on restart).")
+    from backend.app.agents.sweep import start_scheduler
+
+    stop = threading.Event()
+    start_scheduler(stop)  # daily Nexa morning sweep (NEXA_SWEEP_ENABLED=0 turns it off)
     yield
+    stop.set()
 
 
 def create_app() -> FastAPI:

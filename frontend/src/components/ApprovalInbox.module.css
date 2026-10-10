@@ -155,3 +155,35 @@
   color: var(--color-danger-text);
   font-size: var(--text-sm);
 }
+
+.sweep {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-4) var(--space-5) 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(120deg, rgba(20, 184, 166, 0.12), rgba(2, 132, 199, 0.06));
+  border: 1px solid rgba(20, 184, 166, 0.35);
+}
+
+.sweep div {
+  display: grid;
+  gap: 2px;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.sweep strong {
+  font-size: var(--text-sm);
+  color: var(--color-ink);
+}
+
+.sweepTag {
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(20, 184, 166, 0.15);
+  color: var(--color-primary-strong);
+  font-weight: var(--weight-semibold);
+}

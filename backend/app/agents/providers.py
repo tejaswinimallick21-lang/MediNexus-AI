@@ -136,3 +136,33 @@ def run_openai(system: str, history: List[Tuple[str, str]], message: str, tools:
         raise ProviderError(f"OpenAI API error {e.status_code}.") from e
     except openai.APIConnectionError as e:
         raise ProviderError("Cannot reach the OpenAI API.") from e
+
+
+def complete(system: str, prompt: str, max_tokens: int = 160) -> str:
+    """One short, tool-free completion (used by the sweep to word a justification). Raises ProviderError."""
+    provider = active_provider()
+    if provider == "openai":
+        import openai
+
+        try:
+            resp = openai.OpenAI().chat.completions.create(
+                model=OPENAI_MODEL, temperature=0.1, max_tokens=max_tokens,
+                messages=[{"role": "system", "content": system}, {"role": "user", "content": prompt}],
+            )
+            return (resp.choices[0].message.content or "").strip()
+        except openai.OpenAIError as e:
+            raise ProviderError(f"OpenAI: {type(e).__name__}") from e
+    if provider == "claude":
+        import anthropic
+
+        try:
+            resp = anthropic.Anthropic().messages.create(
+                model=CLAUDE_MODEL, max_tokens=max(max_tokens, 1024), system=system, output_config={"effort": "low"},
+                messages=[{"role": "user", "content": prompt}],
+            )
+            if resp.stop_reason == "refusal":
+                raise ProviderError("The model declined.")
+            return "\n".join(b.text for b in resp.content if b.type == "text").strip()
+        except anthropic.AnthropicError as e:
+            raise ProviderError(f"Claude: {type(e).__name__}") from e
+    raise ProviderError("No LLM configured.")

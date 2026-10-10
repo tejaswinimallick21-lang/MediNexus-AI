@@ -2,7 +2,7 @@
   "pending": 1,
   "items": [
     {
-      "action_id": "eb6bd195b9404914b8d239c254b554c6",
+      "action_id": "e6d31fabdc4b41108025f0c7b1a7a0c0",
       "kind": "purchase_order",
       "kind_label": "Purchase order",
       "summary": "Purchase order: 12 units of Atenolol 50 MG / Chlorthalidone 25 MG Oral Tablet for ADAMS PHYSICAL THERAPY  LLC",
@@ -15,7 +15,7 @@
       "session_id": null,
       "requested_by": "hcp@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-10T12:48:37",
+      "created_at": "2026-10-10T13:03:31",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,

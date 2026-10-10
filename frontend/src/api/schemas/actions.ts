@@ -22,3 +22,24 @@ export type AgentAction = z.infer<typeof AgentActionSchema>;
 
 export const ActionInboxSchema = z.object({ pending: z.number(), items: z.array(AgentActionSchema) });
 export type ActionInbox = z.infer<typeof ActionInboxSchema>;
+
+export const SweepStatusSchema = z.object({
+  schedule: z.string(),
+  next_run_at: z.string(),
+  running_job_id: z.string().nullable().optional(),
+  runs: z.array(
+    z.object({
+      run_id: z.string(),
+      trigger: z.string(),
+      started_at: z.string(),
+      finished_at: z.string().nullable().optional(),
+      status: z.string(),
+      found: z.number(),
+      proposed: z.number(),
+      ai_used: z.boolean(),
+      by_kind: z.record(z.number()),
+      error: z.string().nullable().optional(),
+    }),
+  ),
+});
+export type SweepStatus = z.infer<typeof SweepStatusSchema>;

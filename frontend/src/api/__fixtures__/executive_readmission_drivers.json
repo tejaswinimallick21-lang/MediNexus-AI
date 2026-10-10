@@ -17,13 +17,13 @@
       "rate_pct": 0.7
     },
     {
-      "label": "Urgent",
-      "count": 27,
+      "label": "Unknown",
+      "count": 51,
       "rate_pct": 0.0
     },
     {
-      "label": "Unknown",
-      "count": 51,
+      "label": "Urgent",
+      "count": 27,
       "rate_pct": 0.0
     }
   ],
@@ -74,8 +74,8 @@
       "rate_pct": 0.9
     },
     {
-      "label": "Chronic pain",
-      "count": 705,
+      "label": "COVID-19",
+      "count": 2376,
       "rate_pct": 0.4
     }
   ]

@@ -17,8 +17,8 @@ from backend.app.core.users import UserRecord
 from src.security.audit import log_audit_event
 from src.utils.database import execute_query, query_df_strict
 
-KIND_PAGE = {"purchase_order": "pharmacy", "follow_up": "doctor"}
-KIND_LABEL = {"purchase_order": "Purchase order", "follow_up": "Patient follow-up"}
+KIND_PAGE = {"purchase_order": "pharmacy", "follow_up": "doctor", "lab_escalation": "doctor"}
+KIND_LABEL = {"purchase_order": "Purchase order", "follow_up": "Patient follow-up", "lab_escalation": "Critical lab escalation"}
 
 _ready = False
 
@@ -79,16 +79,9 @@ def _row(r) -> Action:
 
 
 def propose(kind: str, requested_by: UserRecord, agent: str, session_id: Optional[str], payload: Dict[str, Any], reason: str, summary: str) -> Action:
-    _ensure()
     if kind not in KIND_PAGE:
         raise ValueError(f"Unknown action kind '{kind}'.")
-    a = Action(action_id=uuid.uuid4().hex, kind=kind, summary=summary[:300], reason=(reason or "")[:1000], payload=payload, agent=agent,
-               session_id=session_id, requested_by=requested_by.email, status="pending", created_at=datetime.now().isoformat(timespec="seconds"))
-    execute_query("INSERT INTO agent_actions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL)",
-                  [a.action_id, a.kind, a.summary, a.reason, json.dumps(payload), agent, session_id, a.requested_by, a.status, datetime.now()])
-    log_audit_event(username=requested_by.email, role=requested_by.role, action="AGENT_PROPOSED_ACTION", resource=a.action_id, status="PENDING",
-                    details=f"{agent}: {a.summary}")
-    return a
+    return _propose_raw(kind, requested_by.email, requested_by.role, agent, session_id, payload, reason, summary)
 
 
 def _get(action_id: str) -> Action:
@@ -127,6 +120,11 @@ def _execute(a: Action, user: UserRecord) -> str:
 
         po = pharmacy.create_purchase_order(a.payload["inventory_id"], int(a.payload["quantity"]), user)
         return f"Purchase order {po.po_id} submitted: {po.quantity} units of {po.medication_name} (est. ${po.estimated_cost:,.2f})."
+    if a.kind == "lab_escalation":
+        task_id = uuid.uuid4().hex[:12].upper()
+        execute_query("INSERT INTO care_tasks VALUES (?, ?, 'lab_escalation', ?, ?, 'open', ?, ?, ?, ?)",
+                      [task_id, a.payload["patient_id"], a.reason, date.today(), a.action_id, a.requested_by, user.email, datetime.now()])
+        return f"Escalation task {task_id} created for {a.payload['patient_id']} ({a.payload.get('test_name', 'critical value')})."
     if a.kind == "follow_up":
         task_id = uuid.uuid4().hex[:12].upper()
         due = date.today() + timedelta(days=int(a.payload.get("due_in_days", 7)))
@@ -158,3 +156,20 @@ def decide(action_id: str, approve: bool, user: UserRecord, note: Optional[str] 
     log_audit_event(username=user.email, role=user.role, action="AGENT_ACTION_APPROVED", resource=action_id,
                     status="SUCCESS" if status == "executed" else "FAILURE", details=f"{a.summary} -> {result}")
     return _get(action_id).out(user)
+
+
+def open_keys(kind: str, field: str) -> set:
+    """Payload values of this kind that are pending or already done (so the sweep never proposes twice)."""
+    _ensure()
+    df = query_df_strict("SELECT payload FROM agent_actions WHERE kind = ? AND status IN ('pending', 'executed')", [kind])
+    return {json.loads(p).get(field) for p in df["payload"]} - {None}
+
+
+def _propose_raw(kind: str, requested_by: str, role: str, agent: str, session_id: Optional[str], payload: Dict[str, Any], reason: str, summary: str) -> Action:
+    _ensure()
+    a = Action(action_id=uuid.uuid4().hex, kind=kind, summary=summary[:300], reason=(reason or "")[:1000], payload=payload, agent=agent,
+               session_id=session_id, requested_by=requested_by, status="pending", created_at=datetime.now().isoformat(timespec="seconds"))
+    execute_query("INSERT INTO agent_actions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL)",
+                  [a.action_id, a.kind, a.summary, a.reason, json.dumps(payload), agent, session_id, requested_by, a.status, datetime.now()])
+    log_audit_event(username=requested_by, role=role, action="AGENT_PROPOSED_ACTION", resource=a.action_id, status="PENDING", details=f"{agent}: {a.summary}")
+    return a

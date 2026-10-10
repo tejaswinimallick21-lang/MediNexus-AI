@@ -52,7 +52,7 @@ import {
   AssistantSessionPageSchema,
   AssistantSessionSchema,
 } from "./schemas/assistant";
-import { ActionInboxSchema, AgentActionSchema } from "./schemas/actions";
+import { ActionInboxSchema, AgentActionSchema, SweepStatusSchema } from "./schemas/actions";
 import { LinkDiscoverySchema, UploadAcceptedSchema, UploadDetailSchema, UploadPageSchema } from "./schemas/dataPlatform";
 
 /**
@@ -114,4 +114,5 @@ export const fixtureSchemas: Record<string, ZodTypeAny> = {
   data_consolidated_insights: UploadDetailSchema,
   actions_inbox: ActionInboxSchema,
   action_decided: AgentActionSchema,
+  sweep_status: SweepStatusSchema,
 };
