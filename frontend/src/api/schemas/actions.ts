@@ -39,6 +39,7 @@ export const SweepStatusSchema = z.object({
       ai_used: z.boolean(),
       by_kind: z.record(z.number()),
       error: z.string().nullable().optional(),
+      suppressed: z.number().optional(),
     }),
   ),
 });

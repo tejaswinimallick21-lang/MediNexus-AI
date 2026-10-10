@@ -245,13 +245,17 @@ def propose_purchase_order(user: UserRecord, inventory_id: str, quantity: int, r
     from backend.app.agents import actions
     from backend.app.services import pharmacy
 
+    from backend.app.agents import learning
+
     line = pharmacy._stock_line(inventory_id)  # 404s on an unknown line
+    context = {"site": str(line.get("hospital_name") or ""), "medication": str(line["medication_name"])}
+    history = learning.history_for("purchase_order", context).summary()
     a = actions.propose(
         kind="purchase_order", requested_by=user, agent=_ctx["agent"], session_id=_ctx.get("session_id"),
-        payload={"inventory_id": inventory_id, "quantity": int(quantity)}, reason=reason,
+        payload={"inventory_id": inventory_id, "quantity": int(quantity), "context": context}, reason=reason + (f" {history}" if history else ""),
         summary=f"Purchase order: {int(quantity)} units of {line['medication_name']} for {line.get('hospital_name') or 'site'}",
     )
-    return {"status": "pending_approval", "action_id": a.action_id, "summary": a.summary,
+    return {"status": "pending_approval", "action_id": a.action_id, "summary": a.summary, "past_decisions": history or "No similar past decisions.",
             "note": "Nothing has been ordered. A pharmacist or administrator must approve this in the approval inbox."}
 
 
@@ -259,13 +263,19 @@ def propose_follow_up(user: UserRecord, patient_id: str, reason: str, due_in_day
     from backend.app.agents import actions
     from backend.app.services import clinical
 
+    from backend.app.agents import learning
+
     clinical._patient_row(patient_id)  # 404s on an unknown patient
+    huddle = {p.patient_id: p.readmission_probability_pct for p in clinical.get_huddle(25)}
+    context = {"risk_band": learning.risk_band(huddle.get(patient_id))}
+    history = learning.history_for("follow_up", context).summary()
     a = actions.propose(
         kind="follow_up", requested_by=user, agent=(_ctx or {}).get("agent", ""), session_id=(_ctx or {}).get("session_id"),
-        payload={"patient_id": patient_id, "due_in_days": max(1, min(int(due_in_days), 90))}, reason=reason,
+        payload={"patient_id": patient_id, "due_in_days": max(1, min(int(due_in_days), 90)), "context": context},
+        reason=reason + (f" {history}" if history else ""),
         summary=f"Follow-up for {patient_id} within {max(1, min(int(due_in_days), 90))} days",
     )
-    return {"status": "pending_approval", "action_id": a.action_id, "summary": a.summary,
+    return {"status": "pending_approval", "action_id": a.action_id, "summary": a.summary, "past_decisions": history or "No similar past decisions.",
             "note": "No task has been created yet. A clinician or administrator must approve this in the approval inbox."}
 
 

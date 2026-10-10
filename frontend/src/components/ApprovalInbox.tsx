@@ -134,7 +134,7 @@ export function ApprovalInbox() {
                         {sweepJob
                           ? `Running… ${job?.stage ?? ""}`
                           : last
-                            ? `Last run ${formatDate(last.started_at)} ${last.started_at.slice(11, 16)} (${last.trigger}): ${last.status === "succeeded" ? `${last.proposed} proposals from ${last.found} findings${last.ai_used ? " · AI-written" : ""}` : `failed${last.error ? `: ${last.error}` : ""}`}`
+                            ? `Last run ${formatDate(last.started_at)} ${last.started_at.slice(11, 16)} (${last.trigger}): ${last.status === "succeeded" ? `${last.proposed} proposals from ${last.found} findings${last.suppressed ? ` · ${last.suppressed} skipped (people kept rejecting similar ones)` : ""}${last.ai_used ? " · AI-written" : ""}` : `failed${last.error ? `: ${last.error}` : ""}`}`
                             : "Not run yet."}
                       </span>
                     </div>

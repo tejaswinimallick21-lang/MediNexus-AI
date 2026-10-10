@@ -46,6 +46,7 @@ class SweepRun(BaseModel):
     ai_used: bool
     by_kind: Dict[str, int] = {}
     error: Optional[str] = None
+    suppressed: int = 0
 
 
 class SweepStatus(BaseModel):

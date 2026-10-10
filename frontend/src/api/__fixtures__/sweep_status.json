@@ -4,6 +4,40 @@
   "running_job_id": null,
   "runs": [
     {
+      "run_id": "bac8edaa73fe",
+      "trigger": "manual",
+      "started_at": "2026-10-10T14:14:45",
+      "finished_at": "2026-10-10T14:15:07",
+      "status": "succeeded",
+      "found": 68,
+      "proposed": 30,
+      "ai_used": false,
+      "by_kind": {
+        "follow_up": 10,
+        "purchase_order": 10,
+        "lab_escalation": 10
+      },
+      "error": null,
+      "suppressed": 0
+    },
+    {
+      "run_id": "5a8c779a5e33",
+      "trigger": "manual",
+      "started_at": "2026-10-10T14:14:19",
+      "finished_at": "2026-10-10T14:14:44",
+      "status": "succeeded",
+      "found": 68,
+      "proposed": 30,
+      "ai_used": false,
+      "by_kind": {
+        "follow_up": 10,
+        "purchase_order": 10,
+        "lab_escalation": 10
+      },
+      "error": null,
+      "suppressed": 1
+    },
+    {
       "run_id": "beee86791d8b",
       "trigger": "schedule",
       "started_at": "2026-10-10T13:06:34",
@@ -17,7 +51,8 @@
         "purchase_order": 7,
         "lab_escalation": 6
       },
-      "error": null
+      "error": null,
+      "suppressed": 0
     }
   ]
 }

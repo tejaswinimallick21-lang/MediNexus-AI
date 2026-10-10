@@ -21,7 +21,7 @@ import uuid
 from datetime import date, datetime, timedelta
 from typing import Any, Dict, List, Optional
 
-from backend.app.agents import actions, providers
+from backend.app.agents import actions, learning, providers
 from backend.app.core.pagination import PageParams
 from src.utils.database import execute_query, query_df_strict
 from src.utils.logging_utils import get_logger
@@ -51,6 +51,7 @@ def _ensure() -> None:
             found INTEGER, proposed INTEGER, skipped_duplicates INTEGER, ai_used BOOLEAN, error VARCHAR, details VARCHAR
         )
     """)
+    execute_query("ALTER TABLE sweep_runs ADD COLUMN IF NOT EXISTS suppressed INTEGER")
     _ready = True
 
 
@@ -69,7 +70,7 @@ def _follow_up_candidates() -> List[Dict[str, Any]]:
         if p.risk_level == "HIGH" and not p.has_follow_up and p.patient_id not in taken:
             out.append({
                 "kind": "follow_up", "key": p.patient_id, "priority": p.readmission_probability_pct,
-                "payload": {"patient_id": p.patient_id, "due_in_days": 7},
+                "payload": {"patient_id": p.patient_id, "due_in_days": 7, "context": {"risk_band": learning.risk_band(p.readmission_probability_pct)}},
                 "summary": f"Follow-up for {p.patient_id} within 7 days ({p.readmission_probability_pct:.0f}% readmission risk)",
                 "facts": {"patient_id": p.patient_id, "age": p.age, "predicted_30d_readmission_risk_pct": p.readmission_probability_pct,
                           "risk_level": p.risk_level, "discharged": p.discharge_date, "admission_reason": p.admission_reason,
@@ -95,7 +96,9 @@ def _stock_candidates() -> List[Dict[str, Any]]:
             continue
         out.append({
             "kind": "purchase_order", "key": line.inventory_id, "priority": 50 - (line.days_of_supply or 0),
-            "payload": {"inventory_id": line.inventory_id, "quantity": int(f.recommended_order_quantity)},
+            "payload": {"inventory_id": line.inventory_id, "quantity": int(f.recommended_order_quantity),
+                        "context": {"site": line.hospital_name or "", "medication": line.medication_name or ""}},
+            "urgent": (line.stock_quantity or 0) <= 0,  # out of stock: propose even against past rejections
             "summary": f"Purchase order: {int(f.recommended_order_quantity)} units of {line.medication_name} for {line.hospital_name or 'site'}",
             "facts": {"medication": line.medication_name, "site": line.hospital_name, "on_hand": line.stock_quantity, "reorder_level": line.reorder_level,
                       "days_of_supply": line.days_of_supply, "forecast_30d_demand": f.predicted_30d_demand, "projected_shortfall": f.projected_shortfall,
@@ -115,7 +118,7 @@ def _lab_candidates() -> List[Dict[str, Any]]:
             continue
         out.append({
             "kind": "lab_escalation", "key": a.lab_id, "priority": 40,
-            "payload": {"lab_id": a.lab_id, "patient_id": a.patient_id, "test_name": a.test_name},
+            "payload": {"lab_id": a.lab_id, "patient_id": a.patient_id, "test_name": a.test_name, "context": {"test": a.test_name}},
             "summary": f"Escalate critical {a.test_name} for {a.patient_id}",
             "facts": {"patient_id": a.patient_id, "test": a.test_name, "value": a.test_value, "unit": a.unit, "reference_range": a.reference_range,
                       "result_date": a.test_date, "department": a.department_name, "policy": "Critical values require verbal physician notification (POL-LAB-001)"},
@@ -154,12 +157,22 @@ def run_sweep(trigger: str = "manual") -> Dict[str, Any]:
     _ensure()
     run_id = uuid.uuid4().hex[:12]
     started = datetime.now()
-    execute_query("INSERT INTO sweep_runs VALUES (?, ?, ?, NULL, 'running', 0, 0, 0, FALSE, NULL, NULL)", [run_id, trigger, started])
+    execute_query("INSERT INTO sweep_runs (run_id, trigger, started_at, status, found, proposed, skipped_duplicates, ai_used, suppressed) "
+                  "VALUES (?, ?, ?, 'running', 0, 0, 0, FALSE, 0)", [run_id, trigger, started])
     try:
         found = _follow_up_candidates() + _stock_candidates() + _lab_candidates()
+        # Learn from past decisions: drop kinds of proposals people keep rejecting (never safety-critical ones)
+        suppressed = 0
+        kept = []
+        for c in found:
+            c["history"] = learning.history_for(c["kind"], c["payload"].get("context", {}))
+            if learning.should_suppress(c["kind"], c["history"], urgent=c.get("urgent", False)):
+                suppressed += 1
+                continue
+            kept.append(c)
         # Highest priority first, but keep every kind represented within the cap
         by_kind: Dict[str, List[Dict[str, Any]]] = {}
-        for c in sorted(found, key=lambda x: -x["priority"]):
+        for c in sorted(kept, key=lambda x: -x["priority"]):
             by_kind.setdefault(c["kind"], []).append(c)
         chosen: List[Dict[str, Any]] = []
         while len(chosen) < MAX_PROPOSALS and any(by_kind.values()):
@@ -169,16 +182,33 @@ def run_sweep(trigger: str = "manual") -> Dict[str, Any]:
         use_ai = providers.active_provider() in ("openai", "claude")
         made = []
         for c in chosen:
-            a = actions._propose_raw(c["kind"], "nexa-sweep@medinexus.org", "system", AGENT, f"sweep:{run_id}", c["payload"], _justify(c, use_ai), c["summary"])
+            note = c["history"].summary()
+            reason = _justify(c, use_ai) + (f" {note}" if note else "")
+            a = actions._propose_raw(c["kind"], "nexa-sweep@medinexus.org", "system", AGENT, f"sweep:{run_id}", c["payload"], reason, c["summary"])
             made.append({"action_id": a.action_id, "kind": c["kind"], "summary": c["summary"]})
         counts = {k: sum(1 for m in made if m["kind"] == k) for k in ("follow_up", "purchase_order", "lab_escalation")}
-        execute_query("UPDATE sweep_runs SET finished_at = ?, status = 'succeeded', found = ?, proposed = ?, ai_used = ?, details = ? WHERE run_id = ?",
-                      [datetime.now(), len(found), len(made), use_ai and bool(made), json.dumps(counts), run_id])
-        logger.info(f"Sweep {run_id} ({trigger}): {len(made)} proposals from {len(found)} candidates {counts}")
-        return {"run_id": run_id, "found": len(found), "proposed": len(made), "by_kind": counts, "ai_used": use_ai and bool(made)}
+        execute_query("UPDATE sweep_runs SET finished_at = ?, status = 'succeeded', found = ?, proposed = ?, ai_used = ?, details = ?, suppressed = ? WHERE run_id = ?",
+                      [datetime.now(), len(found), len(made), use_ai and bool(made), json.dumps(counts), suppressed, run_id])
+        logger.info(f"Sweep {run_id} ({trigger}): {len(made)} proposals from {len(found)} candidates {counts}; {suppressed} suppressed by past decisions")
+        return {"run_id": run_id, "found": len(found), "proposed": len(made), "by_kind": counts, "ai_used": use_ai and bool(made), "suppressed": suppressed}
     except Exception as e:
         execute_query("UPDATE sweep_runs SET finished_at = ?, status = 'failed', error = ? WHERE run_id = ?", [datetime.now(), str(e)[:500], run_id])
         raise
+
+
+def _int(v: Any) -> int:
+    """Nullable database integers (older runs predate some columns) come back as NA."""
+    try:
+        return 0 if v is None or v != v else int(v)
+    except TypeError:  # pd.NA
+        return 0
+
+
+def _ts(v: Any) -> Optional[str]:
+    try:
+        return None if v is None or v != v else str(v)[:19].replace(" ", "T")
+    except TypeError:
+        return None
 
 
 def recent_runs(limit: int = 5) -> List[Dict[str, Any]]:
@@ -186,10 +216,10 @@ def recent_runs(limit: int = 5) -> List[Dict[str, Any]]:
     df = query_df_strict("SELECT * FROM sweep_runs ORDER BY started_at DESC LIMIT ?", [int(limit)])
     out = []
     for r in df.itertuples():
-        out.append({"run_id": r.run_id, "trigger": r.trigger, "started_at": str(r.started_at)[:19].replace(" ", "T"),
-                    "finished_at": None if r.finished_at is None or r.finished_at != r.finished_at else str(r.finished_at)[:19].replace(" ", "T"),
-                    "status": r.status, "found": int(r.found or 0), "proposed": int(r.proposed or 0), "ai_used": bool(r.ai_used),
-                    "by_kind": json.loads(r.details) if r.details else {}, "error": r.error})
+        out.append({"run_id": r.run_id, "trigger": r.trigger, "started_at": _ts(r.started_at), "finished_at": _ts(r.finished_at),
+                    "status": r.status, "found": _int(r.found), "proposed": _int(r.proposed), "ai_used": bool(r.ai_used) if isinstance(r.ai_used, (bool, int)) else False,
+                    "by_kind": json.loads(r.details) if isinstance(r.details, str) and r.details else {},
+                    "error": r.error if isinstance(r.error, str) else None, "suppressed": _int(getattr(r, "suppressed", 0))})
     return out
 
 
