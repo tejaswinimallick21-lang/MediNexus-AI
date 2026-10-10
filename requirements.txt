@@ -1,5 +1,4 @@
 # MediNexus AI — Dependencies
-streamlit>=1.40.0
 duckdb>=1.1.0
 pyarrow>=18.0.0
 pandas>=2.2.0

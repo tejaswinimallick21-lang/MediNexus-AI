@@ -13,8 +13,8 @@ from config.constants import DATABASE_PATH, DATABASE_DIR
 
 _DB_LOCK = threading.RLock()
 
-# DuckDB allows one writing process at a time. Streamlit and the FastAPI backend share the
-# database file, so connections retry briefly when the other process holds the lock.
+# DuckDB allows one writing process at a time. The API, pipeline scripts and background jobs share
+# the database file, so connections retry briefly when another process holds the lock.
 _LOCK_RETRY_SECONDS = 15.0
 
 

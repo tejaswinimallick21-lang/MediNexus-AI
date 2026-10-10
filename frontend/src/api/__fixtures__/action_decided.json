@@ -1,5 +1,5 @@
 {
-  "action_id": "666208aa5cfe4dbca548acd55206b87d",
+  "action_id": "2922b68fad514a738380c7e7b1804907",
   "kind": "purchase_order",
   "kind_label": "Purchase order",
   "summary": "Purchase order: 12 units of Atenolol 50 MG / Chlorthalidone 25 MG Oral Tablet for ADAMS PHYSICAL THERAPY  LLC",
@@ -16,10 +16,10 @@
   "session_id": null,
   "requested_by": "hcp@medinexus.org",
   "status": "executed",
-  "created_at": "2026-10-10T14:21:05",
+  "created_at": "2026-10-10T14:48:49",
   "decided_by": "hcp@medinexus.org",
-  "decided_at": "2026-10-10T14:21:06",
+  "decided_at": "2026-10-10T14:48:50",
   "decision_note": "ok",
-  "result": "Purchase order PO_34FC633A submitted: 12 units of Atenolol 50 MG / Chlorthalidone 25 MG Oral Tablet (est. $3,161.88).",
+  "result": "Purchase order PO_89DEEFD8 submitted: 12 units of Atenolol 50 MG / Chlorthalidone 25 MG Oral Tablet (est. $3,161.88).",
   "can_decide": false
 }

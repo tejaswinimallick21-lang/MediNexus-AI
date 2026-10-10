@@ -1,5 +1,5 @@
 """
-Reception: service unit tests, Streamlit parity, and endpoint contracts.
+Reception: service unit tests, parity with the analytics module, and endpoint contracts.
 """
 
 import pytest
@@ -11,9 +11,9 @@ from backend.tests.conftest import assert_contract, assert_error
 from src.analytics.metrics import compute_reception_kpis
 
 
-# ---- parity with the pre-migration Streamlit calculation ------------------------------------
+# ---- parity with src.analytics.metrics ---------------------------------------------------------
 
-def test_kpis_match_legacy_streamlit_metrics():
+def test_kpis_match_analytics_metrics():
     legacy = compute_reception_kpis()
     new = svc.get_kpis().model_dump()
     for key, value in legacy.items():

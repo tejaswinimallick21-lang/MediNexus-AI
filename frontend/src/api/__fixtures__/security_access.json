@@ -95,6 +95,7 @@
       ],
       "tools": [
         "search_policies",
+        "remember",
         "get_highest_risk_discharges",
         "get_patient_summary",
         "get_care_gap_summary",
@@ -111,6 +112,7 @@
       ],
       "tools": [
         "search_policies",
+        "remember",
         "get_pharmacy_kpis",
         "find_stock",
         "get_stock_forecast",
@@ -129,6 +131,7 @@
       ],
       "tools": [
         "search_policies",
+        "remember",
         "get_network_kpis",
         "get_readmissions_by",
         "get_admissions_trend",
@@ -148,6 +151,7 @@
       ],
       "tools": [
         "search_policies",
+        "remember",
         "get_network_kpis",
         "get_readmissions_by",
         "get_admissions_trend",

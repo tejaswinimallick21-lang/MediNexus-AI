@@ -1,6 +1,6 @@
 # MediNexus AI — Repository Architecture
 
-★ = React/FastAPI platform · ⚰ = legacy Streamlit (removed at retirement)
+React + FastAPI platform over a DuckDB Medallion lakehouse. (The original Streamlit UI was retired; it remains in git history.)
 
 ```
 MediNexus-AI-main/
@@ -15,7 +15,8 @@ MediNexus-AI-main/
 │       ├── routes.ts             sidebar workspace list
 │       ├── pages/                Login, Welcome, Reception (Patient Access), Laboratory, Pharmacy,
 │       │                         Executive, Clinical Workstation, …
-│       ├── components/           AppShell, KPI cards, DataTable, Charts, CopilotPanel, state views,
+│       ├── components/           AppShell, AssistantDock (floating Nexa chat), ApprovalInbox, MemoryPanel,
+│       │                         KPI cards, DataTable, Charts, state views,
 │       │                         3D DnaHelix · NeuralGlobe · EcgTrace
 │       ├── api/                  typed client (client.ts) + zod schemas per area
 │       │   └── __fixtures__/     golden JSON written by backend tests; parsed by contract.test.ts
@@ -28,7 +29,10 @@ MediNexus-AI-main/
 │   │   ├── main.py               app factory: dev CORS, error handlers, routers
 │   │   ├── core/                 config, security (bcrypt + JWT cookie), access (roles → pages),
 │   │   │                         users (seed store), deps (role checks), errors, pagination
-│   │   ├── api/                  thin routers: auth, system, reception, operations, clinical, jobs
+│   │   ├── api/                  thin routers: auth, system, jobs, reception, operations, clinical, command,
+│   │   │                         assistant (+ memory), data_platform, actions (approvals, sweep), security, knowledge
+│   │   ├── agents/               Nexa agents: tools, engine (tool loop), providers (OpenAI/Claude/rules),
+│   │   │                         actions (propose → approve → execute), sweep (07:00), learning, memory
 │   │   ├── services/             business logic per workspace (SQL + model calls)
 │   │   ├── schemas/              Pydantic request/response models
 │   │   └── jobs/runner.py        background jobs with progress polling
@@ -42,17 +46,16 @@ MediNexus-AI-main/
 │   ├── ml/                       features, trainers, forecasting, evaluation, predict, registry
 │   ├── analytics/                legacy KPI / diagnostic queries
 │   ├── prescriptive/             care plan, procurement, lab staffing, bed-surge rules
-│   ├── agents/                   MediCare, HealthAnalyst, PharmaLab copilots
-│   ├── rag/                      policy loader, chunker, TF-IDF retriever, benchmark
+│   ├── rag/                      policy loader, section chunker, hybrid BM25 + embeddings search, benchmark
+│   ├── sandbox/                  isolated upload sandboxes (Data Engineering)
 │   ├── security/                 audit log (+ legacy auth/rbac)
 │   └── utils/database.py         DuckDB connection with lock retry
 │
 ├── config/                     paths, settings, legacy personas
 ├── documents/                  hospital policies and clinical guidelines (RAG corpus)
-├── scripts/                    capture_screenshots.py, PDF dossier generators (outdated)
-├── docs/                       vision, migration plan/log, architecture, screenshots
+├── scripts/                    bootstrap.py (rebuild everything), capture_screenshots.py
+├── docs/                       setup, vision, architecture, screenshots
 ├── tests/                      pipeline, data and ML tests
-├── app.py, pages/, .streamlit/ ⚰ legacy Streamlit UI
 │
 └── not in git (generated / large)
     ├── data/synthea/csv/         Synthea export (16 CSVs)

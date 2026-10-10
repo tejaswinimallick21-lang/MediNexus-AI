@@ -1,22 +1,22 @@
 {
   "session": {
-    "session_id": "48c85dea4bbb477b9ebeca0665078e0c",
+    "session_id": "650a6659fb074dc086a42e108f44e561",
     "agent": "healthanalyst",
     "title": "Provide bed capacity and surge forecast",
-    "created_at": "2026-10-10T14:20:54",
-    "updated_at": "2026-10-10T14:20:57",
+    "created_at": "2026-10-10T14:48:56",
+    "updated_at": "2026-10-10T14:48:57",
     "message_count": 2
   },
   "messages": [
     {
-      "message_id": "04f6b293a04b499fb8cc406af66061c2",
+      "message_id": "31ab1195f91a47fc958ce06e6d109420",
       "role": "user",
       "text": "Provide bed capacity and surge forecast",
       "reply": null,
-      "created_at": "2026-10-10T14:20:57"
+      "created_at": "2026-10-10T14:48:57"
     },
     {
-      "message_id": "2917931989724c928e6e42c38ca1a268",
+      "message_id": "c9442538d3524776994b07f2dc43b765",
       "role": "assistant",
       "text": null,
       "reply": {
@@ -36,7 +36,7 @@
           "Tool get_capacity_plan"
         ],
         "notes": "",
-        "latency_ms": 2479.9,
+        "latency_ms": 739.9,
         "engine": "Rules engine (no LLM key)",
         "tool_calls": [
           {
@@ -48,7 +48,7 @@
         ],
         "proposed_actions": []
       },
-      "created_at": "2026-10-10T14:20:57"
+      "created_at": "2026-10-10T14:48:57"
     }
   ]
 }

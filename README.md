@@ -10,7 +10,7 @@
 > **New machine?** Follow [docs/SETUP.md](docs/SETUP.md): clone, add your keys to `.env`, download the Synthea export, then `python scripts/bootstrap.py` and `npm run dev`.
 
 ## 1. Project Overview
-**MediNexus AI** is a role-aware clinical and operational decision intelligence platform. It ingests fragmented, heterogeneous healthcare data, runs it through an automated, quality-audited **Medallion Architecture (Bronze ➔ Silver ➔ Gold)**, trains predictive machine learning models, applies prescriptive clinical and operational rules, and serves role-tailored decision consoles to seven distinct healthcare stakeholders.
+**MediNexus AI** is a role-aware clinical and operational decision intelligence platform. It ingests fragmented, heterogeneous healthcare data, runs it through an automated, quality-audited **Medallion Architecture (Bronze ➔ Silver ➔ Gold)**, trains predictive machine learning models, applies prescriptive clinical and operational rules, and serves role-tailored workspaces to three roles (admin, healthcare professional, analyst), with grounded AI agents that propose actions for human approval.
 
 The core pipeline represents the journey:
 ### **DATA ➔ TRUST ➔ INTELLIGENCE ➔ PREDICTION ➔ PRESCRIPTION ➔ ACTION**
@@ -29,12 +29,12 @@ Healthcare ecosystems generate massive volumes of heterogeneous data across Elec
 MediNexus AI decouples the **Data Engineering / Producer Layer** from the **Consumption / Business Layer**:
 1. **Producer Layer**: Ingests multi-format source data into Bronze Parquet, applies deterministic deduplication, type validation, date parsing, anomaly repair, and quality scoring into Silver, and materializes high-dimensional, business-ready joined analytical models in Gold.
 2. **Consumption Layer**: Business users consume **strictly validated GOLD models**. Front-end business dashboards are barred from manipulating raw or bronze data directly.
-3. **Role-Aware Decision Consoles**: Tailored dashboards for 7 personas with embedded predictive ML, prescriptive care checklists, and specialized AI copilot agents.
+3. **Role-Aware Workspaces**: React workspaces per role with embedded predictive ML, prescriptive checklists and Nexa AI agents.
 
 ---
 
 ## 4. Platform Novelty
-The novelty of MediNexus AI is **NOT** simply using Streamlit, DuckDB, or Random Forests. 
+The novelty of MediNexus AI is **NOT** simply using React, DuckDB, or gradient boosting.
 
 The novelty is the **Role-Aware Data-to-Decision Pipeline**:
 * A single underlying healthcare ecosystem is ingested once, audited against rigorous completeness and uniqueness indices, and modeled into a unified Gold layer.
@@ -145,32 +145,23 @@ Prediction (ML Model) ➔ Business / Clinical Rule ➔ Prescriptive Recommendati
 
 ---
 
-## 9. Specialized AI Copilot Agents
-MediNexus AI implements three specialized AI agents utilizing a tool-grounded architecture. Responses strictly isolate **FACTS**, **PREDICTIONS**, **RECOMMENDATIONS**, and **EVIDENCE**:
+## 9. Nexa AI Agents (agentic, human-approved)
+Four role-scoped assistants share one engine (`backend/app/agents/`): **Nexa Care** (clinical), **Nexa Care · Lab & Pharmacy**, **Nexa Insight** (analyst) and **Nexa Ops** (admin, all workspaces).
 
-1. **MediCare Agent** (Attending Physician Role)
-   * Grounded in Patient 360, longitudinal laboratory trajectories, and clinical guidelines.
-   * Queries: Patient summaries, readmission explanations, and chronic disease protocols.
-2. **HealthAnalyst Agent** (Hospital Administrator Role)
-   * Grounded in operational KPIs, department revenues, and bed capacity models.
-   * Queries: Readmission root-cause analysis ("Why did readmissions increase?"), occupancy projections, and hospital policies.
-3. **PharmaLab Agent** (Pharmacist & Laboratory Roles)
-   * Grounded in inventory stockout buffers, 30-day demand predictions, critical lab alarms, and equipment biosafety standards.
+* **Tool loop**: the LLM (OpenAI `gpt-4o-mini` or Claude) calls 23 typed tools over the same services the dashboards use; every number in an answer must come from a tool result, with its source cited. Without an API key a free rules engine answers from data only and never guesses.
+* **Actions with approval**: `propose_*` tools create pending purchase orders, follow-ups and lab escalations in the **approval inbox**; nothing executes until a human approves. Everything is audited.
+* **Morning sweep** (07:00 daily): free database checks find high-risk discharges without follow-up, stock-out risks and critical labs; AI-written justifications are capped.
+* **Learning from approvals**: proposals show how similar ones were decided; kinds people keep rejecting are suppressed (never critical labs or zero-stock orders).
+* **Memory**: short-term (last 3 turns) and explicit long-term memory ("remember …"), per user, visible and deletable, refusing any patient data.
+* **Cost caps**: max 5 tool steps, 700-token replies, trimmed history and tool results.
 
 ---
 
-## 10. Grounded RAG Knowledge Base
-Built-in synthetic institutional documents located in `documents/`:
-* `hospital_policies/discharge_policy.txt` (POL-HOSP-001)
-* `hospital_policies/appointment_policy.txt` (POL-HOSP-002)
-* `hospital_policies/patient_privacy_policy.txt` (POL-HOSP-003)
-* `clinical_guidelines/readmission_followup_guideline.txt` (CPG-CLIN-001)
-* `pharmacy/medication_storage_policy.txt` (POL-PHARM-001)
-* `pharmacy/inventory_policy.txt` (POL-PHARM-002)
-* `laboratory/sample_handling_policy.txt` (POL-LAB-001)
-* `laboratory/laboratory_safety_policy.txt` (POL-LAB-002)
+## 10. Hybrid RAG Knowledge Base
+21 synthetic hospital policies and clinical guidelines in `documents/` (plus admin uploads in Security & Infrastructure → Knowledge).
 
-* **Architecture**: Semantic text chunker ➔ TF-IDF vector embeddings with cosine similarity ➔ Grounded synthesis with citations. Works **100% locally offline**, with optional Google Gemini API support if `GEMINI_API_KEY` is provided.
+* **Architecture** (`src/rag/hybrid.py`): section-aware chunking ➔ BM25 keywords + embeddings (OpenAI `text-embedding-3-small`, cached; or free local LSA offline) ➔ query-adaptive score blend (keyword-heavy for policy codes like `POL-LAB-001`) ➔ abstains when nothing relevant matches. Answers cite `[Policy: <id> <section>]`.
+* **Benchmark** (`src/rag/benchmark.py`, 56 questions: keyword, paraphrase, exact-code, out-of-scope) runs from the Security page.
 
 ---
 
@@ -189,135 +180,41 @@ Sign-in is **email + password** (bcrypt) with a **JWT in an httpOnly cookie**. T
 
 ---
 
-## 12. Quickstart & Installation
-
-### Step 1: Clone and Enter Workspace
-```powershell
-cd "D:\Virtusa Project"
-```
-
-### Step 2: Install Dependencies
-```powershell
-pip install -r requirements.txt
-```
-
-### Step 3: Configure Optional Environment Variables
-Copy `.env.example` to `.env` (optional, for Gemini API):
-```powershell
-cp .env.example .env
-```
-*(If left blank, MediNexus AI automatically runs using its high-fidelity deterministic local engine).*
-
----
-
-## 13. Automated Execution Guide
-
-### Step 1: Build Raw Source Tables from Synthea
-With the Synthea CSVs in `data/synthea/csv/`, convert them into the 12 raw source tables:
-```powershell
-python src/ingestion/synthea_adapter.py
-```
-
-### Step 2: Run Full Medallion Lakehouse Pipeline
-Execute Bronze Ingestion, Silver Cleansing, and Gold Dimensional Modeling in one command:
-```powershell
-python src/medallion/pipeline.py
-```
-
-### Step 3: Train Predictive Machine Learning Models
-Train Readmission Risk, Length of Stay, Demand, and Workload models:
-```powershell
-python src/ml/train_demand.py
-```
-
-### Step 4: Run Automated Verification Tests
-Verify all system layers, RBAC policies, and model predictions:
-```powershell
-python -m pytest
-```
-
-### Step 5: Launch the Streamlit Web Application
-Start the interactive multi-role application:
-```powershell
-streamlit run app.py
-```
-
-Open your browser to `http://localhost:8501`.
-
----
-
-### Step 6: Run the React Frontend + FastAPI Backend (migration in progress)
-The Streamlit app is being replaced page by page by a React frontend (`frontend/`, Vite + TypeScript) talking to a FastAPI backend (`backend/`). Both UIs call the same `backend/app/services`, so numbers match. Progress and parity notes: `docs/MIGRATION.md`.
+## 12. Quickstart
+Full instructions for a new machine: **[docs/SETUP.md](docs/SETUP.md)**. In short:
 
 ```bash
-pip install fastapi uvicorn pyjwt bcrypt python-multipart   # backend deps (also in requirements.txt)
-npm install && npm --prefix frontend install                 # once
-npm run seed                                                 # once: writes backend/seed_users.json
-npm run backend      # FastAPI on http://localhost:8000 (docs at /docs)
-npm run frontend     # React on http://localhost:5173 (proxies /api to the backend)
-npm run dev          # both together
-npm test             # pytest (backend + parity) and Vitest (frontend contracts)
+pip install -r requirements.txt
+npm install && npm --prefix frontend install
+cp .env.example .env              # add OPENAI_API_KEY (optional) and MEDINEXUS_JWT_SECRET
+# put the Synthea COVID-19 10K CSVs in data/synthea/csv/
+python scripts/bootstrap.py       # raw → Medallion → simulated ops → models → accounts
+npm run dev                       # API http://localhost:8000 (docs /docs) + React http://localhost:5173
+npm test                          # pytest (backend + pipeline) and Vitest (frontend contracts)
 ```
-Optional environment: `MEDINEXUS_JWT_SECRET` (otherwise a per-process dev key is used and sessions reset on restart), `MEDINEXUS_ENV=production` (disables the dev-only CORS origin), `MEDINEXUS_COOKIE_SECURE=true` behind HTTPS, `frontend/.env` → `VITE_API_BASE` (defaults to `/api`).
 
-> DuckDB allows one writing process at a time. Streamlit and FastAPI share `database/healthcare.duckdb`; connections retry for up to 15 s on a lock. Run the pipeline from one UI at a time.
+Optional environment: `MEDINEXUS_ENV=production` (disables the dev-only CORS origin), `MEDINEXUS_COOKIE_SECURE=true` behind HTTPS, `frontend/.env` → `VITE_API_BASE` (defaults to `/api`). All agent settings are listed in `.env.example`.
+
+> DuckDB allows one writing process at a time; connections retry for up to 15 s on a lock. Tests run on a temporary copy of the database, so they can run while the app is up.
 
 ---
 
-## 14. Project Directory Structure
+## 13. Project Directory Structure
+See **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** for the annotated tree, request flow and data provenance.
+
 ```
-MediNexus_AI/
-├── app.py                     # Main application entry point and RBAC router
-├── requirements.txt           # Verified dependency versions
-├── README.md                  # Comprehensive platform documentation
-├── .env.example               # Environment variables template
-├── .gitignore                 # Version control exclusions
-│
-├── config/
-│   ├── constants.py           # Paths, catalogs (ICD-10, Labs, Meds), defaults
-│   ├── roles.py               # RBAC policies and permission definitions
-│   └── settings.py            # Environment settings and demo user directory
-│
-├── data/
-│   ├── raw/                   # Multi-format raw files (CSV, JSON) with injected defects
-│   ├── bronze/                # Raw Parquet files with ingestion metadata
-│   ├── silver/                # Cleaned, standardized Parquet files
-│   ├── gold/                  # 10 business-ready joined analytical Parquet models
-│   ├── metadata/              # Generation summaries and execution runs
-│   └── ml_results/            # Model performance artifacts
-│
-├── database/
-│   └── healthcare.duckdb      # DuckDB analytical Lakehouse database
-│
-├── src/
-│   ├── ingestion/             # Synthetic generation and Bronze ingestion
-│   ├── medallion/             # Bronze, Silver, Gold, Quality, and Pipeline orchestrator
-│   ├── analytics/             # Descriptive KPIs, Plotly figures, and Diagnostic drivers
-│   ├── ml/                    # Feature matrices, model trainers, registry, and inference
-│   ├── prescriptive/          # Clinical, Pharmacy, Laboratory, and Hospital rule engines
-│   ├── rag/                   # Document loader, chunker, vector store, and grounded answers
-│   ├── agents/                # Base agent, MediCare, HealthAnalyst, and PharmaLab agents
-│   ├── security/              # Hashing, authentication, RBAC checks, and audit logging
-│   └── utils/                 # DuckDB connectors, structured logging, and UI helpers
-│
-├── pages/
-│   ├── welcome.py             # Landing page & architectural philosophy
-│   ├── login.py               # Secure login with 1-click demo persona selector
-│   ├── data_engineer.py       # Data Engineering console with 1-click pipeline
-│   ├── doctor.py              # Clinical decision support & MediCare copilot
-│   ├── pharmacist.py          # Inventory analytics, demand forecast & PharmaLab copilot
-│   ├── laboratory.py          # Specimen throughput, critical alerts & PharmaLab copilot
-│   ├── receptionist.py        # Outpatient appointment flow (Strictly privacy-redacted)
-│   ├── administrator.py       # Executive hospital KPIs, diagnostics & HealthAnalyst copilot
-│   └── it_admin.py            # Security audit stream & database table browser
-│
-├── models/                    # Serialized joblib models (readmission, los, demand)
-├── documents/                 # Institutional guidelines and policy texts
-├── tests/                     # Comprehensive pytest test suite
-└── logs/                      # Application and enterprise security audit logs
+MediNexus-AI/
+├── frontend/     React + Vite + TypeScript workspaces, Nexa chat dock, approval inbox
+├── backend/      FastAPI: routers, services, schemas, Nexa agents, jobs, tests
+├── src/          shared engine: ingestion, medallion, ml, analytics, prescriptive, rag, sandbox, security
+├── config/       paths and settings
+├── documents/    policy and guideline library (RAG corpus)
+├── scripts/      bootstrap.py, capture_screenshots.py
+├── docs/         setup, architecture, product vision, screenshots
+└── tests/        pipeline, data quality, ML and RAG tests
 ```
 
 ---
 
-## 15. Regulatory Notice & Healthcare Disclaimer
+## 14. Regulatory Notice & Healthcare Disclaimer
 > **IMPORTANT NOTICE:** MediNexus AI is a demonstration decision-support intelligence platform utilizing synthetically generated healthcare data. It is developed strictly for research, educational, and workflow evaluation purposes. It does not provide medical diagnoses, treatment plans, or autonomous prescribing authority. All clinical decision-making must be performed by certified, licensed healthcare professionals.

@@ -48,3 +48,6 @@ data/ops/
 data/uploads/
 data/knowledge/
 data/rag/
+
+# Build caches
+*.tsbuildinfo

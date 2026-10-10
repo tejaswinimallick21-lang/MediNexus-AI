@@ -6,7 +6,6 @@
     "backend": "python -m uvicorn backend.app.main:app --reload --reload-dir backend --reload-dir src --reload-dir config --port 8000",
     "frontend": "npm --prefix frontend run dev",
     "dev": "concurrently -k -n api,web -c cyan,magenta \"npm:backend\" \"npm:frontend\"",
-    "streamlit": "python -m streamlit run app.py",
     "seed": "python -m backend.scripts.create_seed_users",
     "test:backend": "python -m pytest -q",
     "test:frontend": "npm --prefix frontend test",

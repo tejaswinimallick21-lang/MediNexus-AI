@@ -66,7 +66,7 @@
       "area": "Secrets",
       "title": "No secrets in version control",
       "status": "pass",
-      "detail": "Scanned 389 tracked files: no API keys. .env is ignored by git.",
+      "detail": "Scanned 356 tracked files: no API keys. .env is ignored by git.",
       "fix": null
     },
     {
@@ -90,7 +90,7 @@
       "area": "AI",
       "title": "Agent guardrails",
       "status": "pass",
-      "detail": "Agents act only through 22 role-scoped tools; actions are proposals that need human approval; patient names are stripped from tool output; max 5 tool rounds per question.",
+      "detail": "Agents act only through 23 role-scoped tools; actions are proposals that need human approval; patient names are stripped from tool output; max 5 tool rounds per question.",
       "fix": null
     },
     {
@@ -98,7 +98,7 @@
       "area": "Monitoring",
       "title": "Audit logging",
       "status": "pass",
-      "detail": "1819 events recorded in the last 24 h (sign-ins, patient-record views, data exports, agent actions).",
+      "detail": "1837 events recorded in the last 24 h (sign-ins, patient-record views, data exports, agent actions).",
       "fix": null
     },
     {

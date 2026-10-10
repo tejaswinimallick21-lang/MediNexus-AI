@@ -1,6 +1,6 @@
 {
   "window_days": 7,
-  "total_events": 2683,
+  "total_events": 2701,
   "failed_logins": 30,
   "access_denied": 164,
   "lockouts": 2,
@@ -8,7 +8,7 @@
   "by_action": [
     {
       "label": "LOGIN",
-      "count": 1104
+      "count": 1113
     },
     {
       "label": "ROLE_SWITCH",
@@ -24,7 +24,7 @@
     },
     {
       "label": "AGENT_QUERY",
-      "count": 98
+      "count": 99
     },
     {
       "label": "SANDBOX_UPLOAD",
@@ -100,7 +100,7 @@
     },
     {
       "day": "2026-10-10 00:00:00",
-      "events": 1018,
+      "events": 1036,
       "failed_logins": 15,
       "denied": 79
     }
@@ -141,7 +141,7 @@
       "count": 18
     },
     {
-      "label": "API_LABORATORY",
+      "label": "API_EXECUTIVE",
       "count": 14
     },
     {
@@ -149,7 +149,7 @@
       "count": 14
     },
     {
-      "label": "API_EXECUTIVE",
+      "label": "API_LABORATORY",
       "count": 14
     },
     {
@@ -176,6 +176,9 @@
     "LOGIN_MANUAL",
     "LOGIN_PERSONA_CREDENTIALS",
     "LOGOUT",
+    "MEMORY_CLEAR",
+    "MEMORY_DELETE",
+    "MEMORY_SAVE",
     "MODEL_TRAIN",
     "MULTI_DATASET_INGESTION",
     "PATIENT_360_VIEW",

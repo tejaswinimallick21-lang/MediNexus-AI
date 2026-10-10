@@ -40,4 +40,4 @@
 3. HCP Care Console: huddle list, care gaps, follow-up agent.
 4. Nexa assistant page: RAG + tool-using agent + approval queue.
 5. Operations simulator: equipment, staffing, care management; Admin Control Tower.
-6. Retire Streamlit.
+6. Retire Streamlit. ✅ (2026-10-10)
