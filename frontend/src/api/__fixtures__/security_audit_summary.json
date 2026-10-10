@@ -1,14 +1,14 @@
 {
   "window_days": 7,
-  "total_events": 2416,
-  "failed_logins": 24,
-  "access_denied": 149,
-  "lockouts": 1,
-  "patient_record_views": 93,
+  "total_events": 2608,
+  "failed_logins": 30,
+  "access_denied": 164,
+  "lockouts": 2,
+  "patient_record_views": 95,
   "by_action": [
     {
       "label": "LOGIN",
-      "count": 1002
+      "count": 1104
     },
     {
       "label": "ROLE_SWITCH",
@@ -16,19 +16,19 @@
     },
     {
       "label": "ACCESS_DENIED",
-      "count": 149
+      "count": 164
     },
     {
       "label": "AGENT_QUERY",
-      "count": 84
+      "count": 98
     },
     {
       "label": "AGENT_PROPOSED_ACTION",
-      "count": 72
+      "count": 94
     },
     {
       "label": "SANDBOX_UPLOAD",
-      "count": 71
+      "count": 80
     },
     {
       "label": "PATIENT_360_VIEW",
@@ -36,23 +36,23 @@
     },
     {
       "label": "LOGOUT",
-      "count": 47
+      "count": 50
     },
     {
       "label": "SANDBOX_DELETE",
-      "count": 42
+      "count": 48
     },
     {
       "label": "PATIENT_VIEW",
-      "count": 37
+      "count": 39
+    },
+    {
+      "label": "LOGIN_FAILED",
+      "count": 30
     },
     {
       "label": "LAUNCH_WELCOME",
       "count": 28
-    },
-    {
-      "label": "LOGIN_FAILED",
-      "count": 24
     },
     {
       "label": "PIPELINE_RUN",
@@ -60,11 +60,11 @@
     },
     {
       "label": "PROCUREMENT_ORDER",
-      "count": 19
+      "count": 21
     },
     {
       "label": "SANDBOX_PREDICT",
-      "count": 17
+      "count": 19
     }
   ],
   "by_day": [
@@ -100,19 +100,19 @@
     },
     {
       "day": "2026-10-10 00:00:00",
-      "events": 751,
-      "failed_logins": 9,
-      "denied": 64
+      "events": 943,
+      "failed_logins": 15,
+      "denied": 79
     }
   ],
   "failed_login_accounts": [
     {
       "label": "hcp@medinexus.org",
-      "count": 15
+      "count": 16
     },
     {
       "label": "intruder@example.com",
-      "count": 5
+      "count": 10
     },
     {
       "label": "doctor@medinexus.org",
@@ -126,35 +126,35 @@
   "denied_resources": [
     {
       "label": "API_DATA",
-      "count": 29
+      "count": 32
     },
     {
       "label": "AGENT_MEDICARE",
-      "count": 23
+      "count": 25
     },
     {
       "label": "API_DOCTOR",
-      "count": 22
+      "count": 24
     },
     {
       "label": "API_RECEPTION",
-      "count": 17
+      "count": 18
     },
     {
       "label": "API_PHARMACY",
-      "count": 13
+      "count": 14
     },
     {
       "label": "API_EXECUTIVE",
-      "count": 13
+      "count": 14
     },
     {
       "label": "API_LABORATORY",
-      "count": 13
+      "count": 14
     },
     {
       "label": "API_COMMAND",
-      "count": 9
+      "count": 10
     }
   ],
   "locked_now": {},

@@ -88,19 +88,6 @@ export function AppShell() {
           </NavLink>
         )}
 
-        <div className={styles.statusCard} aria-live="polite">
-          <div className={styles.sectionLabel}>Platform health</div>
-          {status.data ? (
-            <ul className={styles.statusList}>
-              <li><span className={status.data.gold_ready ? styles.dotOk : styles.dotBad} />Lakehouse Gold</li>
-              <li><span className={status.data.ml_ready ? styles.dotOk : styles.dotBad} />Model registry</li>
-              <li><span className={styles.dotInfo} />{status.data.llm_provider}</li>
-            </ul>
-          ) : (
-            <span className={styles.muted}>{status.error ? "API unreachable" : "Checking…"}</span>
-          )}
-          <span className={styles.version}>v{status.data?.version ?? "—"}</span>
-        </div>
       </aside>
 
       <div className={styles.main}>
@@ -136,10 +123,29 @@ export function AppShell() {
             )}
           </div>
           <div className={styles.topRight}>
-            <span className={`${styles.pill} ${healthy ? styles.pillOk : styles.pillWarn}`}>
-              <span className={styles.pulse} />
-              {healthy ? "All systems operational" : status.data ? "Pipeline attention needed" : "Connecting"}
-            </span>
+            {(() => {
+              // One status pill replaces the old sidebar health card; details on hover, and admins can open the full overview
+              const label = healthy ? "All systems operational" : status.data ? "Pipeline attention needed" : status.error ? "API unreachable" : "Connecting";
+              const detail = status.data
+                ? `Lakehouse Gold: ${status.data.gold_ready ? "ready" : "missing"} · Model registry: ${status.data.ml_ready ? "ready" : "missing"} · ${status.data.llm_provider} · v${status.data.version}`
+                : label;
+              const cls = `${styles.pill} ${healthy ? styles.pillOk : styles.pillWarn}`;
+              const body = (
+                <>
+                  <span className={styles.pulse} />
+                  {label}
+                </>
+              );
+              return user?.allowed_routes.includes("/it") ? (
+                <NavLink to="/it" className={`${cls} ${styles.pillLink}`} title={`${detail} — open Security & Infrastructure`} aria-live="polite">
+                  {body}
+                </NavLink>
+              ) : (
+                <span className={cls} title={detail} aria-live="polite">
+                  {body}
+                </span>
+              );
+            })()}
             {user && <ApprovalInbox />}
             {user && (
               <div className={styles.userChip}>

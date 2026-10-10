@@ -4,8 +4,8 @@
   "python": "3.12.7",
   "platform": "Windows 11",
   "uptime_minutes": 1,
-  "database_path": "database\\healthcare.duckdb",
-  "database_size_mb": 207.0,
+  "database_path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_dif8dmi9\\healthcare_test.duckdb",
+  "database_size_mb": 219.0,
   "tables": [
     {
       "name": "bronze_laboratory_results",
@@ -185,7 +185,7 @@
     {
       "name": "audit_logs",
       "layer": "platform",
-      "rows": 2417
+      "rows": 2609
     },
     {
       "name": "bronze_pharmacy_inventory",
@@ -213,7 +213,7 @@
     "silver": 2135968,
     "gold": 2155859,
     "sim": 2054860,
-    "platform": 3374
+    "platform": 3584
   },
   "storage": [
     {
@@ -243,8 +243,8 @@
     {
       "label": "RAG cache",
       "path": "data\\rag",
-      "size_mb": 4.3,
-      "files": 1
+      "size_mb": 4.4,
+      "files": 2
     },
     {
       "label": "Model artifacts",
@@ -254,8 +254,8 @@
     },
     {
       "label": "Logs",
-      "path": "logs",
-      "size_mb": 0.5,
+      "path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_dif8dmi9\\logs",
+      "size_mb": 0.0,
       "files": 2
     },
     {

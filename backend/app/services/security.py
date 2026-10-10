@@ -220,6 +220,13 @@ def access_matrix() -> AccessMatrix:
 
 # ---- infrastructure -----------------------------------------------------------------------------
 
+def _display_path(p: Path) -> str:
+    try:
+        return str(p.relative_to(BASE_DIR))
+    except ValueError:  # e.g. a database outside the project (tests use a temporary copy)
+        return str(p)
+
+
 def _dir_stats(path: Path) -> tuple:
     size = files = 0
     if path.exists():
@@ -253,13 +260,13 @@ def infra_health() -> InfraHealth:
                         ("Knowledge uploads", DATA_DIR / "knowledge"), ("RAG cache", DATA_DIR / "rag"), ("Model artifacts", MODELS_DIR), ("Logs", LOGS_DIR),
                         ("Policy library", BASE_DIR / "documents")):
         mb, n = _dir_stats(path)
-        storage.append(StorageRow(label=label, path=str(path.relative_to(BASE_DIR)), size_mb=mb, files=n))
+        storage.append(StorageRow(label=label, path=_display_path(path), size_mb=mb, files=n))
     reg = query_df_strict("SELECT COUNT(*) AS n, max(training_timestamp) AS last FROM model_registry WHERE status = 'ACTIVE'").iloc[0]
     runs = sweep.recent_runs(1)
     idx = get_index()
     return InfraHealth(
         api_version=settings.app_version, environment=settings.env, python=sys.version.split()[0], platform=f"{platform.system()} {platform.release()}",
-        uptime_minutes=int((time.time() - STARTED) / 60), database_path=str(Path(DATABASE_PATH).relative_to(BASE_DIR)),
+        uptime_minutes=int((time.time() - STARTED) / 60), database_path=_display_path(Path(DATABASE_PATH)),
         database_size_mb=round(Path(DATABASE_PATH).stat().st_size / 1024 / 1024, 1), tables=tables[:40], layer_rows=layer_rows, storage=storage,
         active_models=int(reg["n"]), models_last_trained=str(reg["last"])[:19] if reg["last"] is not None else None,
         active_jobs=[k for k in ("sandbox_pipeline", "sandbox_predict", "sandbox_forecast", "sandbox_consolidate", "nexa_sweep") if runner.active_job(k)],

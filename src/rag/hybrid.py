@@ -34,6 +34,8 @@ CACHE_DIR = DATA_DIR / "rag"
 EMBED_MODEL = os.getenv("NEXA_EMBED_MODEL", "text-embedding-3-small")
 DENSE_WEIGHT = {"openai": 0.85, "local": 0.4}  # share of the blend given to meaning (non-identifier questions)
 EXACT_DENSE_WEIGHT = 0.25  # identifier / figure questions lean on keywords
+LOCAL_BM25_MIN = 3.5  # offline mode: keyword evidence required (see search())
+LOCAL_MIN_COVERAGE = 0.2  # offline mode: share of the question's words found in the best section
 BM25_STRONG = 8.0  # a keyword match this strong counts as relevant even if meaning search disagrees
 # Policy codes (POL-IT-002, CPG-CLIN-009) and figures with units (70 g/L, 4 mmol/L, 48 hours)
 IDENTIFIER = re.compile(r"\b[A-Z]{2,}-[A-Z]{2,}-\d{2,4}\b|\b\d+(?:\.\d+)?\s*(?:mg|g|mcg|mmol|ml|l|%|°c|mmhg|hours?|days?|minutes?)(?=[^a-z]|$)", re.I)
@@ -279,6 +281,15 @@ class HybridIndex:
         if abstain:
             dense_ok = dn.max() >= DENSE_MIN.get(self.embedder.kind, 0.35)
             lexical_ok = bm.max() >= (BM25_MIN if exact else BM25_STRONG)
+            if self.embedder.kind == "local" and mode == "hybrid":
+                # The offline LSA similarity cannot tell off-topic from on-topic on a small library (a cake recipe scored
+                # 0.95), so offline relevance rests on keyword evidence: a strong match AND a fair share of the question's
+                # words in the best section. Measured: refuses 9/10 off-topic questions, wrongly refuses ~15% of genuine ones.
+                dense_ok = False
+                q_tokens = set(tokenize(query))
+                best = int(np.argmax(bm))
+                coverage = len(q_tokens & set(tokenize(self.chunks[best].search_text))) / max(1, len(q_tokens))
+                lexical_ok = exact and bm.max() >= BM25_MIN or bm.max() >= LOCAL_BM25_MIN and coverage >= LOCAL_MIN_COVERAGE
             if mode == "bm25" and not bm.max() >= BM25_MIN or mode == "dense" and not dense_ok or mode == "hybrid" and not (dense_ok or lexical_ok):
                 return []
         if mode == "bm25":

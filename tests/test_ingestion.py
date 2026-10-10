@@ -78,11 +78,11 @@ def test_dataset_generation_and_interconnectedness():
         assert len(adm_pt_ids.intersection(pt_ids)) > 0
 
 
-def test_bronze_ingestion():
-    """Verify Bronze ingestion creates Parquet files with ingestion metadata."""
-    res = ingest_bronze_layer()
+def test_bronze_ingestion(tmp_path):
+    """Verify Bronze ingestion creates Parquet files with ingestion metadata (written to a temp folder, never data/bronze)."""
+    res = ingest_bronze_layer(bronze_dir=tmp_path)
     assert res["status"] in ["SUCCESS", "PARTIAL", "EMPTY"]
     if res["status"] == "SUCCESS":
         assert res["total_rows"] > 0
-        bronze_files = list(BRONZE_DATA_DIR.glob("*.parquet"))
+        bronze_files = list(tmp_path.glob("*.parquet"))
         assert len(bronze_files) > 0

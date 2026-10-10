@@ -24,7 +24,7 @@ class DataUnavailableError(RuntimeError):
 
 def get_db_path() -> str:
     """Return string representation of the DuckDB database path."""
-    DATABASE_DIR.mkdir(parents=True, exist_ok=True)
+    Path(DATABASE_PATH).parent.mkdir(parents=True, exist_ok=True)
     return str(DATABASE_PATH)
 
 

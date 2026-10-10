@@ -379,3 +379,13 @@
 .nav .sectionLabel {
   margin: var(--space-4) 0 var(--space-1);
 }
+
+.pillLink {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pillLink:hover {
+  filter: brightness(0.97);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}

@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-10T13:31:58",
+ "run_at": "2026-10-10T14:03:46",
  "dense_model": "Local LSA (TF-IDF + SVD)",
  "dense_error": null,
  "documents": 21,
@@ -35,7 +35,7 @@
      "abstained_pct": 66.7
     }
    },
-   "avg_latency_ms": 1.7,
+   "avg_latency_ms": 2.4,
    "rows": [
     {
      "suite": "keyword",
@@ -90,7 +90,7 @@
      "abstained_pct": 66.7
     }
    },
-   "avg_latency_ms": 1.5,
+   "avg_latency_ms": 2.2,
    "rows": [
     {
      "suite": "keyword",
@@ -128,10 +128,10 @@
     },
     "paraphrase": {
      "questions": 21,
-     "hit1_pct": 38.1,
-     "hit3_pct": 57.1,
-     "mrr": 0.468,
-     "false_refusal_pct": 4.8
+     "hit1_pct": 33.3,
+     "hit3_pct": 47.6,
+     "mrr": 0.397,
+     "false_refusal_pct": 28.6
     },
     "exact": {
      "questions": 8,
@@ -142,10 +142,10 @@
     },
     "out_scope": {
      "questions": 6,
-     "abstained_pct": 66.7
+     "abstained_pct": 83.3
     }
    },
-   "avg_latency_ms": 1.4,
+   "avg_latency_ms": 1.7,
    "rows": [
     {
      "suite": "keyword",

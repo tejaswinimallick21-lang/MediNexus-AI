@@ -2,6 +2,7 @@
 Constants and Schema Definitions for MediNexus AI.
 """
 
+import os
 from pathlib import Path
 
 # Base Paths
@@ -14,10 +15,11 @@ GOLD_DATA_DIR = DATA_DIR / "gold"
 METADATA_DIR = DATA_DIR / "metadata"
 ML_RESULTS_DIR = DATA_DIR / "ml_results"
 DATABASE_DIR = BASE_DIR / "database"
-DATABASE_PATH = DATABASE_DIR / "healthcare.duckdb"
+# Overridable so tests (and other environments) can use their own copy of the database
+DATABASE_PATH = Path(os.environ["MEDINEXUS_DB_PATH"]) if os.getenv("MEDINEXUS_DB_PATH") else DATABASE_DIR / "healthcare.duckdb"
 MODELS_DIR = BASE_DIR / "models"
 DOCUMENTS_DIR = BASE_DIR / "documents"
-LOGS_DIR = BASE_DIR / "logs"
+LOGS_DIR = Path(os.environ["MEDINEXUS_LOGS_DIR"]) if os.getenv("MEDINEXUS_LOGS_DIR") else BASE_DIR / "logs"
 
 # Synthea source export (CSV). Swap to the 100K export by pointing this at its folder.
 SYNTHEA_CSV_DIR = DATA_DIR / "synthea" / "csv"

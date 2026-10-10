@@ -12,7 +12,7 @@
   "usage": [
     {
       "agent": "HealthAnalyst Agent",
-      "queries": 50,
+      "queries": 51,
       "fallbacks": 0,
       "avg_latency_ms": 0.0,
       "tool_calls": 0
@@ -33,64 +33,68 @@
     },
     {
       "agent": "healthanalyst",
-      "queries": 5,
-      "fallbacks": 1,
-      "avg_latency_ms": 170.0,
-      "tool_calls": 5
+      "queries": 12,
+      "fallbacks": 2,
+      "avg_latency_ms": 915.0,
+      "tool_calls": 11
     },
     {
       "agent": "medicare",
-      "queries": 3,
+      "queries": 6,
       "fallbacks": 0,
-      "avg_latency_ms": 636.0,
-      "tool_calls": 2
+      "avg_latency_ms": 488.0,
+      "tool_calls": 4
     },
     {
       "agent": "ops",
-      "queries": 1,
+      "queries": 2,
       "fallbacks": 0,
-      "avg_latency_ms": 52.0,
-      "tool_calls": 1
+      "avg_latency_ms": 65.0,
+      "tool_calls": 2
     },
     {
       "agent": "pharmalab",
-      "queries": 2,
+      "queries": 4,
       "fallbacks": 0,
-      "avg_latency_ms": 167.0,
-      "tool_calls": 2
+      "avg_latency_ms": 185.0,
+      "tool_calls": 4
     }
   ],
   "top_tools": [
     {
       "label": "get_readmissions_by",
-      "count": 3
+      "count": 6
     },
     {
       "label": "get_highest_risk_discharges",
-      "count": 1
+      "count": 2
     },
     {
       "label": "find_stock",
-      "count": 1
+      "count": 2
     },
     {
       "label": "get_patient_summary",
-      "count": 1
+      "count": 2
     },
     {
       "label": "propose_purchase_order",
-      "count": 1
+      "count": 2
     },
     {
       "label": "propose_follow_up",
-      "count": 1
+      "count": 2
     },
     {
       "label": "get_capacity_plan",
-      "count": 1
+      "count": 2
     },
     {
       "label": "get_network_kpis",
+      "count": 2
+    },
+    {
+      "label": "get_readmission_economics",
       "count": 1
     }
   ],

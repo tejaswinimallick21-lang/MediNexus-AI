@@ -66,7 +66,7 @@
       "area": "Secrets",
       "title": "No secrets in version control",
       "status": "pass",
-      "detail": "Scanned 348 tracked files: no API keys. .env is ignored by git.",
+      "detail": "Scanned 386 tracked files: no API keys. .env is ignored by git.",
       "fix": null
     },
     {
@@ -98,7 +98,7 @@
       "area": "Monitoring",
       "title": "Audit logging",
       "status": "pass",
-      "detail": "1552 events recorded in the last 24 h (sign-ins, patient-record views, data exports, agent actions).",
+      "detail": "1744 events recorded in the last 24 h (sign-ins, patient-record views, data exports, agent actions).",
       "fix": null
     },
     {
@@ -106,7 +106,7 @@
       "area": "Monitoring",
       "title": "Failed sign-ins (24 h)",
       "status": "warn",
-      "detail": "24 failed sign-ins in the last 24 h; 1 lockouts.",
+      "detail": "30 failed sign-ins in the last 24 h; 2 lockouts.",
       "fix": null
     },
     {
@@ -114,7 +114,7 @@
       "area": "Monitoring",
       "title": "Blocked access attempts (24 h)",
       "status": "warn",
-      "detail": "149 requests were blocked by role-based access control in the last 24 h.",
+      "detail": "164 requests were blocked by role-based access control in the last 24 h.",
       "fix": null
     }
   ]
