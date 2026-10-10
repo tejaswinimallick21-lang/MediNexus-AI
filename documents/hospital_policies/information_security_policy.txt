@@ -1,0 +1,17 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Information Security and Access Control Policy
+DOCUMENT ID: POL-IT-001
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. ACCESS CONTROL
+Access to systems is role-based and limited to what the job requires (least privilege). Access is reviewed every 90 days and removed on the day a staff member leaves.
+
+2. PASSWORDS AND ACCOUNTS
+Passwords are at least 12 characters. Accounts lock for 15 minutes after 5 failed sign-in attempts. Shared accounts are prohibited; demonstration credentials must be changed before any system is shared outside the development team.
+
+3. AUDIT
+Access to patient records, data exports and administrative actions are logged and the logs kept for at least 6 years. Unusual access patterns are reviewed weekly.
+
+4. SECRETS
+API keys and passwords must never be stored in source code or committed to version control. They are kept in a secrets store or local environment file excluded from version control, and rotated at least annually or immediately if exposed.

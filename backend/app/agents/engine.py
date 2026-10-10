@@ -6,6 +6,7 @@ Without an LLM key (or when the LLM is unreachable) a rules engine answers only 
 map to one tool, and otherwise says what it can answer; it never fills gaps with invented text.
 """
 
+import json
 import re
 import time
 from typing import Any, Dict, List, Optional, Tuple
@@ -13,6 +14,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from backend.app.agents import providers
 from backend.app.agents.tools import BY_NAME, Tool, run_tool, tools_for
 from backend.app.core.users import UserRecord
+from src.security.audit import log_audit_event
 
 AGENT_SCOPE = {
     "medicare": "You are Nexa Care, the clinical assistant for healthcare professionals: readmission risk, Patient 360, care gaps, follow-ups and clinical guidelines.",
@@ -130,7 +132,7 @@ def _facts(name: str, data: Any) -> List[str]:
         out = []
         for r in data.get("results", []):
             body = re.sub(r"\[DEMO[^\]]*\]|DOCUMENT TITLE:[^\n]*", "", r["text"]).strip()
-            out.append(f"{r['document']}: {body[:500]}…")
+            out.append(f"{r['document']} ({r.get('policy_id', '')}) · {r.get('section', '')}: {body[:500]}…")
         return out or ["No policy excerpt matched that question."]
     if "rows" in data or "items" in data:
         rows = data.get("rows") if "rows" in data else data.get("items")
@@ -191,7 +193,7 @@ def run(agent: str, message: str, user: UserRecord, history: Optional[List[Tuple
         if r.get("ok") and data.get("action_id"):
             proposed.append({"action_id": data["action_id"], "summary": data.get("summary", ""), "status": "pending"})
         if r.get("ok") and name == "search_policies":
-            sources.extend(f"Policy: {x['document']} ({x['file']})" for x in data.get("results", []))
+            sources.extend(f"Policy: {x['document']} ({x.get('policy_id') or x['file']}) · {x.get('section', '')}" for x in data.get("results", []))
         return r
 
     provider = providers.active_provider()
@@ -211,8 +213,13 @@ def run(agent: str, message: str, user: UserRecord, history: Optional[List[Tuple
         engine = providers.provider_label()
 
     evidence = [f"Tool {t['name']}" + ("" if t["ok"] else f" (failed: {t['error']})") for t in trace] + sources
+    latency = round((time.perf_counter() - started) * 1000, 1)
+    # Audit what the agent did, not what was asked (questions can contain patient details)
+    log_audit_event(username=user.email, role=user.role, action="AGENT_QUERY", resource=agent, status="FALLBACK" if notes else "SUCCESS",
+                    details=json.dumps({"engine": engine, "tools": [t["name"] for t in trace], "failed_tools": sum(not t["ok"] for t in trace),
+                                        "proposals": len(proposed), "latency_ms": latency}))
     return {
         "agent": agent, "answer": answer or "I don't have an answer for that.", "facts": facts, "predictions": [], "recommendations": [],
-        "evidence": list(dict.fromkeys(evidence)), "notes": notes, "latency_ms": round((time.perf_counter() - started) * 1000, 1),
+        "evidence": list(dict.fromkeys(evidence)), "notes": notes, "latency_ms": latency,
         "engine": engine, "tool_calls": trace, "proposed_actions": proposed,
     }

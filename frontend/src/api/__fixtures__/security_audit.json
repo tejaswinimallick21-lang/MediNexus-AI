@@ -1,0 +1,55 @@
+{
+  "items": [
+    {
+      "log_id": "aud_f5a3ff28",
+      "timestamp": "2026-10-10T13:31:56",
+      "username": "admin@medinexus.org",
+      "role": "admin",
+      "action": "LOGIN",
+      "resource": "SYSTEM_AUTH",
+      "status": "SUCCESS",
+      "details": "Credential sign-in"
+    },
+    {
+      "log_id": "aud_52d44ea0",
+      "timestamp": "2026-10-10T13:31:54",
+      "username": "admin@medinexus.org",
+      "role": "admin",
+      "action": "LOGIN",
+      "resource": "SYSTEM_AUTH",
+      "status": "SUCCESS",
+      "details": "Credential sign-in"
+    },
+    {
+      "log_id": "aud_15d830cc",
+      "timestamp": "2026-10-10T13:31:54",
+      "username": "analyst@medinexus.org",
+      "role": "analyst",
+      "action": "LOGIN",
+      "resource": "SYSTEM_AUTH",
+      "status": "SUCCESS",
+      "details": "Credential sign-in"
+    },
+    {
+      "log_id": "aud_096116be",
+      "timestamp": "2026-10-10T13:31:53",
+      "username": "hcp@medinexus.org",
+      "role": "hcp",
+      "action": "LOGIN",
+      "resource": "SYSTEM_AUTH",
+      "status": "SUCCESS",
+      "details": "Credential sign-in"
+    },
+    {
+      "log_id": "aud_1decbe37",
+      "timestamp": "2026-10-10T13:31:53",
+      "username": "hcp@medinexus.org",
+      "role": "hcp",
+      "action": "LOGIN",
+      "resource": "SYSTEM_AUTH",
+      "status": "SUCCESS",
+      "details": "Credential sign-in"
+    }
+  ],
+  "next_cursor": "bzo1"
+}

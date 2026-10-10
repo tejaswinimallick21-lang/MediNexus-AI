@@ -44,6 +44,19 @@ def create_app() -> FastAPI:
             allow_headers=["*"],
         )
 
+    @app.middleware("http")
+    async def security_headers(request, call_next):
+        """Baseline hardening headers on every API response (the API serves JSON, never HTML pages to frame)."""
+        response = await call_next(request)
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("X-Frame-Options", "DENY")
+        response.headers.setdefault("Referrer-Policy", "no-referrer")
+        response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+        response.headers.setdefault("Cache-Control", "no-store")
+        if settings.cookie_secure:
+            response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+        return response
+
     install_error_handlers(app)
     for router in routers:
         app.include_router(router, prefix="/api")

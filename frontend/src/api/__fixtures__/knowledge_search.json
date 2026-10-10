@@ -1,0 +1,104 @@
+{
+  "query": "POL-OPS-099 visitors",
+  "identifier_query": true,
+  "dense_model": "Local LSA (TF-IDF + SVD)",
+  "results": {
+    "bm25": [
+      {
+        "title": "Visitor Hours Policy",
+        "policy_id": "POL-OPS-099",
+        "section": "General Wards",
+        "filename": "visitor_hours.md",
+        "source": "uploaded",
+        "text": "Visitors are welcome between 10:00 and 20:00. A maximum of two visitors per patient at the bedside at any time. Children under 12 must be accompanied by an adult.",
+        "score": 11.313,
+        "bm25": 11.313,
+        "dense": 0.991,
+        "bm25_rank": 1,
+        "dense_rank": 1
+      }
+    ],
+    "dense": [
+      {
+        "title": "Visitor Hours Policy",
+        "policy_id": "POL-OPS-099",
+        "section": "General Wards",
+        "filename": "visitor_hours.md",
+        "source": "uploaded",
+        "text": "Visitors are welcome between 10:00 and 20:00. A maximum of two visitors per patient at the bedside at any time. Children under 12 must be accompanied by an adult.",
+        "score": 0.9908,
+        "bm25": 11.313,
+        "dense": 0.991,
+        "bm25_rank": 1,
+        "dense_rank": 1
+      },
+      {
+        "title": "Medication Reconciliation at Transitions of Care",
+        "policy_id": "CPG-CLIN-007",
+        "section": "Measure",
+        "filename": "medication_reconciliation_guideline.txt",
+        "source": "library",
+        "text": "Target: 95% of admissions reconciled within 24 hours.",
+        "score": 0.0197,
+        "bm25": 0.0,
+        "dense": 0.02,
+        "bm25_rank": null,
+        "dense_rank": 2
+      },
+      {
+        "title": "Adult Sepsis Screening and Escalation Protocol",
+        "policy_id": "CPG-IPC-004",
+        "section": "Screening Triggers",
+        "filename": "sepsis_screening_protocol.txt",
+        "source": "library",
+        "text": "Escalate when infection is suspected AND two or more of: respiratory rate 22 per minute or higher, altered mental status, systolic blood pressure 100 mmHg or lower, or a lactate of 2 mmol/L or higher.",
+        "score": 0.0165,
+        "bm25": 0.0,
+        "dense": 0.016,
+        "bm25_rank": null,
+        "dense_rank": 3
+      }
+    ],
+    "hybrid": [
+      {
+        "title": "Visitor Hours Policy",
+        "policy_id": "POL-OPS-099",
+        "section": "General Wards",
+        "filename": "visitor_hours.md",
+        "source": "uploaded",
+        "text": "Visitors are welcome between 10:00 and 20:00. A maximum of two visitors per patient at the bedside at any time. Children under 12 must be accompanied by an adult.",
+        "score": 1.0,
+        "bm25": 11.313,
+        "dense": 0.991,
+        "bm25_rank": 1,
+        "dense_rank": 1
+      },
+      {
+        "title": "Medication Reconciliation at Transitions of Care",
+        "policy_id": "CPG-CLIN-007",
+        "section": "Measure",
+        "filename": "medication_reconciliation_guideline.txt",
+        "source": "library",
+        "text": "Target: 95% of admissions reconciled within 24 hours.",
+        "score": 0.0086,
+        "bm25": 0.0,
+        "dense": 0.02,
+        "bm25_rank": null,
+        "dense_rank": 2
+      },
+      {
+        "title": "Adult Sepsis Screening and Escalation Protocol",
+        "policy_id": "CPG-IPC-004",
+        "section": "Screening Triggers",
+        "filename": "sepsis_screening_protocol.txt",
+        "source": "library",
+        "text": "Escalate when infection is suspected AND two or more of: respiratory rate 22 per minute or higher, altered mental status, systolic blood pressure 100 mmHg or lower, or a lactate of 2 mmol/L or higher.",
+        "score": 0.0078,
+        "bm25": 0.0,
+        "dense": 0.016,
+        "bm25_rank": null,
+        "dense_rank": 3
+      }
+    ]
+  }
+}

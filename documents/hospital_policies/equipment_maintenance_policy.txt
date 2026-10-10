@@ -1,0 +1,14 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Medical Equipment Maintenance Policy
+DOCUMENT ID: POL-OPS-004
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. PLANNED PREVENTIVE MAINTENANCE
+Every device has a service interval from the manufacturer. Imaging (CT, MRI) is serviced every 90 days, lab analysers every 60 days, infusion pumps annually.
+
+2. OVERDUE EQUIPMENT
+Equipment more than 30 days past its service date is labelled "Do Not Use" and removed from clinical areas until serviced.
+
+3. FAILURE REPORTING
+Staff report any failure through the biomedical engineering helpdesk. Critical devices (ventilators, defibrillators) have a 4-hour response target.

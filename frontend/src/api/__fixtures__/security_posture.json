@@ -1,0 +1,121 @@
+{
+  "score": 86,
+  "passed": 10,
+  "warnings": 4,
+  "failures": 0,
+  "environment": "development",
+  "checks": [
+    {
+      "id": "jwt_secret",
+      "area": "Authentication",
+      "title": "Session signing key",
+      "status": "pass",
+      "detail": "A fixed secret is configured.",
+      "fix": null
+    },
+    {
+      "id": "cookie_flags",
+      "area": "Authentication",
+      "title": "Session cookie flags",
+      "status": "warn",
+      "detail": "HttpOnly and SameSite=Lax are always set; Secure is off (HTTP allowed).",
+      "fix": "Serve over HTTPS and set MEDINEXUS_COOKIE_SECURE=true before going live."
+    },
+    {
+      "id": "session_ttl",
+      "area": "Authentication",
+      "title": "Session lifetime",
+      "status": "pass",
+      "detail": "Sessions expire after 8 h 0 min.",
+      "fix": null
+    },
+    {
+      "id": "login_lockout",
+      "area": "Authentication",
+      "title": "Brute-force protection",
+      "status": "pass",
+      "detail": "5 failed sign-ins within 15 min lock the account for 15 min. Currently locked: 0.",
+      "fix": null
+    },
+    {
+      "id": "demo_passwords",
+      "area": "Authentication",
+      "title": "Default passwords",
+      "status": "pass",
+      "detail": "No account uses the demo password.",
+      "fix": null
+    },
+    {
+      "id": "cors",
+      "area": "Network",
+      "title": "Cross-origin access",
+      "status": "pass",
+      "detail": "Allowed origins: http://localhost:5173.",
+      "fix": null
+    },
+    {
+      "id": "security_headers",
+      "area": "Network",
+      "title": "Security headers",
+      "status": "pass",
+      "detail": "nosniff, frame-deny, no-referrer, no-store and a restrictive Permissions-Policy are sent on every API response; HSTS is added once HTTPS is enabled.",
+      "fix": null
+    },
+    {
+      "id": "secrets_git",
+      "area": "Secrets",
+      "title": "No secrets in version control",
+      "status": "pass",
+      "detail": "Scanned 348 tracked files: no API keys. .env is ignored by git.",
+      "fix": null
+    },
+    {
+      "id": "llm_key",
+      "area": "Secrets",
+      "title": "AI provider key storage",
+      "status": "pass",
+      "detail": "No AI provider key configured; agents use the rules engine.",
+      "fix": null
+    },
+    {
+      "id": "pseudonym_key",
+      "area": "Data protection",
+      "title": "Pseudonymisation key",
+      "status": "warn",
+      "detail": "No platform-wide key yet (it is created on the next dataset upload). The 4 existing sandbox(es) were masked with one-off keys, so their masked identifiers cannot be linked to other uploads.",
+      "fix": "Re-upload datasets you want to link on masked identifiers."
+    },
+    {
+      "id": "agent_guardrails",
+      "area": "AI",
+      "title": "Agent guardrails",
+      "status": "pass",
+      "detail": "Agents act only through 22 role-scoped tools; actions are proposals that need human approval; patient names are stripped from tool output; max 5 tool rounds per question.",
+      "fix": null
+    },
+    {
+      "id": "audit_active",
+      "area": "Monitoring",
+      "title": "Audit logging",
+      "status": "pass",
+      "detail": "1552 events recorded in the last 24 h (sign-ins, patient-record views, data exports, agent actions).",
+      "fix": null
+    },
+    {
+      "id": "failed_logins",
+      "area": "Monitoring",
+      "title": "Failed sign-ins (24 h)",
+      "status": "warn",
+      "detail": "24 failed sign-ins in the last 24 h; 1 lockouts.",
+      "fix": null
+    },
+    {
+      "id": "access_denied",
+      "area": "Monitoring",
+      "title": "Blocked access attempts (24 h)",
+      "status": "warn",
+      "detail": "149 requests were blocked by role-based access control in the last 24 h.",
+      "fix": null
+    }
+  ]
+}

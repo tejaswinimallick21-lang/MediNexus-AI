@@ -46,3 +46,5 @@ frontend/.env
 frontend/coverage/
 data/ops/
 data/uploads/
+data/knowledge/
+data/rag/

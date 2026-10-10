@@ -1,0 +1,14 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Data Retention and Security Incident Response Policy
+DOCUMENT ID: POL-IT-002
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. RETENTION
+Adult health records are retained for 8 years after the last episode of care; audit logs for 6 years. Analytical extracts are deleted when the analysis ends.
+
+2. DE-IDENTIFICATION
+Data used for analytics or AI models is pseudonymised: direct identifiers (names, social security numbers, contact details) are replaced with tokens, dates of birth reduced to year, and precise locations generalised.
+
+3. INCIDENT RESPONSE
+Any suspected breach (lost device, misdirected record, exposed credential) is reported to the information security team within 1 hour. The team contains the incident, assesses the risk to patients, and notifies the regulator within 72 hours when required.

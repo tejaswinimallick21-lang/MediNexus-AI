@@ -1,0 +1,16 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Bed Management and Surge Escalation Policy
+DOCUMENT ID: POL-OPS-003
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. DAILY BED MEETING
+Bed managers meet at 08:00 and 14:00 to review expected admissions, discharges and blocked beds.
+
+2. SURGE LEVELS
+- Level 1 (occupancy below 85%): normal operations.
+- Level 2 (85-92%): expedite discharges before 11:00, open the discharge lounge, review elective admissions for the next 48 hours.
+- Level 3 (above 92%): activate escalation beds, defer non-urgent elective surgery, daily executive huddle.
+
+3. DISCHARGE BEFORE NOON
+Wards aim to discharge 30% of planned discharges before 12:00 to free beds for emergency admissions.

@@ -1,47 +1,25 @@
 """
-Knowledge Base Retriever for MediNexus AI.
+Knowledge Base Retriever for MediNexus AI: hybrid (BM25 + embeddings) search over the policy library.
 """
 
-from typing import List, Dict, Any, Optional
-from src.rag.document_loader import load_knowledge_documents
-from src.rag.chunker import chunk_all_documents
-from src.rag.embeddings import LocalVectorStore
+from typing import Any, Dict, List, Optional
 
-_VECTOR_STORE: Optional[LocalVectorStore] = None
+from src.rag.hybrid import get_index
 
 
-def get_vector_store() -> LocalVectorStore:
-    """Initialize or return the singleton vector store."""
-    global _VECTOR_STORE
-    if _VECTOR_STORE is None or not _VECTOR_STORE.is_indexed:
-        docs = load_knowledge_documents()
-        chunks = chunk_all_documents(docs)
-        store = LocalVectorStore()
-        store.build_index(chunks)
-        _VECTOR_STORE = store
-    return _VECTOR_STORE
-
-
-def retrieve_context(query: str, top_k: int = 3, category: Optional[str] = None) -> List[Dict[str, Any]]:
-    """
-    Retrieve top-k relevant knowledge chunks for a query with citation metadata.
-    """
-    store = get_vector_store()
-    results = store.search(query, top_k=top_k * 2)
-
-    hits = []
-    for chunk, score in results:
-        if category and category.lower() not in chunk["category"].lower():
+def retrieve_context(query: str, top_k: int = 3, category: Optional[str] = None, mode: str = "hybrid") -> List[Dict[str, Any]]:
+    """Top-k relevant sections with citation metadata; an empty list means nothing relevant was found."""
+    hits = get_index().search(query, k=top_k * 3 if category else top_k, mode=mode)
+    out = []
+    for h in hits:
+        d = h.as_dict()
+        if category and category.lower() not in d["category"].lower():
             continue
-        hits.append({
-            "chunk_id": chunk["chunk_id"],
-            "title": chunk["title"],
-            "filename": chunk["filename"],
-            "category": chunk["category"],
-            "text": chunk["text"],
-            "score": score,
-        })
-        if len(hits) >= top_k:
+        out.append(d)
+        if len(out) >= top_k:
             break
+    return out
 
-    return hits
+
+def get_vector_store():  # kept for callers of the old API
+    return get_index()

@@ -1,0 +1,17 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Adult Sepsis Screening and Escalation Protocol
+DOCUMENT ID: CPG-IPC-004
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. WHO IS SCREENED
+All adult emergency admissions and any inpatient with a new suspected infection are screened at triage and whenever vital signs deteriorate.
+
+2. SCREENING TRIGGERS
+Escalate when infection is suspected AND two or more of: respiratory rate 22 per minute or higher, altered mental status, systolic blood pressure 100 mmHg or lower, or a lactate of 2 mmol/L or higher.
+
+3. FIRST-HOUR BUNDLE
+Once sepsis is suspected the team should, within one hour: measure lactate, take blood cultures before antibiotics, start broad-spectrum antibiotics per the stewardship guide, begin fluid resuscitation for hypotension or lactate of 4 mmol/L or more, and start vasopressors if hypotension persists.
+
+4. ESCALATION
+The nurse in charge notifies the responsible physician immediately and the critical care outreach team if there is no response within 30 minutes or the patient deteriorates.

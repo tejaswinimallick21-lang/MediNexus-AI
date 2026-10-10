@@ -52,6 +52,17 @@ import {
   AssistantSessionPageSchema,
   AssistantSessionSchema,
 } from "./schemas/assistant";
+import {
+  AccessMatrixSchema,
+  AiGovernanceSchema,
+  AuditPageSchema,
+  AuditSummarySchema,
+  BenchmarkSchema,
+  InfraHealthSchema,
+  KnowledgeLibrarySchema,
+  PostureSchema,
+  SearchComparisonSchema,
+} from "./schemas/security";
 import { ActionInboxSchema, AgentActionSchema, SweepStatusSchema } from "./schemas/actions";
 import { LinkDiscoverySchema, UploadAcceptedSchema, UploadDetailSchema, UploadPageSchema } from "./schemas/dataPlatform";
 
@@ -115,4 +126,13 @@ export const fixtureSchemas: Record<string, ZodTypeAny> = {
   actions_inbox: ActionInboxSchema,
   action_decided: AgentActionSchema,
   sweep_status: SweepStatusSchema,
+  security_posture: PostureSchema,
+  security_audit: AuditPageSchema,
+  security_audit_summary: AuditSummarySchema,
+  security_access: AccessMatrixSchema,
+  security_infra: InfraHealthSchema,
+  security_ai: AiGovernanceSchema,
+  knowledge_library: KnowledgeLibrarySchema,
+  knowledge_search: SearchComparisonSchema,
+  knowledge_benchmark: BenchmarkSchema,
 };

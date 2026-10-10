@@ -1,0 +1,17 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Pressure Injury Prevention Guideline
+DOCUMENT ID: CPG-CLIN-009
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. RISK ASSESSMENT
+Skin inspection and a validated risk score (for example the Braden scale) on admission and daily thereafter. A Braden score of 18 or lower indicates risk.
+
+2. PREVENTION BUNDLE
+- Reposition at least every 2 hours for bed-bound patients at risk.
+- Pressure-redistributing mattress for high-risk patients.
+- Keep skin clean and dry; manage incontinence promptly.
+- Screen nutrition and refer to the dietitian when intake is poor.
+
+3. REPORTING
+New pressure injuries of stage 2 or above are reported as incidents and reviewed by the tissue viability nurse.

@@ -1,0 +1,17 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Antimicrobial Stewardship Policy
+DOCUMENT ID: POL-PHARM-003
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. PRINCIPLES
+Start smart, then focus: prescribe promptly when infection is likely, document indication and planned duration, and review at 48-72 hours.
+
+2. 48-72 HOUR REVIEW
+At review the prescriber chooses one of: stop, switch from intravenous to oral, change to a narrower agent based on cultures, continue with a new review date, or move to outpatient therapy.
+
+3. RESTRICTED ANTIMICROBIALS
+Carbapenems, linezolid and IV colistin require approval from the infectious diseases or microbiology team within 24 hours of the first dose.
+
+4. AUDIT
+The stewardship pharmacist audits antimicrobial use monthly and reports days of therapy per 1,000 patient-days by ward.

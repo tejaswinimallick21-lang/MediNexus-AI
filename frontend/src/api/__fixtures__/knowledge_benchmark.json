@@ -1,0 +1,175 @@
+{
+ "run_at": "2026-10-10T13:31:58",
+ "dense_model": "Local LSA (TF-IDF + SVD)",
+ "dense_error": null,
+ "documents": 21,
+ "chunks": 73,
+ "questions": 56,
+ "modes": [
+  {
+   "mode": "bm25",
+   "summary": {
+    "keyword": {
+     "questions": 21,
+     "hit1_pct": 95.2,
+     "hit3_pct": 100.0,
+     "mrr": 0.976,
+     "false_refusal_pct": 0.0
+    },
+    "paraphrase": {
+     "questions": 21,
+     "hit1_pct": 42.9,
+     "hit3_pct": 57.1,
+     "mrr": 0.492,
+     "false_refusal_pct": 4.8
+    },
+    "exact": {
+     "questions": 8,
+     "hit1_pct": 100.0,
+     "hit3_pct": 100.0,
+     "mrr": 1.0,
+     "false_refusal_pct": 0.0
+    },
+    "out_scope": {
+     "questions": 6,
+     "abstained_pct": 66.7
+    }
+   },
+   "avg_latency_ms": 1.7,
+   "rows": [
+    {
+     "suite": "keyword",
+     "q": "What temperature range is required for refrigerated medications?",
+     "expected": "medication_storage_policy",
+     "got": [
+      "medication_storage_policy",
+      "medication_storage_policy",
+      "isolation_precautions_policy"
+     ],
+     "rank": 1
+    },
+    {
+     "suite": "paraphrase",
+     "q": "How cold does insulin need to be kept in the fridge?",
+     "expected": "medication_storage_policy",
+     "got": [
+      "medication_storage_policy",
+      "inpatient_glucose_management",
+      "isolation_precautions_policy"
+     ],
+     "rank": 1
+    }
+   ]
+  },
+  {
+   "mode": "dense",
+   "summary": {
+    "keyword": {
+     "questions": 21,
+     "hit1_pct": 95.2,
+     "hit3_pct": 95.2,
+     "mrr": 0.952,
+     "false_refusal_pct": 0.0
+    },
+    "paraphrase": {
+     "questions": 21,
+     "hit1_pct": 38.1,
+     "hit3_pct": 57.1,
+     "mrr": 0.46,
+     "false_refusal_pct": 4.8
+    },
+    "exact": {
+     "questions": 8,
+     "hit1_pct": 100.0,
+     "hit3_pct": 100.0,
+     "mrr": 1.0,
+     "false_refusal_pct": 0.0
+    },
+    "out_scope": {
+     "questions": 6,
+     "abstained_pct": 66.7
+    }
+   },
+   "avg_latency_ms": 1.5,
+   "rows": [
+    {
+     "suite": "keyword",
+     "q": "What temperature range is required for refrigerated medications?",
+     "expected": "medication_storage_policy",
+     "got": [
+      "medication_storage_policy",
+      "medication_storage_policy",
+      "isolation_precautions_policy"
+     ],
+     "rank": 1
+    },
+    {
+     "suite": "paraphrase",
+     "q": "How cold does insulin need to be kept in the fridge?",
+     "expected": "medication_storage_policy",
+     "got": [
+      "medication_storage_policy",
+      "inpatient_glucose_management",
+      "information_security_policy"
+     ],
+     "rank": 1
+    }
+   ]
+  },
+  {
+   "mode": "hybrid",
+   "summary": {
+    "keyword": {
+     "questions": 21,
+     "hit1_pct": 95.2,
+     "hit3_pct": 100.0,
+     "mrr": 0.968,
+     "false_refusal_pct": 0.0
+    },
+    "paraphrase": {
+     "questions": 21,
+     "hit1_pct": 38.1,
+     "hit3_pct": 57.1,
+     "mrr": 0.468,
+     "false_refusal_pct": 4.8
+    },
+    "exact": {
+     "questions": 8,
+     "hit1_pct": 100.0,
+     "hit3_pct": 100.0,
+     "mrr": 1.0,
+     "false_refusal_pct": 0.0
+    },
+    "out_scope": {
+     "questions": 6,
+     "abstained_pct": 66.7
+    }
+   },
+   "avg_latency_ms": 1.4,
+   "rows": [
+    {
+     "suite": "keyword",
+     "q": "What temperature range is required for refrigerated medications?",
+     "expected": "medication_storage_policy",
+     "got": [
+      "medication_storage_policy",
+      "medication_storage_policy",
+      "isolation_precautions_policy"
+     ],
+     "rank": 1
+    },
+    {
+     "suite": "paraphrase",
+     "q": "How cold does insulin need to be kept in the fridge?",
+     "expected": "medication_storage_policy",
+     "got": [
+      "medication_storage_policy",
+      "inpatient_glucose_management",
+      "isolation_precautions_policy"
+     ],
+     "rank": 1
+    }
+   ]
+  }
+ ]
+}

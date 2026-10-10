@@ -1,0 +1,17 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Safe Blood Transfusion Policy
+DOCUMENT ID: POL-CLIN-010
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. CONSENT AND INDICATION
+Transfusion requires documented consent and a documented indication. For stable adult inpatients a restrictive threshold of haemoglobin 70 g/L is used, or 80 g/L with cardiovascular disease, unless clinically justified otherwise.
+
+2. BEDSIDE CHECK
+Two qualified staff independently confirm patient identity against the wristband and the blood component label at the bedside immediately before starting.
+
+3. OBSERVATIONS
+Record temperature, pulse, blood pressure and respiratory rate before the transfusion, 15 minutes after starting and at the end.
+
+4. SUSPECTED REACTION
+Stop the transfusion immediately, keep the IV line open with saline, call the physician, and return the bag to the blood bank. Report every reaction to the haemovigilance team.

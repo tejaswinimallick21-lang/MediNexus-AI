@@ -1,0 +1,17 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Transmission-Based Isolation Precautions
+DOCUMENT ID: POL-IPC-002
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. CONTACT PRECAUTIONS
+Used for MRSA, VRE, CRE and C. difficile. Single room where possible, gown and gloves on entry, dedicated equipment such as stethoscopes and blood pressure cuffs.
+
+2. DROPLET PRECAUTIONS
+Used for influenza and pertussis. Surgical mask within close range of the patient; patient wears a mask during transport.
+
+3. AIRBORNE PRECAUTIONS
+Used for tuberculosis, measles and varicella. Negative-pressure airborne infection isolation room, fit-tested N95 respirator for staff, door kept closed.
+
+4. DISCONTINUATION
+Precautions are stopped only on the instruction of the infection prevention team, according to organism-specific clearance criteria.

@@ -1,0 +1,217 @@
+{
+  "documents": [
+    {
+      "doc_id": "readmission_followup_guideline",
+      "title": "Clinical Practice Guideline: Prevention of Preventable Readmissions in Chronic Disease",
+      "policy_id": "CPG-CLIN-001",
+      "category": "Clinical Guidelines",
+      "filename": "readmission_followup_guideline.txt",
+      "source": "library",
+      "sections": 4,
+      "words": 150
+    },
+    {
+      "doc_id": "inpatient_glucose_management",
+      "title": "Inpatient Diabetes and Glucose Management",
+      "policy_id": "CPG-CLIN-008",
+      "category": "Clinical Guidelines",
+      "filename": "inpatient_glucose_management.txt",
+      "source": "library",
+      "sections": 4,
+      "words": 105
+    },
+    {
+      "doc_id": "fall_prevention_guideline",
+      "title": "Inpatient Fall Prevention Guideline",
+      "policy_id": "CPG-CLIN-006",
+      "category": "Clinical Guidelines",
+      "filename": "fall_prevention_guideline.txt",
+      "source": "library",
+      "sections": 3,
+      "words": 125
+    },
+    {
+      "doc_id": "medication_reconciliation_guideline",
+      "title": "Medication Reconciliation at Transitions of Care",
+      "policy_id": "CPG-CLIN-007",
+      "category": "Clinical Guidelines",
+      "filename": "medication_reconciliation_guideline.txt",
+      "source": "library",
+      "sections": 4,
+      "words": 103
+    },
+    {
+      "doc_id": "pressure_injury_prevention",
+      "title": "Pressure Injury Prevention Guideline",
+      "policy_id": "CPG-CLIN-009",
+      "category": "Clinical Guidelines",
+      "filename": "pressure_injury_prevention.txt",
+      "source": "library",
+      "sections": 3,
+      "words": 84
+    },
+    {
+      "doc_id": "blood_transfusion_policy",
+      "title": "Safe Blood Transfusion Policy",
+      "policy_id": "POL-CLIN-010",
+      "category": "Clinical Guidelines",
+      "filename": "blood_transfusion_policy.txt",
+      "source": "library",
+      "sections": 4,
+      "words": 100
+    },
+    {
+      "doc_id": "bed_management_surge_policy",
+      "title": "Bed Management and Surge Escalation Policy",
+      "policy_id": "POL-OPS-003",
+      "category": "Hospital Policies",
+      "filename": "bed_management_surge_policy.txt",
+      "source": "library",
+      "sections": 3,
+      "words": 74
+    },
+    {
+      "doc_id": "data_retention_incident_policy",
+      "title": "Data Retention and Security Incident Response Policy",
+      "policy_id": "POL-IT-002",
+      "category": "Hospital Policies",
+      "filename": "data_retention_incident_policy.txt",
+      "source": "library",
+      "sections": 3,
+      "words": 96
+    },
+    {
+      "doc_id": "patient_privacy_policy",
+      "title": "Healthcare Data Privacy and Role-Based Access Governance",
+      "policy_id": "POL-HOSP-003",
+      "category": "Hospital Policies",
+      "filename": "patient_privacy_policy.txt",
+      "source": "library",
+      "sections": 3,
+      "words": 93
+    },
+    {
+      "doc_id": "information_security_policy",
+      "title": "Information Security and Access Control Policy",
+      "policy_id": "POL-IT-001",
+      "category": "Hospital Policies",
+      "filename": "information_security_policy.txt",
+      "source": "library",
+      "sections": 4,
+      "words": 129
+    },
+    {
+      "doc_id": "discharge_policy",
+      "title": "Inpatient Discharge Planning and Transitional Care Policy",
+      "policy_id": "POL-HOSP-001",
+      "category": "Hospital Policies",
+      "filename": "discharge_policy.txt",
+      "source": "library",
+      "sections": 4,
+      "words": 173
+    },
+    {
+      "doc_id": "equipment_maintenance_policy",
+      "title": "Medical Equipment Maintenance Policy",
+      "policy_id": "POL-OPS-004",
+      "category": "Hospital Policies",
+      "filename": "equipment_maintenance_policy.txt",
+      "source": "library",
+      "sections": 3,
+      "words": 64
+    },
+    {
+      "doc_id": "appointment_policy",
+      "title": "Outpatient Appointment Scheduling and Attendance Policy",
+      "policy_id": "POL-HOSP-002",
+      "category": "Hospital Policies",
+      "filename": "appointment_policy.txt",
+      "source": "library",
+      "sections": 4,
+      "words": 108
+    },
+    {
+      "doc_id": "sepsis_screening_protocol",
+      "title": "Adult Sepsis Screening and Escalation Protocol",
+      "policy_id": "CPG-IPC-004",
+      "category": "Infection Control",
+      "filename": "sepsis_screening_protocol.txt",
+      "source": "library",
+      "sections": 4,
+      "words": 125
+    },
+    {
+      "doc_id": "hand_hygiene_policy",
+      "title": "Hand Hygiene and Standard Precautions Policy",
+      "policy_id": "POL-IPC-001",
+      "category": "Infection Control",
+      "filename": "hand_hygiene_policy.txt",
+      "source": "library",
+      "sections": 4,
+      "words": 127
+    },
+    {
+      "doc_id": "isolation_precautions_policy",
+      "title": "Transmission-Based Isolation Precautions",
+      "policy_id": "POL-IPC-002",
+      "category": "Infection Control",
+      "filename": "isolation_precautions_policy.txt",
+      "source": "library",
+      "sections": 4,
+      "words": 81
+    },
+    {
+      "doc_id": "laboratory_safety_policy",
+      "title": "Clinical Laboratory Biosafety and Analyzer Maintenance Protocols",
+      "policy_id": "POL-LAB-002",
+      "category": "Laboratory",
+      "filename": "laboratory_safety_policy.txt",
+      "source": "library",
+      "sections": 3,
+      "words": 112
+    },
+    {
+      "doc_id": "sample_handling_policy",
+      "title": "Clinical Laboratory Sample Handling and Critical Value Notification Policy",
+      "policy_id": "POL-LAB-001",
+      "category": "Laboratory",
+      "filename": "sample_handling_policy.txt",
+      "source": "library",
+      "sections": 3,
+      "words": 143
+    },
+    {
+      "doc_id": "antimicrobial_stewardship_policy",
+      "title": "Antimicrobial Stewardship Policy",
+      "policy_id": "POL-PHARM-003",
+      "category": "Pharmacy",
+      "filename": "antimicrobial_stewardship_policy.txt",
+      "source": "library",
+      "sections": 3,
+      "words": 94
+    },
+    {
+      "doc_id": "medication_storage_policy",
+      "title": "Inpatient Medication Storage and Cold Chain Integrity Policy",
+      "policy_id": "POL-PHARM-001",
+      "category": "Pharmacy",
+      "filename": "medication_storage_policy.txt",
+      "source": "library",
+      "sections": 3,
+      "words": 114
+    },
+    {
+      "doc_id": "inventory_policy",
+      "title": "Pharmacy Inventory Replenishment and Critical Shortage Protocol",
+      "policy_id": "POL-PHARM-002",
+      "category": "Pharmacy",
+      "filename": "inventory_policy.txt",
+      "source": "library",
+      "sections": 3,
+      "words": 119
+    }
+  ],
+  "chunks": 73,
+  "dense_model": "Local LSA (TF-IDF + SVD)",
+  "dense_error": null
+}

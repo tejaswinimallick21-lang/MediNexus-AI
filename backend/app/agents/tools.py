@@ -53,8 +53,10 @@ def search_policies(user: UserRecord, query: str) -> Dict[str, Any]:
 
     hits = retrieve_context(query, top_k=3)
     return {
-        "note": "Excerpts from hospital policy and guideline documents (keyword search). Quote only what is here.",
-        "results": [{"document": h["title"], "file": h["filename"], "relevance": h["score"], "text": h["text"][:1500]} for h in hits],
+        "note": "Policy and guideline excerpts found by hybrid search (meaning + keywords). Quote only what is here and cite as "
+                "[Policy: <policy_id> <section>]. An empty list means the library has nothing on this.",
+        "results": [{"document": h["title"], "policy_id": h["policy_id"], "section": h["section"], "file": h["filename"],
+                     "relevance": h["score"], "text": h["text"][:1500]} for h in hits],
     }
 
 

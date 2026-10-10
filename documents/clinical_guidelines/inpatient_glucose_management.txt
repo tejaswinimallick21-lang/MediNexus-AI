@@ -1,0 +1,17 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Inpatient Diabetes and Glucose Management
+DOCUMENT ID: CPG-CLIN-008
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. MONITORING
+Patients with diabetes have capillary blood glucose checked before meals and at bedtime, or every 4-6 hours if not eating.
+
+2. TARGETS
+For most non-critically ill inpatients the target range is 7.8 to 10.0 mmol/L (140 to 180 mg/dL). Tighter targets are reserved for selected patients without hypoglycaemia risk.
+
+3. HYPOGLYCAEMIA
+A glucose below 4.0 mmol/L (70 mg/dL) is treated immediately per the hypoglycaemia algorithm and rechecked after 15 minutes. Every episode is reviewed to find the cause.
+
+4. DISCHARGE
+Patients started on insulin receive device teaching and a follow-up appointment with the diabetes team within 2 weeks. An HbA1c is measured if none was done in the previous 3 months.

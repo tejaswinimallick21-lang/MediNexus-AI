@@ -1,0 +1,18 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Hand Hygiene and Standard Precautions Policy
+DOCUMENT ID: POL-IPC-001
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. WHEN TO CLEAN HANDS (FIVE MOMENTS)
+Staff must clean hands before touching a patient, before a clean or aseptic procedure, after body-fluid exposure risk, after touching a patient, and after touching patient surroundings.
+
+2. METHOD
+- Alcohol-based hand rub is the default for visibly clean hands; rub all surfaces for 20-30 seconds until dry.
+- Soap and water (40-60 seconds) is required when hands are visibly soiled and after caring for patients with suspected Clostridioides difficile or norovirus, because alcohol does not reliably inactivate spores.
+
+3. GLOVES
+Gloves do not replace hand hygiene. Remove gloves and clean hands between patients and between dirty and clean tasks on the same patient.
+
+4. COMPLIANCE MONITORING
+Each ward is audited monthly by direct observation. The compliance target is 90% or higher; wards below 80% for two consecutive months receive a focused improvement plan.

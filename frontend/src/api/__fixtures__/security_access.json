@@ -1,0 +1,204 @@
+{
+  "roles": [
+    {
+      "role": "admin",
+      "title": "Platform Administrator"
+    },
+    {
+      "role": "hcp",
+      "title": "Healthcare Professional"
+    },
+    {
+      "role": "analyst",
+      "title": "Operations Analyst"
+    }
+  ],
+  "workspaces": [
+    {
+      "page": "data",
+      "route": "/data",
+      "label": "Data Engineering",
+      "roles": [
+        "admin"
+      ]
+    },
+    {
+      "page": "it",
+      "route": "/it",
+      "label": "Security & Infrastructure",
+      "roles": [
+        "admin"
+      ]
+    },
+    {
+      "page": "doctor",
+      "route": "/doctor",
+      "label": "Clinical Workstation",
+      "roles": [
+        "admin",
+        "hcp"
+      ]
+    },
+    {
+      "page": "pharmacy",
+      "route": "/pharmacy",
+      "label": "Pharmacy & Supply Chain",
+      "roles": [
+        "admin",
+        "hcp"
+      ]
+    },
+    {
+      "page": "laboratory",
+      "route": "/laboratory",
+      "label": "Laboratory Operations",
+      "roles": [
+        "admin",
+        "hcp"
+      ]
+    },
+    {
+      "page": "executive",
+      "route": "/executive",
+      "label": "Executive Operations",
+      "roles": [
+        "admin",
+        "analyst"
+      ]
+    },
+    {
+      "page": "command",
+      "route": "/command-center",
+      "label": "Analyst Command Center",
+      "roles": [
+        "admin",
+        "analyst"
+      ]
+    },
+    {
+      "page": "reception",
+      "route": "/reception",
+      "label": "Patient Access",
+      "roles": [
+        "admin",
+        "analyst"
+      ]
+    }
+  ],
+  "agents": [
+    {
+      "agent": "medicare",
+      "name": "Nexa Care",
+      "roles": [
+        "admin",
+        "hcp"
+      ],
+      "tools": [
+        "search_policies",
+        "get_highest_risk_discharges",
+        "get_patient_summary",
+        "get_care_gap_summary",
+        "list_care_gaps",
+        "propose_follow_up"
+      ]
+    },
+    {
+      "agent": "pharmalab",
+      "name": "Nexa Care \u00b7 Lab & Pharmacy",
+      "roles": [
+        "admin",
+        "hcp"
+      ],
+      "tools": [
+        "search_policies",
+        "get_pharmacy_kpis",
+        "find_stock",
+        "get_stock_forecast",
+        "get_drug_class_outlook",
+        "get_lab_kpis",
+        "list_critical_lab_alerts",
+        "propose_purchase_order"
+      ]
+    },
+    {
+      "agent": "healthanalyst",
+      "name": "Nexa Insight",
+      "roles": [
+        "admin",
+        "analyst"
+      ],
+      "tools": [
+        "search_policies",
+        "get_network_kpis",
+        "get_readmissions_by",
+        "get_admissions_trend",
+        "get_revenue_by_department",
+        "get_capacity_plan",
+        "get_readmission_economics",
+        "list_hospitals_by_access_pressure",
+        "run_capacity_what_if",
+        "list_model_scores"
+      ]
+    },
+    {
+      "agent": "ops",
+      "name": "Nexa Ops",
+      "roles": [
+        "admin"
+      ],
+      "tools": [
+        "search_policies",
+        "get_network_kpis",
+        "get_readmissions_by",
+        "get_admissions_trend",
+        "get_revenue_by_department",
+        "get_capacity_plan",
+        "get_readmission_economics",
+        "list_hospitals_by_access_pressure",
+        "run_capacity_what_if",
+        "list_model_scores",
+        "get_highest_risk_discharges",
+        "get_patient_summary",
+        "get_care_gap_summary",
+        "list_care_gaps",
+        "propose_follow_up",
+        "get_pharmacy_kpis",
+        "find_stock",
+        "get_stock_forecast",
+        "get_drug_class_outlook",
+        "get_lab_kpis",
+        "list_critical_lab_alerts",
+        "propose_purchase_order"
+      ]
+    }
+  ],
+  "approvals": [
+    {
+      "kind": "purchase_order",
+      "label": "Purchase order",
+      "requires_page": "pharmacy",
+      "roles": [
+        "admin",
+        "hcp"
+      ]
+    },
+    {
+      "kind": "follow_up",
+      "label": "Patient follow-up",
+      "requires_page": "doctor",
+      "roles": [
+        "admin",
+        "hcp"
+      ]
+    },
+    {
+      "kind": "lab_escalation",
+      "label": "Critical lab escalation",
+      "requires_page": "doctor",
+      "roles": [
+        "admin",
+        "hcp"
+      ]
+    }
+  ]
+}

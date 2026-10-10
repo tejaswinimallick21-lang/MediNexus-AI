@@ -1,0 +1,17 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Inpatient Fall Prevention Guideline
+DOCUMENT ID: CPG-CLIN-006
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. RISK ASSESSMENT
+Every adult inpatient receives a fall risk assessment within 6 hours of admission, after any fall, after a change in condition, and on transfer between wards. Common risk factors include age 65 or over, previous falls, sedatives, delirium, urinary urgency and mobility aids.
+
+2. INTERVENTIONS FOR HIGH-RISK PATIENTS
+- Bed in lowest position with brakes on and call bell within reach.
+- Non-slip footwear and hourly intentional rounding.
+- Medication review by the pharmacist for sedatives and antihypertensives.
+- Bed or chair exit alarms for patients with delirium.
+
+3. AFTER A FALL
+Do not move the patient until assessed for injury. The physician reviews within one hour; neurological observations are required if the head was struck or the fall was unwitnessed, especially for patients on anticoagulants. Every fall is reported in the incident system.

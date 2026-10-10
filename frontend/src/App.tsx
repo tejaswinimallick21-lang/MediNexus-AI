@@ -13,12 +13,14 @@ import { LaboratoryPage } from "./pages/LaboratoryPage";
 import { NotMigratedPage } from "./pages/NotMigratedPage";
 import { PharmacyPage } from "./pages/PharmacyPage";
 import { ReceptionPage } from "./pages/ReceptionPage";
+import { SecurityPage } from "./pages/SecurityPage";
 import { WelcomePage } from "./pages/WelcomePage";
 import { CONSOLE_ROUTES } from "./routes";
 
 /** Console pages (path → element). */
 const CONSOLE_PAGES: Record<string, ReactNode> = {
   "/data": <DataEngineeringPage />,
+  "/it": <SecurityPage />,
   "/reception": <ReceptionPage />,
   "/laboratory": <LaboratoryPage />,
   "/pharmacy": <PharmacyPage />,

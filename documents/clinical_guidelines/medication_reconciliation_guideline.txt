@@ -1,0 +1,17 @@
+[DEMO / SYNTHETIC KNOWLEDGE DOCUMENT - NOT OFFICIAL MEDICAL POLICY]
+DOCUMENT TITLE: Medication Reconciliation at Transitions of Care
+DOCUMENT ID: CPG-CLIN-007
+REVISION: 1.0
+EFFECTIVE DATE: 2025-06-01
+
+1. PURPOSE
+Medication errors are most common when patients move between care settings. Reconciliation compares what the patient was taking with what is prescribed now and resolves every difference.
+
+2. ON ADMISSION
+A best possible medication history is taken within 24 hours using at least two sources: the patient or carer, the primary care record, pharmacy dispensing records or the patient's own medicines.
+
+3. AT DISCHARGE
+The discharge prescription is reconciled against the admission list and inpatient changes. Every started, stopped or changed medicine is explained to the patient and documented with the reason. High-risk discharges (see CPG-CLIN-001) receive a pharmacist counselling session.
+
+4. MEASURE
+Target: 95% of admissions reconciled within 24 hours.
