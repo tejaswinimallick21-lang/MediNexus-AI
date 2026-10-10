@@ -164,5 +164,9 @@ export const AgentReplySchema = z.object({
   evidence: z.array(z.string()),
   notes: z.string(),
   latency_ms: num,
+  // Added with the tool-using agents; absent on replies stored before then
+  engine: z.string().optional(),
+  tool_calls: z.array(z.object({ name: z.string(), args: z.record(z.unknown()).optional(), ok: z.boolean(), error: z.string().nullable().optional() })).optional(),
+  proposed_actions: z.array(z.object({ action_id: z.string(), summary: z.string(), status: z.string() })).optional(),
 });
 export type AgentReply = z.infer<typeof AgentReplySchema>;

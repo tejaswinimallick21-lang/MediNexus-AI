@@ -53,7 +53,7 @@ export const executiveApi = {
   capacityPlan: (s?: AbortSignal) => request("/executive/capacity-plan", CapacityPlanSchema, { signal: s }),
 };
 
-export type AgentKey = "medicare" | "pharmalab" | "healthanalyst";
+export type AgentKey = "medicare" | "pharmalab" | "healthanalyst" | "ops";
 export const agentApi = {
   chat: (agent: AgentKey, message: string) => request(`/agents/${agent}/chat`, AgentReplySchema, { method: "POST", body: { message } }),
 };

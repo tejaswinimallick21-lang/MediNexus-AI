@@ -576,3 +576,44 @@
 .sessionList li {
   min-width: 0;
 }
+
+.engine {
+  justify-self: start;
+  font-size: 0.66rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--color-accent-bright);
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+.proposal {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #fde68a;
+  font-size: var(--text-xs);
+}
+
+.proposal button {
+  border: 1px solid rgba(253, 230, 138, 0.6);
+  background: transparent;
+  color: #fde68a;
+  border-radius: var(--radius-sm);
+  padding: 3px 10px;
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.note {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-night-muted);
+}

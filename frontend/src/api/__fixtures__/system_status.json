@@ -1,6 +1,6 @@
 {
   "gold_ready": true,
   "ml_ready": true,
-  "llm_provider": "Deterministic Local Engine",
+  "llm_provider": "Rules engine (no LLM key)",
   "version": "2.4.0"
 }

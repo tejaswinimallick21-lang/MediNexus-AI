@@ -31,7 +31,14 @@ export function App() {
   return (
     <Routes>
       <Route element={<AppShell />}>
-        <Route index element={<WelcomePage />} />
+        <Route
+          index
+          element={
+            <RequireAuth>
+              <WelcomePage />
+            </RequireAuth>
+          }
+        />
         <Route path="/login" element={<LoginPage />} />
         {CONSOLE_ROUTES.map((route) => (
           <Route

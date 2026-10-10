@@ -141,6 +141,6 @@ agents_router = APIRouter(prefix="/agents", tags=["agents"], responses=ERROR_RES
 
 
 @agents_router.post("/{agent}/chat", response_model=AgentReply)
-def agent_chat(body: ChatIn, agent: str = Path(..., pattern="^(medicare|pharmalab|healthanalyst)$"), user: UserRecord = Depends(current_user)) -> AgentReply:
+def agent_chat(body: ChatIn, agent: str = Path(..., pattern="^(medicare|pharmalab|healthanalyst|ops)$"), user: UserRecord = Depends(current_user)) -> AgentReply:
     require_agent(agent, user)
     return agents.chat(agent, body.message, user)

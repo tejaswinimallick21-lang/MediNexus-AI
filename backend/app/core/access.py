@@ -41,6 +41,7 @@ AGENT_ROLES: Dict[str, FrozenSet[str]] = {
     "medicare": frozenset({"hcp", "admin"}),
     "pharmalab": frozenset({"hcp", "admin"}),
     "healthanalyst": frozenset({"analyst", "admin"}),
+    "ops": frozenset({"admin"}),
 }
 
 

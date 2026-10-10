@@ -16,7 +16,7 @@ class AssistantAgent(BaseModel):
 
 
 class SessionCreate(BaseModel):
-    agent: str = Field(..., pattern="^(medicare|pharmalab|healthanalyst)$")
+    agent: str = Field(..., pattern="^(medicare|pharmalab|healthanalyst|ops)$")
 
 
 class SessionRename(BaseModel):

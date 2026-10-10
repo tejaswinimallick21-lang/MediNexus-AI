@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useLocation } from "react-router-dom";
 
+import { ACTIONS_CHANGED } from "../api/actions";
 import { assistantApi } from "../api/assistant";
 import { ApiError } from "../api/client";
 import type { AssistantAgent, AssistantMessage, AssistantSession } from "../api/schemas/assistant";
@@ -188,6 +189,7 @@ export function AssistantDock() {
       }
       const exchange = await assistantApi.send(id, question);
       setMessages((m) => [...m, ...exchange.messages]);
+      if (exchange.messages.some((x) => x.reply?.proposed_actions?.length)) window.dispatchEvent(new Event(ACTIONS_CHANGED));
       setSessions((s) => [exchange.session, ...s.filter((x) => x.session_id !== exchange.session.session_id)]);
     } catch (err) {
       setError(err instanceof ApiError ? err.detail : "The assistant is unavailable.");
@@ -436,10 +438,55 @@ export function AssistantDock() {
   );
 }
 
-function Reply({ reply }: { reply: AgentReply }) {
+/** Minimal, safe formatting for model text: paragraphs, "- " bullets and **bold** (no HTML injection). */
+function RichText({ text }: { text: string }) {
+  const blocks: { list: boolean; lines: string[] }[] = [];
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line) {
+      blocks.push({ list: false, lines: [] });
+      continue;
+    }
+    const isItem = /^([-*•]|\d+[.)])\s+/.test(line);
+    const last = blocks[blocks.length - 1];
+    const content = isItem ? line.replace(/^([-*•]|\d+[.)])\s+/, "") : line.replace(/^#{1,4}\s+/, "");
+    if (last && last.list === isItem && last.lines.length) last.lines.push(content);
+    else blocks.push({ list: isItem, lines: [content] });
+  }
+  const inline = (s: string) =>
+    s.split(/(\*\*[^*]+\*\*)/g).map((part, i) => (part.startsWith("**") && part.endsWith("**") ? <strong key={i}>{part.slice(2, -2)}</strong> : part));
   return (
     <>
-      {reply.answer && <p className={styles.answer}>{reply.answer}</p>}
+      {blocks
+        .filter((b) => b.lines.length)
+        .map((b, i) =>
+          b.list ? (
+            <ul key={i}>
+              {b.lines.map((l, j) => (
+                <li key={j}>{inline(l)}</li>
+              ))}
+            </ul>
+          ) : (
+            <p key={i} className={styles.answer}>
+              {b.lines.map((l, j) => (
+                <span key={j}>
+                  {j > 0 && <br />}
+                  {inline(l)}
+                </span>
+              ))}
+            </p>
+          ),
+        )}
+    </>
+  );
+}
+
+function Reply({ reply }: { reply: AgentReply }) {
+  const tools = reply.tool_calls ?? [];
+  return (
+    <>
+      {reply.engine && <span className={styles.engine}>{reply.engine}</span>}
+      {reply.answer && <RichText text={reply.answer} />}
       {SECTIONS.map(({ key, label }) =>
         reply[key].length ? (
           <div key={key}>
@@ -452,9 +499,23 @@ function Reply({ reply }: { reply: AgentReply }) {
           </div>
         ) : null,
       )}
-      {reply.evidence.length > 0 && (
+      {(reply.proposed_actions ?? []).map((a) => (
+        <div key={a.action_id} className={styles.proposal}>
+          <Icon.Clock size={14} />
+          <span>
+            <strong>Awaiting approval:</strong> {a.summary}
+          </span>
+          <button type="button" onClick={() => window.dispatchEvent(new Event("nexa:open-inbox"))}>
+            Review
+          </button>
+        </div>
+      ))}
+      {reply.notes && <p className={styles.note}>{reply.notes}</p>}
+      {(reply.evidence.length > 0 || tools.length > 0) && (
         <details className={styles.evidence}>
-          <summary>Evidence & sources · {reply.latency_ms.toFixed(0)} ms</summary>
+          <summary>
+            Evidence & sources{tools.length ? ` · ${tools.length} data tool${tools.length === 1 ? "" : "s"}` : ""} · {reply.latency_ms.toFixed(0)} ms
+          </summary>
           <ul>
             {reply.evidence.map((e, i) => (
               <li key={i}>{e}</li>

@@ -1,6 +1,6 @@
 """Schemas for the Laboratory, Pharmacy and Executive workspaces and shared forecast/model metadata."""
 
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -197,6 +197,19 @@ class ChatIn(BaseModel):
     message: str
 
 
+class ToolCallTrace(BaseModel):
+    name: str
+    args: Dict[str, Any] = {}
+    ok: bool
+    error: Optional[str] = None
+
+
+class ProposedAction(BaseModel):
+    action_id: str
+    summary: str
+    status: str
+
+
 class AgentReply(BaseModel):
     agent: str
     answer: Optional[str] = None
@@ -206,3 +219,6 @@ class AgentReply(BaseModel):
     evidence: List[str]
     notes: str
     latency_ms: float
+    engine: str = ""
+    tool_calls: List[ToolCallTrace] = []
+    proposed_actions: List[ProposedAction] = []

@@ -8,7 +8,7 @@ hides it (deleted_at) so the conversation remains available to audit.
 import json
 import uuid
 from datetime import datetime
-from typing import List
+from typing import List, Optional, Tuple
 
 from backend.app.core.access import AGENT_ROLES
 from backend.app.core.deps import require_agent
@@ -23,6 +23,12 @@ from src.utils.database import execute_query, query_df_strict
 TITLE_MAX = 60
 
 CATALOG = [
+    AssistantAgent(
+        key="ops", name="Nexa Ops", tagline="Administrator oversight across every workspace, with actions you approve",
+        prompts=["Which hospital has the highest unplanned readmission rate?", "Which medicines are at high stock-out risk? Propose orders for the worst one",
+                 "How accurate are our prediction models?"],
+        routes=["/data", "/it"],
+    ),
     AssistantAgent(
         key="medicare", name="Nexa Care", tagline="Clinical assistant grounded in Patient 360, risk models and care guidelines",
         prompts=["Show me the highest-risk patients", "Summarize patient P_04436", "What does the heart failure follow-up guideline say?"],
@@ -125,6 +131,22 @@ def _message(r) -> AssistantMessage:
     return AssistantMessage(message_id=r.message_id, role="user", text=r.content, created_at=_iso(r.created_at))
 
 
+def _history(session_id: str, turns: int = 3) -> List[Tuple[str, str]]:
+    """Recent question/answer pairs as plain text, so follow-up questions have context."""
+    df = query_df_strict("SELECT role, content FROM assistant_messages WHERE session_id = ? ORDER BY created_at, role DESC", [session_id])
+    pairs: List[Tuple[str, str]] = []
+    question: Optional[str] = None
+    for r in df.itertuples():
+        if r.role == "user":
+            question = r.content
+        elif question is not None:
+            reply = json.loads(r.content)
+            answer = "\n".join([reply.get("answer") or ""] + [f"- {f}" for f in reply.get("facts", [])]).strip()
+            pairs.append((question, answer[:1500]))
+            question = None
+    return pairs[-turns:]
+
+
 def list_messages(session_id: str, user: UserRecord) -> List[AssistantMessage]:
     _ensure_tables()
     _session_row(session_id, user)
@@ -139,7 +161,7 @@ def send_message(session_id: str, message: str, user: UserRecord) -> AssistantEx
     _ensure_tables()
     session = _session_row(session_id, user)
     require_agent(session.agent, user)
-    reply = agents.chat(session.agent, message, user)  # validates the message before anything is stored
+    reply = agents.chat(session.agent, message, user, history=_history(session_id), session_id=session_id)  # validates before storing
 
     asked_at, now = datetime.now(), datetime.now()
     question = message.strip()

@@ -4,7 +4,7 @@ import { pageOf } from "./common";
 import { AgentReplySchema } from "./operations";
 
 export const AssistantAgentSchema = z.object({
-  key: z.enum(["medicare", "pharmalab", "healthanalyst"]),
+  key: z.enum(["medicare", "pharmalab", "healthanalyst", "ops"]),
   name: z.string(),
   tagline: z.string(),
   prompts: z.array(z.string()),

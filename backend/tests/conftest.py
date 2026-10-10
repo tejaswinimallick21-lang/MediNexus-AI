@@ -18,6 +18,7 @@ TEST_PASSWORD = "Test-Password-123"
 _seed_dir = tempfile.mkdtemp(prefix="medinexus_seed_")
 os.environ["MEDINEXUS_SEED_FILE"] = str(Path(_seed_dir) / "seed_users.json")
 os.environ.setdefault("MEDINEXUS_JWT_SECRET", "test-secret-not-for-production")
+os.environ["NEXA_LLM_PROVIDER"] = "rules"  # tests never call a paid LLM; agent tests inject a fake provider
 
 from backend.scripts.create_seed_users import build_seed  # noqa: E402
 

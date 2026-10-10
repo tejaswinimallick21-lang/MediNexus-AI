@@ -4,7 +4,8 @@ Platform status and overview (sidebar health panel and welcome page).
 
 from backend.app.core.access import ROLE_DESCRIPTIONS, ROLE_TITLES, ROLES, allowed_routes
 from backend.app.schemas.system import PlatformOverview, RoleCard, SystemStatus
-from config.settings import ACTIVE_LLM_PROVIDER, APP_NAME, APP_TAGLINE, APP_VERSION
+from backend.app.agents.providers import provider_label
+from config.settings import APP_NAME, APP_TAGLINE, APP_VERSION
 from src.utils.database import table_exists
 
 PIPELINE_STAGES = ["Data", "Trust", "Intelligence", "Prediction", "Prescription", "Action"]
@@ -14,7 +15,7 @@ def get_system_status() -> SystemStatus:
     return SystemStatus(
         gold_ready=table_exists("gold_patient_360"),
         ml_ready=table_exists("model_registry"),
-        llm_provider=ACTIVE_LLM_PROVIDER,
+        llm_provider=provider_label(),
         version=APP_VERSION,
     )
 

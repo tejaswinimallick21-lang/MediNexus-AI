@@ -5,6 +5,7 @@ import { systemApi } from "../api/auth";
 import { useApi } from "../hooks/useApi";
 import { useAuth } from "../hooks/useAuth";
 import { CONSOLE_ROUTES } from "../routes";
+import { ApprovalInbox } from "./ApprovalInbox";
 import { AssistantDock } from "./AssistantDock";
 import { Icon } from "./Icons";
 import styles from "./AppShell.module.css";
@@ -139,6 +140,7 @@ export function AppShell() {
               <span className={styles.pulse} />
               {healthy ? "All systems operational" : status.data ? "Pipeline attention needed" : "Connecting"}
             </span>
+            {user && <ApprovalInbox />}
             {user && (
               <div className={styles.userChip}>
                 <span className={styles.avatar}>{initials(user.name)}</span>
