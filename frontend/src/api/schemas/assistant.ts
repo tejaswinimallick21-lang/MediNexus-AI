@@ -38,3 +38,13 @@ export const AssistantExchangeSchema = z.object({
   session: AssistantSessionSchema,
   messages: z.array(AssistantMessageSchema),
 });
+
+/** Long-term memory: what the signed-in user asked Nexa to remember. */
+export const MemoryItemSchema = z.object({
+  memory_id: z.string(),
+  text: z.string(),
+  source: z.enum(["chat", "panel"]),
+  created_at: z.string(),
+});
+export type MemoryItem = z.infer<typeof MemoryItemSchema>;
+export const MemoryListSchema = z.array(MemoryItemSchema);

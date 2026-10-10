@@ -3,9 +3,9 @@
   "environment": "development",
   "python": "3.12.7",
   "platform": "Windows 11",
-  "uptime_minutes": 1,
-  "database_path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_dif8dmi9\\healthcare_test.duckdb",
-  "database_size_mb": 219.0,
+  "uptime_minutes": 2,
+  "database_path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_5i7l0vd2\\healthcare_test.duckdb",
+  "database_size_mb": 219.3,
   "tables": [
     {
       "name": "bronze_laboratory_results",
@@ -13,13 +13,13 @@
       "rows": 1216331
     },
     {
-      "name": "silver_laboratory_results",
-      "layer": "silver",
+      "name": "gold_laboratory",
+      "layer": "gold",
       "rows": 1204289
     },
     {
-      "name": "gold_laboratory",
-      "layer": "gold",
+      "name": "silver_laboratory_results",
+      "layer": "silver",
       "rows": 1204289
     },
     {
@@ -38,13 +38,13 @@
       "rows": 435574
     },
     {
-      "name": "silver_prescriptions",
-      "layer": "silver",
+      "name": "gold_prescriptions",
+      "layer": "gold",
       "rows": 431262
     },
     {
-      "name": "gold_prescriptions",
-      "layer": "gold",
+      "name": "silver_prescriptions",
+      "layer": "silver",
       "rows": 431262
     },
     {
@@ -153,13 +153,13 @@
       "rows": 9584
     },
     {
-      "name": "silver_departments",
-      "layer": "silver",
+      "name": "bronze_departments",
+      "layer": "bronze",
       "rows": 5795
     },
     {
-      "name": "bronze_departments",
-      "layer": "bronze",
+      "name": "silver_departments",
+      "layer": "silver",
       "rows": 5795
     },
     {
@@ -173,19 +173,19 @@
       "rows": 5214
     },
     {
-      "name": "bronze_hospitals",
-      "layer": "bronze",
-      "rows": 5209
-    },
-    {
       "name": "silver_hospitals",
       "layer": "silver",
       "rows": 5209
     },
     {
+      "name": "bronze_hospitals",
+      "layer": "bronze",
+      "rows": 5209
+    },
+    {
       "name": "audit_logs",
       "layer": "platform",
-      "rows": 2609
+      "rows": 2684
     },
     {
       "name": "bronze_pharmacy_inventory",
@@ -210,10 +210,10 @@
   ],
   "layer_rows": {
     "bronze": 2156946,
-    "silver": 2135968,
     "gold": 2155859,
+    "silver": 2135968,
     "sim": 2054860,
-    "platform": 3584
+    "platform": 3639
   },
   "storage": [
     {
@@ -254,7 +254,7 @@
     },
     {
       "label": "Logs",
-      "path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_dif8dmi9\\logs",
+      "path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_5i7l0vd2\\logs",
       "size_mb": 0.0,
       "files": 2
     },

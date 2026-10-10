@@ -4,10 +4,10 @@
   "running_job_id": null,
   "runs": [
     {
-      "run_id": "bac8edaa73fe",
+      "run_id": "03efe9c5155b",
       "trigger": "manual",
-      "started_at": "2026-10-10T14:14:45",
-      "finished_at": "2026-10-10T14:15:07",
+      "started_at": "2026-10-10T14:20:34",
+      "finished_at": "2026-10-10T14:20:58",
       "status": "succeeded",
       "found": 68,
       "proposed": 30,
@@ -21,10 +21,10 @@
       "suppressed": 0
     },
     {
-      "run_id": "5a8c779a5e33",
+      "run_id": "9a65e04562ef",
       "trigger": "manual",
-      "started_at": "2026-10-10T14:14:19",
-      "finished_at": "2026-10-10T14:14:44",
+      "started_at": "2026-10-10T14:20:09",
+      "finished_at": "2026-10-10T14:20:33",
       "status": "succeeded",
       "found": 68,
       "proposed": 30,

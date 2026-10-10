@@ -1,16 +1,16 @@
 {
   "upload": {
-    "upload_id": "15e75bb1a6f448b6aaf5fbe517af238c",
+    "upload_id": "fed0dc882bea49d2bc9f4466469d5921",
     "filename": "admissions_export.csv",
     "size_bytes": 34438,
     "sha256": "e6e676e329ca227d0d13f67491aa321151d5cc3c867eb2522ba03d25d2f8b5a6",
     "uploaded_by": "admin@medinexus.org",
-    "created_at": "2026-10-10T14:03:06",
+    "created_at": "2026-10-10T14:19:55",
     "status": "processing",
     "stage": "Silver: cleaning",
     "rows": null,
     "columns": null,
     "quality_score": null
   },
-  "job_id": "0507c4fec0f6458db7a6cb78fefbc674"
+  "job_id": "390ddb694ddf4b9b8b0b007de6709d9b"
 }

@@ -1,0 +1,152 @@
+.panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  color: var(--color-night-text);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.head h4 {
+  margin: 0;
+  color: #fff;
+  font-size: var(--text-md, 1rem);
+}
+
+.back,
+.clearBtn,
+.clear button {
+  border: 1px solid var(--glass-border);
+  background: transparent;
+  color: var(--color-night-text);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.back:hover,
+.clearBtn:hover,
+.clear button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.note {
+  margin: 0;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--color-night-muted);
+}
+
+.add {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.add input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background: rgba(2, 6, 23, 0.45);
+  color: var(--color-night-text);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+.add button {
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(45, 212, 191, 0.45);
+  background: rgba(45, 212, 191, 0.12);
+  color: var(--color-night-text);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.add button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.error {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  font-size: var(--text-sm);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.list li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-night-line);
+  font-size: var(--text-sm);
+}
+
+.list li span {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+}
+
+.list small {
+  font-size: var(--text-xs);
+  color: var(--color-night-muted);
+}
+
+.list li button {
+  border: none;
+  background: transparent;
+  color: var(--color-night-muted);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  cursor: pointer;
+}
+
+.list li button:hover {
+  color: #fff;
+  background: rgba(239, 68, 68, 0.25);
+}
+
+.clearBtn {
+  align-self: flex-start;
+}
+
+.clear {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-xs);
+}
+
+.clear span {
+  flex: 1;
+}
+
+.clear .danger {
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}

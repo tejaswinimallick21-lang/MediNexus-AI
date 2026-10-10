@@ -1,6 +1,10 @@
 import type { ZodTypeAny } from "zod";
 
-import { PlatformOverviewSchema, SystemStatusSchema, UserSchema } from "./schemas/auth";
+import {
+  PlatformOverviewSchema,
+  SystemStatusSchema,
+  UserSchema,
+} from "./schemas/auth";
 import {
   AppointmentPageSchema,
   ReceptionFiltersSchema,
@@ -51,6 +55,8 @@ import {
   AssistantMessageListSchema,
   AssistantSessionPageSchema,
   AssistantSessionSchema,
+  MemoryItemSchema,
+  MemoryListSchema,
 } from "./schemas/assistant";
 import {
   AccessMatrixSchema,
@@ -63,8 +69,17 @@ import {
   PostureSchema,
   SearchComparisonSchema,
 } from "./schemas/security";
-import { ActionInboxSchema, AgentActionSchema, SweepStatusSchema } from "./schemas/actions";
-import { LinkDiscoverySchema, UploadAcceptedSchema, UploadDetailSchema, UploadPageSchema } from "./schemas/dataPlatform";
+import {
+  ActionInboxSchema,
+  AgentActionSchema,
+  SweepStatusSchema,
+} from "./schemas/actions";
+import {
+  LinkDiscoverySchema,
+  UploadAcceptedSchema,
+  UploadDetailSchema,
+  UploadPageSchema,
+} from "./schemas/dataPlatform";
 
 /**
  * Golden fixture name (written by the backend pytest contract tests into __fixtures__/)
@@ -116,6 +131,8 @@ export const fixtureSchemas: Record<string, ZodTypeAny> = {
   assistant_sessions: AssistantSessionPageSchema,
   assistant_messages: AssistantMessageListSchema,
   assistant_exchange: AssistantExchangeSchema,
+  memory_item: MemoryItemSchema,
+  memory_list: MemoryListSchema,
   data_upload_accepted: UploadAcceptedSchema,
   data_upload_detail: UploadDetailSchema,
   data_upload_insights: UploadDetailSchema,

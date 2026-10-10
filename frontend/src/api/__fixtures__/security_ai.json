@@ -42,21 +42,21 @@
       "agent": "medicare",
       "queries": 6,
       "fallbacks": 0,
-      "avg_latency_ms": 488.0,
+      "avg_latency_ms": 532.0,
       "tool_calls": 4
     },
     {
       "agent": "ops",
       "queries": 2,
       "fallbacks": 0,
-      "avg_latency_ms": 65.0,
+      "avg_latency_ms": 62.0,
       "tool_calls": 2
     },
     {
       "agent": "pharmalab",
       "queries": 4,
       "fallbacks": 0,
-      "avg_latency_ms": 185.0,
+      "avg_latency_ms": 186.0,
       "tool_calls": 4
     }
   ],
@@ -98,28 +98,43 @@
       "count": 1
     }
   ],
-  "proposals": [
-    {
-      "kind": "follow_up",
-      "label": "Patient follow-up",
-      "status": "pending",
-      "count": 7
-    },
-    {
-      "kind": "lab_escalation",
-      "label": "Critical lab escalation",
-      "status": "pending",
-      "count": 6
-    },
-    {
-      "kind": "purchase_order",
-      "label": "Purchase order",
-      "status": "pending",
-      "count": 7
-    }
-  ],
+  "proposals": [],
   "approval_rate_pct": null,
   "sweep_runs": [
+    {
+      "run_id": "03efe9c5155b",
+      "trigger": "manual",
+      "started_at": "2026-10-10T14:20:34",
+      "finished_at": "2026-10-10T14:20:58",
+      "status": "succeeded",
+      "found": 68,
+      "proposed": 30,
+      "ai_used": false,
+      "by_kind": {
+        "follow_up": 10,
+        "purchase_order": 10,
+        "lab_escalation": 10
+      },
+      "error": null,
+      "suppressed": 0
+    },
+    {
+      "run_id": "9a65e04562ef",
+      "trigger": "manual",
+      "started_at": "2026-10-10T14:20:09",
+      "finished_at": "2026-10-10T14:20:33",
+      "status": "succeeded",
+      "found": 68,
+      "proposed": 30,
+      "ai_used": false,
+      "by_kind": {
+        "follow_up": 10,
+        "purchase_order": 10,
+        "lab_escalation": 10
+      },
+      "error": null,
+      "suppressed": 1
+    },
     {
       "run_id": "beee86791d8b",
       "trigger": "schedule",
@@ -134,7 +149,8 @@
         "purchase_order": 7,
         "lab_escalation": 6
       },
-      "error": null
+      "error": null,
+      "suppressed": 0
     }
   ],
   "guardrails": [

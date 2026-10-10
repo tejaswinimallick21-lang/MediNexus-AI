@@ -1,6 +1,6 @@
 {
   "window_days": 7,
-  "total_events": 2608,
+  "total_events": 2683,
   "failed_logins": 30,
   "access_denied": 164,
   "lockouts": 2,
@@ -15,16 +15,16 @@
       "count": 664
     },
     {
+      "label": "AGENT_PROPOSED_ACTION",
+      "count": 169
+    },
+    {
       "label": "ACCESS_DENIED",
       "count": 164
     },
     {
       "label": "AGENT_QUERY",
       "count": 98
-    },
-    {
-      "label": "AGENT_PROPOSED_ACTION",
-      "count": 94
     },
     {
       "label": "SANDBOX_UPLOAD",
@@ -100,7 +100,7 @@
     },
     {
       "day": "2026-10-10 00:00:00",
-      "events": 943,
+      "events": 1018,
       "failed_logins": 15,
       "denied": 79
     }
@@ -141,15 +141,15 @@
       "count": 18
     },
     {
+      "label": "API_LABORATORY",
+      "count": 14
+    },
+    {
       "label": "API_PHARMACY",
       "count": 14
     },
     {
       "label": "API_EXECUTIVE",
-      "count": 14
-    },
-    {
-      "label": "API_LABORATORY",
       "count": 14
     },
     {

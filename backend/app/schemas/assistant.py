@@ -43,3 +43,14 @@ class AssistantMessage(BaseModel):
 class AssistantExchange(BaseModel):
     session: AssistantSession
     messages: List[AssistantMessage]
+
+
+class MemoryItem(BaseModel):
+    memory_id: str
+    text: str
+    source: Literal["chat", "panel"]
+    created_at: str
+
+
+class MemoryIn(BaseModel):
+    text: str = Field(..., min_length=1, max_length=300)

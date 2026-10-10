@@ -1,18 +1,33 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
 import { useLocation } from "react-router-dom";
 
 import { ACTIONS_CHANGED } from "../api/actions";
 import { assistantApi } from "../api/assistant";
 import { ApiError } from "../api/client";
-import type { AssistantAgent, AssistantMessage, AssistantSession } from "../api/schemas/assistant";
+import type {
+  AssistantAgent,
+  AssistantMessage,
+  AssistantSession,
+} from "../api/schemas/assistant";
 import type { AgentReply } from "../api/schemas/operations";
 import { useAuth } from "../hooks/useAuth";
 import { Icon } from "./Icons";
+import { MemoryPanel } from "./MemoryPanel";
 import { Skeleton } from "./Skeleton";
 import styles from "./AssistantDock.module.css";
 
-const SECTIONS: { key: keyof Pick<AgentReply, "facts" | "predictions" | "recommendations">; label: string }[] = [
+const SECTIONS: {
+  key: keyof Pick<AgentReply, "facts" | "predictions" | "recommendations">;
+  label: string;
+}[] = [
   { key: "facts", label: "Facts" },
   { key: "predictions", label: "Predictions" },
   { key: "recommendations", label: "Recommended actions" },
@@ -36,10 +51,22 @@ function store(key: string, value: string | null) {
 }
 
 /** Groups conversations like ChatGPT / Claude: Today, Yesterday, Previous 7 days, Older. */
-export function groupSessions(sessions: AssistantSession[], now = new Date()): { label: string; items: AssistantSession[] }[] {
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+export function groupSessions(
+  sessions: AssistantSession[],
+  now = new Date(),
+): { label: string; items: AssistantSession[] }[] {
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+  ).getTime();
   const day = 86_400_000;
-  const buckets: Record<string, AssistantSession[]> = { Today: [], Yesterday: [], "Previous 7 days": [], Older: [] };
+  const buckets: Record<string, AssistantSession[]> = {
+    Today: [],
+    Yesterday: [],
+    "Previous 7 days": [],
+    Older: [],
+  };
   for (const s of sessions) {
     const t = new Date(s.updated_at).getTime();
     if (t >= startOfToday) buckets.Today.push(s);
@@ -61,24 +88,36 @@ export function AssistantDock() {
 
   const [open, setOpen] = useState(() => stored(`${prefix}:open`) === "1");
   const [expanded, setExpanded] = useState(false);
-  const [showHistory, setShowHistory] = useState(() => typeof window === "undefined" || window.innerWidth > 720);
+  const [showHistory, setShowHistory] = useState(
+    () => typeof window === "undefined" || window.innerWidth > 720,
+  );
   const [agents, setAgents] = useState<AssistantAgent[]>([]);
   const [agentKey, setAgentKey] = useState<string | null>(null);
   const [sessions, setSessions] = useState<AssistantSession[]>([]);
   const [sessionsError, setSessionsError] = useState<string>();
-  const [activeId, setActiveId] = useState<string | null>(() => stored(`${prefix}:session`));
+  const [activeId, setActiveId] = useState<string | null>(() =>
+    stored(`${prefix}:session`),
+  );
   const [messages, setMessages] = useState<AssistantMessage[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [pending, setPending] = useState<Pending>(null);
   const [error, setError] = useState<string>();
   const [input, setInput] = useState("");
-  const [renaming, setRenaming] = useState<{ id: string; title: string } | null>(null);
+  const [renaming, setRenaming] = useState<{
+    id: string;
+    title: string;
+  } | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+  const [showMemory, setShowMemory] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const routeAgent = useMemo(
-    () => agents.find((a) => a.routes.some((r) => location.pathname.startsWith(r)))?.key ?? agents[0]?.key ?? null,
+    () =>
+      agents.find((a) => a.routes.some((r) => location.pathname.startsWith(r)))
+        ?.key ??
+      agents[0]?.key ??
+      null,
     [agents, location.pathname],
   );
   const active = sessions.find((s) => s.session_id === activeId) ?? null;
@@ -105,13 +144,18 @@ export function AssistantDock() {
       setSessions(page.items);
       setSessionsError(undefined);
     } catch (err) {
-      setSessionsError(err instanceof ApiError ? err.detail : "Could not load conversations.");
+      setSessionsError(
+        err instanceof ApiError ? err.detail : "Could not load conversations.",
+      );
     }
   }, []);
 
   useEffect(() => {
     if (!user || !open || agents.length) return;
-    assistantApi.agents().then(setAgents).catch(() => setAgents([]));
+    assistantApi
+      .agents()
+      .then(setAgents)
+      .catch(() => setAgents([]));
     void loadSessions();
   }, [user, open, agents.length, loadSessions]);
 
@@ -130,7 +174,12 @@ export function AssistantDock() {
       .catch((err: unknown) => {
         if ((err as Error)?.name === "AbortError") return;
         if (err instanceof ApiError && err.status === 404) setActiveId(null);
-        else setError(err instanceof ApiError ? err.detail : "Could not load this conversation.");
+        else
+          setError(
+            err instanceof ApiError
+              ? err.detail
+              : "Could not load this conversation.",
+          );
       })
       .finally(() => {
         if (!controller.signal.aborted) setLoadingMessages(false);
@@ -139,7 +188,10 @@ export function AssistantDock() {
   }, [activeId, open]);
 
   useEffect(() => {
-    listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
+    listRef.current?.scrollTo({
+      top: listRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, [messages, pending]);
 
   useEffect(() => {
@@ -161,12 +213,14 @@ export function AssistantDock() {
 
   function openSession(id: string) {
     setActiveId(id);
+    setShowMemory(false);
     closeRailOnPhone();
   }
 
   function newChat(key?: string) {
     closeRailOnPhone();
     setActiveId(null);
+    setShowMemory(false);
     setAgentKey(key ?? routeAgent);
     setMessages([]);
     setError(undefined);
@@ -189,10 +243,16 @@ export function AssistantDock() {
       }
       const exchange = await assistantApi.send(id, question);
       setMessages((m) => [...m, ...exchange.messages]);
-      if (exchange.messages.some((x) => x.reply?.proposed_actions?.length)) window.dispatchEvent(new Event(ACTIONS_CHANGED));
-      setSessions((s) => [exchange.session, ...s.filter((x) => x.session_id !== exchange.session.session_id)]);
+      if (exchange.messages.some((x) => x.reply?.proposed_actions?.length))
+        window.dispatchEvent(new Event(ACTIONS_CHANGED));
+      setSessions((s) => [
+        exchange.session,
+        ...s.filter((x) => x.session_id !== exchange.session.session_id),
+      ]);
     } catch (err) {
-      setError(err instanceof ApiError ? err.detail : "The assistant is unavailable.");
+      setError(
+        err instanceof ApiError ? err.detail : "The assistant is unavailable.",
+      );
       setInput(question);
     } finally {
       setPending(null);
@@ -217,7 +277,11 @@ export function AssistantDock() {
       setSessions((s) => s.filter((x) => x.session_id !== id));
       if (activeId === id) newChat();
     } catch (err) {
-      setSessionsError(err instanceof ApiError ? err.detail : "Could not delete the conversation.");
+      setSessionsError(
+        err instanceof ApiError
+          ? err.detail
+          : "Could not delete the conversation.",
+      );
     }
   }
 
@@ -259,12 +323,23 @@ export function AssistantDock() {
             transition={{ type: "spring", stiffness: 360, damping: 32 }}
           >
             {showHistory && (
-              <aside className={styles.history} aria-label="Conversation history">
-                <button type="button" className={styles.newChat} onClick={() => newChat()}>
+              <aside
+                className={styles.history}
+                aria-label="Conversation history"
+              >
+                <button
+                  type="button"
+                  className={styles.newChat}
+                  onClick={() => newChat()}
+                >
                   <Icon.Plus size={16} /> New conversation
                 </button>
                 {agents.length > 1 && (
-                  <div className={styles.agentPicker} role="radiogroup" aria-label="Assistant">
+                  <div
+                    className={styles.agentPicker}
+                    role="radiogroup"
+                    aria-label="Assistant"
+                  >
                     {agents.map((a) => (
                       <button
                         key={a.key}
@@ -281,14 +356,25 @@ export function AssistantDock() {
                   </div>
                 )}
                 <div className={styles.sessionList}>
-                  {sessionsError && <p className={styles.historyNote}>{sessionsError}</p>}
-                  {!sessionsError && sessions.length === 0 && <p className={styles.historyNote}>Your conversations will appear here.</p>}
+                  {sessionsError && (
+                    <p className={styles.historyNote}>{sessionsError}</p>
+                  )}
+                  {!sessionsError && sessions.length === 0 && (
+                    <p className={styles.historyNote}>
+                      Your conversations will appear here.
+                    </p>
+                  )}
                   {groups.map((g) => (
                     <div key={g.label}>
                       <span className={styles.groupLabel}>{g.label}</span>
                       <ul>
                         {g.items.map((s) => (
-                          <li key={s.session_id} className={s.session_id === activeId ? styles.sessionOn : ""}>
+                          <li
+                            key={s.session_id}
+                            className={
+                              s.session_id === activeId ? styles.sessionOn : ""
+                            }
+                          >
                             {renaming?.id === s.session_id ? (
                               <input
                                 className={styles.renameInput}
@@ -296,36 +382,71 @@ export function AssistantDock() {
                                 value={renaming.title}
                                 maxLength={80}
                                 aria-label="Conversation title"
-                                onChange={(e) => setRenaming({ id: s.session_id, title: e.target.value })}
+                                onChange={(e) =>
+                                  setRenaming({
+                                    id: s.session_id,
+                                    title: e.target.value,
+                                  })
+                                }
                                 onKeyDown={(e) => {
-                                  if (e.key === "Enter") void rename(s.session_id, renaming.title);
+                                  if (e.key === "Enter")
+                                    void rename(s.session_id, renaming.title);
                                   if (e.key === "Escape") {
                                     e.stopPropagation();
                                     setRenaming(null);
                                   }
                                 }}
-                                onBlur={() => void rename(s.session_id, renaming.title)}
+                                onBlur={() =>
+                                  void rename(s.session_id, renaming.title)
+                                }
                               />
                             ) : confirmDelete === s.session_id ? (
                               <div className={styles.confirm}>
                                 <span>Delete?</span>
-                                <button type="button" className={styles.danger} onClick={() => void remove(s.session_id)}>
+                                <button
+                                  type="button"
+                                  className={styles.danger}
+                                  onClick={() => void remove(s.session_id)}
+                                >
                                   Delete
                                 </button>
-                                <button type="button" onClick={() => setConfirmDelete(null)}>
+                                <button
+                                  type="button"
+                                  onClick={() => setConfirmDelete(null)}
+                                >
                                   Cancel
                                 </button>
                               </div>
                             ) : (
                               <>
-                                <button type="button" className={styles.sessionTitle} onClick={() => openSession(s.session_id)} title={s.title}>
+                                <button
+                                  type="button"
+                                  className={styles.sessionTitle}
+                                  onClick={() => openSession(s.session_id)}
+                                  title={s.title}
+                                >
                                   {s.title}
                                 </button>
                                 <span className={styles.sessionActions}>
-                                  <button type="button" aria-label={`Rename ${s.title}`} onClick={() => setRenaming({ id: s.session_id, title: s.title })}>
+                                  <button
+                                    type="button"
+                                    aria-label={`Rename ${s.title}`}
+                                    onClick={() =>
+                                      setRenaming({
+                                        id: s.session_id,
+                                        title: s.title,
+                                      })
+                                    }
+                                  >
                                     <Icon.Pencil size={14} />
                                   </button>
-                                  <button type="button" aria-label={`Delete ${s.title}`} onClick={() => setConfirmDelete(s.session_id)}>
+                                  <button
+                                    type="button"
+                                    aria-label={`Delete ${s.title}`}
+                                    onClick={() =>
+                                      setConfirmDelete(s.session_id)
+                                    }
+                                  >
                                     <Icon.Trash size={14} />
                                   </button>
                                 </span>
@@ -342,7 +463,13 @@ export function AssistantDock() {
 
             <div className={styles.chat}>
               <header className={styles.header}>
-                <button type="button" className={styles.iconBtn} onClick={() => setShowHistory((v) => !v)} aria-label={showHistory ? "Hide history" : "Show history"} title="History">
+                <button
+                  type="button"
+                  className={styles.iconBtn}
+                  onClick={() => setShowHistory((v) => !v)}
+                  aria-label={showHistory ? "Hide history" : "Show history"}
+                  title="History"
+                >
                   <Icon.Sidebar size={18} />
                 </button>
                 <span className={styles.orb} aria-hidden="true">
@@ -350,86 +477,154 @@ export function AssistantDock() {
                 </span>
                 <div className={styles.headText}>
                   <h3>{agent?.name ?? "Nexa"}</h3>
-                  <p>{active ? active.title : agent?.tagline ?? "Loading assistants…"}</p>
+                  <p>
+                    {active
+                      ? active.title
+                      : (agent?.tagline ?? "Loading assistants…")}
+                  </p>
                 </div>
-                <button type="button" className={styles.iconBtn} onClick={() => setExpanded((v) => !v)} aria-label={expanded ? "Restore size" : "Expand"} title={expanded ? "Restore" : "Expand"}>
-                  {expanded ? <Icon.Collapse size={18} /> : <Icon.Expand size={18} />}
+                <button
+                  type="button"
+                  className={styles.iconBtn}
+                  onClick={() => setShowMemory((v) => !v)}
+                  aria-label="What Nexa remembers"
+                  aria-pressed={showMemory}
+                  title="What Nexa remembers"
+                >
+                  <Icon.Bookmark size={18} />
                 </button>
-                <button type="button" className={styles.iconBtn} onClick={() => setOpen(false)} aria-label="Close assistant" title="Close (Esc)">
+                <button
+                  type="button"
+                  className={styles.iconBtn}
+                  onClick={() => setExpanded((v) => !v)}
+                  aria-label={expanded ? "Restore size" : "Expand"}
+                  title={expanded ? "Restore" : "Expand"}
+                >
+                  {expanded ? (
+                    <Icon.Collapse size={18} />
+                  ) : (
+                    <Icon.Expand size={18} />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className={styles.iconBtn}
+                  onClick={() => setOpen(false)}
+                  aria-label="Close assistant"
+                  title="Close (Esc)"
+                >
                   <Icon.Close size={18} />
                 </button>
               </header>
 
-              <div className={styles.messages} ref={listRef} aria-live="polite">
-                {loadingMessages && (
-                  <div className={styles.assistant}>
-                    <Skeleton width="70%" />
-                    <Skeleton width="50%" />
+              {showMemory ? (
+                <MemoryPanel onClose={() => setShowMemory(false)} />
+              ) : (
+                <>
+                  <div
+                    className={styles.messages}
+                    ref={listRef}
+                    aria-live="polite"
+                  >
+                    {loadingMessages && (
+                      <div className={styles.assistant}>
+                        <Skeleton width="70%" />
+                        <Skeleton width="50%" />
+                      </div>
+                    )}
+                    {!loadingMessages && messages.length === 0 && !pending && (
+                      <div className={styles.empty}>
+                        <span className={styles.emptyOrb} aria-hidden="true">
+                          <Icon.Sparkle size={26} />
+                        </span>
+                        <h4>How can {agent?.name ?? "Nexa"} help?</h4>
+                        <p>
+                          Answers are grounded in the lakehouse and hospital
+                          policy, and cite their sources.
+                        </p>
+                        <div className={styles.prompts}>
+                          {agent?.prompts.map((p) => (
+                            <button
+                              key={p}
+                              type="button"
+                              onClick={() => void send(p)}
+                            >
+                              {p}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {messages.map((m) => (
+                      <motion.div
+                        key={m.message_id}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={
+                          m.role === "user" ? styles.user : styles.assistant
+                        }
+                      >
+                        {m.role === "assistant" && m.reply ? (
+                          <Reply reply={m.reply} />
+                        ) : (
+                          m.text
+                        )}
+                      </motion.div>
+                    ))}
+                    {pending && (
+                      <>
+                        <div className={styles.user}>{pending.text}</div>
+                        <div className={styles.assistant} aria-busy="true">
+                          <span
+                            className={styles.typing}
+                            aria-label="Nexa is thinking"
+                          >
+                            <i />
+                            <i />
+                            <i />
+                          </span>
+                        </div>
+                      </>
+                    )}
+                    {error && <div className={styles.error}>{error}</div>}
                   </div>
-                )}
-                {!loadingMessages && messages.length === 0 && !pending && (
-                  <div className={styles.empty}>
-                    <span className={styles.emptyOrb} aria-hidden="true">
-                      <Icon.Sparkle size={26} />
-                    </span>
-                    <h4>How can {agent?.name ?? "Nexa"} help?</h4>
-                    <p>Answers are grounded in the lakehouse and hospital policy, and cite their sources.</p>
-                    <div className={styles.prompts}>
-                      {agent?.prompts.map((p) => (
-                        <button key={p} type="button" onClick={() => void send(p)}>
-                          {p}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {messages.map((m) => (
-                  <motion.div key={m.message_id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className={m.role === "user" ? styles.user : styles.assistant}>
-                    {m.role === "assistant" && m.reply ? <Reply reply={m.reply} /> : m.text}
-                  </motion.div>
-                ))}
-                {pending && (
-                  <>
-                    <div className={styles.user}>{pending.text}</div>
-                    <div className={styles.assistant} aria-busy="true">
-                      <span className={styles.typing} aria-label="Nexa is thinking">
-                        <i />
-                        <i />
-                        <i />
-                      </span>
-                    </div>
-                  </>
-                )}
-                {error && <div className={styles.error}>{error}</div>}
-              </div>
 
-              <form
-                className={styles.composer}
-                onSubmit={(e: FormEvent) => {
-                  e.preventDefault();
-                  void send(input);
-                }}
-              >
-                <textarea
-                  ref={inputRef}
-                  rows={1}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
+                  <form
+                    className={styles.composer}
+                    onSubmit={(e: FormEvent) => {
                       e.preventDefault();
                       void send(input);
-                    }
-                  }}
-                  placeholder={`Message ${agent?.name ?? "Nexa"}…`}
-                  maxLength={2000}
-                  aria-label="Message"
-                />
-                <button type="submit" disabled={!!pending || !input.trim() || !agent} aria-label="Send">
-                  <Icon.Arrow size={18} />
-                </button>
-              </form>
-              <p className={styles.disclaimer}>Decision support only. Verify before acting; actions require human approval.</p>
+                    }}
+                  >
+                    <textarea
+                      ref={inputRef}
+                      rows={1}
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          void send(input);
+                        }
+                      }}
+                      placeholder={`Message ${agent?.name ?? "Nexa"}…`}
+                      maxLength={2000}
+                      aria-label="Message"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!!pending || !input.trim() || !agent}
+                      aria-label="Send"
+                    >
+                      <Icon.Arrow size={18} />
+                    </button>
+                  </form>
+                </>
+              )}
+              <p className={styles.disclaimer}>
+                Decision support only. Verify before acting; actions require
+                human approval.
+              </p>
             </div>
           </motion.section>
         )}
@@ -449,12 +644,23 @@ function RichText({ text }: { text: string }) {
     }
     const isItem = /^([-*•]|\d+[.)])\s+/.test(line);
     const last = blocks[blocks.length - 1];
-    const content = isItem ? line.replace(/^([-*•]|\d+[.)])\s+/, "") : line.replace(/^#{1,4}\s+/, "");
-    if (last && last.list === isItem && last.lines.length) last.lines.push(content);
+    const content = isItem
+      ? line.replace(/^([-*•]|\d+[.)])\s+/, "")
+      : line.replace(/^#{1,4}\s+/, "");
+    if (last && last.list === isItem && last.lines.length)
+      last.lines.push(content);
     else blocks.push({ list: isItem, lines: [content] });
   }
   const inline = (s: string) =>
-    s.split(/(\*\*[^*]+\*\*)/g).map((part, i) => (part.startsWith("**") && part.endsWith("**") ? <strong key={i}>{part.slice(2, -2)}</strong> : part));
+    s
+      .split(/(\*\*[^*]+\*\*)/g)
+      .map((part, i) =>
+        part.startsWith("**") && part.endsWith("**") ? (
+          <strong key={i}>{part.slice(2, -2)}</strong>
+        ) : (
+          part
+        ),
+      );
   return (
     <>
       {blocks
@@ -505,7 +711,10 @@ function Reply({ reply }: { reply: AgentReply }) {
           <span>
             <strong>Awaiting approval:</strong> {a.summary}
           </span>
-          <button type="button" onClick={() => window.dispatchEvent(new Event("nexa:open-inbox"))}>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("nexa:open-inbox"))}
+          >
             Review
           </button>
         </div>
@@ -514,7 +723,11 @@ function Reply({ reply }: { reply: AgentReply }) {
       {(reply.evidence.length > 0 || tools.length > 0) && (
         <details className={styles.evidence}>
           <summary>
-            Evidence & sources{tools.length ? ` · ${tools.length} data tool${tools.length === 1 ? "" : "s"}` : ""} · {reply.latency_ms.toFixed(0)} ms
+            Evidence & sources
+            {tools.length
+              ? ` · ${tools.length} data tool${tools.length === 1 ? "" : "s"}`
+              : ""}{" "}
+            · {reply.latency_ms.toFixed(0)} ms
           </summary>
           <ul>
             {reply.evidence.map((e, i) => (

@@ -48,6 +48,14 @@ def _strip_names(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 # ---- common -------------------------------------------------------------------------------------
 
+def remember(user: UserRecord, text: str) -> Dict[str, Any]:
+    from backend.app.agents import memory
+
+    m = memory.add(user, text, source="chat")
+    return {"saved": m["text"], "memory_id": m["memory_id"],
+            "note": "Saved to this user's long-term memory. They can see and delete it under 'What Nexa remembers'."}
+
+
 def search_policies(user: UserRecord, query: str) -> Dict[str, Any]:
     from src.rag.retriever import retrieve_context
 
@@ -294,6 +302,9 @@ def _n(desc: str, **extra: Any) -> Dict[str, Any]:
 TOOLS: List[Tool] = [
     Tool("search_policies", "Search hospital policies and clinical guidelines (discharge, follow-up, medication storage, lab safety, privacy, appointments). Returns document excerpts to quote.",
          {"query": _s("What to look for, in plain words")}, search_policies, "common", required=["query"]),
+    Tool("remember", "Save a preference or standing instruction to the user's long-term memory (e.g. 'I manage Site X', 'show money in thousands'). "
+                     "Call ONLY when the user explicitly asks you to remember something. Never store patient data; patient IDs and personal details are refused.",
+         {"text": _s("What to remember, as one short sentence")}, remember, "common", required=["text"]),
 
     Tool("get_network_kpis", "Network-wide KPIs from Gold: admissions, patients, unplanned 30-day readmission rate, average length of stay, bed occupancy, billed revenue, collection rate, hospital count, data-through date.",
          {}, get_network_kpis, "insight", page="executive"),

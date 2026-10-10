@@ -11,7 +11,7 @@ import re
 import time
 from typing import Any, Dict, List, Optional, Tuple
 
-from backend.app.agents import providers
+from backend.app.agents import memory, providers
 from backend.app.agents.tools import BY_NAME, Tool, run_tool, tools_for
 from backend.app.core.users import UserRecord
 from src.security.audit import log_audit_event
@@ -37,18 +37,22 @@ How you work (these rules are not negotiable):
 """.strip()
 
 
-def system_prompt(agent: str) -> str:
-    return f"{AGENT_SCOPE.get(agent, AGENT_SCOPE['ops'])}\n\nYou work inside MediNexus AI, a hospital-network platform. Currency is USD. Data comes from the Gold lakehouse (Synthea clinical data), simulated operations tables (clearly labelled), the model registry and the hospital policy library.\n\n{RULES}"
+def system_prompt(agent: str, memories: str = "") -> str:
+    prompt = f"{AGENT_SCOPE.get(agent, AGENT_SCOPE['ops'])}\n\nYou work inside MediNexus AI, a hospital-network platform. Currency is USD. Data comes from the Gold lakehouse (Synthea clinical data), simulated operations tables (clearly labelled), the model registry and the hospital policy library.\n\n{RULES}"
+    return f"{prompt}\n\n{memories}" if memories else prompt
 
 
 # ---- rules engine (no LLM) ------------------------------------------------------------------------
 
+REMEMBER = re.compile(r"^\s*(please\s+)?(remember|keep in mind)\b", re.I)
 POLICY_WORDS = re.compile(r"guideline|policy|protocol|procedure|standard|temperature|storage|handling|privacy|how should|what does .* say", re.I)
 PATIENT_ID = re.compile(r"\bP_\d{1,6}\b", re.I)
 
 
 def _route(agent: str, message: str, allowed: Dict[str, Tool]) -> Optional[Tuple[str, Dict[str, Any]]]:
     m = message.lower()
+    if REMEMBER.search(message) and "remember" in allowed:
+        return "remember", {"text": message}
     pid = PATIENT_ID.search(message)
     if pid and "get_patient_summary" in allowed:
         return "get_patient_summary", {"patient_id": pid.group(0).upper()}
@@ -95,6 +99,7 @@ def _route(agent: str, message: str, allowed: Dict[str, Tool]) -> Optional[Tuple
 
 LABELS = {
     "search_policies": ("Policy library", None),
+    "remember": ("Saved to long-term memory", None),
     "get_network_kpis": ("Network KPIs [Gold]", None),
     "get_readmissions_by": ("Unplanned 30-day readmission rates, highest first [Gold admissions]", ["group", "rate_pct", "unplanned_readmissions", "admissions"]),
     "get_admissions_trend": ("Monthly admissions [Gold]", ["period", "value", "secondary"]),
@@ -134,6 +139,8 @@ def _facts(name: str, data: Any) -> List[str]:
             body = re.sub(r"\[DEMO[^\]]*\]|DOCUMENT TITLE:[^\n]*", "", r["text"]).strip()
             out.append(f"{r['document']} ({r.get('policy_id', '')}) · {r.get('section', '')}: {body[:500]}…")
         return out or ["No policy excerpt matched that question."]
+    if name == "remember":
+        return [f"\"{data.get('saved', '')}\"", "You can see and delete it under 'What Nexa remembers'."]
     if "rows" in data or "items" in data:
         rows = data.get("rows") if "rows" in data else data.get("items")
         if not rows:
@@ -172,7 +179,7 @@ def _rules_answer(agent: str, message: str, user: UserRecord, allowed: Dict[str,
     result = execute(name, args)
     trace = [{"name": name, "args": args, "ok": bool(result.get("ok")), "error": result.get("error")}]
     if not result.get("ok"):
-        return f"I couldn't get that data: {result.get('error')}", [], trace
+        return f"I couldn't do that: {result.get('error')}", [], trace
     facts = _facts(name, result.get("data"))
     label = LABELS.get(name, (BY_NAME[name].description.split(".")[0], None))[0]
     return f"{label}. Shown as returned by the platform (rules engine, no AI interpretation):", facts, trace
@@ -202,7 +209,7 @@ def run(agent: str, message: str, user: UserRecord, history: Optional[List[Tuple
     if provider in ("claude", "openai"):
         try:
             runner = providers.run_claude if provider == "claude" else providers.run_openai
-            answer, trace = runner(system_prompt(agent), history or [], message, tools, execute)
+            answer, trace = runner(system_prompt(agent, memory.prompt_block(user)), history or [], message, tools, execute)
             engine = providers.provider_label()
         except providers.ProviderError as e:
             notes = f"AI engine unavailable ({e}); answered by the rules engine."

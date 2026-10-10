@@ -183,6 +183,11 @@ export const Icon = {
       <path d="M9.5 4.5v15" />
     </Svg>
   ),
+  Bookmark: (p: IconProps) => (
+    <Svg {...p}>
+      <path d="M6 3h12v18l-6-4.5L6 21z" />
+    </Svg>
+  ),
   Pencil: (p: IconProps) => (
     <Svg {...p}>
       <path d="M4 20l1-4.5L16 4.5l3.5 3.5L8.5 19z M13.5 7l3.5 3.5" />

@@ -7,13 +7,15 @@ from fastapi import APIRouter, Depends, Path, Response
 from backend.app.core.deps import current_user
 from backend.app.core.pagination import Page, PageParams, page_params
 from backend.app.core.users import UserRecord
-from backend.app.schemas.assistant import AssistantAgent, AssistantExchange, AssistantMessage, AssistantSession, SessionCreate, SessionRename
+from backend.app.agents import memory
+from backend.app.schemas.assistant import AssistantAgent, AssistantExchange, AssistantMessage, AssistantSession, MemoryIn, MemoryItem, SessionCreate, SessionRename
 from backend.app.schemas.common import ERROR_RESPONSES
 from backend.app.schemas.operations import ChatIn
 from backend.app.services import assistant
 
 router = APIRouter(prefix="/assistant", tags=["assistant"], responses=ERROR_RESPONSES)
 SessionId = Path(..., pattern="^[0-9a-f]{32}$")
+MemoryId = Path(..., pattern="^[0-9a-f]{32}$")
 
 
 @router.get("/agents", response_model=List[AssistantAgent])
@@ -50,3 +52,27 @@ def messages(session_id: str = SessionId, user: UserRecord = Depends(current_use
 @router.post("/sessions/{session_id}/messages", response_model=AssistantExchange)
 def send(body: ChatIn, session_id: str = SessionId, user: UserRecord = Depends(current_user)) -> AssistantExchange:
     return assistant.send_message(session_id, body.message, user)
+
+
+# ---- long-term memory: what the signed-in user asked Nexa to remember ----
+
+@router.get("/memory", response_model=List[MemoryItem])
+def list_memory(user: UserRecord = Depends(current_user)) -> List[MemoryItem]:
+    return [MemoryItem(**m) for m in memory.list_for(user)]
+
+
+@router.post("/memory", response_model=MemoryItem, status_code=201)
+def add_memory(body: MemoryIn, user: UserRecord = Depends(current_user)) -> MemoryItem:
+    return MemoryItem(**memory.add(user, body.text, source="panel"))
+
+
+@router.delete("/memory/{memory_id}", status_code=204, response_class=Response)
+def delete_memory(memory_id: str = MemoryId, user: UserRecord = Depends(current_user)) -> Response:
+    memory.delete(user, memory_id)
+    return Response(status_code=204)
+
+
+@router.delete("/memory", status_code=204, response_class=Response)
+def clear_memory(user: UserRecord = Depends(current_user)) -> Response:
+    memory.clear(user)
+    return Response(status_code=204)
