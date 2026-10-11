@@ -80,6 +80,8 @@
     "method_label": "Gradient-boosting model",
     "holdout_mae": 444.354,
     "holdout_baseline_mae": 887.685,
+    "holdout_surge_mae": 973.58,
+    "holdout_served_mae": 444.354,
     "beats_baseline": true,
     "test_period": "2019-05-23 to 2020-05-16",
     "data_through": "2020-05-24"

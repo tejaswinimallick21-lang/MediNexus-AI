@@ -65,7 +65,17 @@ def _train_daily_model(
 
     mae = float(np.mean([f["mae"] for f in folds]))
     base = float(np.mean([f["baseline_mae"] for f in folds]))
+    surge = float(np.mean([f["surge_mae"] for f in folds]))
     pre_covid = [f for f in folds if not f["covid_period"]]
+
+    def pre_skill(key: str):
+        if not pre_covid:
+            return None
+        return round((1 - np.mean([f[key] for f in pre_covid]) / max(1e-9, np.mean([f["baseline_mae"] for f in pre_covid]))) * 100, 1)
+
+    # Champion/challenger: serve whichever method had the lowest backtest error (ties go to the simpler one)
+    candidates = {"baseline_naive7": base, "surge_aware": surge, "model": mae}
+    serving = min(candidates, key=candidates.get)
     metrics = {
         "target": f"average daily {unit} over the next {HORIZON_DAYS} days",
         "mae": round(mae, 3),
@@ -73,8 +83,13 @@ def _train_daily_model(
         "wape_pct": round(float(np.mean([f["wape_pct"] for f in folds])), 2),
         "baseline_naive7_wape_pct": round(float(np.mean([f["baseline_wape_pct"] for f in folds])), 2),
         "skill_vs_naive7_pct": round((1 - mae / max(1e-9, base)) * 100, 1),
-        "pre_covid_skill_pct": round((1 - np.mean([f["mae"] for f in pre_covid]) / max(1e-9, np.mean([f["baseline_mae"] for f in pre_covid]))) * 100, 1) if pre_covid else None,
+        "pre_covid_skill_pct": pre_skill("mae"),
         "beats_baseline": bool(mae < base),
+        "surge_aware_mae": round(surge, 3),
+        "surge_aware_wape_pct": round(float(np.mean([f["surge_wape_pct"] for f in folds])), 2),
+        "surge_aware_pre_covid_skill_pct": pre_skill("surge_mae"),
+        "served_mae": round(candidates[serving], 3),
+        "skill_served_vs_naive7_pct": round((1 - candidates[serving] / max(1e-9, base)) * 100, 1),
         "split": f"rolling-origin backtest: {len(folds)} folds of 60 days",
         "test_period": f"{folds[0]['fold_start']} to {folds[-1]['fold_end']}",
         "folds": folds,
@@ -84,16 +99,16 @@ def _train_daily_model(
 
     labelled = sup.dropna(subset=["target"])
     final = _daily_regressor().fit(labelled[DAILY_FEATURES], labelled["log_ratio_target"])
-    # Champion/challenger: serve the model only if it beat the naive baseline across the backtest
-    metrics["serving_method"] = "model" if metrics["beats_baseline"] else "baseline_naive7"
+    metrics["serving_method"] = serving
     artifact = {
-        "model": final, "features": DAILY_FEATURES, "metrics": metrics, "version": "3.0.0",
+        "model": final, "features": DAILY_FEATURES, "metrics": metrics, "version": "3.1.0",
         "trained_at": datetime.now().isoformat(), "type": "daily_forecaster", "data_through": str(end.date()),
         "serving_method": metrics["serving_method"],
     }
-    path = register_model(model_name=model_name, version="3.0.0", dataset=dataset, features=DAILY_FEATURES,
+    path = register_model(model_name=model_name, version="3.1.0", dataset=dataset, features=DAILY_FEATURES,
                           metrics=metrics, model_obj=artifact, filename=filename)
-    logger.info(f"{model_name}: backtest MAE {metrics['mae']} vs naive-7 {metrics['baseline_naive7_mae']} ({metrics['skill_vs_naive7_pct']}% skill)")
+    logger.info(f"{model_name}: backtest MAE model {metrics['mae']} · surge-aware {metrics['surge_aware_mae']} · naive-7 "
+                f"{metrics['baseline_naive7_mae']}; serving {serving} ({metrics['skill_served_vs_naive7_pct']}% skill)")
     return {"status": "SUCCESS", "model_name": model_name, "path": path, "metrics": metrics}
 
 
@@ -166,6 +181,7 @@ def train_pharmacy_demand_model() -> Dict[str, Any]:
     labelled = frame[frame["t"] + pd.Timedelta(days=PHARMACY_HORIZON) <= end]
     final = _pharmacy_regressor().fit(labelled[PHARMACY_FEATURES], labelled["y30"])
     metrics["serving_method"] = "model" if metrics["beats_baseline"] else "baseline_last30"
+    metrics["served_mae"] = scores["mae"] if metrics["beats_baseline"] else naive30["mae"]
     artifact = {
         "model": final, "features": PHARMACY_FEATURES, "metrics": metrics, "version": "2.0.0",
         "trained_at": datetime.now().isoformat(), "type": "pharmacy_demand_forecaster", "data_through": str(end.date()),

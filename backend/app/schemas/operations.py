@@ -12,6 +12,8 @@ class ForecastMeta(BaseModel):
     method_label: str
     holdout_mae: Optional[float] = None
     holdout_baseline_mae: Optional[float] = None
+    holdout_surge_mae: Optional[float] = None
+    holdout_served_mae: Optional[float] = None
     beats_baseline: Optional[bool] = None
     test_period: Optional[str] = None
     data_through: Optional[str] = None

@@ -20,6 +20,8 @@
     "method_label": "Naive baseline: last 30 days repeated",
     "holdout_mae": 0.217,
     "holdout_baseline_mae": 0.201,
+    "holdout_surge_mae": null,
+    "holdout_served_mae": null,
     "beats_baseline": false,
     "test_period": "2020-02-26 to 2020-04-26",
     "data_through": "2020-05-26"

@@ -1,7 +1,7 @@
 {
-  "score": 86,
-  "passed": 10,
-  "warnings": 4,
+  "score": 96,
+  "passed": 13,
+  "warnings": 1,
   "failures": 0,
   "environment": "development",
   "checks": [
@@ -81,9 +81,9 @@
       "id": "pseudonym_key",
       "area": "Data protection",
       "title": "Pseudonymisation key",
-      "status": "warn",
-      "detail": "No platform-wide key yet (it is created on the next dataset upload). The 4 existing sandbox(es) were masked with one-off keys, so their masked identifiers cannot be linked to other uploads.",
-      "fix": "Re-upload datasets you want to link on masked identifiers."
+      "status": "pass",
+      "detail": "A platform-wide key pseudonymises identifiers in uploaded datasets, so masked keys stay linkable across uploads.",
+      "fix": null
     },
     {
       "id": "agent_guardrails",
@@ -98,23 +98,23 @@
       "area": "Monitoring",
       "title": "Audit logging",
       "status": "pass",
-      "detail": "1837 events recorded in the last 24 h (sign-ins, patient-record views, data exports, agent actions).",
+      "detail": "274 events recorded in the last 24 h (sign-ins, patient-record views, data exports, agent actions).",
       "fix": null
     },
     {
       "id": "failed_logins",
       "area": "Monitoring",
       "title": "Failed sign-ins (24 h)",
-      "status": "warn",
-      "detail": "30 failed sign-ins in the last 24 h; 2 lockouts.",
+      "status": "pass",
+      "detail": "1 failed sign-ins in the last 24 h; 0 lockouts.",
       "fix": null
     },
     {
       "id": "access_denied",
       "area": "Monitoring",
       "title": "Blocked access attempts (24 h)",
-      "status": "warn",
-      "detail": "164 requests were blocked by role-based access control in the last 24 h.",
+      "status": "pass",
+      "detail": "15 requests were blocked by role-based access control in the last 24 h.",
       "fix": null
     }
   ]

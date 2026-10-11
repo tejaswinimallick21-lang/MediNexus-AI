@@ -1,13 +1,13 @@
 {
   "schedule": "Daily at 07:00",
-  "next_run_at": "2026-10-11T07:00",
+  "next_run_at": "2026-10-12T07:00",
   "running_job_id": null,
   "runs": [
     {
-      "run_id": "157d59288edf",
+      "run_id": "69fee423a20a",
       "trigger": "manual",
-      "started_at": "2026-10-10T14:50:10",
-      "finished_at": "2026-10-10T14:50:34",
+      "started_at": "2026-10-11T18:17:11",
+      "finished_at": "2026-10-11T18:17:31",
       "status": "succeeded",
       "found": 68,
       "proposed": 30,
@@ -21,10 +21,10 @@
       "suppressed": 0
     },
     {
-      "run_id": "7a8f1a1ea3ee",
+      "run_id": "37727a1fc3a8",
       "trigger": "manual",
-      "started_at": "2026-10-10T14:49:47",
-      "finished_at": "2026-10-10T14:50:09",
+      "started_at": "2026-10-11T18:16:50",
+      "finished_at": "2026-10-11T18:17:10",
       "status": "succeeded",
       "found": 68,
       "proposed": 30,
@@ -36,6 +36,23 @@
       },
       "error": null,
       "suppressed": 1
+    },
+    {
+      "run_id": "168725f88e1f",
+      "trigger": "schedule",
+      "started_at": "2026-10-11T17:27:17",
+      "finished_at": "2026-10-11T17:30:23",
+      "status": "succeeded",
+      "found": 48,
+      "proposed": 20,
+      "ai_used": true,
+      "by_kind": {
+        "follow_up": 6,
+        "purchase_order": 7,
+        "lab_escalation": 7
+      },
+      "error": null,
+      "suppressed": 0
     },
     {
       "run_id": "beee86791d8b",

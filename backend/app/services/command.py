@@ -25,7 +25,7 @@ from backend.app.schemas.command import (
     WhatIfResult,
     WhatIfSide,
 )
-from backend.app.services.executive import _verdict
+from backend.app.services.executive import _verdict, served_forecast
 from src.utils.database import query_df_strict
 
 ABANDON_RATE = 0.10  # share of the waiting list that drops out each day (same rule as the simulator)
@@ -307,11 +307,15 @@ def list_model_monitor() -> List[ModelMonitorRow]:
             ))
         else:
             base_key = "baseline_last30_mae" if "baseline_last30_mae" in m else "baseline_naive7_mae"
-            served_model = m.get("serving_method") == "model"
+            method, served_label, served = served_forecast(m, base_key)
+            baseline_served = method.startswith("baseline")
+            tried = f"gradient-boosting model MAE {m['mae']:.2f}" + (f", surge-aware {m['surge_aware_mae']:.2f}" if "surge_aware_mae" in m else "")
+            if method == "surge_aware" and m.get("surge_aware_pre_covid_skill_pct") is not None:
+                tried += f" · {m['surge_aware_pre_covid_skill_pct']:.0f}% more accurate than naive outside the COVID-19 surge"
             rows.append(ModelMonitorRow(
-                **common, primary_metric=f"MAE {m['mae']:.2f} · WAPE {m.get('wape_pct', 0):.1f}%", baseline=f"Naive {m[base_key]:.2f}",
-                verdict=_verdict(m["mae"], m[base_key], higher_is_better=False),
-                serving="Model" if served_model else "Naive baseline", health="healthy" if served_model else "baseline",
-                note=f"{m.get('split', 'Time-based holdout')} · {m.get('test_period', '')}",
+                **common, primary_metric=f"MAE {served:.2f} ({served_label.lower()})", baseline=f"Naive {m[base_key]:.2f}",
+                verdict="Baseline wins — baseline served" if baseline_served else _verdict(served, m[base_key], higher_is_better=False),
+                serving=served_label, health="baseline" if baseline_served else "healthy",
+                note=f"{m.get('split', 'Time-based holdout')} · {m.get('test_period', '')} · tried: {tried}",
             ))
     return rows

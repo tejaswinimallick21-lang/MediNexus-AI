@@ -376,7 +376,7 @@ function ModelMonitorTab() {
     return {
       total: rows.length,
       model: rows.filter((r) => r.serving === "Model").length,
-      baseline: rows.filter((r) => r.health === "baseline").length,
+      simpler: rows.filter((r) => r.serving !== "Model").length,
       low: rows.filter((r) => r.health === "low_evidence").length,
     };
   }, [models.data]);
@@ -387,7 +387,7 @@ function ModelMonitorTab() {
           <>
             <Fact label="Active models" value={formatNumber(counts.total)} />
             <Fact label="Serving the model" value={formatNumber(counts.model)} hint="Beat a simple baseline out of sample" />
-            <Fact label="Serving the baseline" value={formatNumber(counts.baseline)} hint="Model lost to the baseline, so the baseline is served" />
+            <Fact label="Serving a simpler method" value={formatNumber(counts.simpler)} hint="A baseline or surge-aware average beat the ML model out of sample" />
             <Fact label="Low evidence" value={formatNumber(counts.low)} hint="Too few held-out events for tight estimates" />
           </>
         ) : (

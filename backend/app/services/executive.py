@@ -66,6 +66,16 @@ def get_revenue_by_department() -> List[RevenueByDepartment]:
     return [RevenueByDepartment(department=r.dept, revenue=round(float(r.rev or 0), 2), admissions=int(r.n)) for r in df.itertuples()]
 
 
+SERVED_LABELS = {"model": "Model", "surge_aware": "Surge-aware average", "baseline_naive7": "Naive baseline", "baseline_last30": "Naive baseline"}
+
+
+def served_forecast(m: dict, base_key: str):
+    """(method key, its display name, its backtest MAE) for the forecasting method actually served."""
+    method = m.get("serving_method", "model")
+    mae = m.get("served_mae", m.get("mae") if method == "model" else m.get(base_key))
+    return method, SERVED_LABELS.get(method, method), mae
+
+
 def _verdict(score: float, baseline: float, higher_is_better: bool = True) -> str:
     if score is None or baseline is None:
         return "Not evaluated"
@@ -112,10 +122,11 @@ def get_model_scorecard() -> List[ModelScore]:
     ]:
         m = active_metrics(name)
         if m:
+            method, served_label, served = served_forecast(m, base_key)
             scores.append(ModelScore(
                 model=label, purpose=f"{m.get('split', 'Time-based holdout')} · {m.get('test_period', '')}",
-                primary_metric=f"MAE {m.get('mae'):.2f}", baseline=f"Naive {m.get(base_key):.2f}",
-                verdict=_verdict(m.get("mae"), m.get(base_key), higher_is_better=False),
+                primary_metric=f"MAE {served:.2f} ({served_label.lower()})", baseline=f"Naive {m.get(base_key):.2f}",
+                verdict=_verdict(served, m.get(base_key), higher_is_better=False) if not method.startswith("baseline") else "Baseline wins — baseline served",
             ))
     return scores
 

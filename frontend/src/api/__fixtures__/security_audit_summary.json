@@ -1,6 +1,6 @@
 {
   "window_days": 7,
-  "total_events": 2701,
+  "total_events": 2740,
   "failed_logins": 30,
   "access_denied": 164,
   "lockouts": 2,
@@ -8,7 +8,7 @@
   "by_action": [
     {
       "label": "LOGIN",
-      "count": 1113
+      "count": 1118
     },
     {
       "label": "ROLE_SWITCH",
@@ -16,7 +16,7 @@
     },
     {
       "label": "AGENT_PROPOSED_ACTION",
-      "count": 169
+      "count": 189
     },
     {
       "label": "ACCESS_DENIED",
@@ -24,11 +24,11 @@
     },
     {
       "label": "AGENT_QUERY",
-      "count": 99
+      "count": 100
     },
     {
       "label": "SANDBOX_UPLOAD",
-      "count": 80
+      "count": 85
     },
     {
       "label": "PATIENT_360_VIEW",
@@ -36,7 +36,7 @@
     },
     {
       "label": "LOGOUT",
-      "count": 50
+      "count": 53
     },
     {
       "label": "SANDBOX_DELETE",
@@ -59,12 +59,12 @@
       "count": 23
     },
     {
-      "label": "PROCUREMENT_ORDER",
-      "count": 21
+      "label": "SANDBOX_PREDICT",
+      "count": 22
     },
     {
-      "label": "SANDBOX_PREDICT",
-      "count": 19
+      "label": "PROCUREMENT_ORDER",
+      "count": 21
     }
   ],
   "by_day": [
@@ -100,9 +100,15 @@
     },
     {
       "day": "2026-10-10 00:00:00",
-      "events": 1036,
-      "failed_logins": 15,
-      "denied": 79
+      "events": 800,
+      "failed_logins": 14,
+      "denied": 64
+    },
+    {
+      "day": "2026-10-11 00:00:00",
+      "events": 275,
+      "failed_logins": 1,
+      "denied": 15
     }
   ],
   "failed_login_accounts": [
@@ -145,11 +151,11 @@
       "count": 14
     },
     {
-      "label": "API_PHARMACY",
+      "label": "API_LABORATORY",
       "count": 14
     },
     {
-      "label": "API_LABORATORY",
+      "label": "API_PHARMACY",
       "count": 14
     },
     {

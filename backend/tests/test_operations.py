@@ -69,7 +69,7 @@ def test_lab_capacity_plan_contract(login):
     c = login("hcp")
     category = c.get("/api/lab/categories").json()[0]
     body = assert_contract(c.get(f"/api/lab/categories/{category}/capacity-plan"), LabCapacityPlan, "lab_capacity_plan")
-    assert body["forecast"]["serving_method"] in {"model", "baseline_naive7"}
+    assert body["forecast"]["serving_method"] in {"model", "surge_aware", "baseline_naive7"}
 
 
 def test_lab_unknown_category(login):

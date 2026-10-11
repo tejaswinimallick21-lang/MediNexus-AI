@@ -214,16 +214,24 @@ def predict_patient_covid_outcomes(patient_id: str) -> Dict[str, Any]:
     }
 
 
+METHOD_LABELS = {
+    "model": "Gradient-boosting model",
+    "surge_aware": "Surge-aware average",
+    "baseline_naive7": "Naive baseline: last 7 days repeated",
+    "baseline_last30": "Naive baseline: last 30 days repeated",
+}
+
+
 def _serving_note(artifact: Dict[str, Any]) -> Dict[str, Any]:
     m = artifact.get("metrics", {})
     method = artifact.get("serving_method", "model")
     return {
         "serving_method": method,
-        "method_label": "Gradient-boosting model" if method == "model" else (
-            "Naive baseline: last 7 days repeated" if method == "baseline_naive7" else "Naive baseline: last 30 days repeated"
-        ),
+        "method_label": METHOD_LABELS.get(method, method),
         "holdout_mae": m.get("mae"),
         "holdout_baseline_mae": m.get("baseline_naive7_mae", m.get("baseline_last30_mae")),
+        "holdout_surge_mae": m.get("surge_aware_mae"),
+        "holdout_served_mae": m.get("served_mae"),
         "beats_baseline": m.get("beats_baseline"),
         "test_period": m.get("test_period"),
         "data_through": artifact.get("data_through"),
@@ -231,13 +239,16 @@ def _serving_note(artifact: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _daily_forecast(model_name: str, series_fn) -> Dict[str, Any]:
-    from src.ml.forecasting import daily_supervised, predict_daily
+    from src.ml.forecasting import daily_supervised, predict_daily, surge_aware
 
     artifact = load_model(model_name)
     series, end = series_fn()
     latest = daily_supervised(series).sort_values("day").groupby("group").tail(1)
-    if artifact and artifact.get("serving_method") == "model":
+    method = artifact.get("serving_method") if artifact else None
+    if method == "model":
         forecast = predict_daily(artifact["model"], latest)
+    elif method == "surge_aware":
+        forecast = surge_aware(latest["mean7"], latest["mean28"])
     else:  # champion/challenger chose the naive baseline (or no model yet)
         forecast = latest["mean7"].to_numpy()
     rows = [

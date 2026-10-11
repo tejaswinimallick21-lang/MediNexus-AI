@@ -10,6 +10,8 @@ export const ForecastMetaSchema = z.object({
   method_label: z.string(),
   holdout_mae: nullableNum.optional(),
   holdout_baseline_mae: nullableNum.optional(),
+  holdout_surge_mae: nullableNum.optional(),
+  holdout_served_mae: nullableNum.optional(),
   beats_baseline: z.boolean().nullable().optional(),
   test_period: z.string().nullable().optional(),
   data_through: z.string().nullable().optional(),

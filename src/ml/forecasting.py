@@ -7,6 +7,12 @@ with naive persistence baselines. Training and inference share the feature build
 
 Daily-series models predict the log-ratio of the next-7-day average to the trailing 7-day
 average, so they stay scale-free through the 2020 COVID-19 volume surge in the Synthea data.
+
+Three daily methods compete in the backtest and the most accurate one is served:
+- the gradient-boosting model;
+- naive-7 (repeat the last 7-day average);
+- surge-aware average: the steadier 7/28-day blend in normal times, naive-7 once volume has
+  shifted sharply (the blend lags a surge; naive-7 is noisy when volume is stable).
 """
 
 from typing import Dict, List, Optional, Tuple
@@ -23,6 +29,7 @@ PHARMACY_HORIZON = 30
 DAILY_FEATURES = ["log_mean7", "log_mean28", "log_mean91", "trend_7_28", "trend_28_91", "last_vs_mean7", "zero_share_28", "month",
                   "doy_sin", "doy_cos", "yoy_change"]
 PHARMACY_FEATURES = ["u30", "u90", "u180", "active_rx", "new_rx_30", "trend_30_90", "unit_cost"]
+SURGE_THRESHOLD = 0.3       # |log 7-day avg - log 28-day avg| above this (about a 35% shift) = surge
 
 
 # ---------------------------------------------------------------------------------------------
@@ -124,12 +131,21 @@ def rolling_backtest(sup: pd.DataFrame, end: pd.Timestamp, make_model, folds: in
         y = test["target"].to_numpy()
         m = regression_scores(y, predict_daily(model, test))
         b = regression_scores(y, test["mean7"].to_numpy())
+        s = regression_scores(y, surge_aware(test["mean7"], test["mean28"]))
         results.append({
             "fold_start": str(start.date()), "fold_end": str((stop - pd.Timedelta(days=1)).date()),
             "mae": m["mae"], "baseline_mae": b["mae"], "wape_pct": m["wape_pct"], "baseline_wape_pct": b["wape_pct"],
+            "surge_mae": s["mae"], "surge_wape_pct": s["wape_pct"],
             "covid_period": bool(stop > pd.Timestamp("2020-03-10")),
         })
     return results
+
+
+def surge_aware(mean7, mean28) -> np.ndarray:
+    """7/28-day blend while volume is stable; the 7-day average once it has shifted sharply."""
+    m7, m28 = np.asarray(mean7, dtype=float), np.asarray(mean28, dtype=float)
+    shifted = np.abs(np.log1p(m7) - np.log1p(m28)) > SURGE_THRESHOLD
+    return np.where(shifted, m7, 0.5 * m7 + 0.5 * m28)
 
 
 def predict_daily(model, frame: pd.DataFrame) -> np.ndarray:

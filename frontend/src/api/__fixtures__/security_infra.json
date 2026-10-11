@@ -3,8 +3,8 @@
   "environment": "development",
   "python": "3.12.7",
   "platform": "Windows 11",
-  "uptime_minutes": 3,
-  "database_path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_nlodml0j\\healthcare_test.duckdb",
+  "uptime_minutes": 2,
+  "database_path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_na6mkz_5\\healthcare_test.duckdb",
   "database_size_mb": 219.0,
   "tables": [
     {
@@ -185,7 +185,7 @@
     {
       "name": "audit_logs",
       "layer": "platform",
-      "rows": 2702
+      "rows": 2741
     },
     {
       "name": "bronze_pharmacy_inventory",
@@ -213,7 +213,7 @@
     "silver": 2135968,
     "gold": 2155859,
     "sim": 2054860,
-    "platform": 3659
+    "platform": 3706
   },
   "storage": [
     {
@@ -231,8 +231,8 @@
     {
       "label": "Upload sandboxes",
       "path": "data\\uploads",
-      "size_mb": 38.8,
-      "files": 16
+      "size_mb": 212.7,
+      "files": 37
     },
     {
       "label": "Knowledge uploads",
@@ -254,7 +254,7 @@
     },
     {
       "label": "Logs",
-      "path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_nlodml0j\\logs",
+      "path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_na6mkz_5\\logs",
       "size_mb": 0.0,
       "files": 2
     },
@@ -266,9 +266,9 @@
     }
   ],
   "active_models": 8,
-  "models_last_trained": "2026-10-09 22:33:28",
+  "models_last_trained": "2026-10-11 18:14:19",
   "active_jobs": [],
-  "sweep_next_run": "2026-10-11T07:00",
+  "sweep_next_run": "2026-10-12T07:00",
   "sweep_last_status": "succeeded",
   "llm_provider": "Rules engine (no LLM key)",
   "embeddings": "Local LSA (TF-IDF + SVD)",

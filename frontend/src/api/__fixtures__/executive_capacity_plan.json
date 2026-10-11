@@ -1,7 +1,7 @@
 {
   "surge_tier": "LEVEL 1: NORMAL OPERATIONS",
   "occupancy_pct": 39.5,
-  "projected_daily_admissions": 1.6,
+  "projected_daily_admissions": 2.0,
   "average_los_days": 4.2,
   "directives": [
     "Maintain baseline staffing and admitting protocols."

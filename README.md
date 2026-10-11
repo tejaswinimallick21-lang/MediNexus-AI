@@ -118,16 +118,17 @@ All clinical models use point-in-time features, out-of-sample evaluation, and a 
    * **Results**: MAE ≈ 1.1 days vs 2.8 days for a median-only baseline (R² ≈ 0.51).
 
 4. **Pharmacy 30-Day Medication Demand Forecaster** (`models/pharmacy_demand_model.joblib`)
-   * **Target**: Projected 30-day unit requirements.
-   * **Algorithm**: Random Forest Regressor on historical burn and reorder thresholds.
+   * **Target**: units dispensed per hospital and medication over the next 30 days.
+   * **Test**: the 3 most recent monthly forecast dates, trained only on earlier months.
+   * **Results**: gradient boosting MAE 0.22 vs 0.20 for "repeat the last 30 days", so **the baseline is served**. Synthea prescriptions are mostly long-running chronic medicines, so next month closely repeats last month and a model has little to add.
 
-5. **Laboratory Workload Forecaster** (`models/lab_workload_model.joblib`)
-   * **Target**: Daily test investigation volume by clinical specialty.
+5. **Laboratory Workload Forecaster** (`models/lab_workload_model.joblib`) and 6. **Admission Demand Forecaster** (`models/resource_demand_model.joblib`)
+   * **Target**: average daily lab tests per category / network admissions over the next 7 days.
+   * **Test**: rolling-origin backtest, 6 folds of 60 days (May 2019 – May 2020), each trained only on earlier data.
+   * **Three methods compete; the most accurate is served**: gradient boosting, naive-7 (repeat the last week) and a **surge-aware average** (7/28-day blend while volume is stable, last week once volume shifts by more than ~35%).
+   * **Results**: gradient boosting loses to naive-7 (lab 275 vs 188 tests/day; admissions 6.4 vs 5.7). The surge-aware average wins and is served: **10.5% (lab) and 7% (admissions) more accurate than naive-7 in normal periods**, and about 1% better overall. Almost all error falls in the March–May 2020 COVID-19 surge, which no history-based method can foresee.
 
-6. **Hospital Bed & Resource Demand Forecaster** (`models/resource_demand_model.joblib`)
-   * **Target**: Daily admission counts and emergency intake volume.
-
-> ⚠️ Models 4–6 are operational heuristics that are still scored in-sample, and their targets are partly computed from their own inputs (e.g. demand = burn × 30). They have not yet been re-validated like models 1–3.
+7–8. **Outpatient demand and drug-class demand** (simulated operations data): the gradient-boosting model is served, 19% and 50% more accurate than naive-7 in the same backtest.
 
 > ⚖️ **Model Transparency Disclaimer:** Every prediction displays confidence intervals, version tags, local contributing factors, and the mandatory warning: *"AI/ML decision support — not a medical diagnosis."*
 

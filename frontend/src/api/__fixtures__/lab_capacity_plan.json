@@ -12,10 +12,12 @@
   ],
   "assessment": "Expected daily volume (0 tests) represents 0.0% of single-shift rated analyzer capacity. Capacity is estimated (75th-percentile daily volume over the past year + 25% headroom).",
   "forecast": {
-    "serving_method": "baseline_naive7",
-    "method_label": "Naive baseline: last 7 days repeated",
+    "serving_method": "surge_aware",
+    "method_label": "Surge-aware average",
     "holdout_mae": 275.124,
     "holdout_baseline_mae": 187.785,
+    "holdout_surge_mae": 186.127,
+    "holdout_served_mae": 186.127,
     "beats_baseline": false,
     "test_period": "2019-05-25 to 2020-05-18",
     "data_through": "2020-05-26"
