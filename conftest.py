@@ -24,6 +24,12 @@ if "MEDINEXUS_DB_PATH" not in os.environ:
         wal = _LIVE_DB.with_suffix(".duckdb.wal")
         if wal.exists():
             shutil.copy2(wal, test_db.with_suffix(".duckdb.wal"))
+        # Accounts come from the test seed file, never from the developer's real people
+        import duckdb
+
+        con = duckdb.connect(str(test_db))
+        con.execute("DROP TABLE IF EXISTS app_users")
+        con.close()
     os.environ["MEDINEXUS_DB_PATH"] = str(test_db)
 os.environ.setdefault("MEDINEXUS_LOGS_DIR", str(_TMP / "logs"))
 # No paid AI calls and no background scheduler in any test (agent tests inject a fake provider)

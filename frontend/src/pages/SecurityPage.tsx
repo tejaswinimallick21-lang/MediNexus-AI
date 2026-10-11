@@ -15,11 +15,13 @@ import { Tabs } from "../components/Tabs";
 import { useApi } from "../hooks/useApi";
 import { useCursorPager } from "../hooks/useCursorPager";
 import { formatDate, formatNumber } from "../lib/format";
+import { PeopleTab } from "./PeopleTab";
 import styles from "./SecurityPage.module.css";
 
-type TabId = "overview" | "audit" | "access" | "ai" | "knowledge";
+type TabId = "overview" | "people" | "audit" | "access" | "ai" | "knowledge";
 const TABS: { id: TabId; label: string }[] = [
   { id: "overview", label: "Overview" },
+  { id: "people", label: "People" },
   { id: "audit", label: "Audit trail" },
   { id: "access", label: "Access control" },
   { id: "ai", label: "AI governance" },
@@ -34,10 +36,11 @@ export function SecurityPage() {
       <PageHeader
         eyebrow="Platform administrator"
         title="Security & Infrastructure"
-        subtitle="Live security posture, audit trail, access control, AI governance and the knowledge library behind the assistants. Every figure is measured from the running system."
+        subtitle="Live security posture, people and their sign-ins, audit trail, access control, AI governance and the knowledge library behind the assistants. Every figure is measured from the running system."
       />
       <Tabs tabs={TABS} value={tab} onChange={setTab} />
       {tab === "overview" && <OverviewTab />}
+      {tab === "people" && <PeopleTab />}
       {tab === "audit" && <AuditTab />}
       {tab === "access" && <AccessTab />}
       {tab === "ai" && <AiTab />}

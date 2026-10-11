@@ -334,6 +334,15 @@
   font-size: var(--text-sm);
 }
 
+a.userText {
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+a.userText:hover strong {
+  color: var(--color-primary);
+}
+
 .iconButton {
   display: grid;
   place-items: center;

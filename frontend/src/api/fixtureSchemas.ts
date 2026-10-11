@@ -80,6 +80,7 @@ import {
   UploadDetailSchema,
   UploadPageSchema,
 } from "./schemas/dataPlatform";
+import { TemporaryPasswordSchema, UserAdminRowSchema, UserDirectorySchema } from "./schemas/users";
 
 /**
  * Golden fixture name (written by the backend pytest contract tests into __fixtures__/)
@@ -87,6 +88,10 @@ import {
  */
 export const fixtureSchemas: Record<string, ZodTypeAny> = {
   auth_me: UserSchema,
+  auth_password_changed: UserSchema,
+  user_created: TemporaryPasswordSchema,
+  user_directory: UserDirectorySchema,
+  user_updated: UserAdminRowSchema,
   system_status: SystemStatusSchema,
   platform_overview: PlatformOverviewSchema,
   reception_kpis: ReceptionKpisSchema,

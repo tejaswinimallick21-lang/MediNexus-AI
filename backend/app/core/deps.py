@@ -9,17 +9,26 @@ from fastapi import Depends, Request
 from backend.app.core.access import AGENT_ROLES, can_access
 from backend.app.core.config import settings
 from backend.app.core.errors import APIError
-from backend.app.core.security import decode_session_token
+from backend.app.core.security import decode_session
 from backend.app.core.users import UserRecord, get_user
 from src.security.audit import log_audit_event
 
 
+# Reachable while a first-login / reset password change is still pending
+PASSWORD_CHANGE_PATHS = {"/api/auth/me", "/api/auth/password", "/api/auth/logout"}
+
+
 def current_user(request: Request) -> UserRecord:
     token = request.cookies.get(settings.cookie_name)
-    email = decode_session_token(token) if token else None
-    user = get_user(email) if email else None
-    if user is None:
+    session = decode_session(token) if token else None
+    user = get_user(session[0]) if session else None
+    if user is None or not user.active:
         raise APIError(401, "not_authenticated", "Sign in to continue.")
+    # A password change, reset or disable ends every session issued before it
+    if session[1] != user.session_version:
+        raise APIError(401, "not_authenticated", "Your session has ended. Sign in again.")
+    if user.must_change_password and request.url.path not in PASSWORD_CHANGE_PATHS:
+        raise APIError(403, "password_change_required", "Choose a new password before continuing.")
     return user
 
 

@@ -6,15 +6,17 @@ account for 15 minutes. The lock is per account and in memory (it resets when th
 """
 
 import os
+import re
 import threading
 import time
+from datetime import datetime
 from collections import deque
 from typing import Deque, Dict, Optional
 
 from backend.app.core.access import ROLE_TITLES, allowed_routes, default_route
 from backend.app.core.errors import APIError
-from backend.app.core.security import verify_password
-from backend.app.core.users import UserRecord, get_user
+from backend.app.core.security import hash_password, verify_password
+from backend.app.core.users import UserRecord, get_user, update_user
 from backend.app.schemas.auth import UserOut
 from src.security.audit import log_audit_event
 
@@ -62,19 +64,23 @@ def authenticate(email: str, password: str) -> Optional[UserRecord]:
     key = (email or "").strip().lower()
     _check_locked(key)
     user = get_user(email or "")
-    ok = user is not None and verify_password(password, user.password_hash)
+    valid = user is not None and verify_password(password, user.password_hash)
+    ok = valid and user.active
     log_audit_event(
         username=key,
         role=user.role if user else "unknown",
         action="LOGIN" if ok else "LOGIN_FAILED",
         resource="SYSTEM_AUTH",
         status="SUCCESS" if ok else "FAILED",
-        details="Credential sign-in" if ok else "Invalid email or password",
+        details="Credential sign-in" if ok else ("Account disabled" if valid else "Invalid email or password"),
     )
     if ok:
         with _lock:
             _failures.pop(key, None)
-        return user
+        update_user(user.email, last_login_at=datetime.now())
+        return get_user(user.email)
+    if valid:  # right password, disabled account: refuse without counting towards a lockout
+        return None
     if _record_failure(key):
         log_audit_event(username=key, role=user.role if user else "unknown", action="ACCOUNT_LOCKED", resource="SYSTEM_AUTH", status="BLOCKED",
                         details=f"{MAX_FAILURES} failed sign-ins within {WINDOW_SECONDS // 60} minutes; locked for {LOCK_SECONDS // 60} minutes")
@@ -97,4 +103,40 @@ def to_user_out(user: UserRecord) -> UserOut:
         department=user.department,
         allowed_routes=allowed_routes(user.role),
         default_route=default_route(user.role),
+        must_change_password=user.must_change_password,
     )
+
+
+# ---- passwords -----------------------------------------------------------------------------------
+
+MIN_PASSWORD = 10
+DEMO_PASSWORD = "MediNexus@2026"
+
+
+def check_password_policy(password: str, email: str) -> None:
+    """At least 10 characters with a letter and a digit; not the email or the public demo password."""
+    problems = []
+    if len(password) < MIN_PASSWORD:
+        problems.append(f"at least {MIN_PASSWORD} characters")
+    if not re.search(r"[A-Za-z]", password) or not re.search(r"\d", password):
+        problems.append("a letter and a number")
+    if problems:
+        raise APIError(422, "weak_password", "Password needs " + " and ".join(problems) + ".")
+    if password.lower() in (email.lower(), email.split("@")[0].lower()) or password == DEMO_PASSWORD:
+        raise APIError(422, "weak_password", "Choose a password that is not your email or the demo password.")
+
+
+def change_password(user: UserRecord, current_password: str, new_password: str) -> UserRecord:
+    """The signed-in user's own change; ends their other sessions (the caller re-issues this one)."""
+    if not verify_password(current_password, user.password_hash):
+        log_audit_event(username=user.email, role=user.role, action="PASSWORD_CHANGE", resource="SYSTEM_AUTH",
+                        status="FAILED", details="Current password incorrect")
+        raise APIError(400, "wrong_password", "Your current password is incorrect.")
+    if new_password == current_password:
+        raise APIError(422, "weak_password", "Choose a password different from the current one.")
+    check_password_policy(new_password, user.email)
+    update_user(user.email, password_hash=hash_password(new_password), must_change_password=False, password_changed_at=datetime.now(),
+                session_version=user.session_version + 1)
+    log_audit_event(username=user.email, role=user.role, action="PASSWORD_CHANGE", resource="SYSTEM_AUTH",
+                    status="SUCCESS", details="Changed own password")
+    return get_user(user.email)

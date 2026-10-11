@@ -8,6 +8,7 @@ export const UserSchema = z.object({
   department: z.string(),
   allowed_routes: z.array(z.string()),
   default_route: z.string(),
+  must_change_password: z.boolean().optional(),
 });
 export type User = z.infer<typeof UserSchema>;
 

@@ -22,7 +22,7 @@ from backend.app.core.config import settings
 from backend.app.core.errors import APIError
 from backend.app.core.pagination import Page, PageParams, build_page
 from backend.app.core.security import verify_password
-from backend.app.core.users import load_users
+from backend.app.core.users import list_users
 from backend.app.jobs import runner
 from backend.app.schemas.security import (
     AccessMatrix,
@@ -87,13 +87,13 @@ def get_posture() -> Posture:
         f"{auth_service.MAX_FAILURES} failed sign-ins within {auth_service.WINDOW_SECONDS // 60} min lock the account for {auth_service.LOCK_SECONDS // 60} min. "
         f"Currently locked: {len(locked)}.")
     try:
-        users = list(load_users().values())
+        users = [u for u in list_users() if u.active]
         demo = [u.email for u in users if verify_password(DEMO_PASSWORD, u.password_hash)]
     except Exception:
         users, demo = [], []
     add("demo_passwords", "Authentication", "Default passwords", "pass" if not demo else ("fail" if prod else "warn"),
         f"{len(demo)} of {len(users)} accounts still use the documented demo password." if demo else "No account uses the demo password.",
-        "Re-seed with your own password: python -m backend.scripts.create_seed_users --password '…' --force" if demo else None)
+        "Each of these people should sign in and use Change password, or an admin can reset them in Security → People." if demo else None)
     origins = settings.cors_origins
     add("cors", "Network", "Cross-origin access", "pass" if all(o.startswith("http://localhost") for o in origins) and "*" not in origins else "fail",
         f"Allowed origins: {', '.join(origins) or 'none (same-origin only)'}.")

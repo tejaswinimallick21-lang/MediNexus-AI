@@ -6,6 +6,8 @@ export const authApi = {
   login: (email: string, password: string) => request("/auth/login", UserSchema, { method: "POST", body: { email, password } }),
   logout: () => request("/auth/logout", EmptySchema, { method: "POST" }),
   me: (signal?: AbortSignal) => request("/auth/me", UserSchema, { signal }),
+  changePassword: (current_password: string, new_password: string) =>
+    request("/auth/password", UserSchema, { method: "POST", body: { current_password, new_password } }),
 };
 
 export const systemApi = {

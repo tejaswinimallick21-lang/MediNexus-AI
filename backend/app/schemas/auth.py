@@ -26,3 +26,9 @@ class UserOut(BaseModel):
     department: str
     allowed_routes: List[str]
     default_route: str
+    must_change_password: bool = False
+
+
+class PasswordChangeIn(BaseModel):
+    current_password: str = Field(min_length=1, max_length=256)
+    new_password: str = Field(min_length=1, max_length=256)

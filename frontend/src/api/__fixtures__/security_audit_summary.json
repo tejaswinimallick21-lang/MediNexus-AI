@@ -1,6 +1,6 @@
 {
   "window_days": 7,
-  "total_events": 2740,
+  "total_events": 2747,
   "failed_logins": 30,
   "access_denied": 164,
   "lockouts": 2,
@@ -8,7 +8,7 @@
   "by_action": [
     {
       "label": "LOGIN",
-      "count": 1118
+      "count": 1122
     },
     {
       "label": "ROLE_SWITCH",
@@ -36,7 +36,7 @@
     },
     {
       "label": "LOGOUT",
-      "count": 53
+      "count": 54
     },
     {
       "label": "SANDBOX_DELETE",
@@ -106,7 +106,7 @@
     },
     {
       "day": "2026-10-11 00:00:00",
-      "events": 275,
+      "events": 282,
       "failed_logins": 1,
       "denied": 15
     }
@@ -147,7 +147,7 @@
       "count": 18
     },
     {
-      "label": "API_EXECUTIVE",
+      "label": "API_PHARMACY",
       "count": 14
     },
     {
@@ -155,7 +155,7 @@
       "count": 14
     },
     {
-      "label": "API_PHARMACY",
+      "label": "API_EXECUTIVE",
       "count": 14
     },
     {
@@ -187,6 +187,7 @@
     "MEMORY_SAVE",
     "MODEL_TRAIN",
     "MULTI_DATASET_INGESTION",
+    "PASSWORD_CHANGE",
     "PATIENT_360_VIEW",
     "PATIENT_VIEW",
     "PIPELINE_RUN",
@@ -199,6 +200,7 @@
     "SANDBOX_PREDICT",
     "SANDBOX_REPORT",
     "SANDBOX_UPLOAD",
+    "USER_CREATE",
     "USER_SIGNUP"
   ]
 }

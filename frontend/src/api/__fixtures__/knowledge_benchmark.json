@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-11T18:18:06",
+ "run_at": "2026-10-11T18:49:45",
  "dense_model": "Local LSA (TF-IDF + SVD)",
  "dense_error": null,
  "documents": 21,
@@ -90,7 +90,7 @@
      "abstained_pct": 66.7
     }
    },
-   "avg_latency_ms": 1.7,
+   "avg_latency_ms": 1.8,
    "rows": [
     {
      "suite": "keyword",
@@ -145,7 +145,7 @@
      "abstained_pct": 83.3
     }
    },
-   "avg_latency_ms": 1.5,
+   "avg_latency_ms": 1.7,
    "rows": [
     {
      "suite": "keyword",

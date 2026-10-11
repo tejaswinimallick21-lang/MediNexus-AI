@@ -204,7 +204,7 @@ export function AssistantDock() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  if (!user || location.pathname === "/login") return null;
+  if (!user || user.must_change_password || location.pathname === "/login") return null;
 
   /** On phones the history rail overlays the chat, so close it once a choice is made. */
   const closeRailOnPhone = () => {

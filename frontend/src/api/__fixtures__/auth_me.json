@@ -9,5 +9,6 @@
     "/command-center",
     "/reception"
   ],
-  "default_route": "/executive"
+  "default_route": "/executive",
+  "must_change_password": false
 }

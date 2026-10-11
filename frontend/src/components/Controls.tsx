@@ -36,6 +36,37 @@ export function SelectField({ label, value, options, onChange, disabled, id }: S
   );
 }
 
+interface TextFieldProps {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  id: string;
+  type?: "text" | "email" | "password";
+  placeholder?: string;
+  autoComplete?: string;
+  maxLength?: number;
+  required?: boolean;
+}
+
+export function TextField({ label, value, onChange, id, type = "text", placeholder, autoComplete, maxLength, required }: TextFieldProps) {
+  return (
+    <label className={styles.field} htmlFor={id}>
+      <span className={styles.label}>{label}</span>
+      <input
+        id={id}
+        className={styles.select}
+        type={type}
+        value={value}
+        placeholder={placeholder}
+        autoComplete={autoComplete}
+        maxLength={maxLength}
+        required={required}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </label>
+  );
+}
+
 export function FieldRow({ children }: { children: ReactNode }) {
   return <div className={styles.row}>{children}</div>;
 }

@@ -146,14 +146,14 @@ export function AppShell() {
                 </span>
               );
             })()}
-            {user && <ApprovalInbox />}
+            {user && !user.must_change_password && <ApprovalInbox />}
             {user && (
               <div className={styles.userChip}>
                 <span className={styles.avatar}>{initials(user.name)}</span>
-                <span className={styles.userText}>
+                <NavLink to="/account" className={styles.userText} title="Your account and password">
                   <strong>{user.name}</strong>
                   <span>{user.role_title}</span>
-                </span>
+                </NavLink>
                 <button
                   type="button"
                   className={styles.iconButton}

@@ -1,0 +1,58 @@
+{
+  "users": [
+    {
+      "email": "admin@medinexus.org",
+      "name": "Platform Admin",
+      "role": "admin",
+      "role_title": "Platform Administrator",
+      "department": "Data Platform & Infrastructure",
+      "active": true,
+      "must_change_password": false,
+      "created_at": "2026-10-11T18:47:18",
+      "created_by": "seed file",
+      "last_login_at": "2026-10-11T18:50:36",
+      "is_you": true
+    },
+    {
+      "email": "analyst@medinexus.org",
+      "name": "Operations Analyst",
+      "role": "analyst",
+      "role_title": "Operations Analyst",
+      "department": "Hospital Operations",
+      "active": true,
+      "must_change_password": false,
+      "created_at": "2026-10-11T18:47:18",
+      "created_by": "seed file",
+      "last_login_at": "2026-10-11T18:50:35",
+      "is_you": false
+    },
+    {
+      "email": "hcp@medinexus.org",
+      "name": "Clinician",
+      "role": "hcp",
+      "role_title": "Healthcare Professional",
+      "department": "Clinical Services",
+      "active": true,
+      "must_change_password": false,
+      "created_at": "2026-10-11T18:47:18",
+      "created_by": "seed file",
+      "last_login_at": "2026-10-11T18:50:34",
+      "is_you": false
+    },
+    {
+      "email": "dr.rivera@medinexus.org",
+      "name": "Dr Ana Rivera",
+      "role": "hcp",
+      "role_title": "Healthcare Professional",
+      "department": "Cardiology",
+      "active": true,
+      "must_change_password": true,
+      "created_at": "2026-10-11T18:50:36",
+      "created_by": "admin@medinexus.org",
+      "last_login_at": null,
+      "is_you": false
+    }
+  ],
+  "active_count": 4,
+  "admin_count": 1
+}

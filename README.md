@@ -167,17 +167,19 @@ Four role-scoped assistants share one engine (`backend/app/agents/`): **Nexa Car
 ---
 
 ## 11. Role-Based Access Control (RBAC) & Audit Trail
-Sign-in is **email + password** (bcrypt) with a **JWT in an httpOnly cookie**. There are three roles, one account each (`backend/app/core/access.py`); admins oversee every workspace. The API re-checks the role on every request.
+Sign-in is **email + password** (bcrypt) with a **JWT in an httpOnly cookie**. Every person has their own account with one of three roles (`backend/app/core/access.py`); admins oversee every workspace. The API re-checks the account and role on every request.
 
-| Role | Login (demo) | Workspaces | Never sees |
+| Role | Starter account | Workspaces | Never sees |
 | :--- | :--- | :--- | :--- |
 | **Admin**: Platform Administrator | `admin@medinexus.org` | Every workspace, plus Data Engineering and Security & Infrastructure | — (full oversight) |
 | **HCP**: Healthcare Professional | `hcp@medinexus.org` | Clinical Workstation, Pharmacy & Supply Chain, Laboratory Operations | Executive financials |
 | **Analyst**: Operations Analyst | `analyst@medinexus.org` | Executive Operations, Patient Access | Patient names, contact details, diagnoses (pseudonymous IDs only) |
 
-* Users come from the **.gitignored** `backend/seed_users.json`, created by `npm run seed` (demo password `MediNexus@2026`; pass `--password` for anything shared). In development builds the sign-in page has a role dropdown that fills these in; production builds omit it.
+* **People management** (Security & Infrastructure → People): admins add a person with a role and department; the app issues a one-time temporary password, and the person must choose their own (10+ characters, a letter and a number) at first sign-in. Admins can change a role, disable or re-enable an account and reset a password. Disabling, resetting or changing a password signs that person out everywhere. Admins cannot change their own role or disable themselves, and the last administrator cannot be removed.
+* Anyone can change their own password under **Your account** (click your name in the top bar).
+* Accounts live in DuckDB (`app_users`). The three starter accounts come from the **.gitignored** `backend/seed_users.json`, created by `npm run seed` (demo password `MediNexus@2026`; pass `--password` for anything shared) and copied in on first start; seed changes never overwrite existing accounts. In development builds the sign-in page has a role dropdown that fills in the starter accounts; production builds omit it.
 * Patient Access (former Receptionist console) is an analyst workspace: volumes, attendance, no-shows and waits with de-identified rows.
-* **Enterprise Audit Log**: every login (and failed login), denied access, agent query, model inference and pipeline execution is logged in DuckDB `audit_logs` and `logs/audit.log`.
+* **Enterprise Audit Log**: every login (and failed login), denied access, account change (create, role, disable, reset, password change; never a password), agent query, model inference and pipeline execution is logged in DuckDB `audit_logs` and `logs/audit.log`.
 
 ---
 

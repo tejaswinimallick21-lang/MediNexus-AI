@@ -31,7 +31,7 @@ Copy `.env.example` to `.env` and fill in:
 
 - `OPENAI_API_KEY` (or `ANTHROPIC_API_KEY`) for the AI assistants — optional; without it they use the free rules engine
 - `MEDINEXUS_JWT_SECRET` — any long random string
-- `MEDINEXUS_SEED_PASSWORD` — the password for the three accounts (leave empty for the demo password)
+- `MEDINEXUS_SEED_PASSWORD` — the password for the three starter accounts (leave empty for the demo password)
 
 The bootstrap script creates `.env` from the example if it is missing.
 
@@ -59,7 +59,8 @@ The simulator and model training use fixed seeds, so the numbers match the origi
 npm run dev
 ```
 
-Open http://localhost:5173 and sign in (admin / hcp / analyst accounts are in the login page's role picker in development).
+Open http://localhost:5173 and sign in (admin / hcp / analyst starter accounts are in the login page's role picker in development).
+Then add real people as admin under Security & Infrastructure → People: each gets a temporary password and chooses their own at first sign-in.
 
 ## What is real and what is simulated
 

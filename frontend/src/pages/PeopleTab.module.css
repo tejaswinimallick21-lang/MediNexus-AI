@@ -1,0 +1,134 @@
+.stack {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.muted {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.addForm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-3);
+  align-items: end;
+}
+
+.addForm label {
+  min-width: 0;
+}
+
+.addForm input,
+.addForm select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.addButton {
+  display: flex;
+  align-items: end;
+}
+
+.issued {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg, 12px);
+  border: 1px solid rgba(13, 148, 136, 0.45);
+  background: rgba(13, 148, 136, 0.08);
+}
+
+.issued p {
+  margin: var(--space-1) 0 var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+.password {
+  display: inline-block;
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  margin-bottom: var(--space-2);
+  user-select: all;
+}
+
+.issuedActions {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+
+.error {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  font-size: var(--text-sm);
+}
+
+.scroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.table th {
+  text-align: left;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--color-text-muted);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.inactive td {
+  opacity: 0.6;
+}
+
+.you {
+  margin-left: var(--space-2);
+  font-size: var(--text-xs);
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(13, 148, 136, 0.12);
+  color: var(--color-primary-strong);
+}
+
+.roleSelect {
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  padding: 4px var(--space-2);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.actions {
+  white-space: nowrap;
+  text-align: right;
+}

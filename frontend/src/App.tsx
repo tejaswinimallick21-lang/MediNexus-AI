@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/AppShell";
 import { RequireAuth } from "./components/RequireAuth";
 import { EmptyState } from "./components/StateViews";
+import { AccountPage } from "./pages/AccountPage";
 import { LoginPage } from "./pages/LoginPage";
 import { ClinicalWorkspace } from "./pages/ClinicalPage";
 import { CommandCenterPage } from "./pages/CommandCenterPage";
@@ -42,6 +43,14 @@ export function App() {
           }
         />
         <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/account"
+          element={
+            <RequireAuth>
+              <AccountPage />
+            </RequireAuth>
+          }
+        />
         {CONSOLE_ROUTES.map((route) => (
           <Route
             key={route.path}

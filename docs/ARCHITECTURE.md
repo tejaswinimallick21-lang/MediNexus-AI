@@ -28,9 +28,9 @@ MediNexus-AI-main/
 │   ├── app/
 │   │   ├── main.py               app factory: dev CORS, error handlers, routers
 │   │   ├── core/                 config, security (bcrypt + JWT cookie), access (roles → pages),
-│   │   │                         users (seed store), deps (role checks), errors, pagination
+│   │   │                         users (accounts in DuckDB, seeded once), deps (session + role checks), errors, pagination
 │   │   ├── api/                  thin routers: auth, system, jobs, reception, operations, clinical, command,
-│   │   │                         assistant (+ memory), data_platform, actions (approvals, sweep), security, knowledge
+│   │   │                         assistant (+ memory), data_platform, actions (approvals, sweep), security, knowledge, users
 │   │   ├── agents/               Nexa agents: tools, engine (tool loop), providers (OpenAI/Claude/rules),
 │   │   │                         actions (propose → approve → execute), sweep (07:00), learning, memory
 │   │   ├── services/             business logic per workspace (SQL + model calls)

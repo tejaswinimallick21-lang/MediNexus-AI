@@ -35,28 +35,28 @@
       "agent": "healthanalyst",
       "queries": 14,
       "fallbacks": 2,
-      "avg_latency_ms": 791.0,
+      "avg_latency_ms": 787.0,
       "tool_calls": 13
     },
     {
       "agent": "medicare",
       "queries": 6,
       "fallbacks": 0,
-      "avg_latency_ms": 516.0,
+      "avg_latency_ms": 503.0,
       "tool_calls": 4
     },
     {
       "agent": "ops",
       "queries": 3,
       "fallbacks": 0,
-      "avg_latency_ms": 1345.0,
+      "avg_latency_ms": 1342.0,
       "tool_calls": 3
     },
     {
       "agent": "pharmalab",
       "queries": 4,
       "fallbacks": 0,
-      "avg_latency_ms": 183.0,
+      "avg_latency_ms": 190.0,
       "tool_calls": 4
     }
   ],
@@ -106,10 +106,10 @@
   "approval_rate_pct": null,
   "sweep_runs": [
     {
-      "run_id": "69fee423a20a",
+      "run_id": "996fd44c764f",
       "trigger": "manual",
-      "started_at": "2026-10-11T18:17:11",
-      "finished_at": "2026-10-11T18:17:31",
+      "started_at": "2026-10-11T18:48:42",
+      "finished_at": "2026-10-11T18:49:02",
       "status": "succeeded",
       "found": 68,
       "proposed": 30,
@@ -123,10 +123,10 @@
       "suppressed": 0
     },
     {
-      "run_id": "37727a1fc3a8",
+      "run_id": "9634688d22f6",
       "trigger": "manual",
-      "started_at": "2026-10-11T18:16:50",
-      "finished_at": "2026-10-11T18:17:10",
+      "started_at": "2026-10-11T18:48:21",
+      "finished_at": "2026-10-11T18:48:41",
       "status": "succeeded",
       "found": 68,
       "proposed": 30,
