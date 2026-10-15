@@ -25,7 +25,8 @@ Download **10k_synthea_covid19_csv.zip** (≈54 MB) from
 https://synthetichealth.github.io/synthea/downloads.html and save it, still zipped, in
 `data/synthea/` (so that `data/synthea/10k_synthea_covid19_csv.zip` exists).
 The bootstrap script keeps this download unchanged and re-dates a copy to today (records up to 2019, so
-no COVID-19 period); a nightly live feed then releases the next day's records.
+no COVID-19 period). That dataset then stays fixed; `MEDINEXUS_FEED_ENABLED=1` in `.env` turns on an
+optional nightly feed that releases the next day's records instead.
 
 ## 4. Add your keys (never committed)
 

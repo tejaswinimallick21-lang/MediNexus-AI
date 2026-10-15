@@ -8,7 +8,7 @@
 #   --domain    public DNS name of the server (required for HTTPS)
 #   --email     address Let's Encrypt uses for certificate expiry notices (required)
 #   --data      archive from `python deploy/pack_data.py` (needed on the first run)
-#   --timezone  server time zone; the 01:00 data feed and 07:00 sweep follow it (default UTC)
+#   --timezone  server time zone; the 07:00 morning sweep follows it (default UTC)
 #   --no-https  skip the certificate (testing only: sign-in cookies then need plain HTTP)
 #
 # Safe to run again: steps that are already done are skipped or refreshed.

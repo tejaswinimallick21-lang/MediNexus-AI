@@ -143,7 +143,7 @@ function RiskTab({ patientId, comorbidities }: { patientId: string; comorbiditie
         </Panel>
       </Grid>
 
-      <Panel title="12-month outcome risk" subtitle={`Scored on history up to ${r.outcome_scored_as_of ?? "today"}`} icon="Shield">
+      <Panel title="12-month outcome risk" subtitle={`Scored on history up to ${r.outcome_scored_as_of ?? "the end of the data"}`} icon="Shield">
         <div className={styles.outlookGrid}>
           {r.outcome_risks.map((o) => (
             <div key={o.outcome} className={styles.outlookCard}>

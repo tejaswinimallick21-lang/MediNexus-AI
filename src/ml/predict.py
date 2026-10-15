@@ -166,7 +166,7 @@ def predict_patient_outcome_risk(patient_id: str) -> Dict[str, Any]:
 
     df_row = query_df("SELECT * FROM gold_outcome_risk WHERE patient_id = ? AND snapshot = 'score'", [patient_id])
     if df_row.empty:
-        return {"status": "NOT_FOUND", "message": f"Patient {patient_id} is not in the living population scored today.",
+        return {"status": "NOT_FOUND", "message": f"Patient {patient_id} is not in the living population scored at the end of the data.",
                 "outcomes": {}, "disclaimer": CLINICAL_DISCLAIMER}
 
     row = df_row.iloc[0]
@@ -198,7 +198,7 @@ def predict_patient_outcome_risk(patient_id: str) -> Dict[str, Any]:
         "status": "SUCCESS",
         "patient_id": patient_id,
         "index_date": row.get("index_date"),
-        "scored_as_of": f"{row.get('index_date')} (today)",
+        "scored_as_of": f"{row.get('index_date')} (end of data)",
         "outcomes": outcomes,
         "risk_drivers": drivers[:5] or ["No major pre-existing risk factors recorded"],
         "model_version": artifact.get("version", "1.0.0"),

@@ -294,7 +294,7 @@ def list_model_monitor() -> List[ModelMonitorRow]:
                 **common, primary_metric=f"Admission AUC {h.get('roc_auc', 0):.2f} · mortality AUC {d.get('roc_auc', 0):.2f}",
                 baseline=f"Age only {h.get('baseline_roc_auc_age_only', 0):.2f} / {d.get('baseline_roc_auc_age_only', 0):.2f}",
                 verdict=_verdict(h.get("roc_auc"), h.get("baseline_roc_auc_age_only")), serving="Model", health="healthy",
-                note="Trained on history up to one year ago; scored on history up to today.",
+                note="Trained on history up to one year before the end of the data; scored on all history.",
             ))
         elif name == "length_of_stay_model":
             rows.append(ModelMonitorRow(

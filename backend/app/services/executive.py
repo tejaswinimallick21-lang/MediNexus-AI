@@ -94,7 +94,7 @@ def get_model_scorecard() -> List[ModelScore]:
         m = outlook.get(key, {})
         if m:
             scores.append(ModelScore(
-                model=label, purpose="Scored today for every living patient (history up to today only)",
+                model=label, purpose="Scored for every living patient on history up to the end of the data",
                 primary_metric=f"ROC-AUC {m.get('roc_auc'):.2f}", baseline=f"Age only {m.get('baseline_roc_auc_age_only'):.2f}",
                 verdict=_verdict(m.get("roc_auc"), m.get("baseline_roc_auc_age_only")),
             ))

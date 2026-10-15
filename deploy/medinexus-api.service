@@ -1,6 +1,6 @@
 # systemd unit for the MediNexus API. setup_server.sh fills in __APP_DIR__ and __USER__.
-# One process only: DuckDB allows a single writer, and the nightly data feed and the morning
-# sweep run inside this process. Never add --workers.
+# One process only: DuckDB allows a single writer, and the morning sweep (and the optional data feed)
+# run inside this process. Never add --workers.
 [Unit]
 Description=MediNexus AI API (FastAPI)
 After=network.target

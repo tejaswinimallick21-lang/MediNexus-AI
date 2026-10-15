@@ -21,7 +21,6 @@ INCLUDE = [
     "backend/seed_users.json",
     "models",
     "data/synthea/10k_synthea_covid19_csv.zip",
-    "data/synthea/redated",
     "data/synthea/current",
     "data/raw",
     "data/bronze",

@@ -12,7 +12,7 @@ import styles from "./LiveFeedPanel.module.css";
 
 const when = (iso?: string | null) => (iso ? `${formatDate(iso)} ${iso.slice(11, 16)}` : "—");
 
-/** The live lakehouse feed: Synthea re-dated to today and released day by day. */
+/** The dataset behind every page: Synthea re-dated to the present; fixed, or released day by day when the feed is on. */
 export function LiveFeedPanel() {
   const feed = useApi((s) => dataApi.feed(s), []);
   const [jobId, setJobId] = useState<string | null>(null);
@@ -34,6 +34,32 @@ export function LiveFeedPanel() {
 
   const f = feed.data;
   const last = f?.runs[0];
+  const weeks = f?.shift_days ? `${Math.round(f.shift_days / 7)} weeks` : "a whole number of weeks";
+  if (f && !f.enabled) {
+    return (
+      <Panel title="Dataset" subtitle="Synthea records before 2020 (no COVID-19 period), re-dated to the present and kept fixed" icon="Pulse">
+        <div className={styles.grid}>
+          <div>
+            <span className={styles.label}>Data through</span>
+            <strong>{f.released_through ? formatDate(f.released_through) : "—"}</strong>
+          </div>
+          <div>
+            <span className={styles.label}>Dates moved forward by</span>
+            <strong>{weeks}</strong>
+          </div>
+          <div>
+            <span className={styles.label}>Daily release</span>
+            <strong>Off</strong>
+            <Badge tone="info">fixed dataset</Badge>
+          </div>
+        </div>
+        <p className={styles.muted}>
+          Every page reads this one fixed dataset, so numbers do not change from day to day. Moving every date by whole weeks keeps weekdays and
+          ages consistent; nothing is invented. Setting MEDINEXUS_FEED_ENABLED=1 on the server releases the next day's records each night instead.
+        </p>
+      </Panel>
+    );
+  }
   return (
     <Panel
       title="Live data feed"
@@ -72,7 +98,7 @@ export function LiveFeedPanel() {
       {jobId && job && <p className={styles.muted}>{job.stage}</p>}
       {error && <p className={styles.error}>{error}</p>}
       <p className={styles.muted}>
-        Every date was moved forward by {f?.shift_days ? `${Math.round(f.shift_days / 7)} weeks` : "a whole number of weeks"} so weekdays and ages stay consistent. Each night the next
+        Every date was moved forward by {weeks} so weekdays and ages stay consistent. Each night the next
         day's records are released and Bronze → Silver → Gold is rebuilt; models are retrained separately.
       </p>
     </Panel>

@@ -2,8 +2,8 @@
 
 MediNexus runs on **one Linux virtual machine**: nginx serves the React app and forwards `/api` to
 the FastAPI service on the same machine. One machine is a requirement, not a shortcut: the database
-is a single DuckDB file that allows one writing process, and the nightly data feed and the morning
-sweep run inside the API. Do not put it behind a scale-out service (App Service with several
+is a single DuckDB file that allows one writing process, and the morning sweep (and the optional
+nightly data feed) run inside the API. Do not put it behind a scale-out service (App Service with several
 instances, Container Apps replicas) or on network file storage (Azure Files).
 
 ```
@@ -47,7 +47,7 @@ When it is ready, open the VM in the portal:
 
 Cost: B2ms is roughly USD 60–70 a month if it runs all the time (check the Azure pricing calculator for
 your region). **Stop** the VM in the portal when you are not using it to stop paying for compute; the
-disk and the DNS name are kept. After a restart the data feed catches up on its own.
+disk and the DNS name are kept. The dataset is fixed, so nothing needs to catch up after a restart.
 
 ## 2. Package the data (your laptop, ~3 min)
 
@@ -82,7 +82,7 @@ ssh -i ~/.ssh/medinexus-vm.pem azureuser@medinexus-demo.centralindia.cloudapp.az
 ```
 
 On the VM, get the code and run the setup script with your address, an email for certificate
-notices, the package and your time zone (the 01:00 data feed and 07:00 morning sweep use it):
+notices, the package and your time zone (the 07:00 morning sweep uses it):
 
 ```bash
 git clone https://github.com/tejaswinimallick21-lang/MediNexus-AI.git medinexus
@@ -117,7 +117,7 @@ number of accounts small.
    shows *Default passwords: fail* (production mode is strict), and anyone who has read the
    README can sign in.
 3. Security → Overview should show the session key and secure cookies as passed.
-4. Data Engineering → Live data feed shows the next run at 01:00 server time.
+4. Data Engineering → Dataset shows the same "data through" date as on your laptop.
 
 ## Running it
 
@@ -143,8 +143,7 @@ The HTTPS certificate renews itself (certbot's timer). Push code to GitHub as us
 | Sign-in works, then you are signed out at once | Opened over `http://` while secure cookies are on: use `https://` |
 | `Permission denied (publickey)` | Wrong key or user: `ssh -i <the .pem> azureuser@...` |
 | `UNPROTECTED PRIVATE KEY FILE` on Windows | Run the `icacls` command in step 2 |
-| The nightly feed failed | Data Engineering → Live data feed shows the error; the log has the details |
-| Pages slow or the API restarts at 01:00 | Out of memory during the rebuild: resize the VM to B4ms (portal → Size) |
+| Pages slow or the API restarts | Out of memory: resize the VM to B4ms (portal → Size) |
 
 ## What this setup is not
 

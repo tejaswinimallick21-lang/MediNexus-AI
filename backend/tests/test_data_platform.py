@@ -76,6 +76,8 @@ def test_live_feed_status(login):
     assert body["enabled"] is False  # the scheduler is off in tests
     assert body["released_through"] == meta["release"]["released_through"] and body["held_back_days"] >= 0
     assert body["redated_end"] == meta["redate"]["redated_end"] and body["next_run_at"]
+    # The dataset is fixed unless the feed is switched on, so a manual refresh is refused
+    assert_error(login("admin").post("/api/data/feed/refresh"), 409, "feed_disabled")
 
 
 def test_rejects_unsupported_and_empty_files(login):

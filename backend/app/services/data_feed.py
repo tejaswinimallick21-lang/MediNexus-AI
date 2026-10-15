@@ -1,7 +1,9 @@
 """
 Live data feed: releases the re-dated Synthea records day by day and rebuilds the lakehouse.
 
-Every night (MEDINEXUS_FEED_TIME, default 01:00) and on demand from Data Engineering:
+OFF by default: the dataset stays fixed at the day it was last released (data/synthea/current).
+Set MEDINEXUS_FEED_ENABLED=1 to turn it on; then every night (MEDINEXUS_FEED_TIME, default 01:00)
+and on demand from Data Engineering:
   1. release the re-dated records dated up to now (src/ingestion/redate_synthea.py);
   2. convert them to raw tables and run Bronze -> Silver -> Gold;
   3. expose the simulated operations days up to now (sim_ tables);
@@ -10,8 +12,7 @@ When the held-back events run out, the source is re-anchored to today first (all
 by whole weeks), so the feed never goes stale. Models are not retrained here; retraining is a
 separate step (python -m src.ml.train_demand).
 
-Runs inside the API process because DuckDB allows one writing process. Disabled with
-MEDINEXUS_FEED_ENABLED=0 (tests).
+Runs inside the API process because DuckDB allows one writing process.
 """
 
 import json
@@ -28,6 +29,10 @@ from src.utils.database import execute_query, query_df_strict
 
 logger = logging.getLogger("medinexus.feed")
 FEED_TIME = os.getenv("MEDINEXUS_FEED_TIME", "01:00")
+
+
+def enabled() -> bool:
+    return os.getenv("MEDINEXUS_FEED_ENABLED", "0") == "1"
 _ready = False
 
 
@@ -50,7 +55,7 @@ def run_refresh(trigger: str = "manual", ctx: Any = None, user: str = "data-feed
 
     from src.ingestion import convert_synthea_to_raw
     from src.ingestion.ops_simulator import release_sim
-    from src.ingestion.redate_synthea import redate, release, status
+    from src.ingestion.redate_synthea import REDATED_DIR, redate, release, status
     from src.medallion.pipeline import run_full_medallion_pipeline
 
     def step(pct: int, stage: str) -> None:
@@ -64,7 +69,8 @@ def run_refresh(trigger: str = "manual", ctx: Any = None, user: str = "data-feed
                   [run_id, trigger, started])
     try:
         meta = status().get("redate") or {}
-        reanchored = not meta or date.fromisoformat(meta["redated_end"]) <= date.today()
+        reanchored = (not meta or date.fromisoformat(meta["redated_end"]) <= date.today()
+                      or not (REDATED_DIR / "patients.csv").exists())
         if reanchored:
             step(5, "Re-anchoring the source to today")
             redate()
@@ -114,7 +120,7 @@ def feed_status() -> Dict[str, Any]:
     meta = status()
     runs = recent_runs()
     return {
-        "enabled": os.getenv("MEDINEXUS_FEED_ENABLED", "1") != "0",
+        "enabled": enabled(),
         "redate": meta.get("redate"),
         "release": meta.get("release"),
         "runs": runs,
@@ -130,7 +136,7 @@ def _ran_today() -> bool:
 
 def start_scheduler(stop: threading.Event) -> Optional[threading.Thread]:
     """Nightly refresh in a background thread (submitted to the single job runner)."""
-    if os.getenv("MEDINEXUS_FEED_ENABLED", "1") == "0":
+    if not enabled():
         return None
 
     def loop() -> None:

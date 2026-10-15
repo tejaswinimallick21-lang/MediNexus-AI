@@ -15,14 +15,14 @@
   "models": [
     {
       "model": "Hospital admission within 12 months",
-      "purpose": "Scored today for every living patient (history up to today only)",
+      "purpose": "Scored for every living patient on history up to the end of the data",
       "primary_metric": "ROC-AUC 0.82",
       "baseline": "Age only 0.65",
       "verdict": "Beats baseline"
     },
     {
       "model": "Death within 12 months",
-      "purpose": "Scored today for every living patient (history up to today only)",
+      "purpose": "Scored for every living patient on history up to the end of the data",
       "primary_metric": "ROC-AUC 0.95",
       "baseline": "Age only 0.87",
       "verdict": "Beats baseline"

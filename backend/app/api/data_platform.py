@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, File, Path, Response, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
 
 from backend.app.core.deps import current_user, require_page
+from backend.app.core.errors import APIError
 from backend.app.jobs import runner
 from backend.app.core.pagination import Page, PageParams, page_params
 from backend.app.core.users import UserRecord
@@ -101,6 +102,8 @@ def feed() -> FeedStatus:
 @router.post("/feed/refresh", response_model=JobAccepted, status_code=202)
 def refresh_feed(user: UserRecord = Depends(current_user)) -> JobAccepted:
     """Release records up to now and rebuild the lakehouse (runs as a background job)."""
+    if not data_feed.enabled():
+        raise APIError(409, "feed_disabled", "The dataset is fixed: the daily release is off (MEDINEXUS_FEED_ENABLED=1 turns it on).")
     active = runner.active_job("data_feed")
     job = active or runner.submit("data_feed", user.email, lambda ctx: data_feed.run_refresh("manual", ctx, user.email))
     return JobAccepted(job_id=job.job_id)

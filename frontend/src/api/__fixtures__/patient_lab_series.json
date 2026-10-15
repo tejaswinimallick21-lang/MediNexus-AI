@@ -1,12 +1,12 @@
 {
-  "test_name": "Chloride",
-  "unit": "mmol/L",
-  "reference_range": "98.0 - 107.0",
+  "test_name": "MCH",
+  "unit": "pg",
+  "reference_range": "27.0 - 33.0",
   "points": [
     {
       "test_date": "2026-06-26",
-      "test_value": 108.3,
-      "abnormal_flag": "High"
+      "test_value": 30.8,
+      "abnormal_flag": "Normal"
     }
   ]
 }

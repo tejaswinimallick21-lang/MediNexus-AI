@@ -26,7 +26,7 @@
     "verdict": "Beats baseline",
     "serving": "Model",
     "health": "healthy",
-    "note": "Trained on history up to one year ago; scored on history up to today.",
+    "note": "Trained on history up to one year before the end of the data; scored on all history.",
     "versions": 2
   },
   {
