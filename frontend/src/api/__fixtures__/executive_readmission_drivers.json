@@ -1,81 +1,81 @@
 {
   "summary": "Observed associations from Gold admissions (descriptive, not causal). Unplanned readmissions only.",
   "findings": [
-    "'Elective' admissions have the highest observed unplanned 30-day readmission rate (1.3%, n=8304).",
-    "Highest-rate admitting reason: Encounter for symptom (procedure) (7.5% of 120 stays).",
+    "'Elective' admissions have the highest observed unplanned 30-day readmission rate (1.5%, n=5542).",
+    "Highest-rate admitting reason: Periodic reevaluation and management of healthy individual (procedure) (7.2% of 139 stays).",
     "Planned same-reason repeat stays (e.g. chemotherapy cycles) and transfers are excluded from these rates."
   ],
   "by_admission_type": [
     {
       "label": "Elective",
-      "count": 8304,
-      "rate_pct": 1.3
+      "count": 5542,
+      "rate_pct": 1.5
     },
     {
       "label": "Emergency",
-      "count": 1202,
+      "count": 1184,
       "rate_pct": 0.7
     },
     {
       "label": "Unknown",
-      "count": 51,
+      "count": 22,
       "rate_pct": 0.0
     },
     {
       "label": "Urgent",
-      "count": 27,
+      "count": 23,
       "rate_pct": 0.0
     }
   ],
   "by_reason": [
-    {
-      "label": "Encounter for symptom (procedure)",
-      "count": 120,
-      "rate_pct": 7.5
-    },
     {
       "label": "Periodic reevaluation and management of healthy individual (procedure)",
       "count": 139,
       "rate_pct": 7.2
     },
     {
-      "label": "Drug rehabilitation and detoxification",
-      "count": 161,
-      "rate_pct": 5.6
+      "label": "Encounter for symptom (procedure)",
+      "count": 119,
+      "rate_pct": 6.7
     },
     {
       "label": "Malignant neoplasm of breast (disorder)",
-      "count": 515,
-      "rate_pct": 5.4
+      "count": 383,
+      "rate_pct": 5.5
+    },
+    {
+      "label": "Drug rehabilitation and detoxification",
+      "count": 119,
+      "rate_pct": 4.2
     },
     {
       "label": "Primary small cell malignant neoplasm of lung  TNM stage 1 (disorder)",
-      "count": 406,
-      "rate_pct": 1.7
+      "count": 387,
+      "rate_pct": 1.6
     },
     {
       "label": "Chronic congestive heart failure (disorder)",
-      "count": 708,
-      "rate_pct": 1.3
+      "count": 691,
+      "rate_pct": 1.2
     },
     {
       "label": "Impacted molars",
-      "count": 761,
-      "rate_pct": 0.9
-    },
-    {
-      "label": "Chronic intractable migraine without aura",
-      "count": 745,
-      "rate_pct": 0.9
+      "count": 733,
+      "rate_pct": 1.0
     },
     {
       "label": "Encounter for problem",
-      "count": 2049,
-      "rate_pct": 0.9
+      "count": 1954,
+      "rate_pct": 0.8
+    },
+    {
+      "label": "Chronic intractable migraine without aura",
+      "count": 716,
+      "rate_pct": 0.8
     },
     {
       "label": "Chronic pain",
-      "count": 705,
+      "count": 683,
       "rate_pct": 0.4
     }
   ]

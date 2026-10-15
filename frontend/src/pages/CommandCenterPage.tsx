@@ -43,7 +43,7 @@ export function CommandCenterPage() {
 
 // ---- Capacity what-if --------------------------------------------------------------------------
 
-const DEFAULTS: WhatIfInput = { hospital_id: null, period: "pre_covid_365", extra_visits_per_physician: 5, extra_physicians: 0, demand_change_pct: 0 };
+const DEFAULTS: WhatIfInput = { hospital_id: null, period: "last_365", extra_visits_per_physician: 5, extra_physicians: 0, demand_change_pct: 0 };
 const PRESETS: { label: string; patch: Partial<WhatIfInput> }[] = [
   { label: "Each doctor sees +5 patients/day", patch: { extra_visits_per_physician: 5, extra_physicians: 0, demand_change_pct: 0 } },
   { label: "Hire 10 physicians per hospital", patch: { extra_visits_per_physician: 0, extra_physicians: 10, demand_change_pct: 0 } },
@@ -51,7 +51,6 @@ const PRESETS: { label: string; patch: Partial<WhatIfInput> }[] = [
   { label: "Surge + 3 visits/doctor", patch: { extra_visits_per_physician: 3, extra_physicians: 0, demand_change_pct: 20 } },
 ];
 const PERIODS: { value: WhatIfPeriod; label: string }[] = [
-  { value: "pre_covid_365", label: "Pre-COVID year (to 9 Mar 2020)" },
   { value: "last_365", label: "Last 365 days of data" },
   { value: "last_90", label: "Last 90 days of data" },
 ];

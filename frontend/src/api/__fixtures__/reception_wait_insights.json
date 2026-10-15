@@ -1,130 +1,130 @@
 {
   "summary": "Average completed-visit wait is 20.4 min against a 20-min target. Wait times are simulated (Synthea records no queue data), so treat patterns as illustrative.",
   "findings": [
-    "Busiest arrival hour: 10:00 (15,373 completed visits).",
-    "Longest average wait: 07:00 at 20.7 min.",
+    "Busiest arrival hour: 10:00 (14,285 completed visits).",
+    "Longest average wait: 00:00 at 20.6 min.",
     "Average wait varies by only 0.5 min across hours: no hour-of-day bottleneck is visible."
   ],
   "by_hour": [
     {
       "hour": "00",
-      "volume": 10884,
-      "avg_wait_min": 20.5
+      "volume": 9859,
+      "avg_wait_min": 20.6
     },
     {
       "hour": "01",
-      "volume": 9328,
+      "volume": 8447,
       "avg_wait_min": 20.4
     },
     {
       "hour": "02",
-      "volume": 12739,
+      "volume": 11795,
       "avg_wait_min": 20.4
     },
     {
       "hour": "03",
-      "volume": 13405,
+      "volume": 12436,
       "avg_wait_min": 20.4
     },
     {
       "hour": "04",
-      "volume": 12379,
-      "avg_wait_min": 20.2
+      "volume": 11334,
+      "avg_wait_min": 20.3
     },
     {
       "hour": "05",
-      "volume": 9564,
-      "avg_wait_min": 20.4
+      "volume": 8626,
+      "avg_wait_min": 20.3
     },
     {
       "hour": "06",
-      "volume": 15135,
+      "volume": 13775,
       "avg_wait_min": 20.4
     },
     {
       "hour": "07",
-      "volume": 14388,
-      "avg_wait_min": 20.7
-    },
-    {
-      "hour": "08",
-      "volume": 12418,
+      "volume": 13391,
       "avg_wait_min": 20.4
     },
     {
+      "hour": "08",
+      "volume": 11514,
+      "avg_wait_min": 20.3
+    },
+    {
       "hour": "09",
-      "volume": 10331,
+      "volume": 9149,
       "avg_wait_min": 20.3
     },
     {
       "hour": "10",
-      "volume": 15373,
-      "avg_wait_min": 20.4
+      "volume": 14285,
+      "avg_wait_min": 20.5
     },
     {
       "hour": "11",
-      "volume": 11751,
-      "avg_wait_min": 20.6
-    },
-    {
-      "hour": "12",
-      "volume": 9845,
-      "avg_wait_min": 20.3
-    },
-    {
-      "hour": "13",
-      "volume": 14867,
+      "volume": 10810,
       "avg_wait_min": 20.4
     },
     {
+      "hour": "12",
+      "volume": 9089,
+      "avg_wait_min": 20.4
+    },
+    {
+      "hour": "13",
+      "volume": 13893,
+      "avg_wait_min": 20.3
+    },
+    {
       "hour": "14",
-      "volume": 12857,
+      "volume": 11798,
       "avg_wait_min": 20.5
     },
     {
       "hour": "15",
-      "volume": 13336,
-      "avg_wait_min": 20.4
+      "volume": 12440,
+      "avg_wait_min": 20.3
     },
     {
       "hour": "16",
-      "volume": 13067,
+      "volume": 12183,
       "avg_wait_min": 20.4
     },
     {
       "hour": "17",
-      "volume": 12672,
-      "avg_wait_min": 20.2
+      "volume": 11729,
+      "avg_wait_min": 20.3
     },
     {
       "hour": "18",
-      "volume": 11257,
-      "avg_wait_min": 20.3
+      "volume": 10156,
+      "avg_wait_min": 20.4
     },
     {
       "hour": "19",
-      "volume": 13011,
-      "avg_wait_min": 20.3
+      "volume": 12012,
+      "avg_wait_min": 20.6
     },
     {
       "hour": "20",
-      "volume": 11061,
-      "avg_wait_min": 20.2
+      "volume": 10272,
+      "avg_wait_min": 20.1
     },
     {
       "hour": "21",
-      "volume": 11859,
-      "avg_wait_min": 20.5
+      "volume": 10882,
+      "avg_wait_min": 20.4
     },
     {
       "hour": "22",
-      "volume": 13098,
-      "avg_wait_min": 20.3
+      "volume": 12051,
+      "avg_wait_min": 20.4
     },
     {
       "hour": "23",
-      "volume": 14511,
-      "avg_wait_min": 20.4
+      "volume": 13492,
+      "avg_wait_min": 20.5
     }
   ],
   "wait_times_simulated": true,

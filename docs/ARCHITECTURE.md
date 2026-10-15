@@ -82,6 +82,6 @@ Synthea CSV → synthea_adapter → data/raw → bronze → silver (clean) → g
 | Kind | Examples |
 |---|---|
 | Synthea records | admissions, stays, diagnoses, lab values, prescriptions, costs, deaths, ICU, hospitals |
-| Computed by the pipeline | unplanned readmission flags, abnormal/critical lab flags, departments, KPIs, COVID outcomes |
+| Computed by the pipeline | unplanned readmission flags, abnormal/critical lab flags, departments, KPIs, 12-month outcome labels |
 | Simulated (labelled) | pharmacy stock levels, no-shows/cancellations, waiting times, payment status, blood group, phone numbers |
 | Estimates (stated rule) | bed capacity & occupancy, lab bench capacity |

@@ -35,6 +35,7 @@ os.environ.setdefault("MEDINEXUS_LOGS_DIR", str(_TMP / "logs"))
 # No paid AI calls and no background scheduler in any test (agent tests inject a fake provider)
 os.environ["NEXA_LLM_PROVIDER"] = "rules"
 os.environ["NEXA_SWEEP_ENABLED"] = "0"
+os.environ["MEDINEXUS_FEED_ENABLED"] = "0"
 
 
 def pytest_sessionfinish(session, exitstatus):

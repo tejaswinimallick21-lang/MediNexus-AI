@@ -28,6 +28,9 @@ async def lifespan(_: FastAPI):
 
     stop = threading.Event()
     start_scheduler(stop)  # daily Nexa morning sweep (NEXA_SWEEP_ENABLED=0 turns it off)
+    from backend.app.services.data_feed import start_scheduler as start_feed
+
+    start_feed(stop)  # nightly live data feed (MEDINEXUS_FEED_ENABLED=0 turns it off)
     yield
     stop.set()
 

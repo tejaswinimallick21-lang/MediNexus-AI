@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-10-09T19:30:12.979306",
+  "generated_at": "2026-10-15T21:54:40.780373",
   "source": "synthea",
-  "source_dir": "C:\\Users\\tejas\\Downloads\\MediNexus-AI-main\\MediNexus-AI-main\\data\\synthea\\csv",
-  "data_through": "2020-05-27",
+  "source_dir": "C:\\Users\\tejas\\Downloads\\MediNexus-AI-main\\MediNexus-AI-main\\data\\synthea\\current",
+  "data_through": "2026-10-15",
   "seed": 42,
   "counts": {
-    "hospitals": 5209,
-    "departments": 5795,
-    "doctors": 5214,
-    "patients": 12537,
-    "admissions": 9699,
-    "diagnoses": 115689,
-    "laboratory_results": 1216331,
-    "medications": 169,
-    "prescriptions": 435574,
-    "appointments": 340100,
-    "billing": 9679,
-    "pharmacy_inventory": 950
+    "hospitals": 4935,
+    "departments": 5399,
+    "doctors": 4940,
+    "patients": 12483,
+    "admissions": 6852,
+    "diagnoses": 48020,
+    "laboratory_results": 179557,
+    "medications": 150,
+    "prescriptions": 419619,
+    "appointments": 313189,
+    "billing": 6838,
+    "pharmacy_inventory": 1270
   },
   "simulated_fields": {
     "patients": [
@@ -43,7 +43,7 @@
   },
   "derived_downstream": [
     "readmitted_30d (Gold, from admission dates)",
-    "COVID-19 outcomes (Gold, from event dates)"
+    "12-month outcome risk labels (Gold, from event dates)"
   ],
   "quality_defects_injected": [
     "Intentional duplicate rows (~1-1.5%)",

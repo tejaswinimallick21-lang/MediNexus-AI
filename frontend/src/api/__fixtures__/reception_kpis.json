@@ -1,8 +1,8 @@
 {
-  "total_appointments": 336733,
-  "completed": 299136,
-  "no_shows": 16250,
-  "cancelled": 19673,
+  "total_appointments": 310054,
+  "completed": 275418,
+  "no_shows": 14909,
+  "cancelled": 18136,
   "no_show_rate_pct": 4.8,
   "cancellation_rate_pct": 5.8,
   "avg_wait_minutes": 20.4

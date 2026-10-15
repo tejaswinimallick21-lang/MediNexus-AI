@@ -1,41 +1,71 @@
 {
   "schedule": "Daily at 07:00",
-  "next_run_at": "2026-10-12T07:00",
+  "next_run_at": "2026-10-16T07:00",
   "running_job_id": null,
   "runs": [
     {
-      "run_id": "996fd44c764f",
+      "run_id": "ccc7e84ac9bb",
       "trigger": "manual",
-      "started_at": "2026-10-11T18:48:42",
-      "finished_at": "2026-10-11T18:49:02",
+      "started_at": "2026-10-15T22:00:18",
+      "finished_at": "2026-10-15T22:00:45",
       "status": "succeeded",
-      "found": 68,
+      "found": 62,
       "proposed": 30,
       "ai_used": false,
       "by_kind": {
-        "follow_up": 10,
-        "purchase_order": 10,
-        "lab_escalation": 10
+        "follow_up": 7,
+        "purchase_order": 12,
+        "lab_escalation": 11
       },
       "error": null,
       "suppressed": 0
     },
     {
-      "run_id": "9634688d22f6",
+      "run_id": "0c9e83d9dbd8",
       "trigger": "manual",
-      "started_at": "2026-10-11T18:48:21",
-      "finished_at": "2026-10-11T18:48:41",
+      "started_at": "2026-10-15T21:59:48",
+      "finished_at": "2026-10-15T22:00:16",
       "status": "succeeded",
-      "found": 68,
+      "found": 62,
       "proposed": 30,
       "ai_used": false,
       "by_kind": {
-        "follow_up": 10,
-        "purchase_order": 10,
-        "lab_escalation": 10
+        "follow_up": 6,
+        "purchase_order": 12,
+        "lab_escalation": 12
       },
       "error": null,
       "suppressed": 1
+    },
+    {
+      "run_id": "1a3159eb6059",
+      "trigger": "schedule",
+      "started_at": "2026-10-15T21:51:13",
+      "finished_at": "2026-10-15T21:53:32",
+      "status": "succeeded",
+      "found": 60,
+      "proposed": 20,
+      "ai_used": true,
+      "by_kind": {
+        "follow_up": 6,
+        "purchase_order": 7,
+        "lab_escalation": 7
+      },
+      "error": null,
+      "suppressed": 0
+    },
+    {
+      "run_id": "d3279247785b",
+      "trigger": "schedule",
+      "started_at": "2026-10-15T11:16:41",
+      "finished_at": null,
+      "status": "running",
+      "found": 0,
+      "proposed": 0,
+      "ai_used": false,
+      "by_kind": {},
+      "error": null,
+      "suppressed": 0
     },
     {
       "run_id": "168725f88e1f",
@@ -50,23 +80,6 @@
         "follow_up": 6,
         "purchase_order": 7,
         "lab_escalation": 7
-      },
-      "error": null,
-      "suppressed": 0
-    },
-    {
-      "run_id": "beee86791d8b",
-      "trigger": "schedule",
-      "started_at": "2026-10-10T13:06:34",
-      "finished_at": "2026-10-10T13:07:32",
-      "status": "succeeded",
-      "found": 68,
-      "proposed": 20,
-      "ai_used": true,
-      "by_kind": {
-        "follow_up": 7,
-        "purchase_order": 7,
-        "lab_escalation": 6
       },
       "error": null,
       "suppressed": 0

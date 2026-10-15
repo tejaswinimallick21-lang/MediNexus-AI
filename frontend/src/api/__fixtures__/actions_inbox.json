@@ -1,8 +1,8 @@
 {
-  "pending": 41,
+  "pending": 23,
   "items": [
     {
-      "action_id": "470ea5ac625344529dfdd6556258a23c",
+      "action_id": "695c2c1a45db41bc8da586ba379e12ef",
       "kind": "purchase_order",
       "kind_label": "Purchase order",
       "summary": "Purchase order: 12 units of Atenolol 50 MG / Chlorthalidone 25 MG Oral Tablet for ADAMS PHYSICAL THERAPY  LLC",
@@ -19,7 +19,7 @@
       "session_id": null,
       "requested_by": "hcp@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-11T18:47:23",
+      "created_at": "2026-10-15T21:58:17",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,
@@ -27,24 +27,24 @@
       "can_decide": true
     },
     {
-      "action_id": "36e0b00c8af945e29d999b1292693aef",
+      "action_id": "bc48927ca8b548e7a7eb0addbcd12229",
       "kind": "lab_escalation",
       "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical eGFR for P_04243",
-      "reason": "The eGFR for patient P_04243 is critically low at 9.3 mL/min/{1.73_m2}, well below the reference range of 60.0 - 120.0. Approving this escalation will ensure that the physician is notified as per policy POL-LAB-001, allowing for timely intervention.",
+      "summary": "Escalate critical eGFR for P_01854",
+      "reason": "The eGFR for patient P_01854 is critically low at 14.9 mL/min, well below the reference range of 60.0 - 120.0. Approving this escalation will ensure that the physician is notified promptly, in accordance with policy POL-LAB-001.",
       "payload": {
-        "lab_id": "LAB_01202960",
-        "patient_id": "P_04243",
+        "lab_id": "LAB_00176848",
+        "patient_id": "P_01854",
         "test_name": "eGFR",
         "context": {
           "test": "eGFR"
         }
       },
       "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
+      "session_id": "sweep:1a3159eb6059",
       "requested_by": "nexa-sweep@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-11T17:30:22",
+      "created_at": "2026-10-15T21:53:31",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,
@@ -52,24 +52,24 @@
       "can_decide": true
     },
     {
-      "action_id": "50342176686f470ca863e71eeb6200b0",
+      "action_id": "80517c77a3da485891e1e53f3ac5cb85",
       "kind": "purchase_order",
       "kind_label": "Purchase order",
-      "summary": "Purchase order: 42 units of Acetaminophen 500 MG Oral Tablet for STURDY MEMORIAL HOSPITAL",
-      "reason": "We need to order 42 units of Acetaminophen 500 MG Oral Tablet for STURDY MEMORIAL HOSPITAL because our current stock is only 4 units, which is below the reorder level of 7, and we anticipate a shortfall of 35 units based on the last 30 days' demand. Approving this purchase will ensure we have adequate supplies to meet patient needs.",
+      "summary": "Purchase order: 6 units of Verapamil Hydrochloride 40 MG for MEDFORD CHIROPRACTIC CENTER",
+      "reason": "We need to approve the purchase order for 6 units of Verapamil Hydrochloride 40 MG for Medford Chiropractic Center because we currently have no units on hand, and the projected shortfall is 3 units. Approving this order will ensure that we meet the demand and maintain adequate supply for patient care.",
       "payload": {
-        "inventory_id": "INV_000850",
-        "quantity": 42,
+        "inventory_id": "INV_000604",
+        "quantity": 6,
         "context": {
-          "site": "STURDY MEMORIAL HOSPITAL",
-          "medication": "Acetaminophen 500 MG Oral Tablet"
+          "site": "MEDFORD CHIROPRACTIC CENTER",
+          "medication": "Verapamil Hydrochloride 40 MG"
         }
       },
       "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
+      "session_id": "sweep:1a3159eb6059",
       "requested_by": "nexa-sweep@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-11T17:30:18",
+      "created_at": "2026-10-15T21:53:28",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,
@@ -77,24 +77,24 @@
       "can_decide": true
     },
     {
-      "action_id": "dda77d75e79747cbb8dc1f587a30104e",
+      "action_id": "60ef56d87a884c0a9b18eb0b571ab590",
       "kind": "lab_escalation",
       "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical Creatinine for P_04243",
-      "reason": "The Creatinine level for patient P_04243 is 7.6, which is significantly above the reference range of 0.6 - 1.3. According to policy POL-LAB-001, critical values require verbal physician notification. Approving this action will ensure timely communication of this critical result to the physician.",
+      "summary": "Escalate critical eGFR for P_01912",
+      "reason": "The eGFR for patient P_01912 is critically low at 5.7 mL/min, well below the reference range of 60.0 - 120.0 mL/min. Approving this escalation will ensure that the physician is notified promptly, in accordance with policy POL-LAB-001.",
       "payload": {
-        "lab_id": "LAB_01202961",
-        "patient_id": "P_04243",
-        "test_name": "Creatinine",
+        "lab_id": "LAB_00176863",
+        "patient_id": "P_01912",
+        "test_name": "eGFR",
         "context": {
-          "test": "Creatinine"
+          "test": "eGFR"
         }
       },
       "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
+      "session_id": "sweep:1a3159eb6059",
       "requested_by": "nexa-sweep@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-11T17:30:15",
+      "created_at": "2026-10-15T21:53:24",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,
@@ -102,24 +102,320 @@
       "can_decide": true
     },
     {
-      "action_id": "340b0d791eaa4789a9dd09a851ad8ca4",
+      "action_id": "9cc7266f438c42c5a7f4da8fe6204c10",
       "kind": "purchase_order",
       "kind_label": "Purchase order",
-      "summary": "Purchase order: 24 units of NDA020503 200 ACTUAT Albuterol 0.09 MG/ACTUAT Metered Dose Inhaler for CAMBRIDGE HEALTH ALLIANCE",
-      "reason": "Approving the purchase order for 24 units of NDA020503 200 ACTUAT Albuterol is necessary because we currently have only 2 units on hand, which is below the reorder level of 5, and we are projected to face a shortfall of 19 units based on the forecasted demand. This order will ensure that CAMBRIDGE HEALTH ALLIANCE maintains adequate supply for patient needs.",
+      "summary": "Purchase order: 6 units of insulin human  isophane 70 UNT/ML / Regular Insulin  Human 30 UNT/ML Injectable Suspension [Humulin] for Lowell Outpatient Clinic",
+      "reason": "We need to place a purchase order for 6 units of insulin human isophane 70 UNT/ML / Regular Insulin Human 30 UNT/ML Injectable Suspension [Humulin] for the Lowell Outpatient Clinic because we currently have no stock on hand and the projected shortfall is 2 units. Approving this order will ensure we meet the demand and maintain adequate supply for our patients.",
       "payload": {
-        "inventory_id": "INV_000161",
-        "quantity": 24,
+        "inventory_id": "INV_000554",
+        "quantity": 6,
+        "context": {
+          "site": "Lowell Outpatient Clinic",
+          "medication": "insulin human  isophane 70 UNT/ML / Regular Insulin  Human 30 UNT/ML Injectable Suspension [Humulin]"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:53:18",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "f4a40f85c5d541a1a650eb679c0485e9",
+      "kind": "follow_up",
+      "kind_label": "Patient follow-up",
+      "summary": "Follow-up for P_07123 within 7 days (42% readmission risk)",
+      "reason": "Given that patient P_07123 has a high readmission risk of 42.5% and was recently discharged after treatment for a malignant neoplasm of the breast, it is essential to schedule a follow-up within 7 days as per guideline CPG-CLIN-001. Approving this action will help ensure timely monitoring and potentially reduce the risk of readmission.",
+      "payload": {
+        "patient_id": "P_07123",
+        "due_in_days": 7,
+        "context": {
+          "risk_band": "high (40-60%)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:53:13",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "bcf9733c76f14342a4c0cbc764f621d7",
+      "kind": "lab_escalation",
+      "kind_label": "Critical lab escalation",
+      "summary": "Escalate critical Systolic Blood Pressure for P_02665",
+      "reason": "The Systolic Blood Pressure for patient P_02665 is 183.0 mm[Hg], which exceeds the reference range of 90.0 - 120.0 mm[Hg]. Approving this escalation will ensure that the critical value is communicated to a physician as required by policy POL-LAB-001.",
+      "payload": {
+        "lab_id": "LAB_00176934",
+        "patient_id": "P_02665",
+        "test_name": "Systolic Blood Pressure",
+        "context": {
+          "test": "Systolic Blood Pressure"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:53:07",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "4237171f647f43f697fe64b066c050ed",
+      "kind": "purchase_order",
+      "kind_label": "Purchase order",
+      "summary": "Purchase order: 12 units of insulin human  isophane 70 UNT/ML / Regular Insulin  Human 30 UNT/ML Injectable Suspension [Humulin] for Framingham Outpatient Clinic",
+      "reason": "The Framingham Outpatient Clinic currently has no units of insulin human isophane and regular insulin on hand, which is below the reorder level of 4 units. With a projected shortfall of 8 units and a forecasted demand of 8 units over the next 30 days, approving the purchase order for 12 units will ensure that the clinic can meet patient needs without interruption.",
+      "payload": {
+        "inventory_id": "INV_000332",
+        "quantity": 12,
+        "context": {
+          "site": "Framingham Outpatient Clinic",
+          "medication": "insulin human  isophane 70 UNT/ML / Regular Insulin  Human 30 UNT/ML Injectable Suspension [Humulin]"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:53:04",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "7c0c349be75f4c3ebb1e876b3cccefb9",
+      "kind": "follow_up",
+      "kind_label": "Patient follow-up",
+      "summary": "Follow-up for P_03300 within 7 days (45% readmission risk)",
+      "reason": "P_03300 has a high readmission risk of 45% and is 65 years old with an active oncology history, which necessitates a follow-up within 7 days as per guideline CPG-CLIN-001. Approving this follow-up will help ensure timely care and potentially reduce the risk of readmission.",
+      "payload": {
+        "patient_id": "P_03300",
+        "due_in_days": 7,
+        "context": {
+          "risk_band": "high (40-60%)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:53:01",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "2fe298b144664fa09425dc91bab15426",
+      "kind": "lab_escalation",
+      "kind_label": "Critical lab escalation",
+      "summary": "Escalate critical eGFR for P_03814",
+      "reason": "The eGFR for patient P_03814 is critically low at 7.8 mL/min, well below the reference range of 60.0 - 120.0. Approving this escalation will ensure that the physician is notified promptly, in accordance with policy POL-LAB-001.",
+      "payload": {
+        "lab_id": "LAB_00177006",
+        "patient_id": "P_03814",
+        "test_name": "eGFR",
+        "context": {
+          "test": "eGFR"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:52:55",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "7f3ceb6ba3de48dcb4e58cd04c6ec976",
+      "kind": "purchase_order",
+      "kind_label": "Purchase order",
+      "summary": "Purchase order: 6 units of 120 ACTUAT Fluticasone propionate 0.044 MG/ACTUAT Metered Dose Inhaler for CRABBE CHIROPRACTIC  INC",
+      "reason": "We need to place a purchase order for 6 units of the 120 ACTUAT Fluticasone propionate Metered Dose Inhaler for CRABBE CHIROPRACTIC INC because we currently have none on hand and the projected shortfall is 3 units. Approving this order will ensure that we meet the demand and maintain adequate supply for our patients.",
+      "payload": {
+        "inventory_id": "INV_000254",
+        "quantity": 6,
+        "context": {
+          "site": "CRABBE CHIROPRACTIC  INC",
+          "medication": "120 ACTUAT Fluticasone propionate 0.044 MG/ACTUAT Metered Dose Inhaler"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:52:48",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "8d6c30e72f8f4091a42a417fb32d87ca",
+      "kind": "follow_up",
+      "kind_label": "Patient follow-up",
+      "summary": "Follow-up for P_02245 within 7 days (47% readmission risk)",
+      "reason": "Patient P_02245 has a high readmission risk of 47% due to advanced age and an active oncology history. Following up within 7 days is essential as per the guideline for high-risk discharges, ensuring timely care and potentially reducing readmission. Approving this action will help manage the patient's health effectively.",
+      "payload": {
+        "patient_id": "P_02245",
+        "due_in_days": 7,
+        "context": {
+          "risk_band": "high (40-60%)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:52:40",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "8f3544e06ecd455bbbb10b758d6a633f",
+      "kind": "lab_escalation",
+      "kind_label": "Critical lab escalation",
+      "summary": "Escalate critical Body Mass Index for P_11654",
+      "reason": "The Body Mass Index for patient P_11654 is 14.9, which is below the critical reference range of 18.5 - 24.9. According to policy POL-LAB-001, critical values require verbal physician notification. Approving this action will ensure timely communication of this critical result to the physician.",
+      "payload": {
+        "lab_id": "LAB_00177274",
+        "patient_id": "P_11654",
+        "test_name": "Body Mass Index",
+        "context": {
+          "test": "Body Mass Index"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:52:36",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "6884ae9f791c4935a6f108bfe5bc0b89",
+      "kind": "purchase_order",
+      "kind_label": "Purchase order",
+      "summary": "Purchase order: 6 units of insulin human  isophane 70 UNT/ML / Regular Insulin  Human 30 UNT/ML Injectable Suspension [Humulin] for CARNEY HOSPITAL",
+      "reason": "We need to place a purchase order for 6 units of insulin human isophane 70 UNT/ML / Regular Insulin Human 30 UNT/ML Injectable Suspension [Humulin] for CARNEY HOSPITAL because we currently have no stock on hand and the projected shortfall is 3 units. Approving this order will ensure we meet the forecasted demand and maintain adequate supply for our patients.",
+      "payload": {
+        "inventory_id": "INV_000215",
+        "quantity": 6,
+        "context": {
+          "site": "CARNEY HOSPITAL",
+          "medication": "insulin human  isophane 70 UNT/ML / Regular Insulin  Human 30 UNT/ML Injectable Suspension [Humulin]"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:52:33",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "1a38882efde7448f8cd60719807130c9",
+      "kind": "follow_up",
+      "kind_label": "Patient follow-up",
+      "summary": "Follow-up for P_05099 within 7 days (51% readmission risk)",
+      "reason": "Given that patient P_05099 has a 51% readmission risk and is classified as high risk due to an active oncology history and frequent admissions, a follow-up within 7 days is essential as per guideline CPG-CLIN-001. Approving this action will help ensure timely intervention and potentially reduce the risk of readmission.",
+      "payload": {
+        "patient_id": "P_05099",
+        "due_in_days": 7,
+        "context": {
+          "risk_band": "high (40-60%)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:52:29",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "e1a9b552af234092b0ba8ad669647bb6",
+      "kind": "lab_escalation",
+      "kind_label": "Critical lab escalation",
+      "summary": "Escalate critical Oxygen Saturation (Arterial) for P_00934",
+      "reason": "The Oxygen Saturation (Arterial) for patient P_00934 is critically low at 82.6%, which is below the reference range of 95.0 - 100.0. Approving this escalation will ensure that the physician is notified as per policy POL-LAB-001, allowing for timely intervention.",
+      "payload": {
+        "lab_id": "LAB_00177332",
+        "patient_id": "P_00934",
+        "test_name": "Oxygen Saturation (Arterial)",
+        "context": {
+          "test": "Oxygen Saturation (Arterial)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1a3159eb6059",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-15T21:52:25",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "55429a3e00d845a997f0125b5011ff07",
+      "kind": "purchase_order",
+      "kind_label": "Purchase order",
+      "summary": "Purchase order: 11 units of NDA020503 200 ACTUAT Albuterol 0.09 MG/ACTUAT Metered Dose Inhaler for CAMBRIDGE HEALTH ALLIANCE",
+      "reason": "We need to approve the purchase order for 11 units of NDA020503 200 ACTUAT Albuterol inhalers for Cambridge Health Alliance because we currently have no units on hand, and the projected shortfall is 8 units based on the last 30 days of demand. Approving this order will ensure we meet patient needs and maintain adequate supply.",
+      "payload": {
+        "inventory_id": "INV_000186",
+        "quantity": 11,
         "context": {
           "site": "CAMBRIDGE HEALTH ALLIANCE",
           "medication": "NDA020503 200 ACTUAT Albuterol 0.09 MG/ACTUAT Metered Dose Inhaler"
         }
       },
       "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
+      "session_id": "sweep:1a3159eb6059",
       "requested_by": "nexa-sweep@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-11T17:30:11",
+      "created_at": "2026-10-15T21:52:22",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,
@@ -127,23 +423,23 @@
       "can_decide": true
     },
     {
-      "action_id": "8e207357560f4375b73eb0f33531f35b",
+      "action_id": "e39762d4a6084559a0c8ed0877c3cacd",
       "kind": "follow_up",
       "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_03590 within 7 days (47% readmission risk)",
-      "reason": "Given that patient P_03590 has a high readmission risk of 47% and has not yet had a follow-up booked, it is essential to schedule a follow-up within 7 days as per the guideline CPG-CLIN-001. Approving this action will help ensure timely care and potentially reduce the risk of readmission.",
+      "summary": "Follow-up for P_06511 within 7 days (52% readmission risk)",
+      "reason": "Given that patient P_06511 has a high readmission risk of 52% and was discharged on September 18, following up within 7 days is essential as per guideline CPG-CLIN-001. Approving this action will help ensure timely care and potentially reduce the risk of readmission.",
       "payload": {
-        "patient_id": "P_03590",
+        "patient_id": "P_06511",
         "due_in_days": 7,
         "context": {
           "risk_band": "high (40-60%)"
         }
       },
       "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
+      "session_id": "sweep:1a3159eb6059",
       "requested_by": "nexa-sweep@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-11T17:30:07",
+      "created_at": "2026-10-15T21:52:19",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,
@@ -151,24 +447,24 @@
       "can_decide": true
     },
     {
-      "action_id": "ee2e42d98a5f4c0291894bfa96e7e50c",
+      "action_id": "acb862dfb6694500922cae5c0daac1f9",
       "kind": "lab_escalation",
       "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical Body Mass Index for P_11377",
-      "reason": "The Body Mass Index for patient P_11377 is critically low at 14.3 kg/m2, which is below the reference range of 18.5 - 24.9. Approving this escalation will ensure that the physician is notified as required by policy POL-LAB-001.",
+      "summary": "Escalate critical Body Mass Index for P_11762",
+      "reason": "The Body Mass Index for patient P_11762 is 14.5, which is significantly below the reference range of 18.5 - 24.9, indicating a critical value. Approving this escalation will ensure that the physician is notified promptly, in accordance with policy POL-LAB-001.",
       "payload": {
-        "lab_id": "LAB_01203119",
-        "patient_id": "P_11377",
+        "lab_id": "LAB_00177767",
+        "patient_id": "P_11762",
         "test_name": "Body Mass Index",
         "context": {
           "test": "Body Mass Index"
         }
       },
       "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
+      "session_id": "sweep:1a3159eb6059",
       "requested_by": "nexa-sweep@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-11T17:30:04",
+      "created_at": "2026-10-15T21:52:17",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,
@@ -176,24 +472,24 @@
       "can_decide": true
     },
     {
-      "action_id": "31124d8c352d415097fb780f1b2c9871",
+      "action_id": "8a9cdba74b524a49bd7717f5bfe1024b",
       "kind": "purchase_order",
       "kind_label": "Purchase order",
-      "summary": "Purchase order: 14 units of 1 ML Epoetin Alfa 4000 UNT/ML Injection [Epogen] for FRANCISCAN CHILDREN'S HOSPITAL & REHAB CENTER",
-      "reason": "We need to place a purchase order for 14 units of Epoetin Alfa 4000 UNT/ML Injection for FRANCISCAN CHILDREN'S HOSPITAL & REHAB CENTER because we currently have only 2 units on hand, which is below the reorder level of 7, and we will run out in 6 days. Approving this order will ensure we maintain adequate supply for patient needs.",
+      "summary": "Purchase order: 11 units of 24 HR Metformin hydrochloride 500 MG Extended Release Oral Tablet for BEVERLY HOSPITAL CORPORATION",
+      "reason": "We need to place a purchase order for 11 units of 24 HR Metformin hydrochloride 500 MG Extended Release Oral Tablet for Beverly Hospital Corporation because we currently have no units on hand and a projected shortfall of 7 units based on the last 30 days of demand. Approving this order will ensure we have adequate supply to meet patient needs.",
       "payload": {
-        "inventory_id": "INV_000276",
-        "quantity": 14,
+        "inventory_id": "INV_000127",
+        "quantity": 11,
         "context": {
-          "site": "FRANCISCAN CHILDREN'S HOSPITAL & REHAB CENTER",
-          "medication": "1 ML Epoetin Alfa 4000 UNT/ML Injection [Epogen]"
+          "site": "BEVERLY HOSPITAL CORPORATION",
+          "medication": "24 HR Metformin hydrochloride 500 MG Extended Release Oral Tablet"
         }
       },
       "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
+      "session_id": "sweep:1a3159eb6059",
       "requested_by": "nexa-sweep@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-11T17:30:01",
+      "created_at": "2026-10-15T21:52:14",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,
@@ -201,23 +497,23 @@
       "can_decide": true
     },
     {
-      "action_id": "6e9151dbcd6a47e0a86f395ad9621aed",
+      "action_id": "af5f8de8621746178c2673579e091368",
       "kind": "follow_up",
       "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_06974 within 7 days (49% readmission risk)",
-      "reason": "P_06974 has a high readmission risk of 49% due to an active oncology history and frequent admissions, and guidelines recommend a follow-up within 7 days for high-risk discharges. Approving this follow-up will help ensure timely care and potentially reduce the risk of readmission.",
+      "summary": "Follow-up for P_02380 within 7 days (54% readmission risk)",
+      "reason": "Given that patient P_02380 has a 54% readmission risk and is classified as high risk due to advanced age and an active oncology history, a follow-up within 7 days is essential as per guideline CPG-CLIN-001. Approving this action will help ensure timely monitoring and potentially reduce the risk of readmission.",
       "payload": {
-        "patient_id": "P_06974",
+        "patient_id": "P_02380",
         "due_in_days": 7,
         "context": {
           "risk_band": "high (40-60%)"
         }
       },
       "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
+      "session_id": "sweep:1a3159eb6059",
       "requested_by": "nexa-sweep@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-11T17:29:57",
+      "created_at": "2026-10-15T21:52:09",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,
@@ -225,49 +521,24 @@
       "can_decide": true
     },
     {
-      "action_id": "7ad772a1fbda4dc6ab4e1525cb38e8c5",
-      "kind": "lab_escalation",
-      "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical Body Mass Index for P_11801",
-      "reason": "The Body Mass Index for patient P_11801 is critically low at 14.0 kg/m2, which is below the reference range of 18.5 - 24.9. Approving this escalation will ensure that the physician is notified as per policy POL-LAB-001, allowing for timely intervention.",
-      "payload": {
-        "lab_id": "LAB_01203129",
-        "patient_id": "P_11801",
-        "test_name": "Body Mass Index",
-        "context": {
-          "test": "Body Mass Index"
-        }
-      },
-      "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-11T17:29:53",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "733df016fef8460c8dcefba13183d87a",
+      "action_id": "0c8161269697473cb8fa723e037d74de",
       "kind": "purchase_order",
       "kind_label": "Purchase order",
-      "summary": "Purchase order: 53 units of 0.4 ML Enoxaparin sodium 100 MG/ML Prefilled Syringe for NEWTON-WELLESLEY HOSPITAL",
-      "reason": "We currently have only 4 units of Enoxaparin sodium on hand, which is below the reorder level of 8, and with a projected shortfall of 45 units based on the forecasted demand. Approving the purchase order for 53 units will ensure we meet patient needs and maintain adequate supply at NEWTON-WELLESLEY HOSPITAL.",
+      "summary": "Purchase order: 6 units of Nitroglycerin 0.4 MG/ACTUAT Mucosal Spray for ADCARE HOSPITAL OF WORCESTER INC",
+      "reason": "We need to purchase 6 units of Nitroglycerin 0.4 MG/ACTUAT Mucosal Spray for ADCARE HOSPITAL OF WORCESTER INC because we currently have none on hand, and our projected shortfall is 2 units. Approving this order will ensure we meet the demand and maintain adequate supply for patient care.",
       "payload": {
-        "inventory_id": "INV_000616",
-        "quantity": 53,
+        "inventory_id": "INV_000011",
+        "quantity": 6,
         "context": {
-          "site": "NEWTON-WELLESLEY HOSPITAL",
-          "medication": "0.4 ML Enoxaparin sodium 100 MG/ML Prefilled Syringe"
+          "site": "ADCARE HOSPITAL OF WORCESTER INC",
+          "medication": "Nitroglycerin 0.4 MG/ACTUAT Mucosal Spray"
         }
       },
       "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
+      "session_id": "sweep:d3279247785b",
       "requested_by": "nexa-sweep@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-11T17:29:49",
+      "created_at": "2026-10-15T11:24:20",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,
@@ -275,671 +546,23 @@
       "can_decide": true
     },
     {
-      "action_id": "ce463a2ba31542c98f25ffb2f21f1eed",
+      "action_id": "ff3edb7598d6452e8d000b5405085e09",
       "kind": "follow_up",
       "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_01788 within 7 days (50% readmission risk)",
-      "reason": "Given that patient P_01788 is 80 years old and has a 50% risk of readmission, following up within 7 days is essential as per the guideline for high-risk discharges. Approving this action will help ensure timely care and potentially reduce the risk of readmission.",
+      "summary": "Follow-up for P_06943 within 7 days (60% readmission risk)",
+      "reason": "Given that patient P_06943 has a high readmission risk of 60.2% and was discharged on October 1, 2026, it is essential to schedule a follow-up within 7 days as per the guideline CPG-CLIN-001 for high-risk discharges. Approving this action will help ensure timely monitoring and potentially reduce the risk of readmission.",
       "payload": {
-        "patient_id": "P_01788",
+        "patient_id": "P_06943",
         "due_in_days": 7,
         "context": {
-          "risk_band": "high (40-60%)"
+          "risk_band": "very high (60%+)"
         }
       },
       "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
+      "session_id": "sweep:d3279247785b",
       "requested_by": "nexa-sweep@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-11T17:29:46",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "3a0f8096a20947a6b9802001f47fe879",
-      "kind": "lab_escalation",
-      "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical Body Mass Index for P_11977",
-      "reason": "The Body Mass Index for patient P_11977 is critically low at 14.0 kg/m2, which is below the reference range of 18.5 - 24.9. Approving this escalation will ensure that the physician is notified as per policy POL-LAB-001, allowing for timely intervention.",
-      "payload": {
-        "lab_id": "LAB_01203139",
-        "patient_id": "P_11977",
-        "test_name": "Body Mass Index",
-        "context": {
-          "test": "Body Mass Index"
-        }
-      },
-      "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-11T17:29:43",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "70723a98e959457c9a1d9e705faaf6c5",
-      "kind": "purchase_order",
-      "kind_label": "Purchase order",
-      "summary": "Purchase order: 16 units of NDA020503 200 ACTUAT Albuterol 0.09 MG/ACTUAT Metered Dose Inhaler for HEALTHALLIANCE HOSPITALS  INC",
-      "reason": "We need to place a purchase order for 16 units of NDA020503 200 ACTUAT Albuterol Metered Dose Inhalers for HEALTHALLIANCE HOSPITALS INC because we currently have only 1 unit on hand, which is below the reorder level of 4, and we are projected to face a shortfall of 12 units based on the forecasted demand. Approving this order will ensure we maintain adequate supply for patient needs.",
-      "payload": {
-        "inventory_id": "INV_000350",
-        "quantity": 16,
-        "context": {
-          "site": "HEALTHALLIANCE HOSPITALS  INC",
-          "medication": "NDA020503 200 ACTUAT Albuterol 0.09 MG/ACTUAT Metered Dose Inhaler"
-        }
-      },
-      "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-11T17:29:40",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "10269c87c0794409a1dca53c740b9495",
-      "kind": "follow_up",
-      "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_03521 within 7 days (51% readmission risk)",
-      "reason": "P_03521 has a high readmission risk of 51% due to an active oncology history and previous frequent admissions. Following up within 7 days is essential to comply with guidelines and ensure the patient's ongoing care, which will help reduce the likelihood of readmission.",
-      "payload": {
-        "patient_id": "P_03521",
-        "due_in_days": 7,
-        "context": {
-          "risk_band": "high (40-60%)"
-        }
-      },
-      "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-11T17:29:37",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "1a4a6ff4a7d14fbcb2a921576a2e1ba6",
-      "kind": "lab_escalation",
-      "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical eGFR for P_00305",
-      "reason": "The eGFR for patient P_00305 is critically low at 9.4, well below the reference range of 60.0 - 120.0. Approving this escalation will ensure that the physician is notified as required by policy POL-LAB-001.",
-      "payload": {
-        "lab_id": "LAB_01203170",
-        "patient_id": "P_00305",
-        "test_name": "eGFR",
-        "context": {
-          "test": "eGFR"
-        }
-      },
-      "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-11T17:29:33",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "42a7447923244dc880de38b2484c7d19",
-      "kind": "purchase_order",
-      "kind_label": "Purchase order",
-      "summary": "Purchase order: 14 units of NDA020503 200 ACTUAT Albuterol 0.09 MG/ACTUAT Metered Dose Inhaler for BETH ISRAEL DEACONESS HOSPITAL-MILTON INC",
-      "reason": "We need to approve the purchase order for 14 units of NDA020503 200 ACTUAT Albuterol inhalers for Beth Israel Deaconess Hospital-Milton Inc because we currently have only 1 unit on hand, which is below the reorder level of 4, and we are projected to have a shortfall of 10 units based on the forecasted demand. Approving this order will ensure we maintain adequate supply for patient needs.",
-      "payload": {
-        "inventory_id": "INV_000094",
-        "quantity": 14,
-        "context": {
-          "site": "BETH ISRAEL DEACONESS HOSPITAL-MILTON INC",
-          "medication": "NDA020503 200 ACTUAT Albuterol 0.09 MG/ACTUAT Metered Dose Inhaler"
-        }
-      },
-      "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-11T17:29:29",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "08fdbc78df8d461bb2b42ddcd7585dc5",
-      "kind": "follow_up",
-      "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_02670 within 7 days (51% readmission risk)",
-      "reason": "P_02670 has a high readmission risk of 51.3% and is 71 years old with an active oncology history, which necessitates a follow-up within 7 days as per guideline CPG-CLIN-001. Approving this follow-up will help ensure timely care and potentially reduce the risk of readmission.",
-      "payload": {
-        "patient_id": "P_02670",
-        "due_in_days": 7,
-        "context": {
-          "risk_band": "high (40-60%)"
-        }
-      },
-      "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-11T17:29:25",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "f9974a7b3a164840b7f2694432a76a05",
-      "kind": "lab_escalation",
-      "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical eGFR for P_03558",
-      "reason": "The eGFR value for patient P_03558 is 1.4 mL/min/{1.73_m2}, which is significantly below the reference range of 60.0 - 120.0. Approving the escalation will ensure that the critical value is communicated to a physician as required by policy POL-LAB-001.",
-      "payload": {
-        "lab_id": "LAB_01203301",
-        "patient_id": "P_03558",
-        "test_name": "eGFR",
-        "context": {
-          "test": "eGFR"
-        }
-      },
-      "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-11T17:29:22",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "4c77556e13c04b5f96979a694b27dd43",
-      "kind": "purchase_order",
-      "kind_label": "Purchase order",
-      "summary": "Purchase order: 18 units of 0.4 ML Enoxaparin sodium 100 MG/ML Prefilled Syringe for MERCY MEDICAL CTR",
-      "reason": "We currently have only 1 unit of Enoxaparin sodium on hand, which is below the reorder level of 4, and we are projected to have a shortfall of 14 units based on the forecasted demand. Approving the purchase order for 18 units will ensure we have adequate supply to meet patient needs at MERCY MEDICAL CTR.",
-      "payload": {
-        "inventory_id": "INV_000509",
-        "quantity": 18,
-        "context": {
-          "site": "MERCY MEDICAL CTR",
-          "medication": "0.4 ML Enoxaparin sodium 100 MG/ML Prefilled Syringe"
-        }
-      },
-      "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-11T17:29:18",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "94b34c6603994641a4e1d2e960ace51f",
-      "kind": "follow_up",
-      "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_03863 within 7 days (51% readmission risk)",
-      "reason": "Given that patient P_03863 has a 51% readmission risk and is classified as high risk due to an active oncology history and frequent admissions, a follow-up within 7 days is essential as per guideline CPG-CLIN-001. Approving this action will help ensure timely monitoring and potentially reduce the risk of readmission.",
-      "payload": {
-        "patient_id": "P_03863",
-        "due_in_days": 7,
-        "context": {
-          "risk_band": "high (40-60%)"
-        }
-      },
-      "agent": "sweep",
-      "session_id": "sweep:168725f88e1f",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-11T17:29:14",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "246b65f27e5f47b6a1f19a65c8662bb5",
-      "kind": "purchase_order",
-      "kind_label": "Purchase order",
-      "summary": "Purchase order: 23 units of 1 ML Enoxaparin sodium 150 MG/ML Prefilled Syringe for FALMOUTH HOSPITAL",
-      "reason": "Falmouth Hospital currently has only 1 unit of Enoxaparin sodium on hand, which is below the reorder level of 4 and insufficient to meet the projected demand over the next 30 days. Approving this purchase order for 23 units will ensure we have adequate supply to meet patient needs and avoid a shortfall.",
-      "payload": {
-        "inventory_id": "INV_000267",
-        "quantity": 23
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:31",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "42f0a50a60db466b9f614b8946256550",
-      "kind": "follow_up",
-      "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_05757 within 7 days (53% readmission risk)",
-      "reason": "Given that patient P_05757 has a 53% readmission risk and is classified as high risk due to an active oncology history and frequent admissions, a follow-up within 7 days is essential as per guideline CPG-CLIN-001. Approving this action will help ensure timely monitoring and potentially reduce the risk of readmission.",
-      "payload": {
-        "patient_id": "P_05757",
-        "due_in_days": 7
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:30",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "67cf28248f074697bc4e50553fd1b737",
-      "kind": "lab_escalation",
-      "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical Creatinine for P_03558",
-      "reason": "The Creatinine level for patient P_03558 is 72.5 mg/dL, which is significantly above the reference range of 0.6 - 1.3 mg/dL. According to policy POL-LAB-001, critical values require verbal physician notification, and approving this action will ensure timely communication of this critical result.",
-      "payload": {
-        "lab_id": "LAB_01203302",
-        "patient_id": "P_03558",
-        "test_name": "Creatinine"
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:27",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "dd6c4da783f740f4811fd3f4e51ece92",
-      "kind": "purchase_order",
-      "kind_label": "Purchase order",
-      "summary": "Purchase order: 25 units of Acetaminophen 500 MG Oral Tablet for SOUTHCOAST HOSPITAL GROUP  INC",
-      "reason": "We need to place a purchase order for 25 units of Acetaminophen 500 MG Oral Tablet for SOUTHCOAST HOSPITAL GROUP INC because we currently have only 1 unit on hand, which is below the reorder level of 5, and we are projected to have a shortfall of 20 units based on the forecasted demand. Approving this order will ensure we maintain adequate supply for patient care.",
-      "payload": {
-        "inventory_id": "INV_000826",
-        "quantity": 25
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:24",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "95f21b25def544fd91897f0d97eaf5b5",
-      "kind": "follow_up",
-      "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_04888 within 7 days (56% readmission risk)",
-      "reason": "P_04888 has a high readmission risk of 56% and has not yet had a follow-up booked since discharge on May 6, 2020. Approving this follow-up within 7 days will help ensure timely care and potentially reduce the risk of readmission.",
-      "payload": {
-        "patient_id": "P_04888",
-        "due_in_days": 7
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:22",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "436fb269c7b0441a97cb376ac3d4efd8",
-      "kind": "lab_escalation",
-      "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical eGFR for P_03889",
-      "reason": "The eGFR for patient P_03889 is critically low at 10.2 mL/min/{1.73_m2}, well below the reference range of 60.0 - 120.0. Approving this escalation will ensure that the physician is notified as required by policy POL-LAB-001.",
-      "payload": {
-        "lab_id": "LAB_01203754",
-        "patient_id": "P_03889",
-        "test_name": "eGFR"
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:20",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "0ad8cba081034d25874264f8dafa7bea",
-      "kind": "purchase_order",
-      "kind_label": "Purchase order",
-      "summary": "Purchase order: 27 units of 0.4 ML Enoxaparin sodium 100 MG/ML Prefilled Syringe for SOUTH SHORE HOSPITAL",
-      "reason": "We currently have only 1 unit of Enoxaparin sodium on hand, which is below the reorder level of 5, and we are projected to have a shortfall of 22 units based on the forecasted demand. Approving the purchase order for 27 units will ensure we have adequate supply to meet patient needs at South Shore Hospital.",
-      "payload": {
-        "inventory_id": "INV_000813",
-        "quantity": 27
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:19",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "43c9a6f908ab4a4c950044785f9bbc9a",
-      "kind": "follow_up",
-      "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_02743 within 7 days (57% readmission risk)",
-      "reason": "P_02743 has a high readmission risk of 56.7% due to chronic congestive heart failure and advanced age, and the guidelines specify that high-risk discharges require a follow-up within 7 days. Approving this follow-up will help ensure timely care and potentially reduce the risk of readmission.",
-      "payload": {
-        "patient_id": "P_02743",
-        "due_in_days": 7
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:17",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "3cad8e02924f432b9a0800bc7c367dc7",
-      "kind": "lab_escalation",
-      "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical Creatinine for P_03889",
-      "reason": "The Creatinine level for patient P_03889 is 8.3 mg/dL, which is significantly above the reference range of 0.6 - 1.3 mg/dL. Approving this escalation will ensure that the physician is notified as required by policy POL-LAB-001.",
-      "payload": {
-        "lab_id": "LAB_01203755",
-        "patient_id": "P_03889",
-        "test_name": "Creatinine"
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:15",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "318cb63cf0934321adf23c12cb1285a2",
-      "kind": "purchase_order",
-      "kind_label": "Purchase order",
-      "summary": "Purchase order: 11 units of 0.4 ML Enoxaparin sodium 100 MG/ML Prefilled Syringe for SHRINERS' HOSPITAL FOR CHILDREN - BOSTON  THE",
-      "reason": "We need to approve the purchase order for 11 units of 0.4 ML Enoxaparin sodium 100 MG/ML Prefilled Syringe for Shriner's Hospital for Children - Boston because we currently have none on hand, are below the reorder level, and face a projected shortfall of 8 units based on the last 30 days' demand. Approving this order will ensure we have adequate supply to meet patient needs.",
-      "payload": {
-        "inventory_id": "INV_000792",
-        "quantity": 11
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:13",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "e0261440795b4b00b87e691def44457d",
-      "kind": "follow_up",
-      "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_03779 within 7 days (58% readmission risk)",
-      "reason": "P_03779 has a high readmission risk of 58% and has not yet had a follow-up booked since discharge on May 1, 2020. Approving this follow-up within 7 days will help ensure timely care and potentially reduce the risk of readmission.",
-      "payload": {
-        "patient_id": "P_03779",
-        "due_in_days": 7
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:11",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "50874af3ea644aba847361099bc8f557",
-      "kind": "lab_escalation",
-      "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical Body Mass Index for P_11704",
-      "reason": "The Body Mass Index for patient P_11704 is 14.9, which is below the critical reference range of 18.5 - 24.9. According to policy POL-LAB-001, critical values require verbal physician notification. Approving this action will ensure timely communication of this critical result to the physician for appropriate intervention.",
-      "payload": {
-        "lab_id": "LAB_01203940",
-        "patient_id": "P_11704",
-        "test_name": "Body Mass Index"
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:10",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "182f801b7c014a49bd80d31123fbdca1",
-      "kind": "purchase_order",
-      "kind_label": "Purchase order",
-      "summary": "Purchase order: 9 units of Jolivette 28 Day Pack for NORTH SHORE MEDICAL CENTER -",
-      "reason": "We need to place a purchase order for 9 units of Jolivette 28 Day Pack for NORTH SHORE MEDICAL CENTER because we currently have no units on hand, and our forecast indicates a projected shortfall of 5 units. Approving this order will ensure we meet the demand and maintain adequate supply for our patients.",
-      "payload": {
-        "inventory_id": "INV_000649",
-        "quantity": 9
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:07",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "4a9b192b3f1c4d9daf3f46ba43132611",
-      "kind": "follow_up",
-      "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_00702 within 7 days (59% readmission risk)",
-      "reason": "Given that patient P_00702 is 98 years old and has a high readmission risk of 58.6%, following up within 7 days is essential as per the guideline for high-risk discharges. Approving this action will help ensure timely care and potentially reduce the risk of readmission.",
-      "payload": {
-        "patient_id": "P_00702",
-        "due_in_days": 7
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:05",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "65823a3d00e4499eafd163734abbe798",
-      "kind": "lab_escalation",
-      "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical eGFR for P_03995",
-      "reason": "The eGFR for patient P_03995 is critically low at 10.6 mL/min/{1.73_m2}, well below the reference range of 60.0 - 120.0. Approving this escalation will ensure timely verbal notification to the physician as required by policy POL-LAB-001.",
-      "payload": {
-        "lab_id": "LAB_01204101",
-        "patient_id": "P_03995",
-        "test_name": "eGFR"
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:04",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "a48d16c369eb4e8880ade854134486f2",
-      "kind": "purchase_order",
-      "kind_label": "Purchase order",
-      "summary": "Purchase order: 6 units of Levora 0.15/30 28 Day Pack for HEYWOOD HOSPITAL -",
-      "reason": "We need to place a purchase order for 6 units of Levora 0.15/30 28 Day Pack for Heywood Hospital because we currently have no units on hand, and the projected shortfall is 3 units. Approving this order will ensure we meet the forecasted demand and maintain adequate supply for our patients.",
-      "payload": {
-        "inventory_id": "INV_000362",
-        "quantity": 6
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:02",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "bd8edd0af919488a8fdade83d478d369",
-      "kind": "follow_up",
-      "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_03280 within 7 days (60% readmission risk)",
-      "reason": "P_03280 has a high readmission risk of 59.6% due to their active oncology history and advanced age. Following up within 7 days is essential as per the guideline for high-risk discharges, ensuring timely care and potentially reducing readmission rates. Approving this action will help us provide necessary support for the patient\u2019s recovery.",
-      "payload": {
-        "patient_id": "P_03280",
-        "due_in_days": 7
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:07:00",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "90c316711d9b4b67bc4e59eb9c50c96f",
-      "kind": "lab_escalation",
-      "kind_label": "Critical lab escalation",
-      "summary": "Escalate critical Creatinine for P_03995",
-      "reason": "The Creatinine level for patient P_03995 is 6.9 mg/dL, which is significantly above the reference range of 0.6 - 1.3 mg/dL. Approving this escalation will ensure that the physician is notified as required by policy POL-LAB-001.",
-      "payload": {
-        "lab_id": "LAB_01204102",
-        "patient_id": "P_03995",
-        "test_name": "Creatinine"
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:06:58",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "0bed6061e8844de7a195e58cab0a7140",
-      "kind": "purchase_order",
-      "kind_label": "Purchase order",
-      "summary": "Purchase order: 6 units of Nitroglycerin 0.4 MG/ACTUAT Mucosal Spray for HALLMARK IMAGING ASSOCIATES  PC",
-      "reason": "We need to place a purchase order for 6 units of Nitroglycerin 0.4 MG/ACTUAT Mucosal Spray for HALLMARK IMAGING ASSOCIATES PC because we currently have none on hand, and the projected shortfall is 2 units. Approving this order will ensure we meet the demand and maintain adequate supply for patient care.",
-      "payload": {
-        "inventory_id": "INV_000334",
-        "quantity": 6
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:06:55",
-      "decided_by": null,
-      "decided_at": null,
-      "decision_note": null,
-      "result": null,
-      "can_decide": true
-    },
-    {
-      "action_id": "4c63e90522b54cf3b11769e5de2f43f0",
-      "kind": "follow_up",
-      "kind_label": "Patient follow-up",
-      "summary": "Follow-up for P_04436 within 7 days (63% readmission risk)",
-      "reason": "Patient P_04436 has a high readmission risk of 63.4% and has not yet booked a follow-up appointment, which is crucial given the guideline that mandates follow-ups for high-risk discharges within 7 days. Approving this action will help ensure timely care and potentially reduce the risk of readmission.",
-      "payload": {
-        "patient_id": "P_04436",
-        "due_in_days": 7
-      },
-      "agent": "sweep",
-      "session_id": "sweep:beee86791d8b",
-      "requested_by": "nexa-sweep@medinexus.org",
-      "status": "pending",
-      "created_at": "2026-10-10T13:06:53",
+      "created_at": "2026-10-15T11:24:16",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,

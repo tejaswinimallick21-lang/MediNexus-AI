@@ -36,6 +36,7 @@ def run_full_medallion_pipeline(
     progress_callback: Optional[Callable[[int, str, Dict[str, Any]], None]] = None,
     username: str = "data_engineer",
     auto_generate_raw_if_missing: bool = True,
+    retrain_models: bool = True,
 ) -> Dict[str, Any]:
     """
     Execute the entire automated Medallion Data Pipeline:
@@ -91,12 +92,13 @@ def run_full_medallion_pipeline(
         notify(90, "Stage 5/5: Building Gold Layer (Patient 360, Operational Models, ML Feature Matrix)...")
         gold_res = generate_gold_models(run_id=pipeline_id)
 
-        # Retrain and sync ML model suite
-        try:
-            from src.ml.train_demand import train_all_models
-            train_all_models()
-        except Exception as e:
-            logger.warning(f"Model retraining during pipeline encountered warning: {e}")
+        # Retrain and sync ML model suite (skipped by the nightly live feed: scoring uses the rebuilt Gold features)
+        if retrain_models:
+            try:
+                from src.ml.train_demand import train_all_models
+                train_all_models()
+            except Exception as e:
+                logger.warning(f"Model retraining during pipeline encountered warning: {e}")
 
         # Stage 6: Pipeline Completion (100%)
         completed_at = datetime.now()

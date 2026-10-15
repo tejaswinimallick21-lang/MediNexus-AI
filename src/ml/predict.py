@@ -155,57 +155,50 @@ def predict_patient_los(patient_id: str) -> Dict[str, Any]:
     }
 
 
-def predict_patient_covid_outcomes(patient_id: str) -> Dict[str, Any]:
+def predict_patient_outcome_risk(patient_id: str) -> Dict[str, Any]:
     """
-    Predict COVID-19 severe-outcome risks using only history recorded before diagnosis.
-    For patients without a COVID-19 diagnosis, features are taken as of the end of the data
-    ("if infected now"); for diagnosed patients, the observed outcomes are returned alongside.
+    12-month outcome risks (unplanned admission, death) for a living patient, from history up to
+    the end of the data. Trained one year earlier, when the outcomes are known.
     """
-    artifact = load_model("covid_outcome_model")
+    artifact = load_model("outcome_risk_model")
     if not artifact:
-        return {
-            "status": "UNAVAILABLE",
-            "message": "COVID-19 outcome model is not yet trained.",
-            "disclaimer": CLINICAL_DISCLAIMER,
-        }
+        return {"status": "UNAVAILABLE", "message": "The 12-month outcome model is not yet trained.", "disclaimer": CLINICAL_DISCLAIMER}
 
-    df_row = query_df("SELECT * FROM gold_covid_outcomes WHERE patient_id = ?", [patient_id])
+    df_row = query_df("SELECT * FROM gold_outcome_risk WHERE patient_id = ? AND snapshot = 'score'", [patient_id])
     if df_row.empty:
-        return {"status": "NOT_FOUND", "message": f"Patient {patient_id} is not in the COVID-19 risk cohort.",
+        return {"status": "NOT_FOUND", "message": f"Patient {patient_id} is not in the living population scored today.",
                 "outcomes": {}, "disclaimer": CLINICAL_DISCLAIMER}
 
     row = df_row.iloc[0]
     X_vec = df_row.reindex(columns=artifact["features"]).apply(pd.to_numeric, errors="coerce")
-    covid_positive = int(row.get("covid_positive", 0)) == 1
     metrics = artifact.get("metrics", {})
-
     outcomes = {}
     for outcome, spec in artifact["models"].items():
         proba = float(spec["model"].predict_proba(X_vec)[0, 1])
-        observed = row.get(outcome) if covid_positive else None
         outcomes[outcome] = {
             "label": spec["label"],
             "probability": round(proba * 100, 1),
             "risk_level": _risk_level(proba, spec["risk_bands"]),
             "cohort_rate_pct": round(metrics.get(outcome, {}).get("positive_rate", 0) * 100, 1),
-            "observed": None if observed is None or pd.isna(observed) else int(observed),
+            "observed": None,  # the next 12 months have not happened yet
         }
 
     drivers = []
     if row.get("age_at_index", 0) >= 65:
-        drivers.append(f"Age {int(row.get('age_at_index'))} (the dominant risk factor in this cohort)")
+        drivers.append(f"Age {int(row.get('age_at_index'))}")
+    if row.get("prior_admissions_5y", 0) >= 2:
+        drivers.append(f"{int(row.get('prior_admissions_5y'))} admissions in the past 5 years")
     for flag, text in [("has_heart_failure", "Heart failure"), ("has_copd", "COPD"), ("has_ckd", "Chronic kidney disease"),
-                       ("has_diabetes", "Type 2 diabetes"), ("has_obesity", "Obesity"), ("has_hypertension", "Hypertension"),
-                       ("has_cancer", "Cancer history")]:
+                       ("has_cancer", "Cancer history"), ("has_diabetes", "Type 2 diabetes"), ("has_dementia", "Dementia"),
+                       ("has_stroke", "Previous stroke"), ("has_obesity", "Obesity"), ("has_hypertension", "Hypertension")]:
         if row.get(flag, 0) == 1:
             drivers.append(text)
 
     return {
         "status": "SUCCESS",
         "patient_id": patient_id,
-        "covid_positive": covid_positive,
         "index_date": row.get("index_date"),
-        "scored_as_of": "COVID-19 diagnosis date" if covid_positive else "end of observed data (hypothetical infection)",
+        "scored_as_of": f"{row.get('index_date')} (today)",
         "outcomes": outcomes,
         "risk_drivers": drivers[:5] or ["No major pre-existing risk factors recorded"],
         "model_version": artifact.get("version", "1.0.0"),

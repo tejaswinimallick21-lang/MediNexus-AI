@@ -7,7 +7,7 @@ Converts a Synthea CSV export (https://synthetichealth.github.io/synthea/) into 
 Clinical facts (patients, inpatient stays, diagnoses, labs, prescriptions, costs,
 deaths, ICU stays, ventilation) come straight from Synthea. Synthea does not model a
 few operational fields; those are simulated and listed in SIMULATED_FIELDS so they are
-never mistaken for source data. Outcome labels (readmission, COVID outcomes) are NOT
+never mistaken for source data. Outcome labels (readmission, 12-month outcomes) are NOT
 created here - they are derived downstream in the Gold layer from event dates.
 """
 
@@ -757,7 +757,7 @@ def convert_synthea_to_raw(
         "seed": seed,
         "counts": counts,
         "simulated_fields": SIMULATED_FIELDS,
-        "derived_downstream": ["readmitted_30d (Gold, from admission dates)", "COVID-19 outcomes (Gold, from event dates)"],
+        "derived_downstream": ["readmitted_30d (Gold, from admission dates)", "12-month outcome risk labels (Gold, from event dates)"],
         "quality_defects_injected": [
             "Intentional duplicate rows (~1-1.5%)",
             "Inconsistent date representations (MM/DD/YYYY, DD-MM-YYYY, ISO)",

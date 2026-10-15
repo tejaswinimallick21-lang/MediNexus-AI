@@ -4,7 +4,7 @@ waiting-room performance and the appointment log.
 
 Minimum necessary: operations analysts never receive patient names, contact details, diagnoses
 or visit reasons. Rows carry a pseudonymous patient ID; with Synthea data the raw
-`reason_for_visit` is clinical (e.g. "COVID-19"), so only the non-clinical visit type is returned.
+`reason_for_visit` is clinical (e.g. "Hypertension"), so only the non-clinical visit type is returned.
 """
 
 from typing import List, Optional

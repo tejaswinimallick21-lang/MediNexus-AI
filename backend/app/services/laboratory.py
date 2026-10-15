@@ -91,7 +91,7 @@ def get_capacity_plan(category: str) -> LabCapacityPlan:
     row = next((f for f in forecast["forecasts"] if f["group"] == category), None)
     projected = row["forecast_daily"] if row else 0.0
     # Bench capacity is not recorded in the data: estimate a typical busy day (75th-percentile daily volume over the
-    # past year) plus 25% headroom. The 95th percentile would be dominated by the 2020 COVID-19 surge peak.
+    # past year) plus 25% headroom. The 95th percentile would be dominated by rare peak days.
     stats = query_df_strict("""
         WITH end_d AS (SELECT max(CAST(test_date AS DATE)) AS d FROM gold_laboratory),
         daily AS (

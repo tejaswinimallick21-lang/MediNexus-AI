@@ -1,122 +1,127 @@
 [
   {
-    "period": "2018-06",
-    "value": 10.0,
+    "period": "2024-10",
+    "value": 7.0,
     "secondary": 0.0
   },
   {
-    "period": "2018-07",
-    "value": 14.0,
-    "secondary": 1.0
+    "period": "2024-11",
+    "value": 21.0,
+    "secondary": 0.0
   },
   {
-    "period": "2018-08",
+    "period": "2024-12",
+    "value": 14.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2025-01",
     "value": 11.0,
     "secondary": 0.0
   },
   {
-    "period": "2018-09",
-    "value": 9.0,
-    "secondary": 0.0
-  },
-  {
-    "period": "2018-10",
-    "value": 7.0,
-    "secondary": 0.0
-  },
-  {
-    "period": "2018-11",
-    "value": 7.0,
-    "secondary": 0.0
-  },
-  {
-    "period": "2018-12",
-    "value": 10.0,
-    "secondary": 0.0
-  },
-  {
-    "period": "2019-01",
-    "value": 17.0,
-    "secondary": 0.0
-  },
-  {
-    "period": "2019-02",
+    "period": "2025-02",
     "value": 13.0,
     "secondary": 0.0
   },
   {
-    "period": "2019-03",
+    "period": "2025-03",
     "value": 12.0,
     "secondary": 0.0
   },
   {
-    "period": "2019-04",
-    "value": 25.0,
+    "period": "2025-04",
+    "value": 8.0,
     "secondary": 0.0
   },
   {
-    "period": "2019-05",
-    "value": 42.0,
+    "period": "2025-05",
+    "value": 16.0,
     "secondary": 1.0
   },
   {
-    "period": "2019-06",
-    "value": 110.0,
-    "secondary": 1.0
-  },
-  {
-    "period": "2019-07",
-    "value": 93.0,
+    "period": "2025-06",
+    "value": 7.0,
     "secondary": 0.0
   },
   {
-    "period": "2019-08",
-    "value": 83.0,
-    "secondary": 1.0
-  },
-  {
-    "period": "2019-09",
-    "value": 83.0,
+    "period": "2025-07",
+    "value": 13.0,
     "secondary": 0.0
   },
   {
-    "period": "2019-10",
-    "value": 67.0,
+    "period": "2025-08",
+    "value": 7.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2025-09",
+    "value": 6.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2025-10",
+    "value": 6.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2025-11",
+    "value": 16.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2025-12",
+    "value": 16.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2026-01",
+    "value": 14.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2026-02",
+    "value": 19.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2026-03",
+    "value": 29.0,
     "secondary": 1.0
   },
   {
-    "period": "2019-11",
-    "value": 91.0,
+    "period": "2026-04",
+    "value": 96.0,
     "secondary": 1.0
   },
   {
-    "period": "2019-12",
+    "period": "2026-05",
+    "value": 87.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2026-06",
+    "value": 87.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2026-07",
+    "value": 100.0,
+    "secondary": 0.0
+  },
+  {
+    "period": "2026-08",
+    "value": 52.0,
+    "secondary": 1.0
+  },
+  {
+    "period": "2026-09",
     "value": 94.0,
     "secondary": 1.0
   },
   {
-    "period": "2020-01",
-    "value": 113.0,
-    "secondary": 1.0
-  },
-  {
-    "period": "2020-02",
-    "value": 464.0,
-    "secondary": 11.0
-  },
-  {
-    "period": "2020-03",
-    "value": 2032.0,
-    "secondary": 14.0
-  },
-  {
-    "period": "2020-04",
-    "value": 68.0,
-    "secondary": 0.0
-  },
-  {
-    "period": "2020-05",
-    "value": 52.0,
+    "period": "2026-10",
+    "value": 43.0,
     "secondary": 0.0
   }
 ]

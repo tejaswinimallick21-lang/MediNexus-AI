@@ -1,452 +1,452 @@
 [
   {
-    "hospital_id": "HOSP_1035",
+    "hospital_id": "HOSP_0982",
     "hospital_name": "Lynn Community Based Outpatient Clinic (CBOC)",
     "beds": 463,
     "physicians": 178,
-    "avg_daily_demand": 2117.4,
-    "served_pct": 81.2,
-    "avg_wait_days": 2.58
+    "avg_daily_demand": 2263.8,
+    "served_pct": 78.2,
+    "avg_wait_days": 3.12
   },
   {
-    "hospital_id": "HOSP_0150",
+    "hospital_id": "HOSP_0143",
     "hospital_name": "BAYSTATE FRANKLIN MEDICAL CENTER",
     "beds": 453,
     "physicians": 139,
-    "avg_daily_demand": 1655.5,
-    "served_pct": 81.3,
-    "avg_wait_days": 2.56
+    "avg_daily_demand": 1772.5,
+    "served_pct": 78.3,
+    "avg_wait_days": 3.08
   },
   {
-    "hospital_id": "HOSP_1034",
+    "hospital_id": "HOSP_0981",
     "hospital_name": "Lowell Veterans Community Care Center",
     "beds": 102,
     "physicians": 35,
-    "avg_daily_demand": 444.7,
-    "served_pct": 82.4,
-    "avg_wait_days": 2.35
+    "avg_daily_demand": 475.2,
+    "served_pct": 79.8,
+    "avg_wait_days": 2.82
   },
   {
-    "hospital_id": "HOSP_0517",
-    "hospital_name": "Cape Cod Vet Center",
-    "beds": 285,
-    "physicians": 81,
-    "avg_daily_demand": 1028.2,
-    "served_pct": 82.8,
-    "avg_wait_days": 2.29
-  },
-  {
-    "hospital_id": "HOSP_0812",
+    "hospital_id": "HOSP_0773",
     "hospital_name": "HARRINGTON MEMORIAL HOSPITAL-1",
     "beds": 642,
     "physicians": 208,
-    "avg_daily_demand": 2686.2,
-    "served_pct": 83.3,
-    "avg_wait_days": 2.21
+    "avg_daily_demand": 2876.5,
+    "served_pct": 80.4,
+    "avg_wait_days": 2.69
   },
   {
-    "hospital_id": "HOSP_0507",
-    "hospital_name": "COOLEY DICKINSON HOSPITAL INC THE",
-    "beds": 634,
-    "physicians": 224,
-    "avg_daily_demand": 2795.3,
-    "served_pct": 83.6,
-    "avg_wait_days": 2.16
+    "hospital_id": "HOSP_0496",
+    "hospital_name": "Cape Cod Vet Center",
+    "beds": 285,
+    "physicians": 81,
+    "avg_daily_demand": 1097.7,
+    "served_pct": 80.5,
+    "avg_wait_days": 2.7
   },
   {
-    "hospital_id": "HOSP_0741",
+    "hospital_id": "HOSP_0707",
     "hospital_name": "Greenfield Outpatient Clinic",
     "beds": 204,
     "physicians": 74,
-    "avg_daily_demand": 946.3,
-    "served_pct": 83.9,
-    "avg_wait_days": 2.12
+    "avg_daily_demand": 1018.4,
+    "served_pct": 80.9,
+    "avg_wait_days": 2.62
   },
   {
-    "hospital_id": "HOSP_4986",
+    "hospital_id": "HOSP_0486",
+    "hospital_name": "COOLEY DICKINSON HOSPITAL INC THE",
+    "beds": 634,
+    "physicians": 224,
+    "avg_daily_demand": 2986.6,
+    "served_pct": 81.2,
+    "avg_wait_days": 2.57
+  },
+  {
+    "hospital_id": "HOSP_4718",
     "hospital_name": "Springfield Vet Center",
     "beds": 315,
     "physicians": 123,
-    "avg_daily_demand": 1356.9,
-    "served_pct": 84.7,
-    "avg_wait_days": 1.97
+    "avg_daily_demand": 1453.8,
+    "served_pct": 82.4,
+    "avg_wait_days": 2.38
   },
   {
-    "hospital_id": "HOSP_4980",
-    "hospital_name": "STURDY MEMORIAL HOSPITAL",
-    "beds": 770,
-    "physicians": 229,
-    "avg_daily_demand": 2737.2,
-    "served_pct": 85.1,
-    "avg_wait_days": 1.91
-  },
-  {
-    "hospital_id": "HOSP_4600",
+    "hospital_id": "HOSP_4351",
     "hospital_name": "Plymouth Outreach Clinic",
     "beds": 475,
     "physicians": 145,
-    "avg_daily_demand": 1733.6,
-    "served_pct": 85.2,
-    "avg_wait_days": 1.89
+    "avg_daily_demand": 1858.1,
+    "served_pct": 82.5,
+    "avg_wait_days": 2.32
   },
   {
-    "hospital_id": "HOSP_0307",
-    "hospital_name": "Boston Vet Center",
-    "beds": 282,
-    "physicians": 113,
-    "avg_daily_demand": 1274.0,
-    "served_pct": 85.3,
-    "avg_wait_days": 1.89
+    "hospital_id": "HOSP_4712",
+    "hospital_name": "STURDY MEMORIAL HOSPITAL",
+    "beds": 770,
+    "physicians": 229,
+    "avg_daily_demand": 2917.8,
+    "served_pct": 82.9,
+    "avg_wait_days": 2.3
   },
   {
-    "hospital_id": "HOSP_0308",
-    "hospital_name": "Brockton Vet Center",
-    "beds": 419,
-    "physicians": 157,
-    "avg_daily_demand": 1813.2,
-    "served_pct": 85.6,
-    "avg_wait_days": 1.83
-  },
-  {
-    "hospital_id": "HOSP_0311",
+    "hospital_id": "HOSP_0297",
     "hospital_name": "CAMBRIDGE HEALTH ALLIANCE",
     "beds": 832,
     "physicians": 295,
-    "avg_daily_demand": 3736.8,
-    "served_pct": 85.7,
-    "avg_wait_days": 1.82
+    "avg_daily_demand": 4021.9,
+    "served_pct": 83.0,
+    "avg_wait_days": 2.26
   },
   {
-    "hospital_id": "HOSP_1520",
-    "hospital_name": "New Bedford Outpatient Clinic",
-    "beds": 439,
-    "physicians": 144,
-    "avg_daily_demand": 1893.6,
-    "served_pct": 85.8,
-    "avg_wait_days": 1.8
-  },
-  {
-    "hospital_id": "HOSP_0594",
+    "hospital_id": "HOSP_0567",
     "hospital_name": "EMERSON HOSPITAL -",
     "beds": 599,
     "physicians": 205,
-    "avg_daily_demand": 2513.9,
-    "served_pct": 85.8,
-    "avg_wait_days": 1.8
+    "avg_daily_demand": 2705.5,
+    "served_pct": 83.2,
+    "avg_wait_days": 2.24
   },
   {
-    "hospital_id": "HOSP_5099",
-    "hospital_name": "VA Central Western Massachusetts Healthcare System",
-    "beds": 322,
-    "physicians": 105,
-    "avg_daily_demand": 1296.9,
-    "served_pct": 86.0,
-    "avg_wait_days": 1.75
+    "hospital_id": "HOSP_0293",
+    "hospital_name": "Boston Vet Center",
+    "beds": 282,
+    "physicians": 113,
+    "avg_daily_demand": 1360.2,
+    "served_pct": 83.3,
+    "avg_wait_days": 2.24
   },
   {
-    "hospital_id": "HOSP_1380",
+    "hospital_id": "HOSP_1313",
     "hospital_name": "NEW ENGLAND BAPTIST HOSPITAL",
     "beds": 401,
     "physicians": 143,
-    "avg_daily_demand": 1740.0,
-    "served_pct": 86.1,
-    "avg_wait_days": 1.75
+    "avg_daily_demand": 1874.8,
+    "served_pct": 83.4,
+    "avg_wait_days": 2.21
   },
   {
-    "hospital_id": "HOSP_0151",
+    "hospital_id": "HOSP_0144",
     "hospital_name": "BAYSTATE MEDICAL CENTER",
     "beds": 626,
     "physicians": 198,
-    "avg_daily_demand": 2220.7,
-    "served_pct": 86.2,
-    "avg_wait_days": 1.75
+    "avg_daily_demand": 2381.2,
+    "served_pct": 83.5,
+    "avg_wait_days": 2.17
   },
   {
-    "hospital_id": "HOSP_1228",
-    "hospital_name": "MILFORD REGIONAL MEDICAL CENTER",
-    "beds": 819,
-    "physicians": 310,
-    "avg_daily_demand": 3196.6,
-    "served_pct": 86.3,
-    "avg_wait_days": 1.73
+    "hospital_id": "HOSP_0294",
+    "hospital_name": "Brockton Vet Center",
+    "beds": 419,
+    "physicians": 157,
+    "avg_daily_demand": 1943.0,
+    "served_pct": 83.5,
+    "avg_wait_days": 2.19
   },
   {
-    "hospital_id": "HOSP_0088",
+    "hospital_id": "HOSP_1443",
+    "hospital_name": "New Bedford Outpatient Clinic",
+    "beds": 439,
+    "physicians": 144,
+    "avg_daily_demand": 2025.8,
+    "served_pct": 84.0,
+    "avg_wait_days": 2.12
+  },
+  {
+    "hospital_id": "HOSP_0082",
     "hospital_name": "ATHOL MEMORIAL HOSPITAL",
     "beds": 463,
     "physicians": 173,
-    "avg_daily_demand": 1953.0,
-    "served_pct": 86.3,
-    "avg_wait_days": 1.72
+    "avg_daily_demand": 2096.4,
+    "served_pct": 84.0,
+    "avg_wait_days": 2.1
   },
   {
-    "hospital_id": "HOSP_1093",
-    "hospital_name": "MASSACHUSETTS GENERAL HOSPITAL",
-    "beds": 412,
-    "physicians": 135,
-    "avg_daily_demand": 1602.2,
-    "served_pct": 86.5,
-    "avg_wait_days": 1.69
+    "hospital_id": "HOSP_4828",
+    "hospital_name": "VA Central Western Massachusetts Healthcare System",
+    "beds": 322,
+    "physicians": 105,
+    "avg_daily_demand": 1389.0,
+    "served_pct": 84.2,
+    "avg_wait_days": 2.11
   },
   {
-    "hospital_id": "HOSP_0222",
-    "hospital_name": "BETH ISRAEL DEACONESS HOSPITAL - PLYMOUTH",
-    "beds": 691,
-    "physicians": 260,
-    "avg_daily_demand": 2831.2,
-    "served_pct": 86.8,
-    "avg_wait_days": 1.65
+    "hospital_id": "HOSP_1166",
+    "hospital_name": "MILFORD REGIONAL MEDICAL CENTER",
+    "beds": 819,
+    "physicians": 310,
+    "avg_daily_demand": 3415.4,
+    "served_pct": 84.3,
+    "avg_wait_days": 2.04
   },
   {
-    "hospital_id": "HOSP_4690",
+    "hospital_id": "HOSP_4436",
     "hospital_name": "SAINT ANNE'S HOSPITAL",
     "beds": 722,
     "physicians": 228,
-    "avg_daily_demand": 2823.1,
+    "avg_daily_demand": 3033.7,
+    "served_pct": 84.4,
+    "avg_wait_days": 2.04
+  },
+  {
+    "hospital_id": "HOSP_0213",
+    "hospital_name": "BETH ISRAEL DEACONESS HOSPITAL - PLYMOUTH",
+    "beds": 691,
+    "physicians": 260,
+    "avg_daily_demand": 3045.8,
+    "served_pct": 84.5,
+    "avg_wait_days": 2.04
+  },
+  {
+    "hospital_id": "HOSP_1034",
+    "hospital_name": "MASSACHUSETTS GENERAL HOSPITAL",
+    "beds": 412,
+    "physicians": 135,
+    "avg_daily_demand": 1716.6,
+    "served_pct": 84.8,
+    "avg_wait_days": 1.97
+  },
+  {
+    "hospital_id": "HOSP_0706",
+    "hospital_name": "Gloucester Community Based Outpatient Clinic (CBOC)",
+    "beds": 80,
+    "physicians": 24,
+    "avg_daily_demand": 313.6,
+    "served_pct": 84.9,
+    "avg_wait_days": 1.96
+  },
+  {
+    "hospital_id": "HOSP_0611",
+    "hospital_name": "FALMOUTH HOSPITAL",
+    "beds": 831,
+    "physicians": 295,
+    "avg_daily_demand": 3354.7,
+    "served_pct": 85.1,
+    "avg_wait_days": 1.93
+  },
+  {
+    "hospital_id": "HOSP_4905",
+    "hospital_name": "WINCHESTER HOSPITAL",
+    "beds": 745,
+    "physicians": 245,
+    "avg_daily_demand": 3132.5,
+    "served_pct": 85.2,
+    "avg_wait_days": 1.93
+  },
+  {
+    "hospital_id": "HOSP_0659",
+    "hospital_name": "Framingham Outpatient Clinic",
+    "beds": 573,
+    "physicians": 177,
+    "avg_daily_demand": 2194.2,
+    "served_pct": 85.2,
+    "avg_wait_days": 1.91
+  },
+  {
+    "hospital_id": "HOSP_0270",
+    "hospital_name": "BRIGHAM AND WOMEN'S FAULKNER HOSPITAL",
+    "beds": 441,
+    "physicians": 150,
+    "avg_daily_demand": 1967.5,
+    "served_pct": 85.4,
+    "avg_wait_days": 1.89
+  },
+  {
+    "hospital_id": "HOSP_0230",
+    "hospital_name": "BOSTON CHILDREN'S HOSPITAL",
+    "beds": 418,
+    "physicians": 130,
+    "avg_daily_demand": 1555.4,
+    "served_pct": 85.5,
+    "avg_wait_days": 1.85
+  },
+  {
+    "hospital_id": "HOSP_0606",
+    "hospital_name": "Edith Nourse Rogers Memorial Veterans Hospital (Bedford VA)",
+    "beds": 644,
+    "physicians": 216,
+    "avg_daily_demand": 2990.6,
+    "served_pct": 86.4,
+    "avg_wait_days": 1.76
+  },
+  {
+    "hospital_id": "HOSP_1274",
+    "hospital_name": "NASHOBA VALLEY MEDICAL CENTER",
+    "beds": 683,
+    "physicians": 241,
+    "avg_daily_demand": 2968.2,
+    "served_pct": 86.5,
+    "avg_wait_days": 1.72
+  },
+  {
+    "hospital_id": "HOSP_1362",
+    "hospital_name": "NOBLE HOSPITAL",
+    "beds": 590,
+    "physicians": 176,
+    "avg_daily_demand": 2157.5,
+    "served_pct": 86.7,
+    "avg_wait_days": 1.69
+  },
+  {
+    "hospital_id": "HOSP_0828",
+    "hospital_name": "HOLY FAMILY HOSPITAL",
+    "beds": 635,
+    "physicians": 190,
+    "avg_daily_demand": 2358.7,
+    "served_pct": 86.8,
+    "avg_wait_days": 1.69
+  },
+  {
+    "hospital_id": "HOSP_0431",
+    "hospital_name": "CLINTON HOSPITAL ASSOCIATION",
+    "beds": 618,
+    "physicians": 185,
+    "avg_daily_demand": 2101.2,
+    "served_pct": 86.8,
+    "avg_wait_days": 1.63
+  },
+  {
+    "hospital_id": "HOSP_0217",
+    "hospital_name": "BEVERLY HOSPITAL CORPORATION",
+    "beds": 712,
+    "physicians": 223,
+    "avg_daily_demand": 2813.8,
     "served_pct": 87.0,
     "avg_wait_days": 1.63
   },
   {
-    "hospital_id": "HOSP_0691",
-    "hospital_name": "Framingham Outpatient Clinic",
-    "beds": 573,
-    "physicians": 177,
-    "avg_daily_demand": 2043.5,
-    "served_pct": 87.3,
-    "avg_wait_days": 1.55
+    "hospital_id": "HOSP_4465",
+    "hospital_name": "SHRINERS' HOSPITAL FOR CHILDREN - BOSTON  THE",
+    "beds": 386,
+    "physicians": 139,
+    "avg_daily_demand": 1652.5,
+    "served_pct": 87.1,
+    "avg_wait_days": 1.65
   },
   {
-    "hospital_id": "HOSP_0740",
-    "hospital_name": "Gloucester Community Based Outpatient Clinic (CBOC)",
-    "beds": 80,
-    "physicians": 24,
-    "avg_daily_demand": 293.2,
-    "served_pct": 87.3,
-    "avg_wait_days": 1.58
+    "hospital_id": "HOSP_0013",
+    "hospital_name": "ADCARE HOSPITAL OF WORCESTER INC",
+    "beds": 598,
+    "physicians": 212,
+    "avg_daily_demand": 2684.8,
+    "served_pct": 87.2,
+    "avg_wait_days": 1.61
   },
   {
-    "hospital_id": "HOSP_0240",
-    "hospital_name": "BOSTON CHILDREN'S HOSPITAL",
-    "beds": 418,
-    "physicians": 130,
-    "avg_daily_demand": 1454.9,
-    "served_pct": 87.4,
-    "avg_wait_days": 1.55
+    "hospital_id": "HOSP_4464",
+    "hospital_name": "SHRINERS' HOSPITAL FOR CHILDREN (THE)",
+    "beds": 639,
+    "physicians": 246,
+    "avg_daily_demand": 2969.7,
+    "served_pct": 87.6,
+    "avg_wait_days": 1.54
   },
   {
-    "hospital_id": "HOSP_5178",
-    "hospital_name": "WINCHESTER HOSPITAL",
-    "beds": 745,
-    "physicians": 245,
-    "avg_daily_demand": 2914.2,
-    "served_pct": 87.5,
-    "avg_wait_days": 1.55
-  },
-  {
-    "hospital_id": "HOSP_0641",
-    "hospital_name": "FALMOUTH HOSPITAL",
-    "beds": 831,
-    "physicians": 295,
-    "avg_daily_demand": 3118.2,
-    "served_pct": 87.7,
-    "avg_wait_days": 1.53
-  },
-  {
-    "hospital_id": "HOSP_0283",
-    "hospital_name": "BRIGHAM AND WOMEN'S FAULKNER HOSPITAL",
-    "beds": 441,
-    "physicians": 150,
-    "avg_daily_demand": 1823.5,
+    "hospital_id": "HOSP_0926",
+    "hospital_name": "LAHEY HOSPITAL & MEDICAL CENTER  BURLINGTON",
+    "beds": 714,
+    "physicians": 273,
+    "avg_daily_demand": 3255.5,
     "served_pct": 87.9,
-    "avg_wait_days": 1.48
+    "avg_wait_days": 1.5
   },
   {
-    "hospital_id": "HOSP_0636",
-    "hospital_name": "Edith Nourse Rogers Memorial Veterans Hospital (Bedford VA)",
-    "beds": 644,
-    "physicians": 216,
-    "avg_daily_demand": 2795.8,
+    "hospital_id": "HOSP_0967",
+    "hospital_name": "LOWELL GENERAL HOSPITAL",
+    "beds": 868,
+    "physicians": 320,
+    "avg_daily_demand": 3990.0,
+    "served_pct": 88.1,
+    "avg_wait_days": 1.47
+  },
+  {
+    "hospital_id": "HOSP_4825",
+    "hospital_name": "VA Boston Healthcare System  Brockton Campus",
+    "beds": 419,
+    "physicians": 162,
+    "avg_daily_demand": 2069.3,
     "served_pct": 88.2,
     "avg_wait_days": 1.45
   },
   {
-    "hospital_id": "HOSP_0872",
-    "hospital_name": "HOLY FAMILY HOSPITAL",
-    "beds": 635,
-    "physicians": 190,
-    "avg_daily_demand": 2207.1,
-    "served_pct": 88.3,
-    "avg_wait_days": 1.41
-  },
-  {
-    "hospital_id": "HOSP_1436",
-    "hospital_name": "NOBLE HOSPITAL",
-    "beds": 590,
-    "physicians": 176,
-    "avg_daily_demand": 2014.4,
-    "served_pct": 88.3,
-    "avg_wait_days": 1.4
-  },
-  {
-    "hospital_id": "HOSP_1340",
-    "hospital_name": "NASHOBA VALLEY MEDICAL CENTER",
-    "beds": 683,
-    "physicians": 241,
-    "avg_daily_demand": 2766.1,
-    "served_pct": 88.4,
-    "avg_wait_days": 1.4
-  },
-  {
-    "hospital_id": "HOSP_4720",
-    "hospital_name": "SHRINERS' HOSPITAL FOR CHILDREN - BOSTON  THE",
-    "beds": 386,
-    "physicians": 139,
-    "avg_daily_demand": 1537.1,
-    "served_pct": 88.8,
-    "avg_wait_days": 1.35
-  },
-  {
-    "hospital_id": "HOSP_0449",
-    "hospital_name": "CLINTON HOSPITAL ASSOCIATION",
-    "beds": 618,
-    "physicians": 185,
-    "avg_daily_demand": 1965.0,
-    "served_pct": 88.9,
-    "avg_wait_days": 1.36
-  },
-  {
-    "hospital_id": "HOSP_0226",
-    "hospital_name": "BEVERLY HOSPITAL CORPORATION",
-    "beds": 712,
-    "physicians": 223,
-    "avg_daily_demand": 2614.4,
-    "served_pct": 89.0,
-    "avg_wait_days": 1.31
-  },
-  {
-    "hospital_id": "HOSP_4719",
-    "hospital_name": "SHRINERS' HOSPITAL FOR CHILDREN (THE)",
-    "beds": 639,
-    "physicians": 246,
-    "avg_daily_demand": 2780.8,
-    "served_pct": 89.2,
-    "avg_wait_days": 1.29
-  },
-  {
-    "hospital_id": "HOSP_0014",
-    "hospital_name": "ADCARE HOSPITAL OF WORCESTER INC",
-    "beds": 598,
-    "physicians": 212,
-    "avg_daily_demand": 2497.5,
-    "served_pct": 89.2,
-    "avg_wait_days": 1.3
-  },
-  {
-    "hospital_id": "HOSP_0224",
+    "hospital_id": "HOSP_0215",
     "hospital_name": "BETH ISRAEL DEACONESS MEDICAL CENTER",
     "beds": 433,
     "physicians": 137,
-    "avg_daily_demand": 1523.1,
-    "served_pct": 89.6,
-    "avg_wait_days": 1.24
+    "avg_daily_demand": 1630.2,
+    "served_pct": 88.2,
+    "avg_wait_days": 1.46
   },
   {
-    "hospital_id": "HOSP_1019",
-    "hospital_name": "LOWELL GENERAL HOSPITAL",
-    "beds": 868,
-    "physicians": 320,
-    "avg_daily_demand": 3719.4,
-    "served_pct": 89.7,
-    "avg_wait_days": 1.24
-  },
-  {
-    "hospital_id": "HOSP_0975",
-    "hospital_name": "LAHEY HOSPITAL & MEDICAL CENTER  BURLINGTON",
-    "beds": 714,
-    "physicians": 273,
-    "avg_daily_demand": 3026.6,
-    "served_pct": 89.7,
-    "avg_wait_days": 1.22
-  },
-  {
-    "hospital_id": "HOSP_0846",
+    "hospital_id": "HOSP_0804",
     "hospital_name": "HEALTHALLIANCE HOSPITALS  INC",
     "beds": 708,
     "physicians": 199,
-    "avg_daily_demand": 2102.2,
-    "served_pct": 89.8,
-    "avg_wait_days": 1.22
+    "avg_daily_demand": 2251.4,
+    "served_pct": 88.3,
+    "avg_wait_days": 1.47
   },
   {
-    "hospital_id": "HOSP_5039",
+    "hospital_id": "HOSP_4769",
     "hospital_name": "TUFTS MEDICAL CENTER",
     "beds": 411,
     "physicians": 142,
-    "avg_daily_demand": 1567.0,
-    "served_pct": 89.9,
-    "avg_wait_days": 1.2
+    "avg_daily_demand": 1672.7,
+    "served_pct": 88.8,
+    "avg_wait_days": 1.38
   },
   {
-    "hospital_id": "HOSP_0707",
+    "hospital_id": "HOSP_0673",
     "hospital_name": "GOOD SAMARITAN MEDICAL CENTER",
     "beds": 766,
     "physicians": 216,
-    "avg_daily_demand": 2417.2,
-    "served_pct": 90.1,
-    "avg_wait_days": 1.18
+    "avg_daily_demand": 2584.7,
+    "served_pct": 88.8,
+    "avg_wait_days": 1.37
   },
   {
-    "hospital_id": "HOSP_5204",
+    "hospital_id": "HOSP_4928",
     "hospital_name": "Worcester Outpatient Clinic",
     "beds": 425,
     "physicians": 131,
-    "avg_daily_demand": 1528.0,
-    "served_pct": 90.3,
-    "avg_wait_days": 1.15
+    "avg_daily_demand": 1630.1,
+    "served_pct": 89.0,
+    "avg_wait_days": 1.37
   },
   {
-    "hospital_id": "HOSP_5096",
-    "hospital_name": "VA Boston Healthcare System  Brockton Campus",
-    "beds": 419,
-    "physicians": 162,
-    "avg_daily_demand": 1918.7,
-    "served_pct": 90.4,
-    "avg_wait_days": 1.14
-  },
-  {
-    "hospital_id": "HOSP_1052",
+    "hospital_id": "HOSP_0995",
     "hospital_name": "MARLBOROUGH HOSPITAL",
     "beds": 649,
     "physicians": 210,
-    "avg_daily_demand": 2334.1,
-    "served_pct": 90.5,
-    "avg_wait_days": 1.1
+    "avg_daily_demand": 2506.7,
+    "served_pct": 89.2,
+    "avg_wait_days": 1.33
   },
   {
-    "hospital_id": "HOSP_1449",
-    "hospital_name": "NORTH SHORE MEDICAL CENTER -",
-    "beds": 758,
-    "physicians": 252,
-    "avg_daily_demand": 2995.2,
-    "served_pct": 90.9,
-    "avg_wait_days": 1.04
-  },
-  {
-    "hospital_id": "HOSP_4851",
+    "hospital_id": "HOSP_4589",
     "hospital_name": "ST VINCENT HOSPITAL",
     "beds": 602,
     "physicians": 210,
-    "avg_daily_demand": 2376.2,
-    "served_pct": 91.1,
-    "avg_wait_days": 1.01
+    "avg_daily_demand": 2562.9,
+    "served_pct": 89.4,
+    "avg_wait_days": 1.26
   },
   {
-    "hospital_id": "HOSP_1302",
-    "hospital_name": "MORTON HOSPITAL",
-    "beds": 682,
-    "physicians": 222,
-    "avg_daily_demand": 2341.4,
-    "served_pct": 91.3,
-    "avg_wait_days": 1.02
+    "hospital_id": "HOSP_4466",
+    "hospital_name": "SIGNATURE HEALTHCARE BROCKTON HOSPITAL",
+    "beds": 760,
+    "physicians": 225,
+    "avg_daily_demand": 2682.8,
+    "served_pct": 89.5,
+    "avg_wait_days": 1.27
+  },
+  {
+    "hospital_id": "HOSP_1374",
+    "hospital_name": "NORTH SHORE MEDICAL CENTER -",
+    "beds": 758,
+    "physicians": 252,
+    "avg_daily_demand": 3196.9,
+    "served_pct": 89.8,
+    "avg_wait_days": 1.24
   }
 ]

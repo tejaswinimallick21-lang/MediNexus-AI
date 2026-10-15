@@ -151,7 +151,7 @@ def list_hospitals_by_access_pressure(user: UserRecord, limit: int = 10) -> Dict
 
 
 def run_capacity_what_if(user: UserRecord, extra_visits_per_physician: float = 0, extra_physicians: int = 0, demand_change_pct: float = 0,
-                         hospital_id: Optional[str] = None, period: str = "pre_covid_365") -> Dict[str, Any]:
+                         hospital_id: Optional[str] = None, period: str = "last_365") -> Dict[str, Any]:
     from backend.app.schemas.command import WhatIfIn
     from backend.app.services import command
 
@@ -326,13 +326,13 @@ TOOLS: List[Tool] = [
           "extra_physicians": _i("Extra physicians per hospital (0-50)", minimum=0, maximum=50),
           "demand_change_pct": _n("Demand change in percent (-50 to 100)", minimum=-50, maximum=100),
           "hospital_id": _s("One hospital id (from list_hospitals_by_access_pressure); omit for the whole network"),
-          "period": _s("Replay window", enum=["pre_covid_365", "last_365", "last_90"])},
+          "period": _s("Replay window", enum=["last_365", "last_90"])},
          run_capacity_what_if, "insight", page="command"),
     Tool("list_model_scores", "Every active ML model with its held-out score vs a baseline, data source, version and health.", {}, list_model_scores, "insight", page="command"),
 
     Tool("get_highest_risk_discharges", "Recent discharges ranked by predicted 30-day readmission probability, with drivers and whether a follow-up exists. Pseudonymous patient IDs only.",
          {"limit": _i("Max patients (1-25)", minimum=1, maximum=25)}, get_highest_risk_discharges, "care", page="doctor"),
-    Tool("get_patient_summary", "Patient 360 for one patient ID (e.g. P_04436): age, risk tier, admissions, labs, prescriptions, comorbidities, care gaps, COVID risk. Every call is audited.",
+    Tool("get_patient_summary", "Patient 360 for one patient ID (e.g. P_04436): age, risk tier, admissions, labs, prescriptions, comorbidities, care gaps, 12-month outcome risk. Every call is audited.",
          {"patient_id": _s("Patient ID like P_04436", pattern=r"^P_\d{1,6}$")}, get_patient_summary, "care", page="doctor", required=["patient_id"]),
     Tool("get_care_gap_summary", "Count of patients per care gap (overdue HbA1c, BP, eGFR, missing follow-up).", {}, get_care_gap_summary, "care", page="doctor"),
     Tool("list_care_gaps", "Patients with a care gap, optionally one gap type.",

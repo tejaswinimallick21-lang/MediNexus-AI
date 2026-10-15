@@ -3,29 +3,29 @@
     {
       "patient_id": "P_00016",
       "name": "Sharleen Rolfson",
-      "age": 110,
+      "age": 109,
       "gender": "Female",
-      "clinical_risk_tier": "High",
-      "total_admissions": 5,
-      "is_deceased": false
-    },
-    {
-      "patient_id": "P_00018",
-      "name": "Analisa Corwin",
-      "age": 110,
-      "gender": "Female",
-      "clinical_risk_tier": "High",
-      "total_admissions": 3,
+      "clinical_risk_tier": "Moderate",
+      "total_admissions": 2,
       "is_deceased": false
     },
     {
       "patient_id": "P_00017",
       "name": "Britni MacGyver",
-      "age": 110,
+      "age": 109,
       "gender": "Female",
-      "clinical_risk_tier": "High",
-      "total_admissions": 3,
-      "is_deceased": true
+      "clinical_risk_tier": "Moderate",
+      "total_admissions": 0,
+      "is_deceased": false
+    },
+    {
+      "patient_id": "P_00018",
+      "name": "Analisa Corwin",
+      "age": 109,
+      "gender": "Female",
+      "clinical_risk_tier": "Low",
+      "total_admissions": 1,
+      "is_deceased": false
     },
     {
       "patient_id": "P_00014",

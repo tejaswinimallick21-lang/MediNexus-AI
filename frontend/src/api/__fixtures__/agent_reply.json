@@ -2,15 +2,15 @@
   "agent": "healthanalyst",
   "answer": "Network KPIs [Gold]. Shown as returned by the platform (rules engine, no AI interpretation):",
   "facts": [
-    "total admissions: 9,584",
-    "patients admitted: 4,024",
-    "unplanned readmission rate pct: 1.26",
-    "average los days: 4.20",
-    "occupancy rate pct: 39.50",
-    "total revenue: 105,860,513.85",
-    "collection rate pct: 39.90",
+    "total admissions: 6,771",
+    "patients admitted: 2,418",
+    "unplanned readmission rate pct: 1.37",
+    "average los days: 1.70",
+    "occupancy rate pct: 43.20",
+    "total revenue: 57,473,615.37",
+    "collection rate pct: 38.60",
     "hospitals: 91",
-    "data through: 2020-05-24"
+    "data through: 2026-10-15"
   ],
   "predictions": [],
   "recommendations": [],
@@ -18,7 +18,7 @@
     "Tool get_network_kpis"
   ],
   "notes": "",
-  "latency_ms": 113.4,
+  "latency_ms": 168.4,
   "engine": "Rules engine (no LLM key)",
   "tool_calls": [
     {

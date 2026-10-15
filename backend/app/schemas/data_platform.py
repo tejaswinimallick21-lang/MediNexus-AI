@@ -318,6 +318,31 @@ class ConsolidateIn(LinkIn):
     relationships: Optional[List[Relationship]] = Field(None, description="Omit to use every discovered relationship")
 
 
+class FeedRun(BaseModel):
+    run_id: str
+    trigger: str
+    started_at: Optional[str] = None
+    finished_at: Optional[str] = None
+    status: str
+    released_through: Optional[str] = None
+    held_back_days: Optional[int] = None
+    reanchored: Optional[bool] = None
+    error: Optional[str] = None
+
+
+class FeedStatus(BaseModel):
+    """Live data feed: re-dated Synthea released day by day (src/ingestion/redate_synthea.py)."""
+
+    enabled: bool
+    released_through: Optional[str] = None
+    held_back_days: Optional[int] = None
+    redated_end: Optional[str] = None
+    original_cutoff: Optional[str] = None
+    shift_days: Optional[int] = None
+    next_run_at: str
+    runs: List[FeedRun]
+
+
 class ForecastIn(BaseModel):
     date_column: str = Field(..., min_length=1, max_length=120)
     value_column: Optional[str] = Field(None, max_length=120, description="Omit to forecast the number of rows per period")

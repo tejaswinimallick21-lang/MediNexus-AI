@@ -66,6 +66,18 @@ def test_data_workspace_is_admin_only(login, client):
     assert_error(login("hcp").get("/api/data/uploads"), 403, "forbidden")
 
 
+def test_live_feed_status(login):
+    from src.ingestion.redate_synthea import status
+
+    assert_error(login("analyst").get("/api/data/feed"), 403, "forbidden")
+    r = login("admin").get("/api/data/feed")
+    assert r.status_code == 200, r.text
+    body, meta = r.json(), status()
+    assert body["enabled"] is False  # the scheduler is off in tests
+    assert body["released_through"] == meta["release"]["released_through"] and body["held_back_days"] >= 0
+    assert body["redated_end"] == meta["redate"]["redated_end"] and body["next_run_at"]
+
+
 def test_rejects_unsupported_and_empty_files(login):
     c = login("admin")
     assert_error(upload(c, b"hello", "notes.txt"), 422, "unsupported_file")

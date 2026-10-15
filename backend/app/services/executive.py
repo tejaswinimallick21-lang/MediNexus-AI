@@ -89,9 +89,9 @@ def _verdict(score: float, baseline: float, higher_is_better: bool = True) -> st
 
 def get_model_scorecard() -> List[ModelScore]:
     scores: List[ModelScore] = []
-    covid = active_metrics("covid_outcome_model")
-    for key, label in [("hospitalized_30d", "COVID-19 hospitalization"), ("died_30d", "COVID-19 30-day mortality")]:
-        m = covid.get(key, {})
+    outlook = active_metrics("outcome_risk_model")
+    for key, label in [("hospitalized_12m", "Hospital admission within 12 months"), ("died_12m", "Death within 12 months")]:
+        m = outlook.get(key, {})
         if m:
             scores.append(ModelScore(
                 model=label, purpose="Risk at diagnosis (pre-diagnosis history only)",

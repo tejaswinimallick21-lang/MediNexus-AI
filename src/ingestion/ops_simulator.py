@@ -10,7 +10,10 @@ Design rules
 - Anchored to the real data: the same 91 hospitals, sized in proportion to their real Synthea
   encounter volume; ventilator use follows the real Synthea ventilated-patient counts.
 - Realistic structure: weekday pattern, winter seasonality, growth trend, public holidays,
-  the COVID-19 shock from March 2020, and multiplicative noise, so forecasts have signal to learn.
+  and multiplicative noise, so forecasts have signal to learn.
+- Live replay: tables are generated through the end of the re-dated Synthea period and stored as
+  `<table>_all`; `release_sim()` exposes only the days up to now as `<table>`, in step with
+  the patient data (src/ingestion/redate_synthea.py).
 - Never generates clinical outcomes (readmission, death, ICU); those come only from Synthea.
 
     python -m src.ingestion.ops_simulator --years 3 --seed 7
@@ -48,19 +51,19 @@ DEPARTMENTS = {  # share of physicians, outpatient visits per physician per day
     "Obstetrics & Gynecology": (0.08, 15),
     "Behavioral Health": (0.08, 11),
 }
-DRUG_CLASSES = {  # base share of dispensing, winter amplitude, COVID multiplier
-    "Antihypertensive / Cardiovascular": (0.34, 0.02, 1.00),
-    "Antidiabetic": (0.17, 0.02, 1.00),
-    "Respiratory": (0.12, 0.35, 1.55),
-    "Statin": (0.08, 0.01, 1.00),
-    "Cardiac": (0.05, 0.05, 1.10),
-    "Anticoagulant / Antiplatelet": (0.05, 0.04, 1.30),
-    "Antibiotic": (0.05, 0.40, 1.40),
-    "Analgesic": (0.04, 0.06, 1.15),
-    "Antihistamine / Allergy": (0.03, -0.30, 0.90),  # spring/summer peak
-    "Oncology": (0.03, 0.00, 0.95),
-    "Critical Care / Anesthesia": (0.02, 0.08, 2.40),
-    "Hematologic": (0.02, 0.02, 1.05),
+DRUG_CLASSES = {  # base share of dispensing, winter amplitude
+    "Antihypertensive / Cardiovascular": (0.34, 0.02),
+    "Antidiabetic": (0.17, 0.02),
+    "Respiratory": (0.12, 0.35),
+    "Statin": (0.08, 0.01),
+    "Cardiac": (0.05, 0.05),
+    "Anticoagulant / Antiplatelet": (0.05, 0.04),
+    "Antibiotic": (0.05, 0.40),
+    "Analgesic": (0.04, 0.06),
+    "Antihistamine / Allergy": (0.03, -0.30),  # spring/summer peak
+    "Oncology": (0.03, 0.00),
+    "Critical Care / Anesthesia": (0.02, 0.08),
+    "Hematologic": (0.02, 0.02),
 }
 EQUIPMENT = {  # per-bed density, min units, service interval (days), daily failure hazard, hours/day at 100%, typical load
     "CT scanner": (0.004, 1, 90, 0.0012, 20, 0.71),
@@ -73,17 +76,28 @@ EQUIPMENT = {  # per-bed density, min units, service interval (days), daily fail
 }
 
 
-def _covid_factor(days: pd.DatetimeIndex, floor: float, recovery: float) -> np.ndarray:
-    """1 before 10 Mar 2020; falls to `floor` by 1 Apr 2020; recovers linearly toward `recovery` by end of data."""
-    t0, t1 = pd.Timestamp("2020-03-10"), pd.Timestamp("2020-04-01")
-    f = np.ones(len(days))
-    drop = (days >= t0) & (days < t1)
-    f[drop] = 1 - (1 - floor) * ((days[drop] - t0).days / (t1 - t0).days)
-    after = days >= t1
-    if after.any():
-        span = max(1, (days[after].max() - t1).days)
-        f[after] = floor + (recovery - floor) * ((days[after] - t1).days / span)
-    return f
+DATED_TABLES = {"sim_outpatient_daily": "date", "sim_pharmacy_daily": "date", "sim_equipment_daily": "date", "sim_equipment_events": "date"}
+
+
+def _simulation_end() -> pd.Timestamp:
+    """End of the re-dated Synthea period when it exists (the live replay releases it day by day), else the data end."""
+    meta = METADATA_DIR / "synthea_redate.json"
+    if meta.exists():
+        return pd.Timestamp(json.loads(meta.read_text(encoding="utf-8"))["redated_end"])
+    return pd.Timestamp(query_df_strict("SELECT max(admission_date) AS d FROM gold_admissions").iloc[0]["d"])
+
+
+def release_sim(as_of=None) -> Dict[str, int]:
+    """Expose simulated days up to `as_of` (default: today) as the sim_ tables the platform reads."""
+    from src.utils.database import execute_query, table_exists
+
+    day = pd.Timestamp(as_of or datetime.now()).strftime("%Y-%m-%d")
+    counts = {}
+    for name, col in DATED_TABLES.items():
+        if table_exists(f"{name}_all"):
+            execute_query(f"CREATE OR REPLACE TABLE {name} AS SELECT * FROM {name}_all WHERE CAST({col} AS DATE) <= CAST(? AS DATE)", [day])
+            counts[name] = int(query_df_strict(f"SELECT count(*) AS n FROM {name}").iloc[0]["n"])
+    return counts
 
 
 def _seasonal(days: pd.DatetimeIndex, amplitude: float) -> np.ndarray:
@@ -97,7 +111,7 @@ def _holiday(days: pd.DatetimeIndex) -> np.ndarray:
 
 def simulate(years: int = 3, seed: int = 7, write_db: bool = True) -> Dict[str, int]:
     rng = np.random.default_rng(seed)
-    end = pd.Timestamp(query_df_strict("SELECT max(admission_date) AS d FROM gold_admissions").iloc[0]["d"])
+    end = _simulation_end()
     days = pd.date_range(end - pd.Timedelta(days=int(365.25 * years)) + pd.Timedelta(days=1), end, freq="D")
     years_since_start = (days - days[0]).days / 365.25
     dow = days.dayofweek.to_numpy()
@@ -129,7 +143,6 @@ def simulate(years: int = 3, seed: int = 7, write_db: bool = True) -> Dict[str, 
     # ---- outpatient demand vs capacity (hospital × day) -----------------------------------
     weekday_demand = np.array([1.18, 1.10, 1.05, 1.02, 0.98, 0.42, 0.25])
     weekday_staffing = np.array([0.97, 0.96, 0.95, 0.94, 0.93, 0.45, 0.26])
-    covid_demand = _covid_factor(days, floor=0.52, recovery=0.78)
     holiday = _holiday(days)
     out_rows = []
     for h in hospitals.itertuples():
@@ -138,7 +151,7 @@ def simulate(years: int = 3, seed: int = 7, write_db: bool = True) -> Dict[str, 
         base_demand = daily_capacity_full * rng.uniform(0.78, 0.97)  # a few hospitals run hot
         growth = rng.uniform(0.01, 0.06)
         demand = (base_demand * weekday_demand[dow] * _seasonal(days, 0.10) * (1 + growth * years_since_start)
-                  * covid_demand * holiday * rng.lognormal(0, 0.07, len(days)))
+                  * holiday * rng.lognormal(0, 0.07, len(days)))
         absence = rng.beta(2, 30, len(days))  # sickness / leave
         capacity = daily_capacity_full * weekday_staffing[dow] * (1 - absence) * np.where(holiday < 1, 0.3, 1.0)
         demand, capacity = np.round(demand), np.round(capacity)
@@ -165,10 +178,9 @@ def simulate(years: int = 3, seed: int = 7, write_db: bool = True) -> Dict[str, 
     rx_rows = []
     for h in hospitals.itertuples():
         site_units = h.beds * rng.uniform(5.5, 8.5)  # units/day across all classes
-        for cls, (share, amp, covid_mult) in DRUG_CLASSES.items():
-            cf = 1 + (covid_mult - 1) * (1 - _covid_factor(days, floor=0.0, recovery=0.4))
+        for cls, (share, amp) in DRUG_CLASSES.items():
             units = (site_units * share * weekday_rx[dow] * _seasonal(days, amp) * (1 + 0.03 * years_since_start)
-                     * cf * holiday * rng.lognormal(0, 0.12, len(days)))
+                     * holiday * rng.lognormal(0, 0.12, len(days)))
             rx_rows.append(pd.DataFrame({
                 "date": days.strftime("%Y-%m-%d"), "hospital_id": h.hospital_id, "drug_class": cls,
                 "units_dispensed": rng.poisson(np.maximum(units, 0.1)),
@@ -216,7 +228,7 @@ def simulate(years: int = 3, seed: int = 7, write_db: bool = True) -> Dict[str, 
                 in_use = np.minimum(available, rng.binomial(n, 0.25, len(days)) + vh * 6)  # ~6 ventilator-days per ventilated stay
                 util = in_use / np.maximum(available, 1)
             else:
-                load = typical_load * rng.uniform(0.85, 1.15) * weekday_demand[dow] / weekday_demand.mean() * _seasonal(days, 0.05) * covid_demand * rng.lognormal(0, 0.06, len(days))
+                load = typical_load * rng.uniform(0.85, 1.15) * weekday_demand[dow] / weekday_demand.mean() * _seasonal(days, 0.05) * rng.lognormal(0, 0.06, len(days))
                 util = np.clip(load, 0, 1)
             eq_daily.append(pd.DataFrame({
                 "date": days.strftime("%Y-%m-%d"), "hospital_id": h.hospital_id, "equipment_type": etype, "units": n,
@@ -238,7 +250,10 @@ def simulate(years: int = 3, seed: int = 7, write_db: bool = True) -> Dict[str, 
     for name, df in tables.items():
         df.to_parquet(OPS_DIR / f"{name}.parquet", index=False)
         if write_db:
-            save_df_to_table(name, df, overwrite=True)
+            # Dated tables are kept whole as <name>_all; release_sim() exposes the days up to now
+            save_df_to_table(f"{name}_all" if name in DATED_TABLES else name, df, overwrite=True)
+    if write_db:
+        release_sim()
 
     counts = {name: int(len(df)) for name, df in tables.items()}
     METADATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -247,7 +262,7 @@ def simulate(years: int = 3, seed: int = 7, write_db: bool = True) -> Dict[str, 
         "date_range": [str(days[0].date()), str(days[-1].date())], "counts": counts,
         "simulated": True,
         "anchors": ["91 Synthea hospitals sized by real encounter volume", "ventilator use follows real Synthea ventilated stays"],
-        "structure": ["weekday pattern", "winter seasonality", "growth trend", "holidays", "COVID-19 shock from 2020-03-10", "lognormal noise"],
+        "structure": ["weekday pattern", "winter seasonality", "growth trend", "holidays", "lognormal noise"],
         "never_generated": ["readmission", "mortality", "ICU", "any clinical outcome"],
     }, indent=2), encoding="utf-8")
     logger.info(f"Operations simulation complete: {counts}")

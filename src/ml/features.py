@@ -3,7 +3,8 @@ Feature Engineering and Dataset Preparation for MediNexus AI ML Models.
 
 All features come from Gold feature stores that are point-in-time correct:
 - gold_patient_risk_features: one row per admission; history up to admission, stay facts known at discharge.
-- gold_covid_outcomes: one row per patient; history strictly before the COVID-19 diagnosis date.
+- gold_outcome_risk: one row per living patient per snapshot (train: one year before the end of the
+  data, outcomes observed; score: as of the end of the data); history strictly before the index date.
 """
 
 from typing import Tuple, List, Optional
@@ -20,7 +21,7 @@ COMORBIDITY_FEATURES = [
 
 # Predicting at discharge: the completed stay is known, nothing after discharge is.
 READMISSION_FEATURES = [
-    "age", "gender_encoded", "is_emergency", "is_urgent", "is_covid_admission",
+    "age", "gender_encoded", "is_emergency", "is_urgent",
     "length_of_stay_days", "is_icu", "mechanical_ventilation",
     "prior_admissions_365d", "prior_admissions_total",
     *COMORBIDITY_FEATURES,
@@ -29,14 +30,14 @@ READMISSION_FEATURES = [
 
 # Predicting at admission: nothing about the stay itself is known yet.
 LOS_BASE_FEATURES = [
-    "age", "gender_encoded", "is_emergency", "is_urgent", "is_covid_admission",
+    "age", "gender_encoded", "is_emergency", "is_urgent",
     "prior_admissions_365d", "prior_admissions_total",
     *COMORBIDITY_FEATURES,
     "total_diagnoses", "active_prescriptions_count",
 ]
 
-# Predicting at COVID-19 diagnosis: only pre-diagnosis history.
-COVID_FEATURES = [
+# 12-month outcome risk: only history before the index date.
+OUTCOME_FEATURES = [
     "age_at_index", "gender_encoded",
     "has_hypertension", "has_diabetes", "has_prediabetes", "has_obesity", "has_heart_failure",
     "has_copd", "has_asthma", "has_ckd", "has_coronary_disease", "has_atrial_fibrillation",
@@ -44,11 +45,9 @@ COVID_FEATURES = [
     "comorbidity_count", "prior_admissions_5y", "active_medications",
     "last_bmi", "last_systolic_bp", "last_hba1c", "last_egfr",
 ]
-COVID_OUTCOMES = {
-    "hospitalized_30d": "Hospitalization within 30 days",
-    "icu_30d": "ICU admission within 30 days",
-    "ventilated_30d": "Mechanical ventilation within 30 days",
-    "died_30d": "Death within 30 days",
+OUTCOMES = {
+    "hospitalized_12m": "Hospital admission within 12 months",
+    "died_12m": "Death within 12 months",
 }
 
 
@@ -64,9 +63,9 @@ def load_risk_features() -> pd.DataFrame:
     return _load_gold("gold_patient_risk_features")
 
 
-def load_covid_features() -> pd.DataFrame:
-    """Load per-patient COVID-19 feature/outcome table from Gold layer."""
-    return _load_gold("gold_covid_outcomes")
+def load_outcome_features() -> pd.DataFrame:
+    """Load the 12-month outcome-risk snapshots (train and score) from the Gold layer."""
+    return _load_gold("gold_outcome_risk")
 
 
 def _numeric_frame(df: pd.DataFrame, cols: List[str], fill: Optional[float] = 0.0) -> pd.DataFrame:
@@ -113,16 +112,15 @@ def get_los_feature_matrix() -> Tuple[pd.DataFrame, pd.Series, List[str], pd.Ser
     return X, y, feature_cols, df["patient_id"]
 
 
-def get_covid_feature_matrix(outcome: str) -> Tuple[pd.DataFrame, pd.Series, List[str]]:
+def get_outcome_feature_matrix(outcome: str) -> Tuple[pd.DataFrame, pd.Series, List[str]]:
     """
-    X, y for one COVID-19 outcome among COVID-positive patients with a complete follow-up window.
+    X, y for one 12-month outcome from the training snapshot (outcomes fully observed).
     Missing vitals/labs are left as NaN (handled natively by the gradient-boosting model).
     """
-    df = load_covid_features()
+    df = load_outcome_features()
     if df.empty or outcome not in df.columns:
         return pd.DataFrame(), pd.Series(dtype=int), []
-    cohort = (pd.to_numeric(df["covid_positive"], errors="coerce") == 1) & (pd.to_numeric(df["followup_complete"], errors="coerce") == 1)
-    df = df[cohort].reset_index(drop=True)
-    X = _numeric_frame(df, COVID_FEATURES, fill=None)
+    df = df[df["snapshot"] == "train"].reset_index(drop=True)
+    X = _numeric_frame(df, OUTCOME_FEATURES, fill=None)
     y = pd.to_numeric(df[outcome], errors="coerce").fillna(0).astype(int)
-    return X, y, COVID_FEATURES
+    return X, y, OUTCOME_FEATURES

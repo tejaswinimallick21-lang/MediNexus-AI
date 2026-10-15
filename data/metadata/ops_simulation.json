@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-09T22:32:02.848507",
+  "generated_at": "2026-10-15T10:11:13.113757",
   "seed": 7,
   "years": 3,
   "date_range": [
-    "2017-05-26",
-    "2020-05-24"
+    "2023-11-12",
+    "2026-11-10"
   ],
   "counts": {
     "sim_hospital_profile": 91,
@@ -13,7 +13,7 @@
     "sim_pharmacy_daily": 1195740,
     "sim_equipment_assets": 30423,
     "sim_equipment_daily": 697515,
-    "sim_equipment_events": 30627
+    "sim_equipment_events": 30339
   },
   "simulated": true,
   "anchors": [
@@ -25,7 +25,6 @@
     "winter seasonality",
     "growth trend",
     "holidays",
-    "COVID-19 shock from 2020-03-10",
     "lognormal noise"
   ],
   "never_generated": [

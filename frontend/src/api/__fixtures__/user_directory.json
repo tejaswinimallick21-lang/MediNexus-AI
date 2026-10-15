@@ -8,9 +8,9 @@
       "department": "Data Platform & Infrastructure",
       "active": true,
       "must_change_password": false,
-      "created_at": "2026-10-11T18:47:18",
+      "created_at": "2026-10-15T21:58:07",
       "created_by": "seed file",
-      "last_login_at": "2026-10-11T18:50:36",
+      "last_login_at": "2026-10-15T22:02:48",
       "is_you": true
     },
     {
@@ -21,9 +21,9 @@
       "department": "Hospital Operations",
       "active": true,
       "must_change_password": false,
-      "created_at": "2026-10-11T18:47:18",
+      "created_at": "2026-10-15T21:58:07",
       "created_by": "seed file",
-      "last_login_at": "2026-10-11T18:50:35",
+      "last_login_at": "2026-10-15T22:02:46",
       "is_you": false
     },
     {
@@ -34,9 +34,9 @@
       "department": "Clinical Services",
       "active": true,
       "must_change_password": false,
-      "created_at": "2026-10-11T18:47:18",
+      "created_at": "2026-10-15T21:58:07",
       "created_by": "seed file",
-      "last_login_at": "2026-10-11T18:50:34",
+      "last_login_at": "2026-10-15T22:02:45",
       "is_you": false
     },
     {
@@ -47,7 +47,7 @@
       "department": "Cardiology",
       "active": true,
       "must_change_password": true,
-      "created_at": "2026-10-11T18:50:36",
+      "created_at": "2026-10-15T22:02:49",
       "created_by": "admin@medinexus.org",
       "last_login_at": null,
       "is_you": false

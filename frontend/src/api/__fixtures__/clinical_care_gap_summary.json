@@ -2,25 +2,25 @@
   {
     "gap": "diabetes_hba1c",
     "label": "Diabetes without HbA1c",
-    "patients": 27,
+    "patients": 181,
     "guideline": "ADA: HbA1c at least every 6\u201312 months"
   },
   {
     "gap": "hypertension_bp",
     "label": "Hypertension without BP check",
-    "patients": 5,
+    "patients": 1120,
     "guideline": "Blood pressure reviewed at least yearly"
   },
   {
     "gap": "ckd_egfr",
     "label": "CKD without kidney function test",
-    "patients": 0,
+    "patients": 11,
     "guideline": "KDIGO: eGFR / creatinine at least yearly"
   },
   {
     "gap": "high_risk_no_follow_up",
     "label": "High-risk discharge without follow-up",
-    "patients": 13,
+    "patients": 7,
     "guideline": "TCP: follow-up visit within 7\u201314 days of discharge"
   }
 ]

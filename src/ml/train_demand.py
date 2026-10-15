@@ -66,13 +66,6 @@ def _train_daily_model(
     mae = float(np.mean([f["mae"] for f in folds]))
     base = float(np.mean([f["baseline_mae"] for f in folds]))
     surge = float(np.mean([f["surge_mae"] for f in folds]))
-    pre_covid = [f for f in folds if not f["covid_period"]]
-
-    def pre_skill(key: str):
-        if not pre_covid:
-            return None
-        return round((1 - np.mean([f[key] for f in pre_covid]) / max(1e-9, np.mean([f["baseline_mae"] for f in pre_covid]))) * 100, 1)
-
     # Champion/challenger: serve whichever method had the lowest backtest error (ties go to the simpler one)
     candidates = {"baseline_naive7": base, "surge_aware": surge, "model": mae}
     serving = min(candidates, key=candidates.get)
@@ -83,11 +76,9 @@ def _train_daily_model(
         "wape_pct": round(float(np.mean([f["wape_pct"] for f in folds])), 2),
         "baseline_naive7_wape_pct": round(float(np.mean([f["baseline_wape_pct"] for f in folds])), 2),
         "skill_vs_naive7_pct": round((1 - mae / max(1e-9, base)) * 100, 1),
-        "pre_covid_skill_pct": pre_skill("mae"),
         "beats_baseline": bool(mae < base),
         "surge_aware_mae": round(surge, 3),
         "surge_aware_wape_pct": round(float(np.mean([f["surge_wape_pct"] for f in folds])), 2),
-        "surge_aware_pre_covid_skill_pct": pre_skill("surge_mae"),
         "served_mae": round(candidates[serving], 3),
         "skill_served_vs_naive7_pct": round((1 - candidates[serving] / max(1e-9, base)) * 100, 1),
         "split": f"rolling-origin backtest: {len(folds)} folds of 60 days",
@@ -197,10 +188,10 @@ def train_all_models() -> Dict[str, Any]:
     """Train all 6 predictive models in sequence."""
     from src.ml.train_readmission import train_readmission_model
     from src.ml.train_los import train_los_model
-    from src.ml.train_covid import train_covid_outcome_models
+    from src.ml.train_outcome import train_outcome_risk_models
 
     return {
-        "covid_outcomes": train_covid_outcome_models(),
+        "outcome_risk": train_outcome_risk_models(),
         "readmission": train_readmission_model(),
         "los": train_los_model(),
         "pharmacy_demand": train_pharmacy_demand_model(),

@@ -98,9 +98,9 @@ class CarePlan(BaseModel):
 
 
 class PatientRisk(BaseModel):
-    covid_scored_as_of: Optional[str]
-    covid_outcomes: List[OutcomeRisk]
-    covid_drivers: List[str]
+    outcome_scored_as_of: Optional[str]
+    outcome_risks: List[OutcomeRisk]
+    outcome_drivers: List[str]
     readmission_available: bool
     readmission_probability_pct: Optional[float]
     readmission_risk_level: Optional[str]

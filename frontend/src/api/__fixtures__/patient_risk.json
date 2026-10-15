@@ -1,67 +1,50 @@
 {
-  "covid_scored_as_of": "COVID-19 diagnosis date",
-  "covid_outcomes": [
+  "outcome_scored_as_of": "2026-10-15 (today)",
+  "outcome_risks": [
     {
-      "outcome": "hospitalized_30d",
-      "label": "Hospitalization within 30 days",
-      "probability_pct": 51.3,
+      "outcome": "hospitalized_12m",
+      "label": "Hospital admission within 12 months",
+      "probability_pct": 59.4,
       "risk_level": "HIGH",
-      "cohort_rate_pct": 21.6,
-      "observed": 0
+      "cohort_rate_pct": 3.0,
+      "observed": null
     },
     {
-      "outcome": "icu_30d",
-      "label": "ICU admission within 30 days",
-      "probability_pct": 13.0,
+      "outcome": "died_12m",
+      "label": "Death within 12 months",
+      "probability_pct": 3.2,
       "risk_level": "HIGH",
-      "cohort_rate_pct": 4.2,
-      "observed": 0
-    },
-    {
-      "outcome": "ventilated_30d",
-      "label": "Mechanical ventilation within 30 days",
-      "probability_pct": 8.6,
-      "risk_level": "HIGH",
-      "cohort_rate_pct": 3.2,
-      "observed": 0
-    },
-    {
-      "outcome": "died_30d",
-      "label": "Death within 30 days",
-      "probability_pct": 10.6,
-      "risk_level": "HIGH",
-      "cohort_rate_pct": 4.0,
-      "observed": 0
+      "cohort_rate_pct": 0.7,
+      "observed": null
     }
   ],
-  "covid_drivers": [
+  "outcome_drivers": [
+    "2 admissions in the past 5 years",
+    "Cancer history",
     "Obesity",
-    "Hypertension",
-    "Cancer history"
+    "Hypertension"
   ],
   "readmission_available": true,
-  "readmission_probability_pct": 63.4,
+  "readmission_probability_pct": 60.2,
   "readmission_risk_level": "HIGH",
-  "readmission_base_rate_pct": 1.41,
+  "readmission_base_rate_pct": 1.5,
   "readmission_drivers": [
-    "Active oncology history",
-    "Frequent admissions in the past year (2)"
+    "Active oncology history"
   ],
-  "readmission_admission_date": "2020-05-22",
+  "readmission_admission_date": "2026-09-30",
   "los_predicted_days": 1.0,
-  "los_observed_days": 1.01,
-  "los_interval": "0.5 - 2.1 days (\u00b1 holdout MAE)",
+  "los_observed_days": 1.02,
+  "los_interval": "0.5 - 1.8 days (\u00b1 holdout MAE)",
   "care_plan": {
     "pathway": "HIGH Risk Management Pathway",
     "primary_recommendation": "Initiate Comprehensive Transitional Care Protocol (TCP)",
     "checklist": [
       "Schedule nurse telephone follow-up within 48 hours post-discharge.",
       "Mandate specialist follow-up consultation within 7 days.",
-      "Perform complete medication reconciliation before discharge to prevent adverse drug events.",
-      "Order repeat metabolic panel and complete blood count within 5 days."
+      "Perform complete medication reconciliation before discharge to prevent adverse drug events."
     ],
     "rationale": [
-      "Patient exhibits high 30-day readmission probability (63.4%). Multidisciplinary follow-up significantly reduces acute bounce-backs."
+      "Patient exhibits high 30-day readmission probability (60.2%). Multidisciplinary follow-up significantly reduces acute bounce-backs."
     ],
     "disclaimer": "Clinical decision support guidance only. Licensed medical practitioners retain sole responsibility for patient care plans."
   },

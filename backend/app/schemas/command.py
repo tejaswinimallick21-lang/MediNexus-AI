@@ -4,7 +4,7 @@ from typing import List, Literal, Optional
 
 from pydantic import BaseModel, Field
 
-Period = Literal["last_90", "last_365", "pre_covid_365"]
+Period = Literal["last_90", "last_365"]
 
 
 class HospitalOption(BaseModel):

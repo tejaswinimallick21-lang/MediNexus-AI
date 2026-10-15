@@ -48,16 +48,19 @@ The novelty is the **Role-Aware Data-to-Decision Pipeline**:
 ---
 
 ## 5. Data Source: Synthea
-The platform runs on the **Synthea COVID-19 10K CSV export** (12,352 synthetic Massachusetts patients, 321k encounters, 9,584 inpatient stays across 91 hospitals, 1.2M lab/vital results, data through 2020-05-27) from https://synthetichealth.github.io/synthea/downloads.html. Synthea simulates full patient lifetimes from clinical disease models, so diagnoses, labs, medications, stays, costs and deaths are linked the way they are in real records.
+The platform runs on **Synthea** synthetic patient records (https://synthetichealth.github.io/synthea/downloads.html), **re-dated to the present day**: about 12,300 synthetic Massachusetts patients across 91 hospitals, with data running up to today. Synthea simulates full patient lifetimes from clinical disease models (cancers, diabetes, heart failure, COPD, kidney disease and more), so diagnoses, labs, medications, stays, costs and deaths are linked the way they are in real records.
+
+**Re-dating and the live feed** (`src/ingestion/redate_synthea.py`). The source export is Synthea's COVID-19 10K set, which ends in May 2020 and is dominated by the COVID-19 module from 20 Jan 2020. We keep only records up to **31 Dec 2019** (so there is no COVID-19 period at all) and move every date, birth dates included, forward by the same whole number of weeks so the data ends about 30 days after the day it is anchored. Ages, weekdays and every patient's history stay consistent; nothing is invented. Records dated after "now" are held back and released each night by the **live data feed** (`backend/app/services/data_feed.py`, Data Engineering > Live data feed), which then rebuilds Bronze -> Silver -> Gold; when the held-back days run out, the source is re-anchored to the new date automatically.
 
 `src/ingestion/synthea_adapter.py` maps the Synthea tables onto the 12 raw MediNexus source tables (SNOMED→ICD-10 crosswalk, LOINC reference ranges, encounter/claim cost roll-ups) and injects source-system defects for the Silver layer to repair.
 
-* **Taken from Synthea:** demographics, deaths, admissions & timestamps, ICU stays, mechanical ventilation, diagnoses, labs/vitals, prescriptions, costs & payers, hospitals, clinicians.
-* **Simulated (Synthea has no equivalent):** blood group, phone numbers, room numbers, appointment wait times and missed visits (`is_simulated=1`), payment status, pharmacy stock levels (sized from real dispensing demand). Listed in `data/metadata/generation_summary.json`.
-* **Derived in Gold from event dates (never generated):** unplanned 30-day readmission and COVID-19 outcomes.
+* **Taken from Synthea:** demographics, deaths, admissions & timestamps, ICU stays, mechanical ventilation, diagnoses, labs/vitals, prescriptions, costs & payers, hospitals, clinicians (all dates shifted as above).
+* **Simulated (Synthea has no equivalent):** blood group, phone numbers, room numbers, appointment wait times and missed visits (`is_simulated=1`), payment status, pharmacy stock levels (sized from real dispensing demand), and the `sim_` operations tables. Listed in `data/metadata/generation_summary.json` and `ops_simulation.json`.
+* **Derived in Gold from event dates (never generated):** unplanned 30-day readmission and the 12-month outcome labels.
+* **Lab/vital history is short:** this Synthea export records detailed results (blood pressure, HbA1c, eGFR…) almost only from mid-2019, i.e. roughly the last six months after re-dating. Older visits exist but carry few results, so many chronic patients have no monitoring test on record and show as open care gaps ("never recorded"). The count is what the data says; no readings are invented to lower it.
 * **Bed capacity** is estimated as 1.25× each unit's observed peak census, so occupancy rates are relative, not reported capacity.
 
-Setup: download `10k_synthea_covid19_csv.zip` (≈54 MB) and extract its CSVs into `data/synthea/csv/`. To scale up, point `SYNTHEA_CSV_DIR` in `config/constants.py` at the 100K export (same schema). The legacy Faker generator (`src/ingestion/generate_datasets.py`) is only used when no Synthea export is present.
+Setup: download `10k_synthea_covid19_csv.zip` (≈54 MB) and extract its CSVs into `data/synthea/csv/` (kept unmodified); `scripts/bootstrap.py` re-dates and releases it. A brand-new Synthea run (Java) with the same CSV schema can replace it at any time. The legacy Faker generator (`src/ingestion/generate_datasets.py`) is only used when no Synthea export is present.
 
 > Please cite: Walonoski J, et al. *Synthea: An approach, method, and software mechanism for generating synthetic patients and the synthetic electronic health care record.* JAMIA 2018;25(3):230–238.
 
@@ -93,42 +96,40 @@ GOLD CONSUMPTION LAYER (data/gold/*.parquet)
 │     * gold_billing (Inpatient charges, insurance coverage, and patient balances)
 │     * gold_hospital_operations (Occupancy rates, bed turnovers, and daily admissions)
 │     * gold_patient_risk_features (Point-in-time feature store, one row per admission)
-│     * gold_covid_outcomes (Pre-diagnosis features + 30-day COVID-19 outcomes, one row per patient)
+│     * gold_outcome_risk (12-month outcome risk: training snapshot one year back + scoring snapshot today)
 ```
 
 ---
 
 ## 7. Machine Learning Models & Transparency
-All clinical models use point-in-time features, out-of-sample evaluation, and a simple baseline for comparison. Scores below are from the Synthea 10K run.
+All clinical models use point-in-time features, out-of-sample evaluation, and a simple baseline for comparison. Scores below are from the re-dated Synthea run (records up to 2019, data ending October 2026).
 
-1. **COVID-19 Severe Outcome Risk** (`models/covid_outcome_model.joblib`) — primary clinical model
-   * **Targets**: hospitalization, ICU admission, mechanical ventilation, and death within 30 days of COVID-19 diagnosis (8,820 diagnosed patients).
-   * **Features**: only history recorded *before* the diagnosis date (age, 14 comorbidity flags, prior admissions, active medications, last BMI/BP/HbA1c/eGFR).
+1. **12-Month Outcome Risk** (`models/outcome_risk_model.joblib`, `src/ml/train_outcome.py`) — population-health model shown on Patient 360
+   * **Targets**: any hospital admission within 12 months, and death within 12 months, for every living patient.
+   * **Training**: a snapshot of all ~10,300 living patients one year before the end of the data (outcomes fully observed); features use only history before that date (age, 14 comorbidity flags, admissions in the past 5 years, active medications, last BMI/BP/HbA1c/eGFR). Scored on the same features as of today.
    * **Algorithm**: HistGradientBoostingClassifier per outcome; stratified 80/20 holdout + 5-fold CV.
-   * **Results**: ROC-AUC 0.73 / 0.77 / 0.84 / 0.88 (hosp / ICU / vent / death), but an **age-only baseline already reaches 0.70 / 0.78 / 0.81 / 0.87**. In Synthea's COVID module age is the dominant driver, and the full model adds little beyond it.
+   * **Results**: admission ROC-AUC **0.82** (CV 0.81) vs **0.65** age-only (309 admissions, 3.0%); death ROC-AUC **0.95** (CV 0.91) vs **0.87** age-only (72 deaths, 0.7%, so indicative).
 
 2. **Unplanned 30-Day Readmission Classifier** (`models/readmission_model.joblib`)
    * **Label**: next admission 1–30 days after discharge, excluding transfers (<24h), in-hospital deaths and planned same-reason repeat stays (e.g. chemotherapy cycles). Only admissions with a full 30-day follow-up window are used.
    * **Split**: grouped by patient (no patient in both train and test).
-   * **Results**: only ~120 unplanned readmissions (1.4%). Holdout ROC-AUC ≈ 0.80 (5-fold CV 0.78 ± 0.03) vs 0.68 for an age + LOS baseline; precision at the top decile is ~6%. Treat as indicative, not deployable.
+   * **Results**: only 92 unplanned readmissions. Holdout ROC-AUC 0.78 (5-fold CV 0.79) vs 0.64 for an age + LOS baseline; only 25 readmissions in the test set. Treat as indicative, not deployable.
 
 3. **Length of Stay (LOS) Regressor** (`models/los_model.joblib`)
    * **Target**: observed inpatient days from admit/discharge timestamps; admission-time features only; patient-grouped split.
-   * **Algorithm**: Gradient Boosting Regressor with absolute-error loss (stays are heavily skewed).
-   * **Results**: MAE ≈ 1.1 days vs 2.8 days for a median-only baseline (R² ≈ 0.51).
+   * **Algorithm**: Gradient Boosting Regressor with absolute-error loss.
+   * **Results**: MAE 0.81 days vs 0.83 for a median-only baseline (R² ≈ 0). Pre-2020 stays are short and uniform, so the model adds essentially nothing over the median; shown as marginal.
 
 4. **Pharmacy 30-Day Medication Demand Forecaster** (`models/pharmacy_demand_model.joblib`)
-   * **Target**: units dispensed per hospital and medication over the next 30 days.
-   * **Test**: the 3 most recent monthly forecast dates, trained only on earlier months.
-   * **Results**: gradient boosting MAE 0.22 vs 0.20 for "repeat the last 30 days", so **the baseline is served**. Synthea prescriptions are mostly long-running chronic medicines, so next month closely repeats last month and a model has little to add.
+   * **Target**: units dispensed per hospital and medication over the next 30 days; test = the 3 most recent monthly forecast dates.
+   * **Results**: gradient boosting MAE 0.39 vs 0.31 for "repeat the last 30 days", so **the baseline is served**: chronic prescriptions make next month repeat last month.
 
 5. **Laboratory Workload Forecaster** (`models/lab_workload_model.joblib`) and 6. **Admission Demand Forecaster** (`models/resource_demand_model.joblib`)
-   * **Target**: average daily lab tests per category / network admissions over the next 7 days.
-   * **Test**: rolling-origin backtest, 6 folds of 60 days (May 2019 – May 2020), each trained only on earlier data.
+   * **Target**: average daily lab tests per category / network admissions over the next 7 days; rolling-origin backtest, 6 folds of 60 days, each trained only on earlier data.
    * **Three methods compete; the most accurate is served**: gradient boosting, naive-7 (repeat the last week) and a **surge-aware average** (7/28-day blend while volume is stable, last week once volume shifts by more than ~35%).
-   * **Results**: gradient boosting loses to naive-7 (lab 275 vs 188 tests/day; admissions 6.4 vs 5.7). The surge-aware average wins and is served: **10.5% (lab) and 7% (admissions) more accurate than naive-7 in normal periods**, and about 1% better overall. Almost all error falls in the March–May 2020 COVID-19 surge, which no history-based method can foresee.
+   * **Results**: the surge-aware average is served for both: lab 5.6 vs 6.1 tests/day for naive-7 (8% better; gradient boosting 12.1), admissions 0.56 vs 0.61 per day (8% better; gradient boosting 0.69).
 
-7–8. **Outpatient demand and drug-class demand** (simulated operations data): the gradient-boosting model is served, 19% and 50% more accurate than naive-7 in the same backtest.
+7–8. **Outpatient demand and drug-class demand** (simulated operations data): the gradient-boosting model is served, 41% and 62% more accurate than naive-7 in the same backtest.
 
 > ⚖️ **Model Transparency Disclaimer:** Every prediction displays confidence intervals, version tags, local contributing factors, and the mandatory warning: *"AI/ML decision support — not a medical diagnosis."*
 
@@ -190,7 +191,7 @@ Full instructions for a new machine: **[docs/SETUP.md](docs/SETUP.md)**. In shor
 pip install -r requirements.txt
 npm install && npm --prefix frontend install
 cp .env.example .env              # add OPENAI_API_KEY (optional) and MEDINEXUS_JWT_SECRET
-# put the Synthea COVID-19 10K CSVs in data/synthea/csv/
+# put the Synthea COVID-19 10K CSVs in data/synthea/csv/ (bootstrap re-dates them to today)
 python scripts/bootstrap.py       # raw → Medallion → simulated ops → models → accounts
 npm run dev                       # API http://localhost:8000 (docs /docs) + React http://localhost:5173
 npm test                          # pytest (backend + pipeline) and Vitest (frontend contracts)

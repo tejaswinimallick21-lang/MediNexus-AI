@@ -1,89 +1,89 @@
 {
   "simulated_data": true,
-  "as_of": "2020-05-24",
+  "as_of": "2026-10-15",
   "items": [
     {
       "drug_class": "Antihypertensive / Cardiovascular",
-      "forecast_daily_units": 99540.4,
-      "last_7d_daily_units": 113019.6,
-      "change_pct": -11.9
+      "forecast_daily_units": 114675.9,
+      "last_7d_daily_units": 114248.9,
+      "change_pct": 0.4
     },
     {
       "drug_class": "Antidiabetic",
-      "forecast_daily_units": 50228.0,
-      "last_7d_daily_units": 57039.3,
-      "change_pct": -11.9
+      "forecast_daily_units": 57318.6,
+      "last_7d_daily_units": 57105.1,
+      "change_pct": 0.4
     },
     {
       "drug_class": "Respiratory",
-      "forecast_daily_units": 37809.8,
-      "last_7d_daily_units": 43174.7,
-      "change_pct": -12.4
+      "forecast_daily_units": 42004.2,
+      "last_7d_daily_units": 40005.1,
+      "change_pct": 5.0
     },
     {
       "drug_class": "Statin",
-      "forecast_daily_units": 23740.4,
-      "last_7d_daily_units": 26959.9,
-      "change_pct": -11.9
-    },
-    {
-      "drug_class": "Anticoagulant / Antiplatelet",
-      "forecast_daily_units": 17444.4,
-      "last_7d_daily_units": 19825.0,
-      "change_pct": -12.0
-    },
-    {
-      "drug_class": "Cardiac",
-      "forecast_daily_units": 15261.8,
-      "last_7d_daily_units": 17224.7,
-      "change_pct": -11.4
+      "forecast_daily_units": 27258.7,
+      "last_7d_daily_units": 27157.1,
+      "change_pct": 0.4
     },
     {
       "drug_class": "Antibiotic",
-      "forecast_daily_units": 14300.9,
-      "last_7d_daily_units": 16332.6,
-      "change_pct": -12.4
+      "forecast_daily_units": 17342.1,
+      "last_7d_daily_units": 16693.1,
+      "change_pct": 3.9
+    },
+    {
+      "drug_class": "Anticoagulant / Antiplatelet",
+      "forecast_daily_units": 16868.1,
+      "last_7d_daily_units": 16823.3,
+      "change_pct": 0.3
+    },
+    {
+      "drug_class": "Cardiac",
+      "forecast_daily_units": 16775.7,
+      "last_7d_daily_units": 16731.1,
+      "change_pct": 0.3
     },
     {
       "drug_class": "Analgesic",
-      "forecast_daily_units": 12431.9,
-      "last_7d_daily_units": 14128.3,
-      "change_pct": -12.0
-    },
-    {
-      "drug_class": "Critical Care / Anesthesia",
-      "forecast_daily_units": 10665.5,
-      "last_7d_daily_units": 12098.9,
-      "change_pct": -11.8
-    },
-    {
-      "drug_class": "Antihistamine / Allergy",
-      "forecast_daily_units": 9861.9,
-      "last_7d_daily_units": 11106.6,
-      "change_pct": -11.2
+      "forecast_daily_units": 13400.8,
+      "last_7d_daily_units": 13345.9,
+      "change_pct": 0.4
     },
     {
       "drug_class": "Oncology",
-      "forecast_daily_units": 8592.0,
-      "last_7d_daily_units": 9765.3,
-      "change_pct": -12.0
+      "forecast_daily_units": 10284.6,
+      "last_7d_daily_units": 10204.4,
+      "change_pct": 0.8
+    },
+    {
+      "drug_class": "Antihistamine / Allergy",
+      "forecast_daily_units": 9995.5,
+      "last_7d_daily_units": 10357.3,
+      "change_pct": -3.5
     },
     {
       "drug_class": "Hematologic",
-      "forecast_daily_units": 6035.1,
-      "last_7d_daily_units": 6806.1,
-      "change_pct": -11.3
+      "forecast_daily_units": 6856.6,
+      "last_7d_daily_units": 6835.7,
+      "change_pct": 0.3
+    },
+    {
+      "drug_class": "Critical Care / Anesthesia",
+      "forecast_daily_units": 6767.2,
+      "last_7d_daily_units": 6724.7,
+      "change_pct": 0.6
     }
   ],
   "forecast": {
     "serving_method": "model",
     "method_label": "Gradient-boosting model",
-    "holdout_mae": 444.354,
-    "holdout_baseline_mae": 887.685,
-    "holdout_surge_mae": 973.58,
-    "holdout_served_mae": 444.354,
+    "holdout_mae": 294.921,
+    "holdout_baseline_mae": 771.053,
+    "holdout_surge_mae": 839.655,
+    "holdout_served_mae": 294.921,
     "beats_baseline": true,
-    "test_period": "2019-05-23 to 2020-05-16",
-    "data_through": "2020-05-24"
+    "test_period": "2025-10-13 to 2026-10-07",
+    "data_through": "2026-10-15"
   }
 }

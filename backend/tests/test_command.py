@@ -6,6 +6,7 @@ from backend.app.schemas.command import HospitalOption, ModelMonitorRow, Readmis
 from backend.app.services import command
 from backend.tests.conftest import assert_contract, assert_error
 from backend.tests.test_operations import contract_list
+from src.utils.database import query_df_strict
 
 
 def test_command_center_access(login, client):
@@ -43,10 +44,11 @@ def test_no_change_scenario_replays_the_baseline():
 
 def test_more_capacity_reduces_backlog_and_demand_raises_it():
     hospital = command.list_hospitals()[0].hospital_id  # the most pressured hospital has a real waiting list
-    base = command.run_what_if(WhatIfIn(hospital_id=hospital, period="pre_covid_365"))
-    more_docs = command.run_what_if(WhatIfIn(hospital_id=hospital, period="pre_covid_365", extra_physicians=10))
-    surge = command.run_what_if(WhatIfIn(hospital_id=hospital, period="pre_covid_365", demand_change_pct=20))
-    assert base.period_end == "2020-03-09"
+    base = command.run_what_if(WhatIfIn(hospital_id=hospital, period="last_365"))
+    more_docs = command.run_what_if(WhatIfIn(hospital_id=hospital, period="last_365", extra_physicians=10))
+    surge = command.run_what_if(WhatIfIn(hospital_id=hospital, period="last_365", demand_change_pct=20))
+    latest = str(query_df_strict("SELECT max(CAST(date AS DATE)) AS d FROM sim_outpatient_daily").iloc[0]["d"])[:10]
+    assert base.period_end == latest  # the replay ends on the latest released simulated day
     assert more_docs.scenario.avg_backlog < base.baseline.avg_backlog
     assert more_docs.scenario.staffing_cost > base.baseline.staffing_cost
     assert surge.scenario.avg_backlog > base.baseline.avg_backlog

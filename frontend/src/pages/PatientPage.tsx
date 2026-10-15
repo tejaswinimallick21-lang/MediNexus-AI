@@ -143,20 +143,20 @@ function RiskTab({ patientId, comorbidities }: { patientId: string; comorbiditie
         </Panel>
       </Grid>
 
-      <Panel title="COVID-19 severe outcome risk" subtitle={`Scored as of the ${r.covid_scored_as_of ?? "end of data"} using only prior history`} icon="Shield">
-        <div className={styles.covidGrid}>
-          {r.covid_outcomes.map((o) => (
-            <div key={o.outcome} className={styles.covidCard}>
-              <span className={styles.covidLabel}>{o.label}</span>
+      <Panel title="12-month outcome risk" subtitle={`Scored on history up to ${r.outcome_scored_as_of ?? "today"}`} icon="Shield">
+        <div className={styles.outlookGrid}>
+          {r.outcome_risks.map((o) => (
+            <div key={o.outcome} className={styles.outlookCard}>
+              <span className={styles.outlookLabel}>{o.label}</span>
               <strong>{o.probability_pct.toFixed(1)}%</strong>
               <Badge tone={TIER_TONE[o.risk_level]}>{o.risk_level}</Badge>
-              <span className={styles.covidMeta}>
-                Cohort {o.cohort_rate_pct}%{o.observed != null ? ` · observed: ${o.observed ? "yes" : "no"}` : ""}
+              <span className={styles.outlookMeta}>
+                Population rate {o.cohort_rate_pct}%{o.observed != null ? ` · observed: ${o.observed ? "yes" : "no"}` : ""}
               </span>
             </div>
           ))}
         </div>
-        <p className={styles.note}>Pre-existing drivers: {r.covid_drivers.join(", ")}</p>
+        <p className={styles.note}>Main drivers: {r.outcome_drivers.join(", ")}</p>
       </Panel>
 
       <div style={{ height: 20 }} />

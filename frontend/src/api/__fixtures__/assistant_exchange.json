@@ -1,22 +1,22 @@
 {
   "session": {
-    "session_id": "1e6544ba8ac74831916d7b4693674e42",
+    "session_id": "ae081c3fabeb4cc9b61ea1490f05f280",
     "agent": "healthanalyst",
     "title": "Provide bed capacity and surge forecast",
-    "created_at": "2026-10-11T18:47:30",
-    "updated_at": "2026-10-11T18:47:31",
+    "created_at": "2026-10-15T21:58:28",
+    "updated_at": "2026-10-15T21:58:29",
     "message_count": 2
   },
   "messages": [
     {
-      "message_id": "17c61b7b681d4c29a9fcdfcf411ffa86",
+      "message_id": "6adac6daf1b04dd79b791fa24c6e9812",
       "role": "user",
       "text": "Provide bed capacity and surge forecast",
       "reply": null,
-      "created_at": "2026-10-11T18:47:31"
+      "created_at": "2026-10-15T21:58:29"
     },
     {
-      "message_id": "e5e46f4c37dd4657a91bd1b987e2134c",
+      "message_id": "9b1bd5eec53a4a94b0e8ee780a55ab73",
       "role": "assistant",
       "text": null,
       "reply": {
@@ -24,10 +24,10 @@
         "answer": "Capacity outlook. Shown as returned by the platform (rules engine, no AI interpretation):",
         "facts": [
           "surge tier: LEVEL 1: NORMAL OPERATIONS",
-          "occupancy pct: 39.50",
-          "projected daily admissions: 2.00",
-          "average los days: 4.20",
-          "assessment: At 39.5% occupancy with 4.2 days average stay, estimated bed turnover requirement is approximately 2 discharges/day.",
+          "occupancy pct: 43.20",
+          "projected daily admissions: 2.70",
+          "average los days: 1.70",
+          "assessment: At 43.2% occupancy with 1.7 days average stay, estimated bed turnover requirement is approximately 3 discharges/day.",
           "occupancy note: Average over the last 90 days of data; bed capacity is estimated (1.25 \u00d7 each unit's peak census)."
         ],
         "predictions": [],
@@ -36,7 +36,7 @@
           "Tool get_capacity_plan"
         ],
         "notes": "",
-        "latency_ms": 593.5,
+        "latency_ms": 705.5,
         "engine": "Rules engine (no LLM key)",
         "tool_calls": [
           {
@@ -48,7 +48,7 @@
         ],
         "proposed_actions": []
       },
-      "created_at": "2026-10-11T18:47:31"
+      "created_at": "2026-10-15T21:58:29"
     }
   ]
 }

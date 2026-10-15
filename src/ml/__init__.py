@@ -4,7 +4,7 @@ from src.ml.model_registry import register_model, load_model, get_model_registry
 from src.ml.predict import (
     predict_patient_readmission,
     predict_patient_los,
-    predict_patient_covid_outcomes,
+    predict_patient_outcome_risk,
     predict_drug_demand,
     CLINICAL_DISCLAIMER,
 )

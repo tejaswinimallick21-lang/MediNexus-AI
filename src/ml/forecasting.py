@@ -6,7 +6,7 @@ Every forecast predicts a FUTURE window from information available at the foreca
 with naive persistence baselines. Training and inference share the feature builders below.
 
 Daily-series models predict the log-ratio of the next-7-day average to the trailing 7-day
-average, so they stay scale-free through the 2020 COVID-19 volume surge in the Synthea data.
+average, so they stay scale-free when volume shifts sharply.
 
 Three daily methods compete in the backtest and the most accurate one is served:
 - the gradient-boosting model;
@@ -136,7 +136,6 @@ def rolling_backtest(sup: pd.DataFrame, end: pd.Timestamp, make_model, folds: in
             "fold_start": str(start.date()), "fold_end": str((stop - pd.Timedelta(days=1)).date()),
             "mae": m["mae"], "baseline_mae": b["mae"], "wape_pct": m["wape_pct"], "baseline_wape_pct": b["wape_pct"],
             "surge_mae": s["mae"], "surge_wape_pct": s["wape_pct"],
-            "covid_period": bool(stop > pd.Timestamp("2020-03-10")),
         })
     return results
 

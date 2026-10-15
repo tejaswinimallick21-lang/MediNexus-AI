@@ -75,11 +75,11 @@ export const Patient360Schema = z.object({
 export type Patient360 = z.infer<typeof Patient360Schema>;
 
 export const PatientRiskSchema = z.object({
-  covid_scored_as_of: optStr,
-  covid_outcomes: z.array(
+  outcome_scored_as_of: optStr,
+  outcome_risks: z.array(
     z.object({ outcome: str, label: str, probability_pct: num, risk_level: str, cohort_rate_pct: num, observed: num.nullable() }),
   ),
-  covid_drivers: z.array(str),
+  outcome_drivers: z.array(str),
   readmission_available: z.boolean(),
   readmission_probability_pct: num.nullable(),
   readmission_risk_level: optStr,

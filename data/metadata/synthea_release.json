@@ -1,0 +1,23 @@
+{
+  "released_through": "2026-10-15T21:53:33",
+  "held_back_days": 26,
+  "rows": {
+    "allergies": 5340,
+    "careplans": 20606,
+    "conditions": 47545,
+    "devices": 872,
+    "encounters": 293039,
+    "imaging_studies": 4301,
+    "immunizations": 9711,
+    "medications": 415465,
+    "observations": 292042,
+    "procedures": 29893,
+    "supplies": 0,
+    "patients": 12299,
+    "payer_transitions": 41392,
+    "organizations": 5499,
+    "providers": 31764,
+    "payers": 10
+  },
+  "released_at": "2026-10-15T21:53:45"
+}

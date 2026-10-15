@@ -66,7 +66,7 @@
       "area": "Secrets",
       "title": "No secrets in version control",
       "status": "pass",
-      "detail": "Scanned 357 tracked files: no API keys. .env is ignored by git.",
+      "detail": "Scanned 372 tracked files: no API keys. .env is ignored by git.",
       "fix": null
     },
     {
@@ -98,7 +98,7 @@
       "area": "Monitoring",
       "title": "Audit logging",
       "status": "pass",
-      "detail": "281 events recorded in the last 24 h (sign-ins, patient-record views, data exports, agent actions).",
+      "detail": "276 events recorded in the last 24 h (sign-ins, patient-record views, data exports, agent actions).",
       "fix": null
     },
     {

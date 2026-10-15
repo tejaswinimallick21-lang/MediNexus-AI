@@ -24,6 +24,8 @@ npm --prefix frontend install
 Download **10k_synthea_covid19_csv.zip** (≈54 MB) from
 https://synthetichealth.github.io/synthea/downloads.html and extract its CSV files into
 `data/synthea/csv/` (so that `data/synthea/csv/patients.csv` exists).
+The bootstrap script keeps this download unchanged and re-dates a copy to today (records up to 2019, so
+no COVID-19 period); a nightly live feed then releases the next day's records.
 
 ## 4. Add your keys (never committed)
 
@@ -45,6 +47,8 @@ It runs, in order, skipping anything already done:
 
 | Step | Command |
 |---|---|
+| Re-date Synthea to today (no COVID period) | `python -m src.ingestion.redate_synthea redate` |
+| Release records up to now | `python -m src.ingestion.redate_synthea release` |
 | Synthea → raw tables | `python -m src.ingestion.synthea_adapter` |
 | Medallion pipeline (Bronze → Silver → Gold) | `python -m src.medallion.pipeline` |
 | Simulated operations data | `python -m src.ingestion.ops_simulator --years 3 --seed 7` |

@@ -80,14 +80,15 @@ def test_reference_catalogs_are_consistent():
         assert crit_high is None or crit_high >= high
 
 
-def test_gold_covid_outcomes_shape():
-    """COVID outcomes exist only for COVID-positive patients (integration check on built Gold data)."""
-    path = GOLD_DATA_DIR / "gold_covid_outcomes.parquet"
+def test_gold_outcome_risk_snapshots():
+    """12-month outcome risk: labels only in the training snapshot, one year before the scoring snapshot."""
+    path = GOLD_DATA_DIR / "gold_outcome_risk.parquet"
     if not path.exists():
         pytest.skip("Gold layer not built yet")
     df = pd.read_parquet(path)
-    negatives = df[df["covid_positive"] == 0]
-    assert negatives["hospitalized_30d"].isna().all()
-    positives = df[df["covid_positive"] == 1]
-    assert positives["hospitalized_30d"].notna().all()
-    assert 0.0 < positives["died_30d"].mean() < 0.5
+    train, score = df[df["snapshot"] == "train"], df[df["snapshot"] == "score"]
+    assert len(train) and len(score) and score["patient_id"].is_unique
+    assert score[["hospitalized_12m", "died_12m"]].isna().all().all()  # the future is not known
+    assert train["hospitalized_12m"].notna().all() and 0.0 < train["died_12m"].mean() < 0.2
+    gap = (pd.to_datetime(score["index_date"].iloc[0]) - pd.to_datetime(train["index_date"].iloc[0])).days
+    assert gap == 365

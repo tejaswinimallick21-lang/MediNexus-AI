@@ -6,6 +6,7 @@ Rebuild everything git does not carry (data, database, models, accounts) on a fr
 
 Prerequisite: the Synthea COVID-19 10K CSV export extracted into data/synthea/csv/
 (https://synthetichealth.github.io/synthea/downloads.html -> 10k_synthea_covid19_csv.zip).
+The first two steps re-date it to today and drop the 2020 COVID-19 period (src/ingestion/redate_synthea.py).
 Each step is the same command documented in docs/SETUP.md, run in order.
 """
 
@@ -38,9 +39,13 @@ def models_trained() -> bool:
 
 
 STEPS = [
+    ("Re-date Synthea to today (records up to 2019, COVID-19 period removed)", [sys.executable, "-m", "src.ingestion.redate_synthea", "redate"],
+     lambda: (ROOT / "data" / "metadata" / "synthea_redate.json").exists()),
+    ("Release re-dated records up to now", [sys.executable, "-m", "src.ingestion.redate_synthea", "release"],
+     lambda: (ROOT / "data" / "synthea" / "current" / "patients.csv").exists()),
     ("Convert Synthea CSVs into raw tables", [sys.executable, "-m", "src.ingestion.synthea_adapter"], lambda: any((ROOT / "data" / "raw").glob("*.csv"))),
     ("Run the Medallion pipeline (Bronze -> Silver -> Gold)", [sys.executable, "-m", "src.medallion.pipeline"], lambda: table_exists("gold_admissions")),
-    ("Generate simulated operations data", [sys.executable, "-m", "src.ingestion.ops_simulator", "--years", "3", "--seed", "7"], lambda: table_exists("sim_outpatient_daily")),
+    ("Generate simulated operations data", [sys.executable, "-m", "src.ingestion.ops_simulator", "--years", "3", "--seed", "7"], lambda: table_exists("sim_outpatient_daily_all")),
     ("Train and register the ML models", [sys.executable, "-m", "src.ml.train_demand"], models_trained),
     ("Create the three sign-in accounts", [sys.executable, "-m", "backend.scripts.create_seed_users"], lambda: (ROOT / "backend" / "seed_users.json").exists()),
 ]

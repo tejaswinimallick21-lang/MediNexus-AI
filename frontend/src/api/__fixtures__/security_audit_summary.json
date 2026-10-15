@@ -1,62 +1,46 @@
 {
   "window_days": 7,
-  "total_events": 2747,
+  "total_events": 1930,
   "failed_logins": 30,
   "access_denied": 164,
   "lockouts": 2,
-  "patient_record_views": 95,
+  "patient_record_views": 61,
   "by_action": [
     {
       "label": "LOGIN",
       "count": 1122
     },
     {
-      "label": "ROLE_SWITCH",
-      "count": 664
-    },
-    {
       "label": "AGENT_PROPOSED_ACTION",
-      "count": 189
+      "count": 211
     },
     {
       "label": "ACCESS_DENIED",
       "count": 164
     },
     {
-      "label": "AGENT_QUERY",
-      "count": 100
-    },
-    {
       "label": "SANDBOX_UPLOAD",
       "count": 85
     },
     {
-      "label": "PATIENT_360_VIEW",
-      "count": 56
+      "label": "PATIENT_VIEW",
+      "count": 59
     },
     {
-      "label": "LOGOUT",
-      "count": 54
+      "label": "AGENT_QUERY",
+      "count": 57
     },
     {
       "label": "SANDBOX_DELETE",
       "count": 48
     },
     {
-      "label": "PATIENT_VIEW",
+      "label": "LOGOUT",
       "count": 39
     },
     {
       "label": "LOGIN_FAILED",
       "count": 30
-    },
-    {
-      "label": "LAUNCH_WELCOME",
-      "count": 28
-    },
-    {
-      "label": "PIPELINE_RUN",
-      "count": 23
     },
     {
       "label": "SANDBOX_PREDICT",
@@ -65,33 +49,25 @@
     {
       "label": "PROCUREMENT_ORDER",
       "count": 21
+    },
+    {
+      "label": "SANDBOX_FORECAST",
+      "count": 13
+    },
+    {
+      "label": "SANDBOX_DOWNLOAD",
+      "count": 10
+    },
+    {
+      "label": "SANDBOX_REPORT",
+      "count": 8
+    },
+    {
+      "label": "AGENT_ACTION_REJECTED",
+      "count": 7
     }
   ],
   "by_day": [
-    {
-      "day": "2026-10-05 00:00:00",
-      "events": 287,
-      "failed_logins": 0,
-      "denied": 0
-    },
-    {
-      "day": "2026-10-06 00:00:00",
-      "events": 3,
-      "failed_logins": 0,
-      "denied": 0
-    },
-    {
-      "day": "2026-10-07 00:00:00",
-      "events": 551,
-      "failed_logins": 0,
-      "denied": 0
-    },
-    {
-      "day": "2026-10-08 00:00:00",
-      "events": 22,
-      "failed_logins": 0,
-      "denied": 0
-    },
     {
       "day": "2026-10-09 00:00:00",
       "events": 802,
@@ -106,7 +82,19 @@
     },
     {
       "day": "2026-10-11 00:00:00",
-      "events": 282,
+      "events": 46,
+      "failed_logins": 0,
+      "denied": 0
+    },
+    {
+      "day": "2026-10-12 00:00:00",
+      "events": 5,
+      "failed_logins": 0,
+      "denied": 0
+    },
+    {
+      "day": "2026-10-15 00:00:00",
+      "events": 277,
       "failed_logins": 1,
       "denied": 15
     }
@@ -147,7 +135,7 @@
       "count": 18
     },
     {
-      "label": "API_PHARMACY",
+      "label": "API_EXECUTIVE",
       "count": 14
     },
     {
@@ -155,7 +143,7 @@
       "count": 14
     },
     {
-      "label": "API_EXECUTIVE",
+      "label": "API_PHARMACY",
       "count": 14
     },
     {

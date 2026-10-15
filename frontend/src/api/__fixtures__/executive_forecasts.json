@@ -1,79 +1,79 @@
 {
-  "admissions_next_7d_daily": 2.0,
-  "admissions_last_7d_daily": 1.6,
+  "admissions_next_7d_daily": 2.7,
+  "admissions_last_7d_daily": 2.4,
   "admissions_forecast": {
     "serving_method": "surge_aware",
     "method_label": "Surge-aware average",
-    "holdout_mae": 6.356,
-    "holdout_baseline_mae": 5.696,
-    "holdout_surge_mae": 5.647,
-    "holdout_served_mae": 5.647,
+    "holdout_mae": 0.687,
+    "holdout_baseline_mae": 0.613,
+    "holdout_surge_mae": 0.561,
+    "holdout_served_mae": 0.561,
     "beats_baseline": false,
-    "test_period": "2019-05-23 to 2020-05-16",
-    "data_through": "2020-05-24"
+    "test_period": "2025-10-13 to 2026-10-07",
+    "data_through": "2026-10-15"
   },
   "models": [
     {
-      "model": "COVID-19 hospitalization",
+      "model": "Hospital admission within 12 months",
       "purpose": "Risk at diagnosis (pre-diagnosis history only)",
-      "primary_metric": "ROC-AUC 0.73",
-      "baseline": "Age only 0.70",
+      "primary_metric": "ROC-AUC 0.82",
+      "baseline": "Age only 0.65",
       "verdict": "Beats baseline"
     },
     {
-      "model": "COVID-19 30-day mortality",
+      "model": "Death within 12 months",
       "purpose": "Risk at diagnosis (pre-diagnosis history only)",
-      "primary_metric": "ROC-AUC 0.88",
+      "primary_metric": "ROC-AUC 0.95",
       "baseline": "Age only 0.87",
-      "verdict": "Marginal over baseline"
+      "verdict": "Beats baseline"
     },
     {
       "model": "Unplanned 30-day readmission",
-      "purpose": "Scored at discharge \u00b7 121 positive cases",
-      "primary_metric": "ROC-AUC 0.80 (CV 0.79 \u00b1 0.03)",
-      "baseline": "Age + LOS 0.68",
+      "purpose": "Scored at discharge \u00b7 92 positive cases",
+      "primary_metric": "ROC-AUC 0.78 (CV 0.79 \u00b1 0.05)",
+      "baseline": "Age + LOS 0.64",
       "verdict": "Beats baseline"
     },
     {
       "model": "Length of stay",
       "purpose": "Scored at admission",
-      "primary_metric": "MAE 1.11 days",
-      "baseline": "Median 2.81 days",
-      "verdict": "Beats baseline"
+      "primary_metric": "MAE 0.81 days",
+      "baseline": "Median 0.83 days",
+      "verdict": "Marginal over baseline"
     },
     {
       "model": "Outpatient demand (7-day) \u00b7 simulated ops data",
-      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2019-05-23 to 2020-05-16",
-      "primary_metric": "MAE 101.37 (model)",
-      "baseline": "Naive 125.58",
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-13 to 2026-10-07",
+      "primary_metric": "MAE 60.82 (model)",
+      "baseline": "Naive 103.95",
       "verdict": "Beats baseline"
     },
     {
       "model": "Drug-class demand (7-day) \u00b7 simulated ops data",
-      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2019-05-23 to 2020-05-16",
-      "primary_metric": "MAE 444.35 (model)",
-      "baseline": "Naive 887.68",
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-13 to 2026-10-07",
+      "primary_metric": "MAE 294.92 (model)",
+      "baseline": "Naive 771.05",
       "verdict": "Beats baseline"
     },
     {
       "model": "Admission demand (7-day)",
-      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2019-05-23 to 2020-05-16",
-      "primary_metric": "MAE 5.65 (surge-aware average)",
-      "baseline": "Naive 5.70",
-      "verdict": "Marginal over baseline"
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-13 to 2026-10-07",
+      "primary_metric": "MAE 0.56 (surge-aware average)",
+      "baseline": "Naive 0.61",
+      "verdict": "Beats baseline"
     },
     {
       "model": "Lab workload (7-day)",
-      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2019-05-25 to 2020-05-18",
-      "primary_metric": "MAE 186.13 (surge-aware average)",
-      "baseline": "Naive 187.78",
-      "verdict": "Marginal over baseline"
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-13 to 2026-10-07",
+      "primary_metric": "MAE 5.63 (surge-aware average)",
+      "baseline": "Naive 6.12",
+      "verdict": "Beats baseline"
     },
     {
       "model": "Stock-line demand (30-day)",
-      "purpose": "time-based: test = the 3 most recent monthly forecast dates \u00b7 2020-02-26 to 2020-04-26",
-      "primary_metric": "MAE 0.20 (naive baseline)",
-      "baseline": "Naive 0.20",
+      "purpose": "time-based: test = the 3 most recent monthly forecast dates \u00b7 2026-07-17 to 2026-09-15",
+      "primary_metric": "MAE 0.31 (naive baseline)",
+      "baseline": "Naive 0.31",
       "verdict": "Baseline wins \u2014 baseline served"
     }
   ]

@@ -2,19 +2,19 @@
   "items": [
     {
       "label": "Completed",
-      "count": 299136
+      "count": 275418
     },
     {
       "label": "Cancelled",
-      "count": 19673
+      "count": 18136
     },
     {
       "label": "No-Show",
-      "count": 16250
+      "count": 14909
     },
     {
       "label": "Unknown",
-      "count": 1674
+      "count": 1591
     }
   ]
 }

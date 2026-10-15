@@ -14,7 +14,7 @@ export const HospitalOptionSchema = z.object({
 export type HospitalOption = z.infer<typeof HospitalOptionSchema>;
 export const HospitalOptionListSchema = z.array(HospitalOptionSchema);
 
-export type WhatIfPeriod = "last_90" | "last_365" | "pre_covid_365";
+export type WhatIfPeriod = "last_90" | "last_365";
 export interface WhatIfInput {
   hospital_id: string | null;
   period: WhatIfPeriod;

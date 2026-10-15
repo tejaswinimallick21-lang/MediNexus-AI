@@ -89,7 +89,7 @@ def load_model(model_name: str) -> Optional[Any]:
         "pharmacy_demand_model": "pharmacy_demand_model.joblib",
         "lab_workload_model": "lab_workload_model.joblib",
         "resource_demand_model": "resource_demand_model.joblib",
-        "covid_outcome_model": "covid_outcome_model.joblib",
+        "outcome_risk_model": "outcome_risk_model.joblib",
         "outpatient_demand_model": "outpatient_demand_model.joblib",
         "drug_class_demand_model": "drug_class_demand_model.joblib",
     }

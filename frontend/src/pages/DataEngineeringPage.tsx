@@ -16,6 +16,7 @@ import { useApi } from "../hooks/useApi";
 import { useJob } from "../hooks/useJob";
 import { formatCompact, formatDate, formatNumber, formatPercent } from "../lib/format";
 import styles from "./DataEngineeringPage.module.css";
+import { LiveFeedPanel } from "./LiveFeedPanel";
 
 const ACCEPT = ".csv,.parquet,.json,.jsonl,.ndjson";
 const MAX_MB = 50;
@@ -87,6 +88,7 @@ export function DataEngineeringPage() {
         title="Data Engineering"
         subtitle="Upload datasets, link related tables and watch them move through Bronze → Silver → Gold, then get ML insights. Every upload runs in its own sandbox."
       />
+      <LiveFeedPanel />
       <div className={styles.top}>
         <UploadPanel
           onUploaded={(id) => {

@@ -3,89 +3,99 @@
   "environment": "development",
   "python": "3.12.7",
   "platform": "Windows 11",
-  "uptime_minutes": 2,
-  "database_path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_f_75vov3\\healthcare_test.duckdb",
-  "database_size_mb": 218.8,
+  "uptime_minutes": 3,
+  "database_path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_7k925vuk\\healthcare_test.duckdb",
+  "database_size_mb": 174.8,
   "tables": [
     {
-      "name": "bronze_laboratory_results",
-      "layer": "bronze",
-      "rows": 1216331
-    },
-    {
-      "name": "silver_laboratory_results",
-      "layer": "silver",
-      "rows": 1204289
-    },
-    {
-      "name": "gold_laboratory",
-      "layer": "gold",
-      "rows": 1204289
-    },
-    {
-      "name": "sim_pharmacy_daily",
+      "name": "sim_pharmacy_daily_all",
       "layer": "sim",
       "rows": 1195740
     },
     {
-      "name": "sim_equipment_daily",
+      "name": "sim_pharmacy_daily",
+      "layer": "sim",
+      "rows": 1167348
+    },
+    {
+      "name": "sim_equipment_daily_all",
       "layer": "sim",
       "rows": 697515
     },
     {
-      "name": "bronze_prescriptions",
-      "layer": "bronze",
-      "rows": 435574
+      "name": "sim_equipment_daily",
+      "layer": "sim",
+      "rows": 680953
     },
     {
-      "name": "gold_prescriptions",
-      "layer": "gold",
-      "rows": 431262
+      "name": "bronze_prescriptions",
+      "layer": "bronze",
+      "rows": 419619
     },
     {
       "name": "silver_prescriptions",
       "layer": "silver",
-      "rows": 431262
+      "rows": 415465
+    },
+    {
+      "name": "gold_prescriptions",
+      "layer": "gold",
+      "rows": 415465
     },
     {
       "name": "bronze_appointments",
       "layer": "bronze",
-      "rows": 340100
+      "rows": 313189
     },
     {
       "name": "silver_appointments",
       "layer": "silver",
-      "rows": 336733
+      "rows": 310089
     },
     {
       "name": "gold_appointments",
       "layer": "gold",
-      "rows": 336733
+      "rows": 310054
     },
     {
-      "name": "bronze_diagnoses",
+      "name": "bronze_laboratory_results",
       "layer": "bronze",
-      "rows": 115689
+      "rows": 179557
     },
     {
-      "name": "gold_clinical",
-      "layer": "gold",
-      "rows": 114544
-    },
-    {
-      "name": "silver_diagnoses",
+      "name": "silver_laboratory_results",
       "layer": "silver",
-      "rows": 114544
+      "rows": 177780
     },
     {
-      "name": "sim_outpatient_daily",
+      "name": "gold_laboratory",
+      "layer": "gold",
+      "rows": 177780
+    },
+    {
+      "name": "sim_outpatient_daily_all",
       "layer": "sim",
       "rows": 99645
     },
     {
-      "name": "sim_equipment_events",
+      "name": "sim_outpatient_daily",
       "layer": "sim",
-      "rows": 30627
+      "rows": 97279
+    },
+    {
+      "name": "bronze_diagnoses",
+      "layer": "bronze",
+      "rows": 48020
+    },
+    {
+      "name": "gold_clinical",
+      "layer": "gold",
+      "rows": 47545
+    },
+    {
+      "name": "silver_diagnoses",
+      "layer": "silver",
+      "rows": 47545
     },
     {
       "name": "sim_equipment_assets",
@@ -93,134 +103,124 @@
       "rows": 30423
     },
     {
-      "name": "gold_hospital_operations",
+      "name": "sim_equipment_events_all",
+      "layer": "sim",
+      "rows": 30339
+    },
+    {
+      "name": "sim_equipment_events",
+      "layer": "sim",
+      "rows": 29615
+    },
+    {
+      "name": "gold_outcome_risk",
       "layer": "gold",
-      "rows": 16629
+      "rows": 20618
     },
     {
       "name": "bronze_patients",
       "layer": "bronze",
-      "rows": 12537
+      "rows": 12483
     },
     {
       "name": "gold_patient_360",
       "layer": "gold",
-      "rows": 12352
+      "rows": 12299
     },
     {
       "name": "silver_patients",
       "layer": "silver",
-      "rows": 12352
+      "rows": 12299
     },
     {
-      "name": "gold_covid_outcomes",
+      "name": "gold_hospital_operations",
       "layer": "gold",
-      "rows": 10357
+      "rows": 11243
     },
     {
       "name": "bronze_admissions",
       "layer": "bronze",
-      "rows": 9699
+      "rows": 6852
     },
     {
       "name": "bronze_billing",
       "layer": "bronze",
-      "rows": 9679
+      "rows": 6838
     },
     {
       "name": "gold_admissions",
       "layer": "gold",
-      "rows": 9584
-    },
-    {
-      "name": "gold_billing",
-      "layer": "gold",
-      "rows": 9584
-    },
-    {
-      "name": "gold_patient_risk_features",
-      "layer": "gold",
-      "rows": 9584
-    },
-    {
-      "name": "silver_admissions",
-      "layer": "silver",
-      "rows": 9584
+      "rows": 6771
     },
     {
       "name": "silver_billing",
       "layer": "silver",
-      "rows": 9584
+      "rows": 6771
     },
     {
-      "name": "bronze_departments",
-      "layer": "bronze",
-      "rows": 5795
+      "name": "silver_admissions",
+      "layer": "silver",
+      "rows": 6771
+    },
+    {
+      "name": "gold_billing",
+      "layer": "gold",
+      "rows": 6770
+    },
+    {
+      "name": "gold_patient_risk_features",
+      "layer": "gold",
+      "rows": 6770
     },
     {
       "name": "silver_departments",
       "layer": "silver",
-      "rows": 5795
+      "rows": 5399
     },
     {
-      "name": "bronze_doctors",
+      "name": "bronze_departments",
       "layer": "bronze",
-      "rows": 5214
+      "rows": 5399
     },
     {
       "name": "silver_doctors",
       "layer": "silver",
-      "rows": 5214
+      "rows": 4940
     },
     {
-      "name": "bronze_hospitals",
+      "name": "bronze_doctors",
       "layer": "bronze",
-      "rows": 5209
+      "rows": 4940
     },
     {
       "name": "silver_hospitals",
       "layer": "silver",
-      "rows": 5209
+      "rows": 4935
+    },
+    {
+      "name": "bronze_hospitals",
+      "layer": "bronze",
+      "rows": 4935
     },
     {
       "name": "audit_logs",
       "layer": "platform",
-      "rows": 2748
-    },
-    {
-      "name": "bronze_pharmacy_inventory",
-      "layer": "bronze",
-      "rows": 950
-    },
-    {
-      "name": "gold_pharmacy",
-      "layer": "gold",
-      "rows": 941
-    },
-    {
-      "name": "silver_pharmacy_inventory",
-      "layer": "silver",
-      "rows": 941
-    },
-    {
-      "name": "sim_staff_roster",
-      "layer": "sim",
-      "rows": 819
+      "rows": 2794
     }
   ],
   "layer_rows": {
-    "bronze": 2156946,
-    "silver": 2135968,
-    "gold": 2155859,
-    "sim": 2054860,
-    "platform": 3716
+    "sim": 4029767,
+    "bronze": 1003252,
+    "silver": 993718,
+    "gold": 1016573,
+    "platform": 3788
   },
   "storage": [
     {
       "label": "Synthea source CSV",
       "path": "data\\synthea",
-      "size_mb": 558.6,
-      "files": 17
+      "size_mb": 1058.4,
+      "files": 49
     },
     {
       "label": "Simulated operations",
@@ -249,12 +249,12 @@
     {
       "label": "Model artifacts",
       "path": "models",
-      "size_mb": 5.3,
+      "size_mb": 4.4,
       "files": 8
     },
     {
       "label": "Logs",
-      "path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_f_75vov3\\logs",
+      "path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_7k925vuk\\logs",
       "size_mb": 0.0,
       "files": 2
     },
@@ -266,9 +266,9 @@
     }
   ],
   "active_models": 8,
-  "models_last_trained": "2026-10-11 18:14:19",
+  "models_last_trained": "2026-10-15 10:21:51",
   "active_jobs": [],
-  "sweep_next_run": "2026-10-12T07:00",
+  "sweep_next_run": "2026-10-16T07:00",
   "sweep_last_status": "succeeded",
   "llm_provider": "Rules engine (no LLM key)",
   "embeddings": "Local LSA (TF-IDF + SVD)",

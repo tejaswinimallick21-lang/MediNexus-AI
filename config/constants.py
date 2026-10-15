@@ -22,9 +22,10 @@ DOCUMENTS_DIR = BASE_DIR / "documents"
 LOGS_DIR = Path(os.environ["MEDINEXUS_LOGS_DIR"]) if os.getenv("MEDINEXUS_LOGS_DIR") else BASE_DIR / "logs"
 
 # Synthea source export (CSV). Swap to the 100K export by pointing this at its folder.
-SYNTHEA_CSV_DIR = DATA_DIR / "synthea" / "csv"
+SYNTHEA_SOURCE_DIR = DATA_DIR / "synthea" / "csv"   # original download, never modified
+SYNTHEA_CSV_DIR = DATA_DIR / "synthea" / "current"  # re-dated and released up to now (src/ingestion/redate_synthea.py)
 
-# 30-day window used for both unplanned readmissions and COVID-19 outcomes
+# 30-day window used for unplanned readmissions
 OUTCOME_WINDOW_DAYS = 30
 
 # Default Generation Counts (Enterprise Scale: 50,000+ records in each core dataset)
@@ -87,7 +88,7 @@ GOLD_TABLES = [
     "gold_billing",
     "gold_hospital_operations",
     "gold_patient_risk_features",
-    "gold_covid_outcomes",
+    "gold_outcome_risk",
 ]
 
 # Clinical Standard Values

@@ -1,6 +1,6 @@
 import { API_BASE, request } from "./client";
 import { EmptySchema } from "./schemas/common";
-import { JobAcceptedSchema, LinkDiscoverySchema, UploadAcceptedSchema, UploadDetailSchema, UploadPageSchema, type Relationship } from "./schemas/dataPlatform";
+import { FeedStatusSchema, JobAcceptedSchema, LinkDiscoverySchema, UploadAcceptedSchema, UploadDetailSchema, UploadPageSchema, type Relationship } from "./schemas/dataPlatform";
 
 const path = (id: string) => `/data/uploads/${encodeURIComponent(id)}`;
 
@@ -22,4 +22,6 @@ export const dataApi = {
     request(`${path(id)}/forecast`, JobAcceptedSchema, { method: "POST", body }),
   /** Same-origin link; the session cookie authorises the download. */
   cleanCsvUrl: (id: string) => `${API_BASE}${path(id)}/clean.csv`,
+  feed: (s?: AbortSignal) => request("/data/feed", FeedStatusSchema, { signal: s }),
+  refreshFeed: () => request("/data/feed/refresh", JobAcceptedSchema, { method: "POST" }),
 };

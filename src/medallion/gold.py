@@ -11,7 +11,7 @@ Produces business-ready, AI-ready, and role-specific analytical data models:
 - gold_billing
 - gold_hospital_operations
 - gold_patient_risk_features
-- gold_covid_outcomes
+- gold_outcome_risk (12-month outcome risk: train and score snapshots)
 
 Outcome labels are derived only from observed event dates (admissions, diagnoses, deaths).
 ML features are computed strictly from information available at the prediction time.
@@ -39,7 +39,7 @@ from src.utils.logging_utils import get_logger
 
 logger = get_logger("gold_transformation")
 
-# ICD-10 prefixes used for comorbidity flags (patient 360, readmission and COVID features)
+# ICD-10 prefixes used for comorbidity flags (patient 360, readmission and outcome-risk features)
 COMORBIDITY_ICD10 = {
     "has_hypertension": ["I10"],
     "has_diabetes": ["E11"],
@@ -57,7 +57,7 @@ COMORBIDITY_ICD10 = {
     "has_anemia": ["D64"],
 }
 CORE_COMORBIDITIES = ["has_hypertension", "has_diabetes", "has_copd", "has_heart_failure"]
-COVID_ICD10 = "U07.1"
+OUTCOME_HORIZON_DAYS = 365  # 12-month outcome-risk window
 
 
 def load_silver_table(table_name: str, silver_dir: Path = SILVER_DATA_DIR) -> pd.DataFrame:
@@ -491,7 +491,6 @@ def generate_gold_models(
                CASE WHEN p.gender = 'Male' THEN 1 ELSE 0 END AS gender_encoded,
                CASE WHEN a.admission_type = 'Emergency' THEN 1 ELSE 0 END AS is_emergency,
                CASE WHEN a.admission_type = 'Urgent' THEN 1 ELSE 0 END AS is_urgent,
-               CASE WHEN a.admission_reason ILIKE '%covid%' OR a.admission_reason ILIKE '%isolation%' THEN 1 ELSE 0 END AS is_covid_admission,
                a.length_of_stay, a.length_of_stay_days, a.is_icu, a.mechanical_ventilation,
                pr.prior_admissions_365d, pr.prior_admissions_total,
                pr.prior_admissions_total + 1 AS total_admissions,
@@ -514,16 +513,17 @@ def generate_gold_models(
     """).df()
     persist("gold_patient_risk_features", df_features)
 
-    # 11. COVID-19 outcomes: features strictly before the COVID diagnosis date; outcomes within 30 days
-    df_covid = con.execute(f"""
-        WITH idx AS (
-            SELECT patient_id, min(_dx_date) AS index_date FROM dx WHERE icd10_code = '{COVID_ICD10}' GROUP BY patient_id),
-        cohort AS (
-            SELECT p.patient_id, p.gender, p._dob, p._death,
-                   coalesce(i.index_date, TIMESTAMP '{data_end}') AS index_date,
-                   CASE WHEN i.index_date IS NOT NULL THEN 1 ELSE 0 END AS covid_positive
-            FROM pat p LEFT JOIN idx i USING (patient_id)
-            WHERE p._death IS NULL OR p._death >= coalesce(i.index_date, TIMESTAMP '{data_end}')),
+    # 11. 12-month outcome risk: two snapshots of every living patient, features strictly before the index date.
+    #     train: index = one year before the end of the data, outcomes observed over the following 365 days.
+    #     score: index = end of the data (today, after re-dating); outcomes not yet known.
+    def outcome_snapshot(index_ts: pd.Timestamp, snapshot: str):
+        idx = index_ts.strftime("%Y-%m-%d %H:%M:%S")
+        labelled = snapshot == "train"
+        return con.execute(f"""
+        WITH cohort AS (
+            SELECT p.patient_id, p.gender, p._dob, p._death, TIMESTAMP '{idx}' AS index_date
+            FROM pat p
+            WHERE p._dob <= TIMESTAMP '{idx}' AND (p._death IS NULL OR p._death > TIMESTAMP '{idx}')),
         comorb AS (
             SELECT c.patient_id, {flag_sql}
             FROM cohort c LEFT JOIN dx d ON d.patient_id = c.patient_id AND d._dx_date < c.index_date
@@ -547,23 +547,18 @@ def generate_gold_models(
             GROUP BY c.patient_id),
         outcomes AS (
             SELECT c.patient_id,
-                   max(CASE WHEN a._adm_ts BETWEEN c.index_date AND c.index_date + INTERVAL {OUTCOME_WINDOW_DAYS} DAY THEN 1 ELSE 0 END) AS hospitalized_30d,
-                   max(CASE WHEN a.is_icu = 1 AND a._adm_ts BETWEEN c.index_date AND c.index_date + INTERVAL {OUTCOME_WINDOW_DAYS} DAY THEN 1 ELSE 0 END) AS icu_30d,
-                   max(CASE WHEN a.mechanical_ventilation = 1 AND a._adm_ts BETWEEN c.index_date AND c.index_date + INTERVAL {OUTCOME_WINDOW_DAYS} DAY THEN 1 ELSE 0 END) AS ventilated_30d
+                   max(CASE WHEN a._adm_ts > c.index_date
+                            AND a._adm_ts <= c.index_date + INTERVAL {OUTCOME_HORIZON_DAYS} DAY THEN 1 ELSE 0 END) AS hospitalized_12m
             FROM cohort c LEFT JOIN adm a ON a.patient_id = c.patient_id GROUP BY c.patient_id)
-        SELECT c.patient_id, c.covid_positive, strftime(c.index_date, '%Y-%m-%d') AS index_date,
+        SELECT '{snapshot}' AS snapshot, c.patient_id, strftime(c.index_date, '%Y-%m-%d') AS index_date,
                CAST(floor(date_diff('day', c._dob, c.index_date) / 365.25) AS INTEGER) AS age_at_index,
                CASE WHEN c.gender = 'Male' THEN 1 ELSE 0 END AS gender_encoded,
                cm.* EXCLUDE (patient_id),
                {' + '.join(f'cm.{f}' for f in COMORBIDITY_ICD10)} AS comorbidity_count,
                h.prior_admissions_5y, m.active_medications,
                v.last_bmi, v.last_systolic_bp, v.last_hba1c, v.last_egfr,
-               CASE WHEN c.covid_positive = 1 THEN o.hospitalized_30d END AS hospitalized_30d,
-               CASE WHEN c.covid_positive = 1 THEN o.icu_30d END AS icu_30d,
-               CASE WHEN c.covid_positive = 1 THEN o.ventilated_30d END AS ventilated_30d,
-               CASE WHEN c.covid_positive = 1 THEN
-                    CASE WHEN c._death BETWEEN c.index_date AND c.index_date + INTERVAL {OUTCOME_WINDOW_DAYS} DAY THEN 1 ELSE 0 END END AS died_30d,
-               CASE WHEN c.index_date + INTERVAL {OUTCOME_WINDOW_DAYS} DAY <= TIMESTAMP '{data_end}' THEN 1 ELSE 0 END AS followup_complete
+               {'o.hospitalized_12m' if labelled else 'NULL'} AS hospitalized_12m,
+               {f"CASE WHEN c._death > c.index_date AND c._death <= c.index_date + INTERVAL {OUTCOME_HORIZON_DAYS} DAY THEN 1 ELSE 0 END" if labelled else 'NULL'} AS died_12m
         FROM cohort c
         JOIN comorb cm USING (patient_id)
         JOIN hist h USING (patient_id)
@@ -571,9 +566,14 @@ def generate_gold_models(
         JOIN vitals v USING (patient_id)
         JOIN outcomes o USING (patient_id)
         ORDER BY c.patient_id
-    """).df()
+        """).df()
+
+    df_outcomes = pd.concat([
+        outcome_snapshot(data_end - pd.Timedelta(days=OUTCOME_HORIZON_DAYS), "train"),
+        outcome_snapshot(data_end, "score"),
+    ], ignore_index=True)
     con.close()
-    persist("gold_covid_outcomes", df_covid)
+    persist("gold_outcome_risk", df_outcomes)
 
     logger.info(f"Gold Layer Generation Complete. Models created: {list(created_models.keys())}")
 

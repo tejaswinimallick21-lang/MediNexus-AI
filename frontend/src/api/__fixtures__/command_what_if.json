@@ -1,40 +1,39 @@
 {
   "simulated_data": true,
   "scope": "All 91 hospitals",
-  "period_start": "2020-02-25",
-  "period_end": "2020-05-24 00:00:00",
+  "period_start": "2026-07-18",
+  "period_end": "2026-10-15",
   "days": 90,
   "baseline": {
-    "demand": 13886537,
-    "served": 13313279,
-    "lost_to_follow_up": 931475,
-    "avg_backlog": 93147.5,
-    "avg_wait_days": 0.61,
-    "utilization_pct": 80.7,
-    "visits_per_physician_day": 11.9,
-    "revenue": 2545209850.95,
-    "staffing_cost": 1144300585.56
+    "demand": 17301943,
+    "served": 16130487,
+    "lost_to_follow_up": 1031568,
+    "avg_backlog": 103156.8,
+    "avg_wait_days": 0.68,
+    "utilization_pct": 98.6,
+    "visits_per_physician_day": 14.4,
+    "revenue": 3083462914.71,
+    "staffing_cost": 1145550119.93
   },
   "scenario": {
-    "demand": 13886537,
-    "served": 13893273,
-    "lost_to_follow_up": 351481,
-    "avg_backlog": 35148.1,
-    "avg_wait_days": 0.18,
-    "utilization_pct": 69.9,
-    "visits_per_physician_day": 12.4,
-    "revenue": 2656355472.05,
-    "staffing_cost": 1495968814.16
+    "demand": 17301943,
+    "served": 17293914,
+    "lost_to_follow_up": 59715,
+    "avg_backlog": 5971.5,
+    "avg_wait_days": 0.03,
+    "utilization_pct": 87.7,
+    "visits_per_physician_day": 15.4,
+    "revenue": 3306455826.3,
+    "staffing_cost": 1497603803.88
   },
-  "net_impact": -240522607.5,
-  "net_impact_per_month": -80174202.5,
+  "net_impact": -129060772.36,
+  "net_impact_per_month": -43020257.45,
   "insights": [
-    "Average waiting list moves from 93,148 to 35,148 patients (-62%); average wait from 0.61 to 0.18 days.",
-    "Patients lost to follow-up (leave the waiting list): 931,475 \u2192 351,481 over 90 days.",
-    "Visits per on-duty physician per day: 11.9 \u2192 12.4 (+4%).",
-    "Capacity outpaces demand: clinic utilization falls to 70%, so part of the added staffing cost buys idle time.",
-    "0 of 91 hospitals run at 97%+ clinic utilization in this period; capacity added elsewhere mostly adds cost. Target those sites first.",
-    "Net financial impact over the period: \u2212$240,522,607 (revenue change minus staffing change)."
+    "Average waiting list moves from 103,157 to 5,972 patients (-94%); average wait from 0.68 to 0.03 days.",
+    "Patients lost to follow-up (leave the waiting list): 1,031,568 \u2192 59,715 over 90 days.",
+    "Visits per on-duty physician per day: 14.4 \u2192 15.4 (+7%).",
+    "73 of 91 hospitals run at 97%+ clinic utilization in this period; capacity added elsewhere mostly adds cost. Target those sites first.",
+    "Net financial impact over the period: \u2212$129,060,772 (revenue change minus staffing change)."
   ],
   "assumptions": [
     "Simulated operations data (sim_outpatient_daily, sim_staff_roster); not source records.",
@@ -45,634 +44,634 @@
   ],
   "daily": [
     {
-      "date": "2020-02-25",
-      "baseline_backlog": 374144.4,
-      "scenario_backlog": 332277.1,
-      "baseline_served": 227150.0,
-      "scenario_served": 273669.3
+      "date": "2026-07-18",
+      "baseline_backlog": 52641.9,
+      "scenario_backlog": 42275.7,
+      "baseline_served": 99067.0,
+      "scenario_served": 110585.0
     },
     {
-      "date": "2020-02-26",
-      "baseline_backlog": 381669.7,
-      "scenario_backlog": 303091.1,
-      "baseline_served": 223073.0,
-      "scenario_served": 268515.2
+      "date": "2026-07-19",
+      "baseline_backlog": 45148.9,
+      "scenario_backlog": 31447.1,
+      "baseline_served": 56678.5,
+      "scenario_served": 61536.5
     },
     {
-      "date": "2020-02-27",
-      "baseline_backlog": 381147.0,
-      "scenario_backlog": 270696.4,
-      "baseline_served": 221685.0,
-      "scenario_served": 265829.3
+      "date": "2026-07-20",
+      "baseline_backlog": 65241.4,
+      "scenario_backlog": 26818.8,
+      "baseline_served": 227774.5,
+      "scenario_served": 256764.4
     },
     {
-      "date": "2020-02-28",
-      "baseline_backlog": 375635.7,
-      "scenario_backlog": 236677.9,
-      "baseline_served": 219149.0,
-      "scenario_served": 263096.0
+      "date": "2026-07-21",
+      "baseline_backlog": 73363.6,
+      "scenario_backlog": 19146.9,
+      "baseline_served": 223214.2,
+      "scenario_served": 245032.4
     },
     {
-      "date": "2020-02-29",
-      "baseline_backlog": 339566.1,
-      "scenario_backlog": 197124.0,
-      "baseline_served": 106115.0,
-      "scenario_served": 125426.3
+      "date": "2026-07-22",
+      "baseline_backlog": 72967.4,
+      "scenario_backlog": 11518.7,
+      "baseline_served": 219052.8,
+      "scenario_served": 233112.4
     },
     {
-      "date": "2020-03-01",
-      "baseline_backlog": 308450.9,
-      "scenario_backlog": 169933.9,
-      "baseline_served": 61347.0,
-      "scenario_served": 72812.5
+      "date": "2026-07-23",
+      "baseline_backlog": 71533.8,
+      "scenario_backlog": 7978.5,
+      "baseline_served": 214283.4,
+      "scenario_served": 223451.7
     },
     {
-      "date": "2020-03-02",
-      "baseline_backlog": 348548.3,
-      "scenario_backlog": 182455.7,
-      "baseline_served": 227630.0,
-      "scenario_served": 273660.3
+      "date": "2026-07-24",
+      "baseline_backlog": 64728.5,
+      "scenario_backlog": 5369.4,
+      "baseline_served": 213056.3,
+      "scenario_served": 215455.5
     },
     {
-      "date": "2020-03-03",
-      "baseline_backlog": 366167.0,
-      "scenario_backlog": 177469.7,
-      "baseline_served": 226015.0,
-      "scenario_served": 269586.2
+      "date": "2026-07-25",
+      "baseline_backlog": 52712.8,
+      "scenario_backlog": 3352.1,
+      "baseline_served": 96700.7,
+      "scenario_served": 92186.9
     },
     {
-      "date": "2020-03-04",
-      "baseline_backlog": 371937.6,
-      "scenario_backlog": 163888.0,
-      "baseline_served": 224179.0,
-      "scenario_served": 266648.0
+      "date": "2026-07-26",
+      "baseline_backlog": 45690.0,
+      "scenario_backlog": 2236.3,
+      "baseline_served": 56075.2,
+      "scenario_served": 54996.3
     },
     {
-      "date": "2020-03-05",
-      "baseline_backlog": 374918.1,
-      "scenario_backlog": 150362.7,
-      "baseline_served": 220540.0,
-      "scenario_served": 261996.3
+      "date": "2026-07-27",
+      "baseline_backlog": 68594.4,
+      "scenario_backlog": 4414.2,
+      "baseline_served": 228221.0,
+      "scenario_served": 256078.6
     },
     {
-      "date": "2020-03-06",
-      "baseline_backlog": 368220.7,
-      "scenario_backlog": 130624.3,
-      "baseline_served": 219725.0,
-      "scenario_served": 259165.6
+      "date": "2026-07-28",
+      "baseline_backlog": 71596.0,
+      "scenario_backlog": 3769.8,
+      "baseline_served": 224747.3,
+      "scenario_served": 235929.5
     },
     {
-      "date": "2020-03-07",
-      "baseline_backlog": 332862.9,
-      "scenario_backlog": 105521.5,
-      "baseline_served": 107074.0,
-      "scenario_served": 122079.2
+      "date": "2026-07-29",
+      "baseline_backlog": 75137.0,
+      "scenario_backlog": 2655.4,
+      "baseline_served": 221142.5,
+      "scenario_served": 233851.4
     },
     {
-      "date": "2020-03-08",
-      "baseline_backlog": 302868.8,
-      "scenario_backlog": 91188.9,
-      "baseline_served": 61080.0,
-      "scenario_served": 68938.5
+      "date": "2026-07-30",
+      "baseline_backlog": 73508.4,
+      "scenario_backlog": 787.5,
+      "baseline_served": 216756.0,
+      "scenario_served": 225075.4
     },
     {
-      "date": "2020-03-09",
-      "baseline_backlog": 340734.4,
-      "scenario_backlog": 110759.0,
-      "baseline_served": 228595.0,
-      "scenario_served": 272443.4
+      "date": "2026-07-31",
+      "baseline_backlog": 66970.2,
+      "scenario_backlog": 151.7,
+      "baseline_served": 211663.1,
+      "scenario_served": 213184.9
     },
     {
-      "date": "2020-03-10",
-      "baseline_backlog": 355862.2,
-      "scenario_backlog": 109855.2,
-      "baseline_served": 227206.0,
-      "scenario_served": 270571.6
-    },
-    {
-      "date": "2020-03-11",
-      "baseline_backlog": 355510.1,
-      "scenario_backlog": 100315.6,
-      "baseline_served": 224559.0,
-      "scenario_served": 262101.4
-    },
-    {
-      "date": "2020-03-12",
-      "baseline_backlog": 348823.0,
-      "scenario_backlog": 86978.2,
-      "baseline_served": 218842.0,
-      "scenario_served": 254586.1
-    },
-    {
-      "date": "2020-03-13",
-      "baseline_backlog": 329780.7,
-      "scenario_backlog": 68027.4,
-      "baseline_served": 218078.0,
-      "scenario_served": 247070.2
-    },
-    {
-      "date": "2020-03-14",
-      "baseline_backlog": 288869.7,
-      "scenario_backlog": 47755.2,
-      "baseline_served": 105841.3,
-      "scenario_served": 111993.1
-    },
-    {
-      "date": "2020-03-15",
-      "baseline_backlog": 256107.4,
-      "scenario_backlog": 37473.4,
-      "baseline_served": 61183.0,
-      "scenario_served": 62995.1
-    },
-    {
-      "date": "2020-03-16",
-      "baseline_backlog": 260975.1,
-      "scenario_backlog": 36459.5,
-      "baseline_served": 228025.0,
-      "scenario_served": 258852.8
-    },
-    {
-      "date": "2020-03-17",
-      "baseline_backlog": 246029.5,
-      "scenario_backlog": 27530.7,
-      "baseline_served": 224292.0,
-      "scenario_served": 242552.9
-    },
-    {
-      "date": "2020-03-18",
-      "baseline_backlog": 219270.9,
-      "scenario_backlog": 15760.8,
-      "baseline_served": 223924.2,
-      "scenario_served": 231547.6
-    },
-    {
-      "date": "2020-03-19",
-      "baseline_backlog": 185936.4,
-      "scenario_backlog": 6943.4,
-      "baseline_served": 221368.9,
-      "scenario_served": 216740.0
-    },
-    {
-      "date": "2020-03-20",
-      "baseline_backlog": 150659.3,
-      "scenario_backlog": 2996.2,
-      "baseline_served": 213316.1,
-      "scenario_served": 198393.3
-    },
-    {
-      "date": "2020-03-21",
-      "baseline_backlog": 118296.8,
-      "scenario_backlog": 932.7,
-      "baseline_served": 100227.5,
-      "scenario_served": 82968.9
-    },
-    {
-      "date": "2020-03-22",
-      "baseline_backlog": 96909.9,
-      "scenario_backlog": 196.3,
-      "baseline_served": 57369.1,
-      "scenario_served": 47464.5
-    },
-    {
-      "date": "2020-03-23",
-      "baseline_backlog": 82622.6,
+      "date": "2026-08-01",
+      "baseline_backlog": 53718.4,
       "scenario_backlog": 0.0,
-      "baseline_served": 219424.9,
-      "scenario_served": 214514.3
+      "baseline_served": 97511.1,
+      "scenario_served": 90379.7
     },
     {
-      "date": "2020-03-24",
-      "baseline_backlog": 57030.0,
+      "date": "2026-08-02",
+      "baseline_backlog": 46459.2,
       "scenario_backlog": 0.0,
-      "baseline_served": 209843.9,
-      "scenario_served": 190588.0
+      "baseline_served": 57452.0,
+      "scenario_served": 55355.0
     },
     {
-      "date": "2020-03-25",
-      "baseline_backlog": 33024.6,
+      "date": "2026-08-03",
+      "baseline_backlog": 73174.7,
+      "scenario_backlog": 4676.2,
+      "baseline_served": 227194.0,
+      "scenario_served": 256844.3
+    },
+    {
+      "date": "2026-08-04",
+      "baseline_backlog": 81210.3,
+      "scenario_backlog": 4114.8,
+      "baseline_served": 224426.0,
+      "scenario_served": 241589.1
+    },
+    {
+      "date": "2026-08-05",
+      "baseline_backlog": 76500.5,
+      "scenario_backlog": 1930.3,
+      "baseline_served": 223133.8,
+      "scenario_served": 228894.1
+    },
+    {
+      "date": "2026-08-06",
+      "baseline_backlog": 74515.0,
+      "scenario_backlog": 927.0,
+      "baseline_served": 215485.1,
+      "scenario_served": 222679.3
+    },
+    {
+      "date": "2026-08-07",
+      "baseline_backlog": 67983.0,
+      "scenario_backlog": 466.8,
+      "baseline_served": 212756.3,
+      "scenario_served": 214186.3
+    },
+    {
+      "date": "2026-08-08",
+      "baseline_backlog": 53974.7,
+      "scenario_backlog": 63.3,
+      "baseline_served": 99969.1,
+      "scenario_served": 92354.4
+    },
+    {
+      "date": "2026-08-09",
+      "baseline_backlog": 46908.6,
       "scenario_backlog": 0.0,
-      "baseline_served": 197596.1,
-      "scenario_served": 177260.0
+      "baseline_served": 56911.9,
+      "scenario_served": 55121.3
     },
     {
-      "date": "2020-03-26",
-      "baseline_backlog": 15313.2,
-      "scenario_backlog": 0.0,
-      "baseline_served": 184817.9,
-      "scenario_served": 168808.0
+      "date": "2026-08-10",
+      "baseline_backlog": 68257.1,
+      "scenario_backlog": 3205.4,
+      "baseline_served": 227067.5,
+      "scenario_served": 252438.4
     },
     {
-      "date": "2020-03-27",
-      "baseline_backlog": 5586.4,
-      "scenario_backlog": 0.0,
-      "baseline_served": 162516.1,
-      "scenario_served": 153410.0
+      "date": "2026-08-11",
+      "baseline_backlog": 77209.2,
+      "scenario_backlog": 2593.1,
+      "baseline_served": 224700.1,
+      "scenario_served": 242555.2
     },
     {
-      "date": "2020-03-28",
-      "baseline_backlog": 2348.9,
-      "scenario_backlog": 0.0,
-      "baseline_served": 66210.5,
-      "scenario_served": 63234.0
+      "date": "2026-08-12",
+      "baseline_backlog": 80151.8,
+      "scenario_backlog": 1263.6,
+      "baseline_served": 220800.6,
+      "scenario_served": 233838.1
     },
     {
-      "date": "2020-03-29",
-      "baseline_backlog": 1377.4,
-      "scenario_backlog": 0.0,
-      "baseline_served": 37327.5,
-      "scenario_served": 36509.0
+      "date": "2026-08-13",
+      "baseline_backlog": 76807.3,
+      "scenario_backlog": 821.5,
+      "baseline_served": 218225.4,
+      "scenario_served": 223765.9
     },
     {
-      "date": "2020-03-30",
-      "baseline_backlog": 330.5,
-      "scenario_backlog": 0.0,
-      "baseline_served": 163971.1,
-      "scenario_served": 162961.0
+      "date": "2026-08-14",
+      "baseline_backlog": 72815.3,
+      "scenario_backlog": 1200.6,
+      "baseline_served": 211988.4,
+      "scenario_served": 215574.5
     },
     {
-      "date": "2020-03-31",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 148275.5,
-      "scenario_served": 147945.0
+      "date": "2026-08-15",
+      "baseline_backlog": 59690.0,
+      "scenario_backlog": 301.4,
+      "baseline_served": 98693.0,
+      "scenario_served": 93065.7
     },
     {
-      "date": "2020-04-01",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 135465.0,
-      "scenario_served": 135465.0
+      "date": "2026-08-16",
+      "baseline_backlog": 51561.9,
+      "scenario_backlog": 72.1,
+      "baseline_served": 57871.1,
+      "scenario_served": 55693.3
     },
     {
-      "date": "2020-04-02",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 133725.0,
-      "scenario_served": 133725.0
+      "date": "2026-08-17",
+      "baseline_backlog": 74818.7,
+      "scenario_backlog": 4410.3,
+      "baseline_served": 226786.0,
+      "scenario_served": 253527.8
     },
     {
-      "date": "2020-04-03",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 127657.0,
-      "scenario_served": 127657.0
+      "date": "2026-08-18",
+      "baseline_backlog": 83545.6,
+      "scenario_backlog": 3443.6,
+      "baseline_served": 224667.2,
+      "scenario_served": 243261.1
     },
     {
-      "date": "2020-04-04",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 55182.0,
-      "scenario_served": 55182.0
+      "date": "2026-08-19",
+      "baseline_backlog": 87087.3,
+      "scenario_backlog": 2633.0,
+      "baseline_served": 220442.0,
+      "scenario_served": 234178.1
     },
     {
-      "date": "2020-04-05",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 33241.0,
-      "scenario_served": 33241.0
+      "date": "2026-08-20",
+      "baseline_backlog": 86270.9,
+      "scenario_backlog": 1964.1,
+      "baseline_served": 217632.7,
+      "scenario_served": 226852.6
     },
     {
-      "date": "2020-04-06",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 156453.0,
-      "scenario_served": 156453.0
+      "date": "2026-08-21",
+      "baseline_backlog": 80939.1,
+      "scenario_backlog": 1079.3,
+      "baseline_served": 214251.6,
+      "scenario_served": 218677.9
     },
     {
-      "date": "2020-04-07",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 148822.0,
-      "scenario_served": 148822.0
+      "date": "2026-08-22",
+      "baseline_backlog": 67157.9,
+      "scenario_backlog": 411.8,
+      "baseline_served": 100513.2,
+      "scenario_served": 94815.8
     },
     {
-      "date": "2020-04-08",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 141076.0,
-      "scenario_served": 141076.0
+      "date": "2026-08-23",
+      "baseline_backlog": 58132.3,
+      "scenario_backlog": 148.5,
+      "baseline_served": 58582.4,
+      "scenario_served": 56262.8
     },
     {
-      "date": "2020-04-09",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 138626.0,
-      "scenario_served": 138626.0
+      "date": "2026-08-24",
+      "baseline_backlog": 83588.8,
+      "scenario_backlog": 6026.0,
+      "baseline_served": 229949.9,
+      "scenario_served": 258147.0
     },
     {
-      "date": "2020-04-10",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 133813.0,
-      "scenario_served": 133813.0
+      "date": "2026-08-25",
+      "baseline_backlog": 95546.4,
+      "scenario_backlog": 6185.0,
+      "baseline_served": 224922.1,
+      "scenario_served": 246649.7
     },
     {
-      "date": "2020-04-11",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 58148.0,
-      "scenario_served": 58148.0
+      "date": "2026-08-26",
+      "baseline_backlog": 98200.8,
+      "scenario_backlog": 3580.0,
+      "baseline_served": 222301.4,
+      "scenario_served": 238074.3
     },
     {
-      "date": "2020-04-12",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 34815.0,
-      "scenario_served": 34815.0
+      "date": "2026-08-27",
+      "baseline_backlog": 95939.1,
+      "scenario_backlog": 907.7,
+      "baseline_served": 219839.8,
+      "scenario_served": 230809.4
     },
     {
-      "date": "2020-04-13",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 166204.0,
-      "scenario_served": 166204.0
+      "date": "2026-08-28",
+      "baseline_backlog": 91473.1,
+      "scenario_backlog": 764.1,
+      "baseline_served": 214584.3,
+      "scenario_served": 220340.7
     },
     {
-      "date": "2020-04-14",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 156064.0,
-      "scenario_served": 156064.0
+      "date": "2026-08-29",
+      "baseline_backlog": 77015.9,
+      "scenario_backlog": 95.0,
+      "baseline_served": 100717.9,
+      "scenario_served": 95476.5
     },
     {
-      "date": "2020-04-15",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 147908.0,
-      "scenario_served": 147908.0
+      "date": "2026-08-30",
+      "baseline_backlog": 67899.4,
+      "scenario_backlog": 113.7,
+      "baseline_served": 58183.1,
+      "scenario_served": 56579.7
     },
     {
-      "date": "2020-04-16",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 147854.0,
-      "scenario_served": 147854.0
+      "date": "2026-08-31",
+      "baseline_backlog": 93654.6,
+      "scenario_backlog": 6454.0,
+      "baseline_served": 227374.7,
+      "scenario_served": 256478.6
     },
     {
-      "date": "2020-04-17",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 140961.0,
-      "scenario_served": 140961.0
+      "date": "2026-09-01",
+      "baseline_backlog": 105380.1,
+      "scenario_backlog": 5217.8,
+      "baseline_served": 225101.6,
+      "scenario_served": 249192.4
     },
     {
-      "date": "2020-04-18",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 60529.0,
-      "scenario_served": 60529.0
+      "date": "2026-09-02",
+      "baseline_backlog": 109504.9,
+      "scenario_backlog": 9118.2,
+      "baseline_served": 66971.0,
+      "scenario_served": 78349.5
     },
     {
-      "date": "2020-04-19",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 37106.0,
-      "scenario_served": 37106.0
+      "date": "2026-09-03",
+      "baseline_backlog": 109886.1,
+      "scenario_backlog": 4126.4,
+      "baseline_served": 217861.2,
+      "scenario_served": 234985.3
     },
     {
-      "date": "2020-04-20",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 173555.0,
-      "scenario_served": 173555.0
+      "date": "2026-09-04",
+      "baseline_backlog": 104572.0,
+      "scenario_backlog": 1632.9,
+      "baseline_served": 217177.1,
+      "scenario_served": 225794.1
     },
     {
-      "date": "2020-04-21",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 164765.0,
-      "scenario_served": 164765.0
+      "date": "2026-09-05",
+      "baseline_backlog": 86743.8,
+      "scenario_backlog": 540.4,
+      "baseline_served": 103869.0,
+      "scenario_served": 96711.4
     },
     {
-      "date": "2020-04-22",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 157708.0,
-      "scenario_served": 157708.0
+      "date": "2026-09-06",
+      "baseline_backlog": 75980.8,
+      "scenario_backlog": 283.8,
+      "baseline_served": 59345.7,
+      "scenario_served": 57250.1
     },
     {
-      "date": "2020-04-23",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 153483.0,
-      "scenario_served": 153483.0
+      "date": "2026-09-07",
+      "baseline_backlog": 105719.2,
+      "scenario_backlog": 7504.5,
+      "baseline_served": 228026.0,
+      "scenario_served": 261456.4
     },
     {
-      "date": "2020-04-24",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 149386.0,
-      "scenario_served": 149386.0
+      "date": "2026-09-08",
+      "baseline_backlog": 117585.6,
+      "scenario_backlog": 6117.4,
+      "baseline_served": 226575.6,
+      "scenario_served": 252214.5
     },
     {
-      "date": "2020-04-25",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 63514.0,
-      "scenario_served": 63514.0
+      "date": "2026-09-09",
+      "baseline_backlog": 121468.4,
+      "scenario_backlog": 4462.7,
+      "baseline_served": 223625.7,
+      "scenario_served": 242163.8
     },
     {
-      "date": "2020-04-26",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 38304.0,
-      "scenario_served": 38304.0
+      "date": "2026-09-10",
+      "baseline_backlog": 119192.7,
+      "scenario_backlog": 2915.1,
+      "baseline_served": 220084.0,
+      "scenario_served": 232275.8
     },
     {
-      "date": "2020-04-27",
-      "baseline_backlog": 75.6,
-      "scenario_backlog": 0.0,
-      "baseline_served": 183798.0,
-      "scenario_served": 183882.0
+      "date": "2026-09-11",
+      "baseline_backlog": 113120.1,
+      "scenario_backlog": 2162.6,
+      "baseline_served": 217496.8,
+      "scenario_served": 224505.2
     },
     {
-      "date": "2020-04-28",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 168368.6,
-      "scenario_served": 168293.0
+      "date": "2026-09-12",
+      "baseline_backlog": 96945.0,
+      "scenario_backlog": 741.8,
+      "baseline_served": 102969.4,
+      "scenario_served": 98904.4
     },
     {
-      "date": "2020-04-29",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 164382.0,
-      "scenario_served": 164382.0
+      "date": "2026-09-13",
+      "baseline_backlog": 85301.6,
+      "scenario_backlog": 399.6,
+      "baseline_served": 59175.4,
+      "scenario_served": 57307.7
     },
     {
-      "date": "2020-04-30",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 158839.0,
-      "scenario_served": 158839.0
+      "date": "2026-09-14",
+      "baseline_backlog": 114162.9,
+      "scenario_backlog": 9673.3,
+      "baseline_served": 227400.0,
+      "scenario_served": 258597.5
     },
     {
-      "date": "2020-05-01",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 153011.0,
-      "scenario_served": 153011.0
+      "date": "2026-09-15",
+      "baseline_backlog": 127451.0,
+      "scenario_backlog": 8820.7,
+      "baseline_served": 225589.7,
+      "scenario_served": 252911.6
     },
     {
-      "date": "2020-05-02",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 67576.0,
-      "scenario_served": 67576.0
+      "date": "2026-09-16",
+      "baseline_backlog": 129489.0,
+      "scenario_backlog": 7441.1,
+      "baseline_served": 221584.3,
+      "scenario_served": 238562.8
     },
     {
-      "date": "2020-05-03",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 40164.0,
-      "scenario_served": 40164.0
+      "date": "2026-09-17",
+      "baseline_backlog": 129147.4,
+      "scenario_backlog": 5529.6,
+      "baseline_served": 220981.8,
+      "scenario_served": 236287.1
     },
     {
-      "date": "2020-05-04",
-      "baseline_backlog": 122.4,
-      "scenario_backlog": 0.0,
-      "baseline_served": 189926.0,
-      "scenario_served": 190062.0
+      "date": "2026-09-18",
+      "baseline_backlog": 124422.3,
+      "scenario_backlog": 3492.7,
+      "baseline_served": 217273.4,
+      "scenario_served": 228021.8
     },
     {
-      "date": "2020-05-05",
-      "baseline_backlog": 376.2,
-      "scenario_backlog": 0.0,
-      "baseline_served": 178815.4,
-      "scenario_served": 179111.0
+      "date": "2026-09-19",
+      "baseline_backlog": 108643.1,
+      "scenario_backlog": 1611.0,
+      "baseline_served": 101693.8,
+      "scenario_served": 99688.7
     },
     {
-      "date": "2020-05-06",
-      "baseline_backlog": 21.6,
-      "scenario_backlog": 0.0,
-      "baseline_served": 169915.2,
-      "scenario_served": 169563.0
+      "date": "2026-09-20",
+      "baseline_backlog": 95571.5,
+      "scenario_backlog": 865.3,
+      "baseline_served": 60051.6,
+      "scenario_served": 58248.6
     },
     {
-      "date": "2020-05-07",
-      "baseline_backlog": 14.4,
-      "scenario_backlog": 0.0,
-      "baseline_served": 165934.6,
-      "scenario_served": 165929.0
+      "date": "2026-09-21",
+      "baseline_backlog": 125805.1,
+      "scenario_backlog": 9635.1,
+      "baseline_served": 228414.0,
+      "scenario_served": 262785.7
     },
     {
-      "date": "2020-05-08",
-      "baseline_backlog": 109.3,
-      "scenario_backlog": 0.0,
-      "baseline_served": 161697.0,
-      "scenario_served": 161804.0
+      "date": "2026-09-22",
+      "baseline_backlog": 140493.8,
+      "scenario_backlog": 8258.7,
+      "baseline_served": 225412.9,
+      "scenario_served": 256170.7
     },
     {
-      "date": "2020-05-09",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 69572.3,
-      "scenario_served": 69463.0
+      "date": "2026-09-23",
+      "baseline_backlog": 141946.8,
+      "scenario_backlog": 6514.4,
+      "baseline_served": 224752.2,
+      "scenario_served": 242997.4
     },
     {
-      "date": "2020-05-10",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 41246.0,
-      "scenario_served": 41246.0
+      "date": "2026-09-24",
+      "baseline_backlog": 142790.7,
+      "scenario_backlog": 5002.8,
+      "baseline_served": 221803.5,
+      "scenario_served": 239468.8
     },
     {
-      "date": "2020-05-11",
-      "baseline_backlog": 332.1,
-      "scenario_backlog": 0.0,
-      "baseline_served": 195214.0,
-      "scenario_served": 195583.0
+      "date": "2026-09-25",
+      "baseline_backlog": 138157.3,
+      "scenario_backlog": 3393.4,
+      "baseline_served": 215604.6,
+      "scenario_served": 227554.4
     },
     {
-      "date": "2020-05-12",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 182495.1,
-      "scenario_served": 182163.0
+      "date": "2026-09-26",
+      "baseline_backlog": 119358.4,
+      "scenario_backlog": 1328.7,
+      "baseline_served": 103116.9,
+      "scenario_served": 99497.1
     },
     {
-      "date": "2020-05-13",
-      "baseline_backlog": 239.4,
-      "scenario_backlog": 0.0,
-      "baseline_served": 176770.0,
-      "scenario_served": 177036.0
+      "date": "2026-09-27",
+      "baseline_backlog": 105857.4,
+      "scenario_backlog": 820.5,
+      "baseline_served": 59783.1,
+      "scenario_served": 58461.1
     },
     {
-      "date": "2020-05-14",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 172994.4,
-      "scenario_served": 172755.0
+      "date": "2026-09-28",
+      "baseline_backlog": 138270.0,
+      "scenario_backlog": 12195.0,
+      "baseline_served": 228536.0,
+      "scenario_served": 263582.4
     },
     {
-      "date": "2020-05-15",
-      "baseline_backlog": 369.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 166228.0,
-      "scenario_served": 166638.0
+      "date": "2026-09-29",
+      "baseline_backlog": 152873.1,
+      "scenario_backlog": 12574.5,
+      "baseline_served": 226170.0,
+      "scenario_served": 255982.4
     },
     {
-      "date": "2020-05-16",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 72110.0,
-      "scenario_served": 71741.0
+      "date": "2026-09-30",
+      "baseline_backlog": 159081.4,
+      "scenario_backlog": 10840.2,
+      "baseline_served": 223701.9,
+      "scenario_served": 248115.8
     },
     {
-      "date": "2020-05-17",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 43752.0,
-      "scenario_served": 43752.0
+      "date": "2026-10-01",
+      "baseline_backlog": 159861.8,
+      "scenario_backlog": 7701.0,
+      "baseline_served": 222506.2,
+      "scenario_served": 243332.5
     },
     {
-      "date": "2020-05-18",
-      "baseline_backlog": 1844.1,
-      "scenario_backlog": 35.8,
-      "baseline_served": 200732.0,
-      "scenario_served": 202741.2
+      "date": "2026-10-02",
+      "baseline_backlog": 154567.5,
+      "scenario_backlog": 5929.0,
+      "baseline_served": 216933.1,
+      "scenario_served": 229926.2
     },
     {
-      "date": "2020-05-19",
-      "baseline_backlog": 965.4,
-      "scenario_backlog": 0.0,
-      "baseline_served": 194522.4,
-      "scenario_served": 193786.8
+      "date": "2026-10-03",
+      "baseline_backlog": 136665.6,
+      "scenario_backlog": 2664.1,
+      "baseline_served": 103135.9,
+      "scenario_served": 103387.9
     },
     {
-      "date": "2020-05-20",
-      "baseline_backlog": 891.9,
-      "scenario_backlog": 0.0,
-      "baseline_served": 183004.5,
-      "scenario_served": 183030.0
+      "date": "2026-10-04",
+      "baseline_backlog": 122519.8,
+      "scenario_backlog": 1689.1,
+      "baseline_served": 59564.5,
+      "scenario_served": 59819.3
     },
     {
-      "date": "2020-05-21",
-      "baseline_backlog": 381.9,
-      "scenario_backlog": 0.0,
-      "baseline_served": 178440.5,
-      "scenario_served": 177973.0
+      "date": "2026-10-05",
+      "baseline_backlog": 153630.7,
+      "scenario_backlog": 13010.8,
+      "baseline_served": 229661.0,
+      "scenario_served": 265074.7
     },
     {
-      "date": "2020-05-22",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 172062.9,
-      "scenario_served": 171681.0
+      "date": "2026-10-06",
+      "baseline_backlog": 175194.6,
+      "scenario_backlog": 18043.2,
+      "baseline_served": 224478.0,
+      "scenario_served": 258470.8
     },
     {
-      "date": "2020-05-23",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 75231.0,
-      "scenario_served": 75231.0
+      "date": "2026-10-07",
+      "baseline_backlog": 180303.0,
+      "scenario_backlog": 13899.5,
+      "baseline_served": 224860.0,
+      "scenario_served": 252601.3
     },
     {
-      "date": "2020-05-24",
-      "baseline_backlog": 0.0,
-      "scenario_backlog": 0.0,
-      "baseline_served": 44540.0,
-      "scenario_served": 44540.0
+      "date": "2026-10-08",
+      "baseline_backlog": 184851.9,
+      "scenario_backlog": 10868.4,
+      "baseline_served": 221123.9,
+      "scenario_served": 248035.5
+    },
+    {
+      "date": "2026-10-09",
+      "baseline_backlog": 181551.3,
+      "scenario_backlog": 9460.1,
+      "baseline_served": 219283.3,
+      "scenario_served": 236512.2
+    },
+    {
+      "date": "2026-10-10",
+      "baseline_backlog": 159624.7,
+      "scenario_backlog": 5041.6,
+      "baseline_served": 105141.5,
+      "scenario_served": 104809.3
+    },
+    {
+      "date": "2026-10-11",
+      "baseline_backlog": 143652.4,
+      "scenario_backlog": 3709.3,
+      "baseline_served": 60628.0,
+      "scenario_served": 61537.2
+    },
+    {
+      "date": "2026-10-12",
+      "baseline_backlog": 178479.3,
+      "scenario_backlog": 17398.1,
+      "baseline_served": 227944.0,
+      "scenario_served": 266980.1
+    },
+    {
+      "date": "2026-10-13",
+      "baseline_backlog": 194337.8,
+      "scenario_backlog": 18944.9,
+      "baseline_served": 228356.4,
+      "scenario_served": 262156.2
+    },
+    {
+      "date": "2026-10-14",
+      "baseline_backlog": 205652.9,
+      "scenario_backlog": 19395.1,
+      "baseline_served": 222806.6,
+      "scenario_served": 254366.7
+    },
+    {
+      "date": "2026-10-15",
+      "baseline_backlog": 206260.1,
+      "scenario_backlog": 14686.2,
+      "baseline_served": 220550.0,
+      "scenario_served": 247152.1
     }
   ]
 }

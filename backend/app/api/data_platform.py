@@ -6,11 +6,14 @@ from fastapi import APIRouter, Depends, File, Path, Response, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
 
 from backend.app.core.deps import current_user, require_page
+from backend.app.jobs import runner
 from backend.app.core.pagination import Page, PageParams, page_params
 from backend.app.core.users import UserRecord
 from backend.app.schemas.common import ERROR_RESPONSES
 from backend.app.schemas.data_platform import (
     ConsolidateIn,
+    FeedRun,
+    FeedStatus,
     ForecastIn,
     JobAccepted,
     LinkDiscovery,
@@ -20,7 +23,7 @@ from backend.app.schemas.data_platform import (
     UploadDetail,
     UploadSummary,
 )
-from backend.app.services import data_platform
+from backend.app.services import data_feed, data_platform
 
 router = APIRouter(prefix="/data", tags=["data-engineering"], responses=ERROR_RESPONSES, dependencies=[Depends(require_page("data"))])
 UploadId = Path(..., pattern="^[0-9a-f]{32}$")
@@ -80,3 +83,24 @@ def discover_links(body: LinkIn) -> LinkDiscovery:
 @router.post("/links/consolidate", response_model=UploadAccepted, status_code=202)
 def consolidate(body: ConsolidateIn, user: UserRecord = Depends(current_user)) -> UploadAccepted:
     return data_platform.start_consolidation(body, user)
+
+
+# ---- live data feed --------------------------------------------------------------------------
+
+@router.get("/feed", response_model=FeedStatus)
+def feed() -> FeedStatus:
+    s = data_feed.feed_status()
+    redate, release = s.get("redate") or {}, s.get("release") or {}
+    return FeedStatus(
+        enabled=s["enabled"], released_through=release.get("released_through"), held_back_days=release.get("held_back_days"),
+        redated_end=redate.get("redated_end"), original_cutoff=redate.get("original_cutoff"), shift_days=redate.get("shift_days"),
+        next_run_at=s["next_run_at"], runs=[FeedRun(**r) for r in s["runs"]],
+    )
+
+
+@router.post("/feed/refresh", response_model=JobAccepted, status_code=202)
+def refresh_feed(user: UserRecord = Depends(current_user)) -> JobAccepted:
+    """Release records up to now and rebuild the lakehouse (runs as a background job)."""
+    active = runner.active_job("data_feed")
+    job = active or runner.submit("data_feed", user.email, lambda ctx: data_feed.run_refresh("manual", ctx, user.email))
+    return JobAccepted(job_id=job.job_id)

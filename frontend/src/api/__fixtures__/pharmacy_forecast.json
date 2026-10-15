@@ -1,16 +1,16 @@
 {
-  "inventory_id": "INV_000334",
-  "medication_name": "Nitroglycerin 0.4 MG/ACTUAT Mucosal Spray",
-  "hospital_name": "HALLMARK IMAGING ASSOCIATES  PC",
+  "inventory_id": "INV_000010",
+  "medication_name": "120 ACTUAT Fluticasone propionate 0.044 MG/ACTUAT Metered Dose Inhaler",
+  "hospital_name": "ADCARE HOSPITAL OF WORCESTER INC",
   "current_stock": 0,
   "dispensed_last_30d": 2,
   "predicted_30d_demand": 2,
   "projected_shortfall": 2,
   "urgency": "URGENT",
   "recommended_order_quantity": 6,
-  "estimated_procurement_cost": 789.6,
+  "estimated_procurement_cost": 168.42,
   "actions": [
-    "Issue IMMEDIATE emergency procurement order for 6 units of Nitroglycerin 0.4 MG/ACTUAT Mucosal Spray.",
+    "Issue IMMEDIATE emergency procurement order for 6 units of 120 ACTUAT Fluticasone propionate 0.044 MG/ACTUAT Metered Dose Inhaler.",
     "Notify prescribing physicians to consider equivalent therapeutic alternatives if available.",
     "Restructure inpatient dispensing to standard unit-dose rounds to minimize ward stock wastage."
   ],
@@ -18,12 +18,12 @@
   "forecast": {
     "serving_method": "baseline_last30",
     "method_label": "Naive baseline: last 30 days repeated",
-    "holdout_mae": 0.217,
-    "holdout_baseline_mae": 0.201,
+    "holdout_mae": 0.385,
+    "holdout_baseline_mae": 0.314,
     "holdout_surge_mae": null,
-    "holdout_served_mae": null,
+    "holdout_served_mae": 0.314,
     "beats_baseline": false,
-    "test_period": "2020-02-26 to 2020-04-26",
-    "data_through": "2020-05-26"
+    "test_period": "2026-07-17 to 2026-09-15",
+    "data_through": "2026-10-15"
   }
 }

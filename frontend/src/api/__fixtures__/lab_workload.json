@@ -1,62 +1,38 @@
 [
   {
     "category": "Chemistry",
-    "total": 297233,
-    "abnormal": 86829,
-    "critical": 24079
+    "total": 68984,
+    "abnormal": 16313,
+    "critical": 1284
   },
   {
     "category": "Vital Signs",
-    "total": 281082,
-    "abnormal": 175710,
-    "critical": 81113
+    "total": 48991,
+    "abnormal": 18318,
+    "critical": 905
   },
   {
     "category": "Hematology",
-    "total": 276214,
-    "abnormal": 80268,
-    "critical": 1000
-  },
-  {
-    "category": "Liver Function",
-    "total": 156897,
-    "abnormal": 48232,
-    "critical": 0
-  },
-  {
-    "category": "Inflammatory Markers",
-    "total": 51236,
-    "abnormal": 24324,
-    "critical": 2541
-  },
-  {
-    "category": "Blood Gas",
-    "total": 42672,
-    "abnormal": 23233,
-    "critical": 13333
-  },
-  {
-    "category": "Coagulation",
-    "total": 38427,
-    "abnormal": 20854,
-    "critical": 1384
+    "total": 19431,
+    "abnormal": 1740,
+    "critical": 316
   },
   {
     "category": "Lipid",
-    "total": 28440,
-    "abnormal": 8542,
+    "total": 18808,
+    "abnormal": 5739,
     "critical": 0
   },
   {
-    "category": "Cardiac",
-    "total": 25618,
-    "abnormal": 4467,
-    "critical": 57
+    "category": "Liver Function",
+    "total": 17321,
+    "abnormal": 4826,
+    "critical": 0
   },
   {
     "category": "Endocrine",
-    "total": 6470,
-    "abnormal": 5212,
+    "total": 4245,
+    "abnormal": 3376,
     "critical": 0
   }
 ]

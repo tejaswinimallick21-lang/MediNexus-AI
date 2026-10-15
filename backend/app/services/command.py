@@ -31,7 +31,6 @@ from src.utils.database import query_df_strict
 ABANDON_RATE = 0.10  # share of the waiting list that drops out each day (same rule as the simulator)
 SHIFT_HOURS = 8.0
 OVERTIME_MULTIPLIER = 1.5
-PRE_COVID_END = "2020-03-09"
 
 
 # ---- What-if capacity simulation --------------------------------------------------------------
@@ -55,9 +54,7 @@ def list_hospitals() -> List[HospitalOption]:
 
 
 def _window(period: str) -> Tuple[str, str]:
-    end = str(query_df_strict("SELECT max(CAST(date AS DATE)) AS d FROM sim_outpatient_daily").iloc[0]["d"])
-    if period == "pre_covid_365":
-        end = PRE_COVID_END
+    end = pd.Timestamp(query_df_strict("SELECT max(CAST(date AS DATE)) AS d FROM sim_outpatient_daily").iloc[0]["d"]).strftime("%Y-%m-%d")
     days = 90 if period == "last_90" else 365
     start = (pd.Timestamp(end) - pd.Timedelta(days=days - 1)).strftime("%Y-%m-%d")
     return start, end
@@ -256,7 +253,7 @@ def get_readmission_economics() -> ReadmissionEconomics:
 
 MONITORED = [  # registry name, label
     ("readmission_risk_model", "Unplanned 30-day readmission"),
-    ("covid_outcome_model", "COVID-19 outcomes"),
+    ("outcome_risk_model", "12-month outcome risk"),
     ("length_of_stay_model", "Length of stay"),
     ("outpatient_demand_model", "Outpatient demand (7-day)"),
     ("drug_class_demand_model", "Drug-class demand (7-day)"),
@@ -291,13 +288,13 @@ def list_model_monitor() -> List[ModelMonitorRow]:
                 health="low_evidence" if low else "healthy",
                 note=f"{m.get('test_positives')} readmissions in the held-out set; precision {m['precision'] * 100:.1f}%.",
             ))
-        elif name == "covid_outcome_model":
-            h, d = m.get("hospitalized_30d", {}), m.get("died_30d", {})
+        elif name == "outcome_risk_model":
+            h, d = m.get("hospitalized_12m", {}), m.get("died_12m", {})
             rows.append(ModelMonitorRow(
-                **common, primary_metric=f"Hospitalization AUC {h.get('roc_auc', 0):.2f} · mortality AUC {d.get('roc_auc', 0):.2f}",
+                **common, primary_metric=f"Admission AUC {h.get('roc_auc', 0):.2f} · mortality AUC {d.get('roc_auc', 0):.2f}",
                 baseline=f"Age only {h.get('baseline_roc_auc_age_only', 0):.2f} / {d.get('baseline_roc_auc_age_only', 0):.2f}",
                 verdict=_verdict(h.get("roc_auc"), h.get("baseline_roc_auc_age_only")), serving="Model", health="healthy",
-                note="Scored at diagnosis using pre-diagnosis history only.",
+                note="Trained on history up to one year ago; scored on history up to today.",
             ))
         elif name == "length_of_stay_model":
             rows.append(ModelMonitorRow(
@@ -310,8 +307,6 @@ def list_model_monitor() -> List[ModelMonitorRow]:
             method, served_label, served = served_forecast(m, base_key)
             baseline_served = method.startswith("baseline")
             tried = f"gradient-boosting model MAE {m['mae']:.2f}" + (f", surge-aware {m['surge_aware_mae']:.2f}" if "surge_aware_mae" in m else "")
-            if method == "surge_aware" and m.get("surge_aware_pre_covid_skill_pct") is not None:
-                tried += f" · {m['surge_aware_pre_covid_skill_pct']:.0f}% more accurate than naive outside the COVID-19 surge"
             rows.append(ModelMonitorRow(
                 **common, primary_metric=f"MAE {served:.2f} ({served_label.lower()})", baseline=f"Naive {m[base_key]:.2f}",
                 verdict="Baseline wins — baseline served" if baseline_served else _verdict(served, m[base_key], higher_is_better=False),

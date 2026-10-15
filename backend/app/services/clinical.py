@@ -33,7 +33,7 @@ from backend.app.schemas.clinical import (
 from src.ml.model_registry import load_model
 from src.ml.predict import (
     CLINICAL_DISCLAIMER,
-    predict_patient_covid_outcomes,
+    predict_patient_outcome_risk,
     predict_patient_los,
     predict_patient_readmission,
     readmission_drivers,
@@ -281,20 +281,20 @@ def get_patient_360(patient_id: str, user: UserRecord) -> Patient360:
 def get_patient_risk(patient_id: str, user: UserRecord) -> PatientRisk:
     p = _patient_row(patient_id)
     _audit_view(user, patient_id, "risk_predictions")
-    covid = predict_patient_covid_outcomes(patient_id)
+    outlook = predict_patient_outcome_risk(patient_id)
     readm = predict_patient_readmission(patient_id)
     los = predict_patient_los(patient_id)
     profile = {k: pd.to_numeric(p.get(k), errors="coerce") for k in ["has_heart_failure", "has_diabetes", "critical_lab_count"]}
     plan = get_clinical_prescription_plan(readm if readm.get("status") == "SUCCESS" else {"risk_level": "LOW", "probability": 0.0}, profile)
     ok = readm.get("status") == "SUCCESS"
     return PatientRisk(
-        covid_scored_as_of=covid.get("scored_as_of"),
-        covid_outcomes=[
+        outcome_scored_as_of=outlook.get("scored_as_of"),
+        outcome_risks=[
             OutcomeRisk(outcome=k, label=v["label"], probability_pct=v["probability"], risk_level=v["risk_level"],
                         cohort_rate_pct=v["cohort_rate_pct"], observed=v["observed"])
-            for k, v in covid.get("outcomes", {}).items()
+            for k, v in outlook.get("outcomes", {}).items()
         ],
-        covid_drivers=covid.get("risk_drivers", []),
+        outcome_drivers=outlook.get("risk_drivers", []),
         readmission_available=ok,
         readmission_probability_pct=readm.get("probability") if ok else None,
         readmission_risk_level=readm.get("risk_level") if ok else None,
