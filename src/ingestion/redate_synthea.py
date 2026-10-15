@@ -23,6 +23,8 @@ to data/metadata/synthea_redate.json and synthea_release.json.
 import argparse
 import json
 import sys
+import tempfile
+import zipfile
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Dict, Optional
@@ -36,7 +38,8 @@ from src.utils.logging_utils import get_logger  # noqa: E402
 
 logger = get_logger("redate_synthea")
 
-SOURCE_DIR = SYNTHEA_SOURCE_DIR                    # the original download (never modified)
+SOURCE_DIR = SYNTHEA_SOURCE_DIR                    # the original download, unzipped (optional: the zip is enough)
+SOURCE_ZIP = DATA_DIR / "synthea" / "10k_synthea_covid19_csv.zip"  # the original download as published
 REDATED_DIR = DATA_DIR / "synthea" / "redated"     # cut + shifted, including held-back future events
 CURRENT_DIR = SYNTHEA_CSV_DIR                      # what the pipeline reads: released up to now
 REDATE_META = METADATA_DIR / "synthea_redate.json"
@@ -121,6 +124,19 @@ def _shifted_expr(expr: str, col: str, days: int) -> str:
             f"ELSE strftime(TRY_CAST(replace(replace(({expr}), 'T', ' '), 'Z', '') AS TIMESTAMP) + INTERVAL {days} DAY, '%Y-%m-%dT%H:%M:%SZ') END")
 
 
+def _source_csvs(tmp: Path) -> Path:
+    """Folder holding the original CSVs: data/synthea/csv if present, else the zip extracted into `tmp`."""
+    if (SOURCE_DIR / "patients.csv").exists():
+        return SOURCE_DIR
+    if not SOURCE_ZIP.exists():
+        raise FileNotFoundError(f"Synthea source not found: put {SOURCE_ZIP.name} in {SOURCE_ZIP.parent} (or its CSVs in {SOURCE_DIR}).")
+    with zipfile.ZipFile(SOURCE_ZIP) as z:
+        for member in z.namelist():
+            if member.endswith(".csv"):
+                (tmp / Path(member).name).write_bytes(z.read(member))
+    return tmp
+
+
 def redate(today: Optional[date] = None, horizon_days: int = HORIZON_DAYS) -> Dict:
     """Cut the source at 31 Dec 2019 and shift it so it ends about `horizon_days` after today."""
     today = today or date.today()
@@ -129,9 +145,11 @@ def redate(today: Optional[date] = None, horizon_days: int = HORIZON_DAYS) -> Di
     shift_days = ((target_end - original_end).days // 7) * 7  # whole weeks: weekday patterns stay intact
     shift_years = round(shift_days / 365.25)
     logger.info(f"Re-dating Synthea: cut at {ORIGINAL_CUTOFF}, shift {shift_days} days (~{shift_years} years)")
-    counts = _transform(SOURCE_DIR, REDATED_DIR, ORIGINAL_CUTOFF, shift_days, shift_years)
+    with tempfile.TemporaryDirectory(prefix="synthea_src_") as tmp:
+        src = _source_csvs(Path(tmp))
+        counts = _transform(src, REDATED_DIR, ORIGINAL_CUTOFF, shift_days, shift_years)
     meta = {
-        "source": str(SOURCE_DIR), "original_cutoff": ORIGINAL_CUTOFF, "shift_days": shift_days, "shift_years": shift_years,
+        "source": str(SOURCE_DIR if src == SOURCE_DIR else SOURCE_ZIP), "original_cutoff": ORIGINAL_CUTOFF, "shift_days": shift_days, "shift_years": shift_years,
         "redated_end": str(original_end + timedelta(days=shift_days)), "anchored_on": str(today),
         "rows": counts, "covid_period_removed": "records after 2019-12-31 in the original data (COVID-19 starts 2020-01-20)",
         "generated_at": datetime.now().isoformat(timespec="seconds"),

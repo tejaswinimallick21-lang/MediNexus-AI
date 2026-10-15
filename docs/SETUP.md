@@ -22,8 +22,8 @@ npm --prefix frontend install
 ## 3. Get the Synthea data
 
 Download **10k_synthea_covid19_csv.zip** (≈54 MB) from
-https://synthetichealth.github.io/synthea/downloads.html and extract its CSV files into
-`data/synthea/csv/` (so that `data/synthea/csv/patients.csv` exists).
+https://synthetichealth.github.io/synthea/downloads.html and save it, still zipped, in
+`data/synthea/` (so that `data/synthea/10k_synthea_covid19_csv.zip` exists).
 The bootstrap script keeps this download unchanged and re-dates a copy to today (records up to 2019, so
 no COVID-19 period); a nightly live feed then releases the next day's records.
 

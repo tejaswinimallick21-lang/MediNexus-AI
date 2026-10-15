@@ -58,7 +58,7 @@ MediNexus-AI-main/
 ├── tests/                      pipeline, data and ML tests
 │
 └── not in git (generated / large)
-    ├── data/synthea/csv/         Synthea export (16 CSVs)
+    ├── data/synthea/             Synthea download (zip), re-dated and released copies
     ├── data/raw → bronze → silver → gold/   Medallion layers (Parquet)
     ├── database/healthcare.duckdb   tables the API reads + registry, audit, purchase orders
     ├── models/*.joblib           trained models

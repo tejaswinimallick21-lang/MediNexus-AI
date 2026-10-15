@@ -60,7 +60,7 @@ The platform runs on **Synthea** synthetic patient records (https://synthetichea
 * **Lab/vital history is short:** this Synthea export records detailed results (blood pressure, HbA1c, eGFR…) almost only from mid-2019, i.e. roughly the last six months after re-dating. Older visits exist but carry few results, so many chronic patients have no monitoring test on record and show as open care gaps ("never recorded"). The count is what the data says; no readings are invented to lower it.
 * **Bed capacity** is estimated as 1.25× each unit's observed peak census, so occupancy rates are relative, not reported capacity.
 
-Setup: download `10k_synthea_covid19_csv.zip` (≈54 MB) and extract its CSVs into `data/synthea/csv/` (kept unmodified); `scripts/bootstrap.py` re-dates and releases it. A brand-new Synthea run (Java) with the same CSV schema can replace it at any time. The legacy Faker generator (`src/ingestion/generate_datasets.py`) is only used when no Synthea export is present.
+Setup: download `10k_synthea_covid19_csv.zip` (≈54 MB) and save it, still zipped, in `data/synthea/` (kept unmodified); `scripts/bootstrap.py` re-dates and releases it. A brand-new Synthea run (Java) with the same CSV schema can replace it at any time. The legacy Faker generator (`src/ingestion/generate_datasets.py`) is only used when no Synthea export is present.
 
 > Please cite: Walonoski J, et al. *Synthea: An approach, method, and software mechanism for generating synthetic patients and the synthetic electronic health care record.* JAMIA 2018;25(3):230–238.
 
@@ -191,7 +191,7 @@ Full instructions for a new machine: **[docs/SETUP.md](docs/SETUP.md)**. In shor
 pip install -r requirements.txt
 npm install && npm --prefix frontend install
 cp .env.example .env              # add OPENAI_API_KEY (optional) and MEDINEXUS_JWT_SECRET
-# put the Synthea COVID-19 10K CSVs in data/synthea/csv/ (bootstrap re-dates them to today)
+# save 10k_synthea_covid19_csv.zip in data/synthea/ (bootstrap re-dates it to today)
 python scripts/bootstrap.py       # raw → Medallion → simulated ops → models → accounts
 npm run dev                       # API http://localhost:8000 (docs /docs) + React http://localhost:5173
 npm test                          # pytest (backend + pipeline) and Vitest (frontend contracts)

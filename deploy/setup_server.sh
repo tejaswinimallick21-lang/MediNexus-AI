@@ -35,7 +35,7 @@ step() { echo; echo "==> $*"; }
 
 step "System packages"
 sudo apt-get update -y
-sudo apt-get install -y python3-venv python3-pip nginx unzip git curl
+sudo apt-get install -y python3-venv python3-pip nginx git curl
 if [[ $HTTPS -eq 1 ]]; then sudo apt-get install -y certbot python3-certbot-nginx; fi
 if ! command -v node >/dev/null || [[ "$(node -v | cut -d. -f1 | tr -d v)" -lt 20 ]]; then
   curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
@@ -55,11 +55,6 @@ if [[ -n "$DATA" ]]; then
 fi
 [[ -f database/healthcare.duckdb ]] || { echo "No database yet: pass --data medinexus_data.tar.gz (see docs/DEPLOY_AZURE.md)"; exit 1; }
 [[ -f backend/seed_users.json ]] || { echo "backend/seed_users.json is missing: it is inside the data archive"; exit 1; }
-if [[ ! -f data/synthea/csv/patients.csv ]]; then
-  step "Extracting the original Synthea CSVs (used when the feed re-anchors)"
-  mkdir -p data/synthea/csv
-  unzip -j -o -q data/synthea/10k_synthea_covid19_csv.zip '*.csv' -d data/synthea/csv
-fi
 
 step "Python environment"
 [[ -d .venv ]] || python3 -m venv .venv

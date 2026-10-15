@@ -4,7 +4,8 @@ Rebuild everything git does not carry (data, database, models, accounts) on a fr
     python scripts/bootstrap.py            # run every step that is still missing
     python scripts/bootstrap.py --force    # re-run every step
 
-Prerequisite: the Synthea COVID-19 10K CSV export extracted into data/synthea/csv/
+Prerequisite: the Synthea COVID-19 10K download, 10k_synthea_covid19_csv.zip, saved in data/synthea/
+(or its CSVs extracted into data/synthea/csv/).
 (https://synthetichealth.github.io/synthea/downloads.html -> 10k_synthea_covid19_csv.zip).
 The first two steps re-date it to today and drop the 2020 COVID-19 period (src/ingestion/redate_synthea.py).
 Each step is the same command documented in docs/SETUP.md, run in order.
@@ -56,9 +57,9 @@ def main() -> int:
     parser.add_argument("--force", action="store_true", help="Re-run steps that already look complete")
     args = parser.parse_args()
 
-    csv_dir = ROOT / "data" / "synthea" / "csv"
-    if not (csv_dir / "patients.csv").exists():
-        print(f"Missing Synthea data: extract 10k_synthea_covid19_csv.zip into {csv_dir}\n"
+    synthea = ROOT / "data" / "synthea"
+    if not ((synthea / "10k_synthea_covid19_csv.zip").exists() or (synthea / "csv" / "patients.csv").exists()):
+        print(f"Missing Synthea data: save 10k_synthea_covid19_csv.zip in {synthea}\n"
               "Download: https://synthetichealth.github.io/synthea/downloads.html")
         return 1
     if not (ROOT / ".env").exists() and (ROOT / ".env.example").exists():
