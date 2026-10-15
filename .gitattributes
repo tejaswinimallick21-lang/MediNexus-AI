@@ -6,3 +6,6 @@
 *.parquet binary
 *.duckdb binary
 *.zip binary
+*.sh text eol=lf
+deploy/*.service text eol=lf
+deploy/nginx.conf text eol=lf

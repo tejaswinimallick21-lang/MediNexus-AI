@@ -51,3 +51,6 @@ data/rag/
 
 # Build caches
 *.tsbuildinfo
+
+# Deployment data package (deploy/pack_data.py)
+medinexus_data*.tar.gz

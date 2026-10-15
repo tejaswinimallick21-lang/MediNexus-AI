@@ -199,6 +199,8 @@ npm test                          # pytest (backend + pipeline) and Vitest (fron
 
 Optional environment: `MEDINEXUS_ENV=production` (disables the dev-only CORS origin), `MEDINEXUS_COOKIE_SECURE=true` behind HTTPS, `frontend/.env` → `VITE_API_BASE` (defaults to `/api`). All agent settings are listed in `.env.example`.
 
+**Deploying to a server:** `docs/DEPLOY_AZURE.md` sets it up on one Azure Linux VM (nginx + HTTPS + the API as a service) with the scripts in `deploy/`.
+
 > DuckDB allows one writing process at a time; connections retry for up to 15 s on a lock. Tests run on a temporary copy of the database, so they can run while the app is up.
 
 ---
