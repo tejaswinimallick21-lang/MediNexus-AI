@@ -18,6 +18,16 @@ import { PatientPage } from "./PatientPage";
 import styles from "./ClinicalPage.module.css";
 
 export const TIER_TONE: Record<string, "bad" | "warn" | "good"> = { High: "bad", Moderate: "warn", Low: "good", HIGH: "bad", MODERATE: "warn", LOW: "good" };
+export const STATUS_TONE: Record<string, "bad" | "warn" | "good" | "info" | "neutral"> = {
+  "In treatment": "info",
+  "Awaiting treatment": "warn",
+  "Watchful waiting": "neutral",
+  Surveillance: "good",
+  Hospice: "bad",
+  Deceased: "neutral",
+};
+export const TREND_ARROW: Record<string, string> = { Rising: "↑", Falling: "↓", Stable: "→" };
+const CANCER_TYPES = ["Breast", "Prostate", "Lung", "Colon", "Melanoma", "Leukemia (CLL)", "Lymphoma (NHL)", "Pancreas"];
 
 /** /doctor/* : workstation home and nested patient pages. */
 export function ClinicalWorkspace() {
@@ -41,39 +51,45 @@ function useDebounced<T>(value: T, ms = 300): T {
 function ClinicalHome() {
   const navigate = useNavigate();
   const kpis = useApi((s) => clinicalApi.kpis(s), []);
-  const huddle = useApi((s) => clinicalApi.huddle(12, s), []);
+  const worklist = useApi((s) => clinicalApi.worklist(12, s), []);
   const gapSummary = useApi((s) => clinicalApi.careGapSummary(s), []);
-  const [gap, setGap] = useState("high_risk_no_follow_up");
+  const [gap, setGap] = useState("treatment_delay");
   const gapPager = useCursorPager();
   const gaps = useApi((s) => clinicalApi.careGaps({ gap, limit: 8, cursor: gapPager.cursor }, s), [gap, gapPager.cursor]);
 
   const [search, setSearch] = useState("");
-  const [tier, setTier] = useState("");
+  const [cancerType, setCancerType] = useState("");
+  const [stage, setStage] = useState("");
   const debounced = useDebounced(search);
   const pager = useCursorPager();
-  useEffect(() => pager.reset(), [debounced, tier]); // eslint-disable-line react-hooks/exhaustive-deps
-  const patients = useApi((s) => patientApi.search({ search: debounced, tier, limit: 10, cursor: pager.cursor }, s), [debounced, tier, pager.cursor]);
+  useEffect(() => pager.reset(), [debounced, cancerType, stage]); // eslint-disable-line react-hooks/exhaustive-deps
+  const patients = useApi(
+    (s) => patientApi.search({ search: debounced, cancer_type: cancerType || undefined, stage: stage || undefined, limit: 10, cursor: pager.cursor }, s),
+    [debounced, cancerType, stage, pager.cursor],
+  );
 
   const k = kpis.data;
   const patientColumns: Column<PatientSummary>[] = [
     { key: "id", header: "Patient", render: (r) => <Link to={`patients/${r.patient_id}`}><code>{r.patient_id}</code></Link> },
     { key: "name", header: "Name", render: (r) => <Link to={`patients/${r.patient_id}`} className={styles.nameLink}>{r.name}</Link> },
     { key: "age", header: "Age", numeric: true, render: (r) => formatNumber(r.age) },
-    { key: "gender", header: "Sex", render: (r) => r.gender },
-    { key: "adm", header: "Admissions", numeric: true, render: (r) => formatNumber(r.total_admissions) },
+    { key: "cancer", header: "Cancer", render: (r) => r.cancer_type ?? "Not yet diagnosed" },
+    { key: "stage", header: "Stage", render: (r) => r.cancer_stage ?? "—" },
     {
-      key: "tier",
-      header: "Acuity",
-      render: (r) => (r.is_deceased ? <Badge>Deceased</Badge> : <Badge tone={TIER_TONE[r.clinical_risk_tier]}>{r.clinical_risk_tier}</Badge>),
+      key: "status",
+      header: "Status",
+      render: (r) =>
+        r.is_deceased ? <Badge>Deceased</Badge> : r.treatment_status ? <Badge tone={STATUS_TONE[r.treatment_status]}>{r.treatment_status}</Badge> : "—",
     },
+    { key: "tier", header: "Acuity", render: (r) => <Badge tone={TIER_TONE[r.clinical_risk_tier]}>{r.clinical_risk_tier}</Badge> },
   ];
 
   return (
     <div>
       <PageHeader
         eyebrow="Healthcare professional"
-        title="Clinical Workstation"
-        subtitle={k ? `Morning huddle, care gaps and patient 360 · data through ${formatDate(k.data_through)}` : "Morning huddle, care gaps and patient 360"}
+        title="Oncology Workstation"
+        subtitle={k ? `Tumour board, care gaps and patient 360 · data through ${formatDate(k.data_through)}` : "Tumour board, care gaps and patient 360"}
       />
 
       <KpiGrid
@@ -82,48 +98,55 @@ function ClinicalHome() {
         onRetry={kpis.reload}
         items={
           k && [
-            { label: "Living patients", value: k.living_patients, format: (n) => formatNumber(n), icon: "Users", hint: `${formatNumber(k.high_tier_patients)} high acuity` },
-            { label: "Discharged · 30 days", value: k.recent_discharges, format: (n) => formatNumber(n), icon: "Home", hint: "Latest stay per patient" },
-            { label: "High readmission risk", value: k.high_risk_recent_discharges, format: (n) => formatNumber(n), icon: "Alert", tone: "bad", hint: "Top decile of the model" },
-            { label: "Open care gaps", value: k.open_care_gaps, format: (n) => formatNumber(n), icon: "Clipboard", tone: "warn", hint: "Guideline monitoring overdue" },
+            { label: "Active cancer patients", value: k.active_patients, format: (n) => formatNumber(n), icon: "Users", hint: "Living, with a diagnosis" },
+            { label: "In treatment", value: k.in_treatment, format: (n) => formatNumber(n), icon: "Pulse", hint: "Treatment in the last 30 days" },
+            { label: "Awaiting treatment", value: k.awaiting_treatment, format: (n) => formatNumber(n), icon: "Clock", tone: "warn", hint: "Diagnosed ≤ 90 days, untreated" },
+            { label: "High 12-month risk", value: k.high_mortality_risk, format: (n) => formatNumber(n), icon: "Alert", tone: "bad", hint: `${formatNumber(k.open_care_gaps)} open care gaps` },
           ]
         }
       />
 
       <Grid>
-        <Panel title="Morning huddle" subtitle="Recent discharges ranked by unplanned 30-day readmission risk" icon="Stethoscope">
-          {huddle.error ? (
-            <ErrorState error={huddle.error} onRetry={huddle.reload} />
-          ) : !huddle.data ? (
+        <Panel title="Tumour-board worklist" subtitle="Living patients ranked by predicted 12-month mortality risk" icon="Stethoscope">
+          {worklist.error ? (
+            <ErrorState error={worklist.error} onRetry={worklist.reload} />
+          ) : !worklist.data ? (
             <SkeletonText lines={10} />
-          ) : huddle.data.length === 0 ? (
-            <EmptyState title="No recent discharges" />
+          ) : worklist.data.length === 0 ? (
+            <EmptyState title="No scored patients" />
           ) : (
             <ul className={styles.huddle}>
-              {huddle.data.map((p, i) => (
+              {worklist.data.map((p, i) => (
                 <motion.li key={p.patient_id} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }}>
                   <button type="button" className={styles.huddleCard} onClick={() => navigate(`patients/${p.patient_id}`)}>
                     <div className={styles.huddleTop}>
                       <div>
                         <strong>{p.name}</strong>
                         <span className={styles.meta}>
-                          {p.patient_id} · {p.age} y · {p.gender} · discharged {formatDate(p.discharge_date)}
+                          {p.patient_id} · {p.age} y · {p.cancer_type}
+                          {p.cancer_stage ? ` stage ${p.cancer_stage}` : ""}
+                          {p.days_since_diagnosis != null ? ` · diagnosed ${formatNumber(p.days_since_diagnosis)} days ago` : ""}
                         </span>
                       </div>
                       <div className={styles.prob}>
-                        <span>{p.readmission_probability_pct.toFixed(1)}%</span>
+                        <span>{p.mortality_risk_pct.toFixed(1)}%</span>
                         <Badge tone={TIER_TONE[p.risk_level]}>{p.risk_level}</Badge>
                       </div>
                     </div>
                     <div className={styles.bar}>
-                      <span style={{ width: `${Math.min(100, p.readmission_probability_pct)}%` }} />
+                      <span style={{ width: `${Math.min(100, p.mortality_risk_pct)}%` }} />
                     </div>
                     <div className={styles.chips}>
-                      {p.admission_reason && <span className={styles.reason}>{p.admission_reason}</span>}
+                      <Badge tone={STATUS_TONE[p.treatment_status]}>{p.treatment_status}</Badge>
+                      {p.systemic_regimen && <span className={styles.reason}>{p.systemic_regimen}</span>}
                       {p.drivers.map((d) => (
                         <span key={d} className={styles.chip}>{d}</span>
                       ))}
-                      {!p.has_follow_up && p.risk_level === "HIGH" && <Badge tone="bad">No follow-up booked</Badge>}
+                      {p.tumor_marker && p.marker_trend && (
+                        <span className={styles.chip}>
+                          {p.tumor_marker} {TREND_ARROW[p.marker_trend] ?? ""} {p.marker_value != null ? formatNumber(p.marker_value, 1) : ""}
+                        </span>
+                      )}
                     </div>
                   </button>
                 </motion.li>
@@ -132,7 +155,7 @@ function ClinicalHome() {
           )}
         </Panel>
 
-        <Panel title="Care-gap radar" subtitle="Patients overdue for guideline monitoring" icon="Pulse">
+        <Panel title="Care-gap radar" subtitle="Patients missing a step of the oncology pathway" icon="Pulse">
           {gapSummary.error ? (
             <ErrorState error={gapSummary.error} onRetry={gapSummary.reload} />
           ) : !gapSummary.data ? (
@@ -183,53 +206,57 @@ function ClinicalHome() {
         </Panel>
       </Grid>
 
-        <Panel
-          title="Patient finder"
-          subtitle="Search by name or patient ID"
-          icon="Users"
-          actions={
-            <FieldRow>
-              <label className={styles.search}>
-                <span>Search</span>
-                <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="e.g. P_00016 or Barrows" />
-              </label>
-              <SelectField
-                id="tier"
-                label="Acuity"
-                value={tier}
-                onChange={setTier}
-                options={[
-                  { value: "", label: "All" },
-                  { value: "High", label: "High" },
-                  { value: "Moderate", label: "Moderate" },
-                  { value: "Low", label: "Low" },
-                ]}
-              />
-            </FieldRow>
+      <Panel
+        title="Patient finder"
+        subtitle="Search by name or patient ID; filter by cancer type and stage"
+        icon="Users"
+        actions={
+          <FieldRow>
+            <label className={styles.search}>
+              <span>Search</span>
+              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="e.g. P_00016 or Walker" />
+            </label>
+            <SelectField
+              id="cancer-type"
+              label="Cancer"
+              value={cancerType}
+              onChange={setCancerType}
+              options={[{ value: "", label: "All" }, ...CANCER_TYPES.map((t) => ({ value: t, label: t }))]}
+            />
+            <SelectField
+              id="stage"
+              label="Stage"
+              value={stage}
+              onChange={setStage}
+              options={[{ value: "", label: "All" }, ...["I", "II", "III", "IV"].map((s) => ({ value: s, label: `Stage ${s}` }))]}
+            />
+          </FieldRow>
+        }
+      >
+        <DataTable
+          columns={patientColumns}
+          rows={patients.data?.items}
+          rowKey={(r) => r.patient_id}
+          loading={patients.loading}
+          error={patients.error}
+          onRetry={patients.reload}
+          emptyTitle="No matching patients"
+          caption="Patients"
+          footer={
+            <>
+              <span>
+                <Icon.Lock size={12} /> Every patient record you open is recorded in the audit trail.
+              </span>
+              <span style={{ display: "flex", gap: 8 }}>
+                <Button onClick={pager.prev} disabled={!pager.hasPrev || patients.loading}>Previous</Button>
+                <Button onClick={() => pager.next(patients.data?.next_cursor ?? null)} disabled={!patients.data?.next_cursor || patients.loading}>
+                  Next
+                </Button>
+              </span>
+            </>
           }
-        >
-          <DataTable
-            columns={patientColumns}
-            rows={patients.data?.items}
-            rowKey={(r) => r.patient_id}
-            loading={patients.loading}
-            error={patients.error}
-            onRetry={patients.reload}
-            emptyTitle="No matching patients"
-            caption="Patients"
-            footer={
-              <>
-                <span>
-                  <Icon.Lock size={12} /> Every patient record you open is recorded in the audit trail.
-                </span>
-                <span style={{ display: "flex", gap: 8 }}>
-                  <Button onClick={pager.prev} disabled={!pager.hasPrev || patients.loading}>Previous</Button>
-                  <Button onClick={() => pager.next(patients.data?.next_cursor ?? null)} disabled={!patients.data?.next_cursor || patients.loading}>Next</Button>
-                </span>
-              </>
-            }
-          />
-        </Panel>
+        />
+      </Panel>
     </div>
   );
 }

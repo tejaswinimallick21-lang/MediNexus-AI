@@ -25,23 +25,23 @@ TITLE_MAX = 60
 CATALOG = [
     AssistantAgent(
         key="ops", name="Nexa Ops", tagline="Administrator oversight across every workspace, with actions you approve",
-        prompts=["Which hospital has the highest unplanned readmission rate?", "Which medicines are at high stock-out risk? Propose orders for the worst one",
+        prompts=["Which cancer type has the lowest survival?", "Which medicines are at high stock-out risk? Propose orders for the worst one",
                  "How accurate are our prediction models?"],
         routes=["/data", "/it"],
     ),
     AssistantAgent(
-        key="medicare", name="Nexa Care", tagline="Clinical assistant grounded in Patient 360, risk models and care guidelines",
-        prompts=["Show me the highest-risk patients", "Summarize patient P_04436", "What does the heart failure follow-up guideline say?"],
+        key="medicare", name="Nexa Care", tagline="Oncology assistant grounded in Patient 360, the tumour board and care guidelines",
+        prompts=["Show me the tumour-board worklist", "Summarize patient P_00205", "Which patients are waiting to start treatment?"],
         routes=["/doctor"],
     ),
     AssistantAgent(
         key="pharmalab", name="Nexa Care · Lab & Pharmacy", tagline="Laboratory and formulary data plus lab safety and cold-chain policy",
-        prompts=["Which medicines require immediate replenishment?", "Which laboratory alerts need escalation?", "What are the temperature standards for refrigerated medications?"],
+        prompts=["Which chemotherapy lines require immediate replenishment?", "Which laboratory alerts need escalation?", "What are the temperature standards for refrigerated medications?"],
         routes=["/pharmacy", "/laboratory"],
     ),
     AssistantAgent(
-        key="healthanalyst", name="Nexa Insight", tagline="Operations analytics grounded in Gold marts and hospital policy",
-        prompts=["Why did readmissions increase across inpatient wards?", "Provide bed capacity and surge forecast", "What are the inpatient discharge guidelines?"],
+        key="healthanalyst", name="Nexa Insight", tagline="Oncology outcomes and operations grounded in Gold marts and hospital policy",
+        prompts=["How does survival differ by stage?", "What is the infusion and radiation forecast for next week?", "What does the cost of care look like by cancer type?"],
         routes=["/executive", "/command-center", "/reception"],
     ),
 ]

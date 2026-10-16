@@ -1,80 +1,69 @@
 {
-  "admissions_next_7d_daily": 2.7,
-  "admissions_last_7d_daily": 2.4,
-  "admissions_forecast": {
+  "treatment": [
+    {
+      "service": "Infusion chairs (chemo / immuno / targeted)",
+      "forecast_daily": 7.9,
+      "last_7d_daily": 7.9
+    },
+    {
+      "service": "Radiation sessions",
+      "forecast_daily": 2.6,
+      "last_7d_daily": 3.0
+    }
+  ],
+  "treatment_forecast": {
     "serving_method": "surge_aware",
     "method_label": "Surge-aware average",
-    "holdout_mae": 0.687,
-    "holdout_baseline_mae": 0.613,
-    "holdout_surge_mae": 0.561,
-    "holdout_served_mae": 0.561,
-    "beats_baseline": false,
-    "test_period": "2025-10-13 to 2026-10-07",
-    "data_through": "2026-10-15"
+    "holdout_mae": 0.598,
+    "holdout_baseline_mae": 0.648,
+    "holdout_surge_mae": 0.551,
+    "holdout_served_mae": 0.551,
+    "beats_baseline": true,
+    "test_period": "2025-10-14 to 2026-10-08",
+    "data_through": "2026-10-16"
   },
   "models": [
     {
-      "model": "Hospital admission within 12 months",
-      "purpose": "Scored for every living patient on history up to the end of the data",
-      "primary_metric": "ROC-AUC 0.82",
-      "baseline": "Age only 0.65",
-      "verdict": "Beats baseline"
-    },
-    {
       "model": "Death within 12 months",
-      "purpose": "Scored for every living patient on history up to the end of the data",
-      "primary_metric": "ROC-AUC 0.95",
-      "baseline": "Age only 0.87",
-      "verdict": "Beats baseline"
+      "purpose": "Every living cancer patient \u00b7 219 deaths in the training year",
+      "primary_metric": "ROC-AUC 0.88 (model)",
+      "baseline": "Stage + type 0.89 \u00b7 age only 0.63",
+      "verdict": "Baseline wins \u2014 baseline served"
     },
     {
-      "model": "Unplanned 30-day readmission",
-      "purpose": "Scored at discharge \u00b7 92 positive cases",
-      "primary_metric": "ROC-AUC 0.78 (CV 0.79 \u00b1 0.05)",
-      "baseline": "Age + LOS 0.64",
-      "verdict": "Beats baseline"
-    },
-    {
-      "model": "Length of stay",
-      "purpose": "Scored at admission",
-      "primary_metric": "MAE 0.81 days",
-      "baseline": "Median 0.83 days",
-      "verdict": "Marginal over baseline"
-    },
-    {
-      "model": "Outpatient demand (7-day) \u00b7 simulated ops data",
-      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-13 to 2026-10-07",
-      "primary_metric": "MAE 60.82 (model)",
-      "baseline": "Naive 103.95",
-      "verdict": "Beats baseline"
-    },
-    {
-      "model": "Drug-class demand (7-day) \u00b7 simulated ops data",
-      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-13 to 2026-10-07",
-      "primary_metric": "MAE 294.92 (model)",
-      "baseline": "Naive 771.05",
-      "verdict": "Beats baseline"
-    },
-    {
-      "model": "Admission demand (7-day)",
-      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-13 to 2026-10-07",
-      "primary_metric": "MAE 0.56 (surge-aware average)",
-      "baseline": "Naive 0.61",
+      "model": "Treatment sessions (7-day)",
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-14 to 2026-10-08",
+      "primary_metric": "MAE 0.55 (surge-aware average)",
+      "baseline": "Naive 0.65",
       "verdict": "Beats baseline"
     },
     {
       "model": "Lab workload (7-day)",
-      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-13 to 2026-10-07",
-      "primary_metric": "MAE 5.63 (surge-aware average)",
-      "baseline": "Naive 6.12",
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-14 to 2026-10-08",
+      "primary_metric": "MAE 12.89 (model)",
+      "baseline": "Naive 17.57",
       "verdict": "Beats baseline"
     },
     {
       "model": "Stock-line demand (30-day)",
-      "purpose": "time-based: test = the 3 most recent monthly forecast dates \u00b7 2026-07-17 to 2026-09-15",
-      "primary_metric": "MAE 0.31 (naive baseline)",
-      "baseline": "Naive 0.31",
-      "verdict": "Baseline wins \u2014 baseline served"
+      "purpose": "time-based: test = the 3 most recent monthly forecast dates \u00b7 2026-07-18 to 2026-09-16",
+      "primary_metric": "MAE 7.50 (model)",
+      "baseline": "Naive 9.03",
+      "verdict": "Beats baseline"
+    },
+    {
+      "model": "Outpatient demand (7-day) \u00b7 simulated ops data",
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-14 to 2026-10-08",
+      "primary_metric": "MAE 35.39 (model)",
+      "baseline": "Naive 56.83",
+      "verdict": "Beats baseline"
+    },
+    {
+      "model": "Drug-class demand (7-day) \u00b7 simulated ops data",
+      "purpose": "rolling-origin backtest: 6 folds of 60 days \u00b7 2025-10-14 to 2026-10-08",
+      "primary_metric": "MAE 39.23 (model)",
+      "baseline": "Naive 67.33",
+      "verdict": "Beats baseline"
     }
   ]
 }

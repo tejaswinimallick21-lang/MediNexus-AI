@@ -2,11 +2,11 @@
   {
     "key": "medicare",
     "name": "Nexa Care",
-    "tagline": "Clinical assistant grounded in Patient 360, risk models and care guidelines",
+    "tagline": "Oncology assistant grounded in Patient 360, the tumour board and care guidelines",
     "prompts": [
-      "Show me the highest-risk patients",
-      "Summarize patient P_04436",
-      "What does the heart failure follow-up guideline say?"
+      "Show me the tumour-board worklist",
+      "Summarize patient P_00205",
+      "Which patients are waiting to start treatment?"
     ],
     "routes": [
       "/doctor"
@@ -17,7 +17,7 @@
     "name": "Nexa Care \u00b7 Lab & Pharmacy",
     "tagline": "Laboratory and formulary data plus lab safety and cold-chain policy",
     "prompts": [
-      "Which medicines require immediate replenishment?",
+      "Which chemotherapy lines require immediate replenishment?",
       "Which laboratory alerts need escalation?",
       "What are the temperature standards for refrigerated medications?"
     ],

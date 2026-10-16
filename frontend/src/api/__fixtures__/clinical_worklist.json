@@ -1,0 +1,222 @@
+[
+  {
+    "patient_id": "P_00205",
+    "name": "Emily Hernandez",
+    "age": 85,
+    "gender": "Female",
+    "cancer_type": "Pancreas",
+    "cancer_stage": "IV",
+    "treatment_status": "Awaiting treatment",
+    "systemic_regimen": null,
+    "days_since_diagnosis": 36,
+    "last_treatment_date": null,
+    "mortality_risk_pct": 59.8,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Stage IV",
+      "Pancreas: low survival at every stage",
+      "Age 85"
+    ],
+    "tumor_marker": "CA 19-9",
+    "marker_value": 239.63,
+    "marker_trend": "Stable"
+  },
+  {
+    "patient_id": "P_00222",
+    "name": "Emily Rodriguez",
+    "age": 85,
+    "gender": "Female",
+    "cancer_type": "Pancreas",
+    "cancer_stage": "IV",
+    "treatment_status": "In treatment",
+    "systemic_regimen": null,
+    "days_since_diagnosis": 36,
+    "last_treatment_date": "2026-10-12",
+    "mortality_risk_pct": 59.8,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Stage IV",
+      "Pancreas: low survival at every stage",
+      "Age 85"
+    ],
+    "tumor_marker": "CA 19-9",
+    "marker_value": 157.32,
+    "marker_trend": "Stable"
+  },
+  {
+    "patient_id": "P_00255",
+    "name": "David Martin",
+    "age": 84,
+    "gender": "Male",
+    "cancer_type": "Pancreas",
+    "cancer_stage": "IV",
+    "treatment_status": "Surveillance",
+    "systemic_regimen": "Gemcitabine + nab-Paclitaxel",
+    "days_since_diagnosis": 593,
+    "last_treatment_date": "2025-07-25",
+    "mortality_risk_pct": 59.8,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Stage IV",
+      "Pancreas: low survival at every stage",
+      "Age 84"
+    ],
+    "tumor_marker": "CA 19-9",
+    "marker_value": 170.63,
+    "marker_trend": "Rising"
+  },
+  {
+    "patient_id": "P_00539",
+    "name": "Edward Hernandez",
+    "age": 79,
+    "gender": "Male",
+    "cancer_type": "Pancreas",
+    "cancer_stage": "IV",
+    "treatment_status": "Surveillance",
+    "systemic_regimen": "Gemcitabine + nab-Paclitaxel",
+    "days_since_diagnosis": 1411,
+    "last_treatment_date": "2023-04-03",
+    "mortality_risk_pct": 59.8,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Stage IV",
+      "Pancreas: low survival at every stage",
+      "Age 79"
+    ],
+    "tumor_marker": "CA 19-9",
+    "marker_value": 269.31,
+    "marker_trend": "Stable"
+  },
+  {
+    "patient_id": "P_00677",
+    "name": "Andrew Martinez",
+    "age": 78,
+    "gender": "Male",
+    "cancer_type": "Pancreas",
+    "cancer_stage": "IV",
+    "treatment_status": "Surveillance",
+    "systemic_regimen": "FOLFIRINOX",
+    "days_since_diagnosis": 781,
+    "last_treatment_date": "2025-01-15",
+    "mortality_risk_pct": 59.8,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Stage IV",
+      "Pancreas: low survival at every stage",
+      "Age 78"
+    ],
+    "tumor_marker": "CA 19-9",
+    "marker_value": 14.6,
+    "marker_trend": "Stable"
+  },
+  {
+    "patient_id": "P_00811",
+    "name": "Robert Wilson",
+    "age": 77,
+    "gender": "Male",
+    "cancer_type": "Pancreas",
+    "cancer_stage": "IV",
+    "treatment_status": "Surveillance",
+    "systemic_regimen": "FOLFIRINOX",
+    "days_since_diagnosis": 820,
+    "last_treatment_date": "2024-11-27",
+    "mortality_risk_pct": 59.8,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Stage IV",
+      "Pancreas: low survival at every stage",
+      "Age 77"
+    ],
+    "tumor_marker": "CA 19-9",
+    "marker_value": 325.24,
+    "marker_trend": "Stable"
+  },
+  {
+    "patient_id": "P_00883",
+    "name": "George Williams",
+    "age": 76,
+    "gender": "Male",
+    "cancer_type": "Pancreas",
+    "cancer_stage": "IV",
+    "treatment_status": "In treatment",
+    "systemic_regimen": "FOLFIRINOX",
+    "days_since_diagnosis": 202,
+    "last_treatment_date": "2026-09-30",
+    "mortality_risk_pct": 59.8,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Stage IV",
+      "Pancreas: low survival at every stage",
+      "Age 76"
+    ],
+    "tumor_marker": "CA 19-9",
+    "marker_value": 257.86,
+    "marker_trend": "Falling"
+  },
+  {
+    "patient_id": "P_00938",
+    "name": "Donald Smith",
+    "age": 75,
+    "gender": "Male",
+    "cancer_type": "Pancreas",
+    "cancer_stage": "IV",
+    "treatment_status": "Surveillance",
+    "systemic_regimen": "FOLFIRINOX",
+    "days_since_diagnosis": 926,
+    "last_treatment_date": "2024-07-21",
+    "mortality_risk_pct": 59.8,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Stage IV",
+      "Pancreas: low survival at every stage",
+      "Age 75"
+    ],
+    "tumor_marker": "CA 19-9",
+    "marker_value": 103.25,
+    "marker_trend": "Falling"
+  },
+  {
+    "patient_id": "P_01513",
+    "name": "Timothy Johnson",
+    "age": 71,
+    "gender": "Male",
+    "cancer_type": "Pancreas",
+    "cancer_stage": "IV",
+    "treatment_status": "Awaiting treatment",
+    "systemic_regimen": null,
+    "days_since_diagnosis": 36,
+    "last_treatment_date": null,
+    "mortality_risk_pct": 59.8,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Stage IV",
+      "Pancreas: low survival at every stage",
+      "Tumour marker above range"
+    ],
+    "tumor_marker": "CA 19-9",
+    "marker_value": 257.04,
+    "marker_trend": "Stable"
+  },
+  {
+    "patient_id": "P_01553",
+    "name": "Betty Garcia",
+    "age": 71,
+    "gender": "Female",
+    "cancer_type": "Pancreas",
+    "cancer_stage": "IV",
+    "treatment_status": "In treatment",
+    "systemic_regimen": "Gemcitabine + nab-Paclitaxel",
+    "days_since_diagnosis": 260,
+    "last_treatment_date": "2026-09-21",
+    "mortality_risk_pct": 59.8,
+    "risk_level": "HIGH",
+    "drivers": [
+      "Stage IV",
+      "Pancreas: low survival at every stage",
+      "Tumour marker above range"
+    ],
+    "tumor_marker": "CA 19-9",
+    "marker_value": 267.41,
+    "marker_trend": "Falling"
+  }
+]

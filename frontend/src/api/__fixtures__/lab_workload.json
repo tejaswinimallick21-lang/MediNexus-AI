@@ -1,38 +1,32 @@
 [
   {
-    "category": "Chemistry",
-    "total": 68984,
-    "abnormal": 16313,
-    "critical": 1284
+    "category": "Vital Signs",
+    "total": 617375,
+    "abnormal": 266415,
+    "critical": 150
   },
   {
-    "category": "Vital Signs",
-    "total": 48991,
-    "abnormal": 18318,
-    "critical": 905
+    "category": "Chemistry",
+    "total": 581623,
+    "abnormal": 228279,
+    "critical": 70881
   },
   {
     "category": "Hematology",
-    "total": 19431,
-    "abnormal": 1740,
-    "critical": 316
-  },
-  {
-    "category": "Lipid",
-    "total": 18808,
-    "abnormal": 5739,
-    "critical": 0
+    "total": 474366,
+    "abnormal": 189542,
+    "critical": 63435
   },
   {
     "category": "Liver Function",
-    "total": 17321,
-    "abnormal": 4826,
+    "total": 227235,
+    "abnormal": 70179,
     "critical": 0
   },
   {
-    "category": "Endocrine",
-    "total": 4245,
-    "abnormal": 3376,
+    "category": "Tumor Markers",
+    "total": 112936,
+    "abnormal": 46785,
     "critical": 0
   }
 ]

@@ -19,14 +19,11 @@ npm install
 npm --prefix frontend install
 ```
 
-## 3. Get the Synthea data
+## 3. The dataset
 
-Download **10k_synthea_covid19_csv.zip** (≈54 MB) from
-https://synthetichealth.github.io/synthea/downloads.html and save it, still zipped, in
-`data/synthea/` (so that `data/synthea/10k_synthea_covid19_csv.zip` exists).
-The bootstrap script keeps this download unchanged and re-dates a copy to today (records up to 2019, so
-no COVID-19 period). That dataset then stays fixed; `MEDINEXUS_FEED_ENABLED=1` in `.env` turns on an
-optional nightly feed that releases the next day's records instead.
+Nothing to download: the oncology dataset (5,000 synthetic cancer patients in the Synthea CSV format)
+comes with the repository as `data/synthea/oncology_5k.zip` (45 MB). The bootstrap script cleans it and
+fixes it as of its as-of date (16 Oct 2026) into `data/synthea/current/`; see README section 5.
 
 ## 4. Add your keys (never committed)
 
@@ -48,9 +45,8 @@ It runs, in order, skipping anything already done:
 
 | Step | Command |
 |---|---|
-| Re-date Synthea to today (no COVID period) | `python -m src.ingestion.redate_synthea redate` |
-| Release records up to now | `python -m src.ingestion.redate_synthea release` |
-| Synthea → raw tables | `python -m src.ingestion.synthea_adapter` |
+| Prepare the oncology dataset (clean, fix as of its date) | `python -m src.ingestion.oncology_dataset` |
+| Synthea-format CSVs → raw tables | `python -m src.ingestion.synthea_adapter` |
 | Medallion pipeline (Bronze → Silver → Gold) | `python -m src.medallion.pipeline` |
 | Simulated operations data | `python -m src.ingestion.ops_simulator --years 3 --seed 7` |
 | Train the ML models | `python -m src.ml.train_demand` |
@@ -71,8 +67,8 @@ Then add real people as admin under Security & Infrastructure → People: each g
 
 | Source | Used for |
 |---|---|
-| **Synthea** (synthetic patient records) | Patients, admissions, diagnoses, labs, prescriptions, billing, completed outpatient visits, readmissions, deaths |
+| **Oncology dataset** (synthetic cancer patients, Synthea format) | Patients, cancer type and stage, diagnoses, surgery, chemotherapy / immunotherapy / radiation, labs and tumour markers, prescriptions, billing, completed visits, deaths |
 | **Simulated by this project** (labelled in the UI) | Staffing, outpatient demand vs capacity, pharmacy dispensing by drug class, equipment, missed appointments, waiting times, some stock fields |
 | **Demo documents** | The policy and guideline library under `documents/` (synthetic, not medical advice) |
 
-No outcome labels (readmission, mortality) are ever simulated.
+No outcome labels (mortality, treatment response) are ever simulated.

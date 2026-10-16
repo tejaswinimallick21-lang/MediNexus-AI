@@ -138,21 +138,61 @@ class PurchaseOrderOut(BaseModel):
 # ---- Executive ---------------------------------------------------------------------------------
 
 class ExecutiveKpis(BaseModel):
-    total_admissions: int
-    patients_admitted: int
-    unplanned_readmission_rate_pct: float
-    average_los_days: float
-    occupancy_rate_pct: Optional[float]
-    total_revenue: float
-    collection_rate_pct: float
+    """Oncology outcomes across the network."""
+
+    patients: int
+    living_patients: int
+    new_diagnoses_12m: int
+    five_year_survival_pct: Optional[float]
+    median_days_to_treatment: Optional[float]
+    treatment_sessions_30d: int
+    cost_of_care: float
     hospitals: int
     data_through: str
 
 
-class RevenueByDepartment(BaseModel):
-    department: str
-    revenue: float
-    admissions: int
+class SurvivalPoint(BaseModel):
+    month: int
+    survival_pct: float
+    at_risk: int
+
+
+class SurvivalCurve(BaseModel):
+    label: str
+    kind: str
+    patients: int
+    points: List[SurvivalPoint]
+
+
+class SurvivalRow(BaseModel):
+    cancer_type: str
+    patients: int
+    one_year_pct: Optional[float]
+    three_year_pct: Optional[float]
+    five_year_pct: Optional[float]
+    stage_i_five_year_pct: Optional[float]
+    stage_iv_five_year_pct: Optional[float]
+
+
+class SurvivalOverview(BaseModel):
+    curves: List[SurvivalCurve]
+    by_type: List[SurvivalRow]
+    note: str
+
+
+class StageMixRow(BaseModel):
+    cancer_type: str
+    stage_i: int
+    stage_ii: int
+    stage_iii: int
+    stage_iv: int
+
+
+class CostByType(BaseModel):
+    cancer_type: str
+    patients: int
+    total_cost: float
+    cost_per_patient: float
 
 
 class ModelScore(BaseModel):
@@ -163,34 +203,16 @@ class ModelScore(BaseModel):
     verdict: str
 
 
+class TreatmentForecastRow(BaseModel):
+    service: str
+    forecast_daily: float
+    last_7d_daily: float
+
+
 class ExecutiveForecasts(BaseModel):
-    admissions_next_7d_daily: float
-    admissions_last_7d_daily: float
-    admissions_forecast: ForecastMeta
+    treatment: List[TreatmentForecastRow]
+    treatment_forecast: ForecastMeta
     models: List[ModelScore]
-
-
-class ReadmissionBreakdownRow(BaseModel):
-    label: str
-    count: int
-    rate_pct: float
-
-
-class ReadmissionDrivers(BaseModel):
-    summary: str
-    findings: List[str]
-    by_admission_type: List[ReadmissionBreakdownRow]
-    by_reason: List[ReadmissionBreakdownRow]
-
-
-class CapacityPlan(BaseModel):
-    surge_tier: str
-    occupancy_pct: Optional[float]
-    projected_daily_admissions: float
-    average_los_days: float
-    directives: List[str]
-    assessment: str
-    occupancy_note: str
 
 
 # ---- Agents ------------------------------------------------------------------------------------

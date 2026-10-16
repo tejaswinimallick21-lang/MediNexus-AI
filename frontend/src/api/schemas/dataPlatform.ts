@@ -178,26 +178,17 @@ export type UploadDetail = z.infer<typeof UploadDetailSchema>;
 export const UploadAcceptedSchema = z.object({ upload: UploadSummarySchema, job_id: z.string() });
 export const JobAcceptedSchema = z.object({ job_id: z.string() });
 
-/** Live data feed: re-dated Synthea released day by day. */
-export const FeedRunSchema = z.object({
-  run_id: z.string(),
-  trigger: z.string(),
-  started_at: z.string().nullable().optional(),
-  finished_at: z.string().nullable().optional(),
-  status: z.string(),
-  released_through: z.string().nullable().optional(),
-  held_back_days: z.number().nullable().optional(),
-  reanchored: z.boolean().nullable().optional(),
-  error: z.string().nullable().optional(),
+/** The fixed oncology dataset every workspace reads. */
+const CountItemSchema = z.object({ label: z.string(), count: z.number() });
+export const DatasetInfoSchema = z.object({
+  name: z.string(),
+  as_of: z.string().nullable().optional(),
+  patients: z.number(),
+  living: z.number(),
+  deceased: z.number(),
+  cancer_types: z.array(CountItemSchema),
+  stages: z.array(CountItemSchema),
+  repairs: z.record(z.number()),
+  known_limitations: z.array(z.string()),
 });
-export const FeedStatusSchema = z.object({
-  enabled: z.boolean(),
-  released_through: z.string().nullable().optional(),
-  held_back_days: z.number().nullable().optional(),
-  redated_end: z.string().nullable().optional(),
-  original_cutoff: z.string().nullable().optional(),
-  shift_days: z.number().nullable().optional(),
-  next_run_at: z.string(),
-  runs: z.array(FeedRunSchema),
-});
-export type FeedStatus = z.infer<typeof FeedStatusSchema>;
+export type DatasetInfo = z.infer<typeof DatasetInfoSchema>;

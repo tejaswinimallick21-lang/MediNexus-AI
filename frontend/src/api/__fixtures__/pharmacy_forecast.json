@@ -1,29 +1,29 @@
 {
-  "inventory_id": "INV_000010",
-  "medication_name": "120 ACTUAT Fluticasone propionate 0.044 MG/ACTUAT Metered Dose Inhaler",
-  "hospital_name": "ADCARE HOSPITAL OF WORCESTER INC",
+  "inventory_id": "INV_000302",
+  "medication_name": "Nivolumab (1 mg/kg IV q3w)",
+  "hospital_name": "Riverside Cancer Hospital",
   "current_stock": 0,
-  "dispensed_last_30d": 2,
-  "predicted_30d_demand": 2,
-  "projected_shortfall": 2,
+  "dispensed_last_30d": 0,
+  "predicted_30d_demand": 3,
+  "projected_shortfall": 3,
   "urgency": "URGENT",
   "recommended_order_quantity": 6,
-  "estimated_procurement_cost": 168.42,
+  "estimated_procurement_cost": 2128.02,
   "actions": [
-    "Issue IMMEDIATE emergency procurement order for 6 units of 120 ACTUAT Fluticasone propionate 0.044 MG/ACTUAT Metered Dose Inhaler.",
+    "Issue IMMEDIATE emergency procurement order for 6 units of Nivolumab (1 mg/kg IV q3w).",
     "Notify prescribing physicians to consider equivalent therapeutic alternatives if available.",
     "Restructure inpatient dispensing to standard unit-dose rounds to minimize ward stock wastage."
   ],
   "buffer_assessment": "Current stock provides approximately 0.0 days of supply based on projected burn rate.",
   "forecast": {
-    "serving_method": "baseline_last30",
-    "method_label": "Naive baseline: last 30 days repeated",
-    "holdout_mae": 0.385,
-    "holdout_baseline_mae": 0.314,
+    "serving_method": "model",
+    "method_label": "Gradient-boosting model",
+    "holdout_mae": 7.497,
+    "holdout_baseline_mae": 9.029,
     "holdout_surge_mae": null,
-    "holdout_served_mae": 0.314,
-    "beats_baseline": false,
-    "test_period": "2026-07-17 to 2026-09-15",
-    "data_through": "2026-10-15"
+    "holdout_served_mae": 7.497,
+    "beats_baseline": true,
+    "test_period": "2026-07-18 to 2026-09-16",
+    "data_through": "2026-10-16"
   }
 }

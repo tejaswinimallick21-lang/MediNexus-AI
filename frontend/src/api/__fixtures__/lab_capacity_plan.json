@@ -1,24 +1,25 @@
 {
   "category": "Chemistry",
-  "forecast_daily_tests": 150.7,
-  "last_7d_daily": 153.1,
-  "estimated_capacity_daily": 192,
-  "utilization_pct": 78.6,
-  "critical_rate_pct": 1.9,
+  "forecast_daily_tests": 220.3,
+  "last_7d_daily": 240.4,
+  "estimated_capacity_daily": 306,
+  "utilization_pct": 71.9,
+  "critical_rate_pct": 12.2,
   "operational_status": "STABLE",
   "actions": [
-    "Workload within normal operational parameters. Proceed with standard preventive maintenance schedule."
+    "Workload within normal operational parameters. Proceed with standard preventive maintenance schedule.",
+    "Alert Laboratory Director: Critical result alert frequency is abnormally elevated."
   ],
-  "assessment": "Expected daily volume (151 tests) represents 78.6% of single-shift rated analyzer capacity. Capacity is estimated (75th-percentile daily volume over the past year + 25% headroom).",
+  "assessment": "Expected daily volume (220 tests) represents 71.9% of single-shift rated analyzer capacity. Capacity is estimated (75th-percentile daily volume over the past year + 25% headroom).",
   "forecast": {
-    "serving_method": "surge_aware",
-    "method_label": "Surge-aware average",
-    "holdout_mae": 12.05,
-    "holdout_baseline_mae": 6.119,
-    "holdout_surge_mae": 5.626,
-    "holdout_served_mae": 5.626,
-    "beats_baseline": false,
-    "test_period": "2025-10-13 to 2026-10-07",
-    "data_through": "2026-10-15"
+    "serving_method": "model",
+    "method_label": "Gradient-boosting model",
+    "holdout_mae": 12.895,
+    "holdout_baseline_mae": 17.567,
+    "holdout_surge_mae": 16.256,
+    "holdout_served_mae": 12.895,
+    "beats_baseline": true,
+    "test_period": "2025-10-14 to 2026-10-08",
+    "data_through": "2026-10-16"
   }
 }

@@ -1,49 +1,49 @@
 {
   "items": [
     {
-      "patient_id": "P_02245",
-      "name": "Hillary Bogan",
-      "age": 74,
-      "gap": "high_risk_no_follow_up",
-      "label": "High-risk discharge without follow-up",
-      "detail": "Discharged 2026-09-21; no outpatient visit within 14 days",
-      "last_done": "2026-09-21"
+      "patient_id": "P_00010",
+      "name": "John Davis",
+      "age": 92,
+      "gap": "treatment_delay",
+      "label": "Diagnosed, treatment not started",
+      "detail": "Colon stage I diagnosed 2026-09-10; no treatment recorded yet",
+      "last_done": "2026-09-10"
     },
     {
-      "patient_id": "P_02380",
-      "name": "Hiroko Bernier",
-      "age": 73,
-      "gap": "high_risk_no_follow_up",
-      "label": "High-risk discharge without follow-up",
-      "detail": "Discharged 2026-10-11; no outpatient visit within 14 days",
-      "last_done": "2026-10-11"
+      "patient_id": "P_00052",
+      "name": "Elizabeth Ramirez",
+      "age": 91,
+      "gap": "treatment_delay",
+      "label": "Diagnosed, treatment not started",
+      "detail": "Breast stage I diagnosed 2026-09-10; no treatment recorded yet",
+      "last_done": "2026-09-10"
     },
     {
-      "patient_id": "P_03300",
-      "name": "Argentina Johnson",
-      "age": 65,
-      "gap": "high_risk_no_follow_up",
-      "label": "High-risk discharge without follow-up",
-      "detail": "Discharged 2026-10-12; no outpatient visit within 14 days",
-      "last_done": "2026-10-12"
+      "patient_id": "P_00063",
+      "name": "Ava Williams",
+      "age": 91,
+      "gap": "treatment_delay",
+      "label": "Diagnosed, treatment not started",
+      "detail": "Lung stage III diagnosed 2026-09-10; no treatment recorded yet",
+      "last_done": "2026-09-10"
     },
     {
-      "patient_id": "P_05099",
-      "name": "Tonisha McCullough",
-      "age": 54,
-      "gap": "high_risk_no_follow_up",
-      "label": "High-risk discharge without follow-up",
-      "detail": "Discharged 2026-10-15; no outpatient visit within 14 days",
-      "last_done": "2026-10-15"
+      "patient_id": "P_00070",
+      "name": "Daniel Wilson",
+      "age": 90,
+      "gap": "treatment_delay",
+      "label": "Diagnosed, treatment not started",
+      "detail": "Prostate stage I diagnosed 2026-09-10; no treatment recorded yet",
+      "last_done": "2026-09-10"
     },
     {
-      "patient_id": "P_06511",
-      "name": "Diana Welch",
-      "age": 44,
-      "gap": "high_risk_no_follow_up",
-      "label": "High-risk discharge without follow-up",
-      "detail": "Discharged 2026-09-18; no outpatient visit within 14 days",
-      "last_done": "2026-09-18"
+      "patient_id": "P_00085",
+      "name": "Linda White",
+      "age": 89,
+      "gap": "treatment_delay",
+      "label": "Diagnosed, treatment not started",
+      "detail": "Lymphoma (NHL) stage IV diagnosed 2026-09-10; no treatment recorded yet",
+      "last_done": "2026-09-10"
     }
   ],
   "next_cursor": "bzo1"

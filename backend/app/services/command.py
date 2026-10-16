@@ -3,8 +3,6 @@ Analyst Command Center services (analyst role; admins oversee).
 
 - What-if capacity simulation: replays the outpatient queue over a historical window of the
   SIMULATED operations data (sim_outpatient_daily, sim_staff_roster) with changed staffing or demand.
-- Readmission economics: facts from Gold admissions/billing plus the readmission model's held-out
-  performance; the programme scenario itself is computed in the browser from these facts.
 - Model monitor: every active model in the registry with its out-of-sample score against a baseline.
 """
 
@@ -19,7 +17,6 @@ from backend.app.core.errors import APIError
 from backend.app.schemas.command import (
     HospitalOption,
     ModelMonitorRow,
-    ReadmissionEconomics,
     WhatIfDay,
     WhatIfIn,
     WhatIfResult,
@@ -208,58 +205,15 @@ def _metrics(model_name: str) -> Tuple[Optional[Dict], Optional[str], Optional[s
     return (json.loads(raw) if isinstance(raw, str) else dict(raw)), str(row["version"]), str(row["training_timestamp"]), len(df)
 
 
-def get_readmission_economics() -> ReadmissionEconomics:
-    a = query_df_strict("""
-        WITH end_d AS (SELECT max(CAST(admission_date AS DATE)) AS d FROM gold_admissions)
-        SELECT min(CAST(admission_date AS DATE)) AS start_d, max(CAST(admission_date AS DATE)) AS end_d,
-               COUNT(*) AS n, SUM(readmitted_30d) AS readm, AVG(length_of_stay_days) AS los
-        FROM gold_admissions, end_d WHERE CAST(admission_date AS DATE) > end_d.d - INTERVAL 365 DAY
-    """).iloc[0]
-    cost = query_df_strict("""
-        WITH end_d AS (SELECT max(CAST(admission_date AS DATE)) AS d FROM gold_admissions)
-        SELECT AVG(b.total_amount) AS c FROM gold_billing b JOIN gold_admissions g USING (admission_id), end_d
-        WHERE CAST(g.admission_date AS DATE) > end_d.d - INTERVAL 365 DAY
-    """).iloc[0]["c"]
-    m, _, _, _ = _metrics("readmission_risk_model")
-    if not m:
-        raise APIError(503, "model_unavailable", "The readmission model has not been trained yet.")
-    (tn, fp), (fn, tp) = m["confusion_matrix"]
-    n_test = tn + fp + fn + tp
-    n, readm = int(a["n"]), int(a["readm"] or 0)
-    return ReadmissionEconomics(
-        period_start=str(a["start_d"])[:10],
-        period_end=str(a["end_d"])[:10],
-        discharges=n,
-        unplanned_readmissions=readm,
-        readmission_rate_pct=round(readm / max(1, n) * 100, 2),
-        avg_cost_per_stay=round(float(cost or 0), 2),
-        avg_los_days=round(float(a["los"] or 0), 1),
-        model_roc_auc=float(m["roc_auc"]),
-        model_flag_share_pct=round((fp + tp) / max(1, n_test) * 100, 1),
-        model_capture_pct=round(float(m["recall"]) * 100, 1),
-        model_precision_pct=round(float(m["precision"]) * 100, 1),
-        model_test_positives=int(m["test_positives"]),
-        default_effectiveness_pct=20.0,
-        default_cost_per_enrolled=150.0,
-        notes=[
-            "Cost of a readmission stay is the average billed amount per inpatient stay in the same 12 months.",
-            f"Model capture and flag rates are held-out estimates from only {int(m['test_positives'])} readmissions, so they carry wide uncertainty.",
-            "Programme effectiveness and cost per enrolled patient are planning assumptions; adjust them to your programme.",
-        ],
-    )
-
-
 # ---- Model monitor ----------------------------------------------------------------------------
 
 MONITORED = [  # registry name, label
-    ("readmission_risk_model", "Unplanned 30-day readmission"),
-    ("outcome_risk_model", "12-month outcome risk"),
-    ("length_of_stay_model", "Length of stay"),
-    ("outpatient_demand_model", "Outpatient demand (7-day)"),
-    ("drug_class_demand_model", "Drug-class demand (7-day)"),
-    ("resource_demand_model", "Admission demand (7-day)"),
+    ("outcome_risk_model", "12-month mortality risk"),
+    ("treatment_demand_model", "Treatment sessions (7-day)"),
     ("lab_workload_model", "Lab workload (7-day)"),
     ("pharmacy_demand_model", "Stock-line demand (30-day)"),
+    ("outpatient_demand_model", "Outpatient demand (7-day)"),
+    ("drug_class_demand_model", "Drug-class demand (7-day)"),
 ]
 
 
@@ -276,31 +230,21 @@ def list_model_monitor() -> List[ModelMonitorRow]:
         m, version, trained_at, versions = _metrics(name)
         if not m:
             continue
-        source = "Simulated ops data" if m.get("simulated_data") else "Synthea"
+        source = "Simulated ops data" if m.get("simulated_data") else "Oncology records"
         common = dict(model_name=name, label=label, version=version, trained_at=trained_at[:19], age_days=_age_days(trained_at),
                       data_source=source, versions=versions)
-        if name == "readmission_risk_model":
-            verdict = _verdict(m.get("roc_auc"), m.get("baseline_roc_auc_age_los"))
-            low = int(m.get("test_positives", 0)) < 50
+        if name == "outcome_risk_model":
+            d = m.get("died_12m", {})
+            baseline_served = d.get("serving_method") == "stage_type_baseline"
             rows.append(ModelMonitorRow(
-                **common, primary_metric=f"ROC-AUC {m['roc_auc']:.2f} · recall {m['recall'] * 100:.0f}%",
-                baseline=f"Age + LOS {m['baseline_roc_auc_age_los']:.2f}", verdict=verdict, serving="Model",
-                health="low_evidence" if low else "healthy",
-                note=f"{m.get('test_positives')} readmissions in the held-out set; precision {m['precision'] * 100:.1f}%.",
-            ))
-        elif name == "outcome_risk_model":
-            h, d = m.get("hospitalized_12m", {}), m.get("died_12m", {})
-            rows.append(ModelMonitorRow(
-                **common, primary_metric=f"Admission AUC {h.get('roc_auc', 0):.2f} · mortality AUC {d.get('roc_auc', 0):.2f}",
-                baseline=f"Age only {h.get('baseline_roc_auc_age_only', 0):.2f} / {d.get('baseline_roc_auc_age_only', 0):.2f}",
-                verdict=_verdict(h.get("roc_auc"), h.get("baseline_roc_auc_age_only")), serving="Model", health="healthy",
-                note="Trained on history up to one year before the end of the data; scored on all history.",
-            ))
-        elif name == "length_of_stay_model":
-            rows.append(ModelMonitorRow(
-                **common, primary_metric=f"MAE {m['mae_days']:.2f} days", baseline=f"Median {m['baseline_mae_days_median']:.2f} days",
-                verdict=_verdict(m["mae_days"], m["baseline_mae_days_median"], higher_is_better=False), serving="Model", health="healthy",
-                note=f"R² {m.get('r2_score', 0):.2f} on {m.get('test_samples')} held-out stays.",
+                **common, primary_metric=f"ROC-AUC {d.get('roc_auc', 0):.2f} (model) · {d.get('served_roc_auc', 0):.2f} served",
+                baseline=f"Stage + type {d.get('baseline_roc_auc_stage_type', 0):.2f} · age only {d.get('baseline_roc_auc_age_only', 0):.2f}",
+                verdict="Baseline wins — baseline served" if baseline_served else _verdict(d.get("roc_auc"), d.get("baseline_roc_auc_stage_type")),
+                serving="Stage + cancer type" if baseline_served else "Model",
+                health="baseline" if baseline_served else ("low_evidence" if int(d.get("test_positives", 0)) < 50 else "healthy"),
+                note=(f"{d.get('test_positives')} deaths among {d.get('test_samples')} held-out patients. Trained one year before the end of the data; "
+                      "the model does not beat staging alone on this synthetic data, so the stage + type score is served."
+                      if baseline_served else f"{d.get('test_positives')} deaths among {d.get('test_samples')} held-out patients."),
             ))
         else:
             base_key = "baseline_last30_mae" if "baseline_last30_mae" in m else "baseline_naive7_mae"

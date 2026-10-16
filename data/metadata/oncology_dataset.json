@@ -1,0 +1,44 @@
+{
+  "dataset": "Synthetic oncology EHR (Synthea CSV format)",
+  "source": "data/synthea/cancer",
+  "as_of": "2026-10-16",
+  "rows": {
+    "allergies": 724,
+    "careplans": 6150,
+    "conditions": 22613,
+    "devices": 1464,
+    "encounters": 206223,
+    "imaging_studies": 14423,
+    "immunizations": 51705,
+    "medications": 125482,
+    "observations": 2273591,
+    "procedures": 57098,
+    "supplies": 0,
+    "patients": 5000,
+    "payer_transitions": 84814,
+    "organizations": 12,
+    "providers": 168,
+    "payers": 10
+  },
+  "repairs": {
+    "encounters_after_as_of_dropped": 5005,
+    "encounters_after_death_dropped": 2443,
+    "careplans_rows_removed": 44,
+    "conditions_rows_removed": 129,
+    "devices_rows_removed": 81,
+    "encounters_rows_removed": 7448,
+    "imaging_studies_rows_removed": 132,
+    "immunizations_rows_removed": 3828,
+    "medications_rows_removed": 12225,
+    "impossible_lab_values_dropped": 10371,
+    "observations_rows_removed": 56512,
+    "procedures_rows_removed": 3589
+  },
+  "known_limitations": [
+    "Every inpatient stay is a short surgical admission and no patient is admitted twice: no readmissions, length of stay not meaningful.",
+    "Emergency visits occur only in the last weeks before death, so they are not used as model features.",
+    "Lab values are drawn independently of treatment (no post-chemotherapy dip), so no toxicity model is trained.",
+    "Medication costs and dispense counts are near-uniform across drugs."
+  ],
+  "prepared_at": "2026-10-16T01:28:19"
+}

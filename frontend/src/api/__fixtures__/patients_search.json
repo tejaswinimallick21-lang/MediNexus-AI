@@ -1,49 +1,59 @@
 {
   "items": [
     {
-      "patient_id": "P_00016",
-      "name": "Sharleen Rolfson",
-      "age": 109,
+      "patient_id": "P_00015",
+      "name": "Sophia Moore",
+      "age": 92,
       "gender": "Female",
+      "cancer_type": "Leukemia (CLL)",
+      "cancer_stage": "II",
+      "treatment_status": "Surveillance",
       "clinical_risk_tier": "Moderate",
-      "total_admissions": 2,
-      "is_deceased": false
-    },
-    {
-      "patient_id": "P_00017",
-      "name": "Britni MacGyver",
-      "age": 109,
-      "gender": "Female",
-      "clinical_risk_tier": "Moderate",
-      "total_admissions": 0,
       "is_deceased": false
     },
     {
       "patient_id": "P_00018",
-      "name": "Analisa Corwin",
-      "age": 109,
+      "name": "Ashley Lewis",
+      "age": 92,
       "gender": "Female",
-      "clinical_risk_tier": "Low",
-      "total_admissions": 1,
+      "cancer_type": "Lung",
+      "cancer_stage": "II",
+      "treatment_status": "Surveillance",
+      "clinical_risk_tier": "Moderate",
       "is_deceased": false
     },
     {
-      "patient_id": "P_00014",
-      "name": "Buck Kilback",
-      "age": 67,
+      "patient_id": "P_00010",
+      "name": "John Davis",
+      "age": 92,
       "gender": "Male",
-      "clinical_risk_tier": "High",
-      "total_admissions": 1,
-      "is_deceased": true
+      "cancer_type": "Colon",
+      "cancer_stage": "I",
+      "treatment_status": "Awaiting treatment",
+      "clinical_risk_tier": "Low",
+      "is_deceased": false
     },
     {
-      "patient_id": "P_00015",
-      "name": "Otha Herman",
-      "age": 66,
+      "patient_id": "P_00012",
+      "name": "Richard Robinson",
+      "age": 92,
       "gender": "Male",
-      "clinical_risk_tier": "High",
-      "total_admissions": 1,
-      "is_deceased": true
+      "cancer_type": "Prostate",
+      "cancer_stage": "I",
+      "treatment_status": "Surveillance",
+      "clinical_risk_tier": "Low",
+      "is_deceased": false
+    },
+    {
+      "patient_id": "P_00017",
+      "name": "Mark Perez",
+      "age": 92,
+      "gender": "Male",
+      "cancer_type": "Leukemia (CLL)",
+      "cancer_stage": "I",
+      "treatment_status": "In treatment",
+      "clinical_risk_tier": "Low",
+      "is_deceased": false
     }
   ],
   "next_cursor": "bzo1"

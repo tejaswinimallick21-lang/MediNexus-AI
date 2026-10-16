@@ -1,9 +1,9 @@
 """
-Models 3, 4, 5: Operational demand forecasts (honest re-implementation).
+Operational demand forecasts.
 
-- Model 3: Pharmacy demand: units dispensed per (site, medication) over the next 30 days.
-- Model 4: Laboratory workload: average daily tests per category over the next 7 days.
-- Model 5: Admission demand: average daily network admissions over the next 7 days.
+- Pharmacy demand: units dispensed per (site, medication) over the next 30 days.
+- Laboratory workload: average daily tests per category over the next 7 days.
+- Treatment demand: average daily infusion-chair and radiation sessions over the next 7 days.
 
 All features end at the forecast date; evaluation uses a later, held-out time period; every
 model is compared with naive persistence baselines. After evaluation the model is refit on all
@@ -27,12 +27,12 @@ from src.ml.forecasting import (
     HORIZON_DAYS,
     PHARMACY_FEATURES,
     PHARMACY_HORIZON,
-    admissions_daily_series,
     daily_supervised,
     lab_daily_series,
     outpatient_daily_series,
     pharmacy_class_series,
     pharmacy_frame,
+    treatment_daily_series,
     regression_scores,
     rolling_backtest,
 )
@@ -108,9 +108,10 @@ def train_lab_workload_model() -> Dict[str, Any]:
     return _train_daily_model(lab_daily_series, "lab_workload_model", "lab_workload_model.joblib", "gold_laboratory", "tests")
 
 
-def train_resource_demand_model() -> Dict[str, Any]:
-    """Model 5: next-7-day average daily inpatient admissions across the network."""
-    return _train_daily_model(admissions_daily_series, "resource_demand_model", "resource_demand_model.joblib", "gold_admissions", "admissions")
+def train_treatment_demand_model() -> Dict[str, Any]:
+    """Next-7-day average daily infusion-chair (chemo / immuno / targeted) and radiation sessions."""
+    return _train_daily_model(treatment_daily_series, "treatment_demand_model", "treatment_demand_model.joblib",
+                              "gold_treatment_events", "treatment sessions")
 
 
 def train_outpatient_demand_model() -> Dict[str, Any]:
@@ -184,19 +185,29 @@ def train_pharmacy_demand_model() -> Dict[str, Any]:
     return {"status": "SUCCESS", "model_name": "pharmacy_demand_model", "path": path, "metrics": metrics}
 
 
+# Models the oncology data cannot support: it has no readmissions (one short surgical stay per
+# patient), so readmission, length-of-stay and admission-demand models are retired, not trained.
+RETIRED_MODELS = ("readmission_risk_model", "length_of_stay_model", "resource_demand_model")
+
+
+def retire_models() -> None:
+    from src.utils.database import execute_query, table_exists
+
+    if table_exists("model_registry"):
+        for name in RETIRED_MODELS:
+            execute_query("UPDATE model_registry SET status = 'RETIRED' WHERE model_name = ? AND status = 'ACTIVE'", [name])
+
+
 def train_all_models() -> Dict[str, Any]:
-    """Train all 6 predictive models in sequence."""
-    from src.ml.train_readmission import train_readmission_model
-    from src.ml.train_los import train_los_model
+    """Train every model the oncology data supports, and retire the ones it does not."""
     from src.ml.train_outcome import train_outcome_risk_models
 
+    retire_models()
     return {
         "outcome_risk": train_outcome_risk_models(),
-        "readmission": train_readmission_model(),
-        "los": train_los_model(),
         "pharmacy_demand": train_pharmacy_demand_model(),
         "lab_workload": train_lab_workload_model(),
-        "resource_demand": train_resource_demand_model(),
+        "treatment_demand": train_treatment_demand_model(),
         "outpatient_demand": train_outpatient_demand_model(),
         "drug_class_demand": train_drug_class_demand_model(),
     }

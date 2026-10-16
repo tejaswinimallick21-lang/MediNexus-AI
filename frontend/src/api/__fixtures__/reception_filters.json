@@ -6,11 +6,14 @@
     "Unknown"
   ],
   "departments": [
-    "Internal Medicine"
+    "Internal Medicine",
+    "Medical Oncology",
+    "Pathology",
+    "Primary Care",
+    "Radiation Oncology",
+    "Radiology"
   ],
   "visit_types": [
-    "ambulatory",
-    "outpatient",
-    "wellness"
+    "ambulatory"
   ]
 }

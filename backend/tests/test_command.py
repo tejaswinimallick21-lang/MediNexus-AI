@@ -2,7 +2,7 @@
 Analyst Command Center: contracts, access and the what-if simulation's behaviour.
 """
 
-from backend.app.schemas.command import HospitalOption, ModelMonitorRow, ReadmissionEconomics, WhatIfIn, WhatIfResult
+from backend.app.schemas.command import HospitalOption, ModelMonitorRow, WhatIfIn, WhatIfResult
 from backend.app.services import command
 from backend.tests.conftest import assert_contract, assert_error
 from backend.tests.test_operations import contract_list
@@ -16,7 +16,7 @@ def test_command_center_access(login, client):
 
 def test_hospitals_contract(login):
     rows = contract_list(login("analyst").get("/api/command/hospitals"), HospitalOption, "command_hospitals")
-    assert len(rows) == 91
+    assert len(rows) == query_df_strict("SELECT count(*) AS n FROM sim_hospital_profile").iloc[0]["n"]
     assert rows[0]["served_pct"] <= rows[-1]["served_pct"]  # most pressured first
 
 
@@ -55,16 +55,13 @@ def test_more_capacity_reduces_backlog_and_demand_raises_it():
     assert surge.scenario.lost_to_follow_up > base.baseline.lost_to_follow_up
 
 
-def test_readmission_economics_contract(login):
-    body = assert_contract(login("analyst").get("/api/command/readmission-economics"), ReadmissionEconomics, "command_readmission_economics")
-    assert body["discharges"] > 0 and 0 < body["model_capture_pct"] <= 100
-    assert body["readmission_rate_pct"] == round(body["unplanned_readmissions"] / body["discharges"] * 100, 2)
-
-
 def test_model_monitor_contract(login):
     rows = contract_list(login("admin").get("/api/command/models"), ModelMonitorRow, "command_models")
     names = {r["model_name"] for r in rows}
-    assert {"readmission_risk_model", "outpatient_demand_model"} <= names
+    assert {"outcome_risk_model", "treatment_demand_model", "outpatient_demand_model"} <= names
+    assert not names & {"readmission_risk_model", "length_of_stay_model", "resource_demand_model"}  # retired
+    mortality = next(r for r in rows if r["model_name"] == "outcome_risk_model")
+    assert mortality["serving"] in ("Model", "Stage + cancer type")
     assert not any(n.startswith("test_") for n in names)
     sim = next(r for r in rows if r["model_name"] == "outpatient_demand_model")
     assert sim["data_source"] == "Simulated ops data"

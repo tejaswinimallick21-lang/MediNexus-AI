@@ -81,14 +81,47 @@ def test_reference_catalogs_are_consistent():
 
 
 def test_gold_outcome_risk_snapshots():
-    """12-month outcome risk: labels only in the training snapshot, one year before the scoring snapshot."""
+    """12-month mortality risk: labels only in the training snapshot, one year before the scoring snapshot."""
     path = GOLD_DATA_DIR / "gold_outcome_risk.parquet"
     if not path.exists():
         pytest.skip("Gold layer not built yet")
     df = pd.read_parquet(path)
     train, score = df[df["snapshot"] == "train"], df[df["snapshot"] == "score"]
     assert len(train) and len(score) and score["patient_id"].is_unique
-    assert score[["hospitalized_12m", "died_12m"]].isna().all().all()  # the future is not known
-    assert train["hospitalized_12m"].notna().all() and 0.0 < train["died_12m"].mean() < 0.2
+    assert score["died_12m"].isna().all()  # the future is not known
+    assert train["died_12m"].notna().all() and 0.0 < train["died_12m"].mean() < 0.2
+    assert score["cancer_type"].notna().all() and set(score["stage_num"].dropna()) <= {1, 2, 3, 4}
     gap = (pd.to_datetime(score["index_date"].iloc[0]) - pd.to_datetime(train["index_date"].iloc[0])).days
     assert gap == 365
+
+
+def test_prepared_oncology_dataset_has_no_future_or_post_death_visits():
+    """oncology_dataset.prepare(): nothing dated after the as-of date, no visit after a patient's death."""
+    import duckdb
+
+    from src.ingestion.oncology_dataset import CURRENT_DIR, status
+
+    meta = status()
+    if not meta or not (CURRENT_DIR / "encounters.csv").exists():
+        pytest.skip("Oncology dataset not prepared yet")
+    con = duckdb.connect()
+    enc = (CURRENT_DIR / "encounters.csv").as_posix()
+    pat = (CURRENT_DIR / "patients.csv").as_posix()
+    late = con.execute(f"SELECT count(*) FROM read_csv('{enc}', all_varchar=true) WHERE left(START, 10) > '{meta['as_of']}'").fetchone()[0]
+    after_death = con.execute(f"""
+        SELECT count(*) FROM read_csv('{enc}', all_varchar=true) e JOIN read_csv('{pat}', all_varchar=true) p ON p.Id = e.PATIENT
+        WHERE p.DEATHDATE IS NOT NULL AND left(e.START, 10) > p.DEATHDATE""").fetchone()[0]
+    assert late == 0 and after_death == 0
+    assert meta["repairs"]["encounters_after_death_dropped"] > 0  # the repairs are recorded
+
+
+def test_survival_curves_start_at_100_and_never_rise():
+    path = GOLD_DATA_DIR / "gold_survival.parquet"
+    if not path.exists():
+        pytest.skip("Gold layer not built yet")
+    df = pd.read_parquet(path)
+    for _, g in df.groupby(["group_type", "group_label"]):
+        s = g.sort_values("month")["survival_pct"].to_numpy()
+        assert s[0] == 100.0 and (s[1:] <= s[:-1] + 1e-9).all()
+    five = df[(df["group_type"] == "stage") & (df["month"] == 60)].set_index("group_label")["survival_pct"]
+    assert five["Stage I"] > five["Stage II"] > five["Stage III"] > five["Stage IV"]

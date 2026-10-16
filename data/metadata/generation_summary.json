@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-10-15T21:54:40.780373",
+  "generated_at": "2026-10-16T10:25:39.964036",
   "source": "synthea",
-  "source_dir": "C:\\Users\\tejas\\Downloads\\MediNexus-AI-main\\MediNexus-AI-main\\data\\synthea\\current",
-  "data_through": "2026-10-15",
+  "source_dir": "data/synthea/current",
+  "data_through": "2026-10-16",
   "seed": 42,
   "counts": {
-    "hospitals": 4935,
-    "departments": 5399,
-    "doctors": 4940,
-    "patients": 12483,
-    "admissions": 6852,
-    "diagnoses": 48020,
-    "laboratory_results": 179557,
-    "medications": 150,
-    "prescriptions": 419619,
-    "appointments": 313189,
-    "billing": 6838,
-    "pharmacy_inventory": 1270
+    "hospitals": 12,
+    "departments": 66,
+    "doctors": 142,
+    "patients": 5075,
+    "admissions": 2612,
+    "diagnoses": 22839,
+    "laboratory_results": 2033670,
+    "medications": 41,
+    "prescriptions": 126736,
+    "appointments": 229007,
+    "billing": 2607,
+    "pharmacy_inventory": 344
   },
   "simulated_fields": {
     "patients": [

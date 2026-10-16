@@ -1,4 +1,4 @@
-"""Clinical Workstation routes (/api/clinical/*, /api/patients/*): hcp role, admins oversee."""
+"""Oncology Workstation routes (/api/clinical/*, /api/patients/*): hcp role, admins oversee."""
 
 from typing import List, Optional
 
@@ -12,13 +12,14 @@ from backend.app.schemas.clinical import (
     CareGapSummary,
     ClinicalKpis,
     EncounterRow,
-    HuddlePatient,
     LabResultRow,
     LabSeries,
     MedicationRow,
     Patient360,
     PatientRisk,
     PatientSummary,
+    TreatmentEvent,
+    WorklistPatient,
 )
 from backend.app.schemas.common import ERROR_RESPONSES
 from backend.app.services import clinical
@@ -35,9 +36,10 @@ def kpis() -> ClinicalKpis:
     return clinical.get_kpis()
 
 
-@clinical_router.get("/huddle", response_model=List[HuddlePatient])
-def huddle(limit: int = Query(20, ge=1, le=100)) -> List[HuddlePatient]:
-    return clinical.get_huddle(limit)
+@clinical_router.get("/worklist", response_model=List[WorklistPatient])
+def worklist(limit: int = Query(20, ge=1, le=100)) -> List[WorklistPatient]:
+    """Tumour-board worklist: living cancer patients ranked by 12-month mortality risk."""
+    return clinical.get_worklist(limit)
 
 
 @clinical_router.get("/care-gaps/summary", response_model=List[CareGapSummary])
@@ -55,9 +57,11 @@ def search(
     params: PageParams = Depends(page_params),
     search: Optional[str] = Query(None, max_length=80),
     tier: Optional[str] = Query(None, pattern="^(High|Moderate|Low)$"),
+    cancer_type: Optional[str] = Query(None, max_length=40),
+    stage: Optional[str] = Query(None, pattern="^(I|II|III|IV)$"),
     _: UserRecord = Depends(guard),
 ) -> Page[PatientSummary]:
-    return clinical.search_patients(params, search, tier)
+    return clinical.search_patients(params, search, tier, cancer_type, stage)
 
 
 @patients_router.get("/{patient_id}", response_model=Patient360)
@@ -68,6 +72,11 @@ def patient_360(patient_id: str = PatientId, user: UserRecord = Depends(guard)) 
 @patients_router.get("/{patient_id}/risk", response_model=PatientRisk)
 def patient_risk(patient_id: str = PatientId, user: UserRecord = Depends(guard)) -> PatientRisk:
     return clinical.get_patient_risk(patient_id, user)
+
+
+@patients_router.get("/{patient_id}/treatments", response_model=List[TreatmentEvent])
+def treatments(patient_id: str = PatientId, _: UserRecord = Depends(guard)) -> List[TreatmentEvent]:
+    return clinical.get_treatments(patient_id)
 
 
 @patients_router.get("/{patient_id}/lab-tests", response_model=List[str])

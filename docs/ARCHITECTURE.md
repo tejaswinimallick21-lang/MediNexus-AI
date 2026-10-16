@@ -58,7 +58,7 @@ MediNexus-AI-main/
 ├── tests/                      pipeline, data and ML tests
 │
 └── not in git (generated / large)
-    ├── data/synthea/             Synthea download (zip), re-dated and released copies
+    ├── data/synthea/             oncology_5k.zip (committed), its unzipped and prepared copies
     ├── data/raw → bronze → silver → gold/   Medallion layers (Parquet)
     ├── database/healthcare.duckdb   tables the API reads + registry, audit, purchase orders
     ├── models/*.joblib           trained models
@@ -82,6 +82,6 @@ Synthea CSV → synthea_adapter → data/raw → bronze → silver (clean) → g
 | Kind | Examples |
 |---|---|
 | Synthea records | admissions, stays, diagnoses, lab values, prescriptions, costs, deaths, ICU, hospitals |
-| Computed by the pipeline | unplanned readmission flags, abnormal/critical lab flags, departments, KPIs, 12-month outcome labels |
+| Computed by the pipeline | treatment timeline and status, time to treatment, survival curves, abnormal/critical lab flags, departments, KPIs, 12-month mortality labels |
 | Simulated (labelled) | pharmacy stock levels, no-shows/cancellations, waiting times, payment status, blood group, phone numbers |
 | Estimates (stated rule) | bed capacity & occupancy, lab bench capacity |

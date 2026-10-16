@@ -48,16 +48,16 @@ def test_out_of_scope_question_is_refused_not_answered(login):
     assert reply.answer.startswith("I can't answer that") and not reply.facts and not reply.tool_calls
 
 
-def test_readmission_by_hospital_uses_the_right_tool(login):
-    reply = chat(login("analyst"), "healthanalyst", "Which hospital has the highest readmission rate?")
-    assert [t.name for t in reply.tool_calls] == ["get_readmissions_by"]
-    assert reply.tool_calls[0].args == {"dimension": "hospital"}
-    assert reply.facts and "rate pct" in reply.facts[0]
+def test_mortality_by_stage_uses_the_right_tool(login):
+    reply = chat(login("analyst"), "healthanalyst", "Which cancer stage has the highest mortality?")
+    assert [t.name for t in reply.tool_calls] == ["get_outcomes_by"]
+    assert reply.tool_calls[0].args == {"dimension": "stage"}
+    assert reply.facts and "died pct" in reply.facts[0] and "Stage IV" in reply.facts[0]
 
 
 def test_agent_outputs_never_contain_patient_names(login):
     reply = chat(login("hcp"), "medicare", "Show me the highest-risk patients")
-    names = query_df_strict("SELECT DISTINCT patient_name FROM gold_admissions WHERE patient_name IS NOT NULL LIMIT 200")["patient_name"]
+    names = query_df_strict("SELECT DISTINCT name FROM gold_patient_360 WHERE name IS NOT NULL LIMIT 500")["name"]
     text = " ".join(reply.facts + [reply.answer or ""])
     assert reply.facts and "P_" in text
     assert not any(n in text for n in names if len(str(n)) > 4)
@@ -117,10 +117,10 @@ def test_llm_failure_falls_back_to_rules(login, monkeypatch):
 
     monkeypatch.setattr(providers, "active_provider", lambda: "openai")
     monkeypatch.setattr(providers, "run_openai", broken)
-    reply = chat(login("analyst"), "healthanalyst", "Which department has the highest readmission rate?")
+    reply = chat(login("analyst"), "healthanalyst", "Which stage has the highest mortality?")
     assert reply.engine == "Rules engine (fallback)" and "key was rejected" in reply.notes and reply.facts
 
 
 def test_ops_agent_is_admin_only(login):
     assert_error(login("analyst").post("/api/agents/ops/chat", json={"message": "hi"}), 403, "forbidden")
-    assert chat(login("admin"), "ops", "Which hospital has the highest readmission rate?").tool_calls
+    assert chat(login("admin"), "ops", "Which cancer type has the lowest survival?").tool_calls

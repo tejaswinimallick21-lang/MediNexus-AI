@@ -29,7 +29,9 @@ data/raw/
 data/bronze/
 data/silver/
 data/gold/
-data/synthea/
+# the oncology dataset ships as one zip; the unzipped and prepared copies are rebuilt locally
+data/synthea/*
+!data/synthea/oncology_5k.zip
 data/legacy_raw/
 data/ml_results/
 database/*.duckdb

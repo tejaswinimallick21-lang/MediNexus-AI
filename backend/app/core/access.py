@@ -2,8 +2,8 @@
 Access policy: three roles, one account each.
 
     admin    Platform administrator   every workspace (oversight), plus Data Engineering and Security
-    hcp      Healthcare professional  Clinical Workstation, Pharmacy, Laboratory
-    analyst  Operations analyst       Executive Operations, Analyst Command Center, Patient Access
+    hcp      Healthcare professional  Oncology Workstation, Pharmacy, Laboratory
+    analyst  Operations analyst       Oncology Outcomes, Analyst Command Center, Patient Access
 
 Both the API (per-request checks) and the React app (navigation) read this module.
 """
@@ -20,8 +20,8 @@ ROLE_TITLES: Dict[str, str] = {
 
 ROLE_DESCRIPTIONS: Dict[str, str] = {
     "admin": "Oversees the whole network: every workspace, plus the data pipeline, model registry, agent governance and audit trail.",
-    "hcp": "Clinical decision support: patient 360, risk predictions, care plans, pharmacy stock and laboratory operations.",
-    "analyst": "Enterprise performance: occupancy, readmissions, revenue, capacity planning and outpatient patient access.",
+    "hcp": "Oncology decision support: tumour-board worklist, Patient 360 and treatment pathway, mortality risk, care gaps, chemotherapy stock and laboratory operations.",
+    "analyst": "Oncology outcomes and operations: survival by type and stage, time to treatment, cost of care, treatment capacity and outpatient access.",
 }
 
 # API page key -> (React route, roles allowed)

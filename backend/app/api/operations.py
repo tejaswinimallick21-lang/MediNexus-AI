@@ -10,10 +10,10 @@ from backend.app.core.users import UserRecord
 from backend.app.schemas.common import ERROR_RESPONSES
 from backend.app.schemas.operations import (
     AgentReply,
-    CapacityPlan,
     ClassOutlook,
     CategoryWorkload,
     ChatIn,
+    CostByType,
     CriticalAlert,
     DemandForecast,
     ExecutiveForecasts,
@@ -23,9 +23,9 @@ from backend.app.schemas.operations import (
     PharmacyKpis,
     PurchaseOrderIn,
     PurchaseOrderOut,
-    ReadmissionDrivers,
-    RevenueByDepartment,
+    StageMixRow,
     StockLine,
+    SurvivalOverview,
     TrendPoint,
 )
 from backend.app.services import agents, executive, laboratory, pharmacy
@@ -111,29 +111,30 @@ def executive_kpis() -> ExecutiveKpis:
     return executive.get_kpis()
 
 
-@executive_router.get("/admissions-trend", response_model=List[TrendPoint])
+@executive_router.get("/diagnoses-trend", response_model=List[TrendPoint])
 def executive_trend(months: int = Query(36, ge=6, le=240)) -> List[TrendPoint]:
-    return executive.get_admissions_trend(months)
+    """New cancer diagnoses per month (value) and deaths per month (secondary)."""
+    return executive.get_diagnoses_trend(months)
 
 
-@executive_router.get("/revenue-by-department", response_model=List[RevenueByDepartment])
-def executive_revenue() -> List[RevenueByDepartment]:
-    return executive.get_revenue_by_department()
+@executive_router.get("/survival", response_model=SurvivalOverview)
+def executive_survival() -> SurvivalOverview:
+    return executive.get_survival()
+
+
+@executive_router.get("/stage-mix", response_model=List[StageMixRow])
+def executive_stage_mix() -> List[StageMixRow]:
+    return executive.get_stage_mix()
+
+
+@executive_router.get("/cost-by-type", response_model=List[CostByType])
+def executive_cost() -> List[CostByType]:
+    return executive.get_cost_by_type()
 
 
 @executive_router.get("/forecasts", response_model=ExecutiveForecasts)
 def executive_forecasts() -> ExecutiveForecasts:
     return executive.get_forecasts()
-
-
-@executive_router.get("/readmission-drivers", response_model=ReadmissionDrivers)
-def executive_readmission_drivers() -> ReadmissionDrivers:
-    return executive.get_readmission_drivers()
-
-
-@executive_router.get("/capacity-plan", response_model=CapacityPlan)
-def executive_capacity_plan() -> CapacityPlan:
-    return executive.get_capacity_plan()
 
 
 # ---- Copilots -----------------------------------------------------------------------------------

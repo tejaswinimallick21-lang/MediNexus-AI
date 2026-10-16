@@ -22,8 +22,7 @@ DOCUMENTS_DIR = BASE_DIR / "documents"
 LOGS_DIR = Path(os.environ["MEDINEXUS_LOGS_DIR"]) if os.getenv("MEDINEXUS_LOGS_DIR") else BASE_DIR / "logs"
 
 # Synthea source export (CSV). Swap to the 100K export by pointing this at its folder.
-SYNTHEA_SOURCE_DIR = DATA_DIR / "synthea" / "csv"   # original download, never modified
-SYNTHEA_CSV_DIR = DATA_DIR / "synthea" / "current"  # re-dated and released up to now (src/ingestion/redate_synthea.py)
+SYNTHEA_CSV_DIR = DATA_DIR / "synthea" / "current"  # the prepared oncology dataset (src/ingestion/oncology_dataset.py)
 
 # 30-day window used for unplanned readmissions
 OUTCOME_WINDOW_DAYS = 30

@@ -1,7 +1,10 @@
+import { useMemo, useState } from "react";
+import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
 import { executiveApi } from "../api/operations";
-import type { ModelScore } from "../api/schemas/operations";
-import { BarLineChart, RankedBars } from "../components/Charts";
-import { Badge } from "../components/Controls";
+import type { ModelScore, SurvivalOverview } from "../api/schemas/operations";
+import { BarLineChart, RankedBars, SERIES } from "../components/Charts";
+import { Badge, SelectField } from "../components/Controls";
 import { DataTable, type Column } from "../components/DataTable";
 import { ForecastNote } from "../components/ForecastNote";
 import { KpiGrid } from "../components/Kpi";
@@ -23,42 +26,126 @@ const MODEL_COLUMNS: Column<ModelScore>[] = [
   { key: "verdict", header: "Verdict", render: (r) => <Badge tone={VERDICT_TONE(r.verdict)}>{r.verdict}</Badge> },
 ];
 
+type SurvivalRow = SurvivalOverview["by_type"][number];
+const pct = (v: number | null) => (v == null ? "—" : formatPercent(v));
+const SURVIVAL_COLUMNS: Column<SurvivalRow>[] = [
+  { key: "type", header: "Cancer type", render: (r) => <strong>{r.cancer_type}</strong> },
+  { key: "n", header: "Patients", numeric: true, render: (r) => formatNumber(r.patients) },
+  { key: "y1", header: "1-year", numeric: true, render: (r) => pct(r.one_year_pct) },
+  { key: "y3", header: "3-year", numeric: true, render: (r) => pct(r.three_year_pct) },
+  { key: "y5", header: "5-year", numeric: true, render: (r) => pct(r.five_year_pct) },
+  { key: "s1", header: "Stage I · 5-year", numeric: true, render: (r) => pct(r.stage_i_five_year_pct) },
+  { key: "s4", header: "Stage IV · 5-year", numeric: true, render: (r) => pct(r.stage_iv_five_year_pct) },
+];
+const STAGE_COLORS = ["#14b8a6", "#0284c7", "#f59e0b", "#ef4444"];
+
+function SurvivalChart({ data, kind }: { data: SurvivalOverview; kind: "stage" | "cancer_type" }) {
+  const curves = data.curves.filter((c) => c.kind === kind);
+  const rows = useMemo(() => {
+    const months = Array.from(new Set(curves.flatMap((c) => c.points.map((p) => p.month)))).sort((a, b) => a - b).filter((m) => m <= 120);
+    return months.map((m) => {
+      const row: Record<string, number> = { month: m };
+      curves.forEach((c) => {
+        const p = c.points.find((x) => x.month === m);
+        if (p) row[c.label] = p.survival_pct;
+      });
+      return row;
+    });
+  }, [curves]);
+  const colors = kind === "stage" ? STAGE_COLORS : SERIES.concat(["#a855f7", "#64748b"]);
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={rows} margin={{ top: 8, right: 16, bottom: 0, left: -8 }}>
+        <CartesianGrid vertical={false} stroke="var(--chart-grid)" />
+        <XAxis dataKey="month" tickFormatter={(m) => `${Math.round(Number(m) / 12)}y`} ticks={[0, 12, 24, 36, 48, 60, 72, 84, 96, 108, 120]} tick={{ fontSize: 12, fill: "#5b6b82" }} tickLine={false} axisLine={false} />
+        <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12, fill: "#5b6b82" }} tickLine={false} axisLine={false} />
+        <Tooltip labelFormatter={(m) => `${m} months after diagnosis`} formatter={(v: number, name: string) => [`${formatNumber(v, 1)}%`, name]} />
+        <Legend wrapperStyle={{ fontSize: 12 }} />
+        {curves.map((c, i) => (
+          <Line key={c.label} type="stepAfter" dataKey={c.label} stroke={colors[i % colors.length]} strokeWidth={2.2} dot={false} animationDuration={900} />
+        ))}
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}
+
 export function ExecutivePage() {
   const kpis = useApi((s) => executiveApi.kpis(s), []);
-  const trend = useApi((s) => executiveApi.admissionsTrend(36, s), []);
-  const revenue = useApi((s) => executiveApi.revenue(s), []);
+  const trend = useApi((s) => executiveApi.diagnosesTrend(36, s), []);
+  const survival = useApi((s) => executiveApi.survival(s), []);
+  const stageMix = useApi((s) => executiveApi.stageMix(s), []);
+  const cost = useApi((s) => executiveApi.costByType(s), []);
   const forecasts = useApi((s) => executiveApi.forecasts(s), []);
-  const drivers = useApi((s) => executiveApi.readmissionDrivers(s), []);
-  const capacity = useApi((s) => executiveApi.capacityPlan(s), []);
+  const [curveKind, setCurveKind] = useState<"stage" | "cancer_type">("stage");
   const k = kpis.data;
 
   return (
     <div>
       <PageHeader
-        eyebrow="Operations analyst"
-        title="Executive Operations"
-        subtitle={k ? `Network performance across ${formatNumber(k.hospitals)} hospitals · data through ${formatDate(k.data_through)}` : "Network performance across all hospitals"}
+        eyebrow="Oncology analyst"
+        title="Oncology outcomes"
+        subtitle={k ? `Survival, diagnoses, treatment and cost across ${formatNumber(k.hospitals)} cancer centres · data through ${formatDate(k.data_through)}` : "Survival, diagnoses, treatment and cost"}
       />
 
       <KpiGrid
-        count={8}
+        count={6}
         loading={kpis.loading}
         error={kpis.error}
         onRetry={kpis.reload}
         items={
           k && [
-            { label: "Inpatient admissions", value: k.total_admissions, format: (n) => formatNumber(n), icon: "Building", hint: `${formatNumber(k.patients_admitted)} patients` },
-            { label: "Unplanned readmissions", value: k.unplanned_readmission_rate_pct, format: (n) => formatPercent(n, 2), icon: "Alert", tone: "warn", hint: "Within 30 days of discharge" },
-            { label: "Average length of stay", value: k.average_los_days, format: (n) => `${formatNumber(n, 1)} d`, icon: "Clock", hint: "Observed" },
-            { label: "Bed occupancy", value: k.occupancy_rate_pct ?? 0, format: (n) => (k.occupancy_rate_pct == null ? "—" : formatPercent(n)), icon: "Users", hint: "Last 90 days · estimated capacity" },
-            { label: "Billed revenue", value: k.total_revenue, format: (n) => formatUSD(n, { whole: true }), icon: "Sparkle", tone: "good", hint: "All inpatient claims" },
-            { label: "Collection rate", value: k.collection_rate_pct, format: (n) => formatPercent(n), icon: "Check", tone: k.collection_rate_pct >= 70 ? "good" : "warn", hint: "Payer-covered share" },
+            { label: "Cancer patients", value: k.patients, format: (n) => formatNumber(n), icon: "Users", hint: `${formatNumber(k.living_patients)} living` },
+            { label: "New diagnoses · 12 months", value: k.new_diagnoses_12m, format: (n) => formatNumber(n), icon: "Building", hint: "First recorded diagnosis" },
+            { label: "5-year survival", value: k.five_year_survival_pct ?? 0, format: (n) => (k.five_year_survival_pct == null ? "—" : formatPercent(n)), icon: "Sparkle", tone: "good", hint: "Kaplan-Meier, all patients" },
+            { label: "Median time to treatment", value: k.median_days_to_treatment ?? 0, format: (n) => (k.median_days_to_treatment == null ? "—" : `${formatNumber(n)} d`), icon: "Clock", tone: (k.median_days_to_treatment ?? 0) > 30 ? "warn" : "good", hint: "Diagnosis to first treatment" },
+            { label: "Treatment sessions · 30 days", value: k.treatment_sessions_30d, format: (n) => formatNumber(n), icon: "Pulse", hint: "Surgery, systemic, radiation" },
+            { label: "Recorded cost of care", value: k.cost_of_care, format: (n) => formatUSD(n, { whole: true }), icon: "Check", hint: "Claims, visits and medicines" },
           ]
         }
       />
 
+      <Panel
+        title="Survival from diagnosis"
+        subtitle={survival.data?.note ?? "Kaplan-Meier survival curves"}
+        icon="Shield"
+        actions={
+          <SelectField
+            id="curve-kind"
+            label="Curves by"
+            value={curveKind}
+            onChange={(v) => setCurveKind(v as "stage" | "cancer_type")}
+            options={[
+              { value: "stage", label: "Stage" },
+              { value: "cancer_type", label: "Cancer type" },
+            ]}
+          />
+        }
+      >
+        {survival.error ? (
+          <ErrorState error={survival.error} onRetry={survival.reload} />
+        ) : survival.data ? (
+          <SurvivalChart data={survival.data} kind={curveKind} />
+        ) : (
+          <Skeleton height={300} radius={12} />
+        )}
+      </Panel>
+      <div style={{ height: 20 }} />
+
+      <Panel title="Survival by cancer type" subtitle="Share of patients alive 1, 3 and 5 years after diagnosis" icon="Pulse">
+        <DataTable
+          columns={SURVIVAL_COLUMNS}
+          rows={survival.data?.by_type}
+          rowKey={(r) => r.cancer_type}
+          loading={survival.loading}
+          error={survival.error}
+          onRetry={survival.reload}
+          caption="Survival by cancer type"
+        />
+      </Panel>
+      <div style={{ height: 20 }} />
+
       <Grid>
-        <Panel title="Admissions & unplanned readmissions" subtitle="Monthly · last 36 months of data" icon="Pulse">
+        <Panel title="New diagnoses and deaths" subtitle="Monthly · last 36 months of data" icon="Pulse">
           {trend.error ? (
             <ErrorState error={trend.error} onRetry={trend.reload} />
           ) : trend.data ? (
@@ -67,8 +154,8 @@ export function ExecutivePage() {
               x="period"
               bar="value"
               line="secondary"
-              barName="Admissions"
-              lineName="Unplanned readmissions"
+              barName="New diagnoses"
+              lineName="Deaths"
               xFormatter={formatMonth}
               formatLine={(n) => formatNumber(n)}
             />
@@ -76,11 +163,23 @@ export function ExecutivePage() {
             <Skeleton height={260} radius={12} />
           )}
         </Panel>
-        <Panel title="Revenue by department" subtitle="Billed, all inpatient claims" icon="Building">
-          {revenue.error ? (
-            <ErrorState error={revenue.error} onRetry={revenue.reload} />
-          ) : revenue.data ? (
-            <RankedBars data={revenue.data.map((r) => ({ label: r.department, value: r.revenue }))} format={(n) => formatUSD(n, { whole: true })} height={270} />
+        <Panel title="Stage at diagnosis" subtitle="Patients per cancer type and stage" icon="Building">
+          {stageMix.error ? (
+            <ErrorState error={stageMix.error} onRetry={stageMix.reload} />
+          ) : stageMix.data ? (
+            <ResponsiveContainer width="100%" height={270}>
+              <BarChart data={stageMix.data} layout="vertical" margin={{ top: 4, right: 16, bottom: 0, left: 24 }}>
+                <CartesianGrid horizontal={false} stroke="var(--chart-grid)" />
+                <XAxis type="number" tick={{ fontSize: 12, fill: "#5b6b82" }} tickLine={false} axisLine={false} />
+                <YAxis type="category" dataKey="cancer_type" width={110} tick={{ fontSize: 12, fill: "#5b6b82" }} tickLine={false} axisLine={false} />
+                <Tooltip />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+                <Bar dataKey="stage_i" name="Stage I" stackId="s" fill={STAGE_COLORS[0]} />
+                <Bar dataKey="stage_ii" name="Stage II" stackId="s" fill={STAGE_COLORS[1]} />
+                <Bar dataKey="stage_iii" name="Stage III" stackId="s" fill={STAGE_COLORS[2]} />
+                <Bar dataKey="stage_iv" name="Stage IV" stackId="s" fill={STAGE_COLORS[3]} />
+              </BarChart>
+            </ResponsiveContainer>
           ) : (
             <SkeletonText lines={8} />
           )}
@@ -88,46 +187,33 @@ export function ExecutivePage() {
       </Grid>
 
       <Grid>
-        <Panel title="Why patients are readmitted" subtitle="Computed from Gold admissions (associations, not causes)" icon="Alert">
-          {drivers.error ? (
-            <ErrorState error={drivers.error} onRetry={drivers.reload} />
-          ) : drivers.data ? (
-            <div style={{ display: "grid", gap: 14 }}>
-              <ul style={{ margin: 0, paddingLeft: 18, display: "grid", gap: 6, fontSize: 14 }}>
-                {drivers.data.findings.map((f) => (
-                  <li key={f}>{f}</li>
-                ))}
-              </ul>
-              <RankedBars
-                data={drivers.data.by_reason.slice(0, 8).map((r) => ({ label: r.label, value: r.rate_pct }))}
-                format={(n) => formatPercent(n)}
-                height={240}
-              />
-            </div>
+        <Panel title="Cost of care per patient" subtitle="Recorded claims, visits and medicines (synthetic costs)" icon="Building">
+          {cost.error ? (
+            <ErrorState error={cost.error} onRetry={cost.reload} />
+          ) : cost.data ? (
+            <RankedBars data={cost.data.map((r) => ({ label: r.cancer_type, value: r.cost_per_patient }))} format={(n) => formatUSD(n, { whole: true })} height={270} />
           ) : (
-            <SkeletonText lines={9} />
+            <SkeletonText lines={8} />
           )}
         </Panel>
-        <Panel title="Capacity outlook" subtitle="Next 7 days" icon="Users">
-          {capacity.error ? (
-            <ErrorState error={capacity.error} onRetry={capacity.reload} />
-          ) : capacity.data && forecasts.data ? (
+        <Panel title="Treatment capacity outlook" subtitle="Average sessions per day over the next 7 days" icon="Users">
+          {forecasts.error ? (
+            <ErrorState error={forecasts.error} onRetry={forecasts.reload} />
+          ) : forecasts.data ? (
             <div style={{ display: "grid", gap: 14 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: 12 }}>
-                <Stat label="Admissions / day" value={formatNumber(capacity.data.projected_daily_admissions, 1)} />
-                <Stat label="Occupancy" value={capacity.data.occupancy_pct == null ? "—" : formatPercent(capacity.data.occupancy_pct)} />
-                <Stat label="Avg stay" value={`${formatNumber(capacity.data.average_los_days, 1)} d`} />
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0,1fr))", gap: 12 }}>
+                {forecasts.data.treatment.map((t) => (
+                  <Stat key={t.service} label={t.service} value={`${formatNumber(t.forecast_daily, 1)} / day`} />
+                ))}
               </div>
-              <Badge tone={capacity.data.surge_tier.includes("LEVEL 1") ? "good" : capacity.data.surge_tier.includes("LEVEL 2") ? "warn" : "bad"}>
-                {capacity.data.surge_tier}
-              </Badge>
               <ul style={{ margin: 0, paddingLeft: 18, display: "grid", gap: 6, fontSize: 14 }}>
-                {capacity.data.directives.map((d) => (
-                  <li key={d}>{d}</li>
+                {forecasts.data.treatment.map((t) => (
+                  <li key={t.service}>
+                    {t.service}: {formatNumber(t.last_7d_daily, 1)} a day over the last 7 days.
+                  </li>
                 ))}
               </ul>
-              <p style={{ margin: 0, fontSize: 12, color: "var(--color-text-muted)" }}>{capacity.data.occupancy_note}</p>
-              <ForecastNote meta={forecasts.data.admissions_forecast} />
+              <ForecastNote meta={forecasts.data.treatment_forecast} />
             </div>
           ) : (
             <SkeletonText lines={9} />
@@ -149,7 +235,6 @@ export function ExecutivePage() {
           />
         </Panel>
       </div>
-
     </div>
   );
 }

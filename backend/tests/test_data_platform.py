@@ -12,7 +12,7 @@ import pytest
 
 from backend.app.core.pagination import Page
 from backend.app.jobs import runner
-from backend.app.schemas.data_platform import UploadAccepted, UploadDetail, UploadSummary
+from backend.app.schemas.data_platform import DatasetInfo, UploadAccepted, UploadDetail, UploadSummary
 from backend.app.services import data_platform
 from backend.tests.conftest import FIXTURE_DIR, assert_contract, assert_error
 
@@ -66,18 +66,16 @@ def test_data_workspace_is_admin_only(login, client):
     assert_error(login("hcp").get("/api/data/uploads"), 403, "forbidden")
 
 
-def test_live_feed_status(login):
-    from src.ingestion.redate_synthea import status
+def test_dataset_info(login):
+    from src.ingestion.oncology_dataset import status
 
-    assert_error(login("analyst").get("/api/data/feed"), 403, "forbidden")
-    r = login("admin").get("/api/data/feed")
-    assert r.status_code == 200, r.text
-    body, meta = r.json(), status()
-    assert body["enabled"] is False  # the scheduler is off in tests
-    assert body["released_through"] == meta["release"]["released_through"] and body["held_back_days"] >= 0
-    assert body["redated_end"] == meta["redate"]["redated_end"] and body["next_run_at"]
-    # The dataset is fixed unless the feed is switched on, so a manual refresh is refused
-    assert_error(login("admin").post("/api/data/feed/refresh"), 409, "feed_disabled")
+    assert_error(login("analyst").get("/api/data/dataset"), 403, "forbidden")
+    body = assert_contract(login("admin").get("/api/data/dataset"), DatasetInfo, "data_dataset")
+    assert body["as_of"] == status()["as_of"]
+    assert body["patients"] == body["living"] + body["deceased"] > 0
+    assert sum(c["count"] for c in body["cancer_types"]) == body["patients"]
+    assert [s["label"] for s in body["stages"]] == ["Stage I", "Stage II", "Stage III", "Stage IV"]
+    assert body["repairs"]["encounters_after_death_dropped"] > 0 and body["known_limitations"]
 
 
 def test_rejects_unsupported_and_empty_files(login):

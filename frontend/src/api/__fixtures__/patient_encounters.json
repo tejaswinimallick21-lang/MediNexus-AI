@@ -1,56 +1,14 @@
 [
   {
-    "admission_id": "ADM_0006726",
-    "admission_date": "2026-09-30",
-    "discharge_date": "2026-10-01",
-    "length_of_stay_days": 1.02,
+    "admission_id": "ADM_0000356",
+    "admission_date": "2019-02-20",
+    "discharge_date": "2019-02-20",
+    "length_of_stay_days": 0.05,
     "admission_type": "Elective",
-    "admission_reason": "Malignant neoplasm of breast (disorder)",
-    "department_name": "Oncology",
+    "admission_reason": "Malignant tumor of prostate (disorder)",
+    "department_name": "Surgical Oncology",
     "discharge_disposition": "Home",
-    "is_icu": false,
-    "readmitted_30d": false,
+    "surgery_procedure": "Prostatectomy",
     "diagnoses": []
-  },
-  {
-    "admission_id": "ADM_0006727",
-    "admission_date": "2026-09-30",
-    "discharge_date": "2026-10-01",
-    "length_of_stay_days": 1.02,
-    "admission_type": "Elective",
-    "admission_reason": "Malignant neoplasm of breast (disorder)",
-    "department_name": "Oncology",
-    "discharge_disposition": "Home",
-    "is_icu": false,
-    "readmitted_30d": false,
-    "diagnoses": []
-  },
-  {
-    "admission_id": "ADM_0005096",
-    "admission_date": "2019-05-11",
-    "discharge_date": "2019-05-12",
-    "length_of_stay_days": 1.12,
-    "admission_type": "Elective",
-    "admission_reason": "Malignant neoplasm of breast (disorder)",
-    "department_name": "Oncology",
-    "discharge_disposition": "Home",
-    "is_icu": false,
-    "readmitted_30d": false,
-    "diagnoses": []
-  },
-  {
-    "admission_id": "ADM_0005047",
-    "admission_date": "2018-12-13",
-    "discharge_date": "2018-12-14",
-    "length_of_stay_days": 1.0,
-    "admission_type": "Elective",
-    "admission_reason": "Encounter for symptom (procedure)",
-    "department_name": "Internal Medicine",
-    "discharge_disposition": "Home",
-    "is_icu": false,
-    "readmitted_30d": false,
-    "diagnoses": [
-      "Malignant neoplasm of breast (disorder)"
-    ]
   }
 ]

@@ -33,7 +33,7 @@
     {
       "page": "doctor",
       "route": "/doctor",
-      "label": "Clinical Workstation",
+      "label": "Oncology Workstation",
       "roles": [
         "admin",
         "hcp"
@@ -60,7 +60,7 @@
     {
       "page": "executive",
       "route": "/executive",
-      "label": "Executive Operations",
+      "label": "Oncology Outcomes",
       "roles": [
         "admin",
         "analyst"
@@ -96,7 +96,7 @@
       "tools": [
         "search_policies",
         "remember",
-        "get_highest_risk_discharges",
+        "get_tumour_board",
         "get_patient_summary",
         "get_care_gap_summary",
         "list_care_gaps",
@@ -133,11 +133,11 @@
         "search_policies",
         "remember",
         "get_network_kpis",
-        "get_readmissions_by",
-        "get_admissions_trend",
-        "get_revenue_by_department",
-        "get_capacity_plan",
-        "get_readmission_economics",
+        "get_outcomes_by",
+        "get_diagnoses_trend",
+        "get_survival_by_type",
+        "get_cost_by_cancer_type",
+        "get_treatment_forecast",
         "list_hospitals_by_access_pressure",
         "run_capacity_what_if",
         "list_model_scores"
@@ -153,15 +153,15 @@
         "search_policies",
         "remember",
         "get_network_kpis",
-        "get_readmissions_by",
-        "get_admissions_trend",
-        "get_revenue_by_department",
-        "get_capacity_plan",
-        "get_readmission_economics",
+        "get_outcomes_by",
+        "get_diagnoses_trend",
+        "get_survival_by_type",
+        "get_cost_by_cancer_type",
+        "get_treatment_forecast",
         "list_hospitals_by_access_pressure",
         "run_capacity_what_if",
         "list_model_scores",
-        "get_highest_risk_discharges",
+        "get_tumour_board",
         "get_patient_summary",
         "get_care_gap_summary",
         "list_care_gaps",

@@ -3,8 +3,8 @@ Feature Engineering and Dataset Preparation for MediNexus AI ML Models.
 
 All features come from Gold feature stores that are point-in-time correct:
 - gold_patient_risk_features: one row per admission; history up to admission, stay facts known at discharge.
-- gold_outcome_risk: one row per living patient per snapshot (train: one year before the end of the
-  data, outcomes observed; score: as of the end of the data); history strictly before the index date.
+- gold_outcome_risk: one row per living cancer patient per snapshot (train: one year before the end
+  of the data, deaths observed; score: as of the end of the data); history strictly before the index date.
 """
 
 from typing import Tuple, List, Optional
@@ -36,17 +36,22 @@ LOS_BASE_FEATURES = [
     "total_diagnoses", "active_prescriptions_count",
 ]
 
-# 12-month outcome risk: only history before the index date.
+# 12-month mortality risk for cancer patients: only history before the index date.
+# Emergency and hospice visits are deliberately absent (in this data they occur only just before death).
+CANCER_TYPE_FEATURES = ["type_breast", "type_prostate", "type_lung", "type_colon", "type_melanoma",
+                        "type_leukemia", "type_lymphoma", "type_pancreas"]
+STAGE_TYPE_BASELINE = ["stage_num", *CANCER_TYPE_FEATURES]  # what an oncologist reads off the chart
 OUTCOME_FEATURES = [
-    "age_at_index", "gender_encoded",
-    "has_hypertension", "has_diabetes", "has_prediabetes", "has_obesity", "has_heart_failure",
-    "has_copd", "has_asthma", "has_ckd", "has_coronary_disease", "has_atrial_fibrillation",
-    "has_stroke", "has_cancer", "has_dementia", "has_anemia",
-    "comorbidity_count", "prior_admissions_5y", "active_medications",
-    "last_bmi", "last_systolic_bp", "last_hba1c", "last_egfr",
+    "age_at_index", "gender_encoded", "stage_num", *CANCER_TYPE_FEATURES,
+    "months_since_diagnosis", "age_at_diagnosis",
+    "surgeries_before", "chemo_cycles_before", "immuno_targeted_cycles_before", "radiation_sessions_before",
+    "treatments_last_90d", "marker_elevated", "marker_elevated_share",
+    "has_hypertension", "has_diabetes", "has_obesity", "has_heart_failure", "has_copd", "has_ckd",
+    "has_coronary_disease", "has_atrial_fibrillation", "has_anemia",
+    "comorbidity_count", "active_medications",
+    "last_bmi", "last_hemoglobin", "last_ldh", "last_creatinine",
 ]
 OUTCOMES = {
-    "hospitalized_12m": "Hospital admission within 12 months",
     "died_12m": "Death within 12 months",
 }
 

@@ -1,24 +1,23 @@
 {
-  "generated_at": "2026-10-15T10:11:13.113757",
+  "generated_at": "2026-10-16T01:37:15.921010",
   "seed": 7,
   "years": 3,
   "date_range": [
-    "2023-11-12",
-    "2026-11-10"
+    "2023-10-18",
+    "2026-10-16"
   ],
   "counts": {
-    "sim_hospital_profile": 91,
-    "sim_staff_roster": 819,
-    "sim_outpatient_daily": 99645,
-    "sim_pharmacy_daily": 1195740,
-    "sim_equipment_assets": 30423,
-    "sim_equipment_daily": 697515,
-    "sim_equipment_events": 30339
+    "sim_hospital_profile": 9,
+    "sim_staff_roster": 54,
+    "sim_outpatient_daily": 9855,
+    "sim_pharmacy_daily": 78840,
+    "sim_equipment_assets": 1965,
+    "sim_equipment_daily": 59130,
+    "sim_equipment_events": 1802
   },
   "simulated": true,
   "anchors": [
-    "91 Synthea hospitals sized by real encounter volume",
-    "ventilator use follows real Synthea ventilated stays"
+    "9 oncology hospitals sized by real encounter volume"
   ],
   "structure": [
     "weekday pattern",
@@ -28,9 +27,9 @@
     "lognormal noise"
   ],
   "never_generated": [
-    "readmission",
     "mortality",
-    "ICU",
+    "treatment response",
+    "toxicity",
     "any clinical outcome"
   ]
 }

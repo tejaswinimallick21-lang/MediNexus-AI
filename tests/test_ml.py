@@ -5,8 +5,7 @@ Tests for Machine Learning Models and Transparency Pipeline in MediNexus AI.
 import pytest
 import pandas as pd
 from src.ml.predict import (
-    predict_patient_readmission,
-    predict_patient_los,
+    predict_patient_outcome_risk,
     predict_drug_demand,
     CLINICAL_DISCLAIMER,
 )
@@ -15,7 +14,7 @@ from src.ml.model_registry import register_model, load_model
 
 def test_clinical_disclaimer_presence():
     """Verify that clinical disclaimer is always present on inferences."""
-    res = predict_patient_readmission("NON_EXISTENT_P99")
+    res = predict_patient_outcome_risk("NON_EXISTENT_P99")
     assert "disclaimer" in res
     assert res["disclaimer"] == CLINICAL_DISCLAIMER
 

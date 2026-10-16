@@ -10,8 +10,8 @@ from pydantic import TypeAdapter
 from backend.app.core.pagination import Page
 from backend.app.schemas.operations import (
     AgentReply,
-    CapacityPlan,
     CategoryWorkload,
+    CostByType,
     CriticalAlert,
     DemandForecast,
     ExecutiveForecasts,
@@ -20,9 +20,9 @@ from backend.app.schemas.operations import (
     LabKpis,
     PharmacyKpis,
     PurchaseOrderOut,
-    ReadmissionDrivers,
-    RevenueByDepartment,
+    StageMixRow,
     StockLine,
+    SurvivalOverview,
     TrendPoint,
 )
 from backend.app.services import executive as exec_svc
@@ -114,25 +114,29 @@ def test_purchase_order_is_created_and_validated(login):
 
 def test_executive_kpis_contract(login):
     body = assert_contract(login("analyst").get("/api/executive/kpis"), ExecutiveKpis, "executive_kpis")
-    assert body["hospitals"] > 1
+    assert body["hospitals"] > 1 and 0 < body["living_patients"] <= body["patients"]
+    assert 0 < body["five_year_survival_pct"] < 100
 
 
-def test_executive_trend_and_revenue_contracts(login):
+def test_executive_outcome_contracts(login):
     c = login("analyst")
-    contract_list(c.get("/api/executive/admissions-trend", params={"months": 24}), TrendPoint, "executive_admissions_trend")
-    contract_list(c.get("/api/executive/revenue-by-department"), RevenueByDepartment, "executive_revenue")
+    contract_list(c.get("/api/executive/diagnoses-trend", params={"months": 24}), TrendPoint, "executive_diagnoses_trend")
+    surv = assert_contract(c.get("/api/executive/survival"), SurvivalOverview, "executive_survival")
+    stage = {cv["label"]: cv for cv in surv["curves"] if cv["kind"] == "stage"}
+    five = {k: next(p["survival_pct"] for p in v["points"] if p["month"] == 60) for k, v in stage.items()}
+    assert five["Stage I"] > five["Stage IV"]  # survival falls with stage
+    assert all(cv["points"][0]["survival_pct"] == 100 for cv in surv["curves"])
+    mix = contract_list(c.get("/api/executive/stage-mix"), StageMixRow, "executive_stage_mix")
+    assert sum(r["stage_i"] + r["stage_ii"] + r["stage_iii"] + r["stage_iv"] for r in mix) > 0
+    contract_list(c.get("/api/executive/cost-by-type"), CostByType, "executive_cost_by_type")
 
 
 def test_executive_forecasts_report_real_registry_metrics(login):
     body = assert_contract(login("analyst").get("/api/executive/forecasts"), ExecutiveForecasts, "executive_forecasts")
-    assert any(m["model"] == "Unplanned 30-day readmission" for m in body["models"])
-    assert all("99.6" not in m["primary_metric"] for m in body["models"])  # no hard-coded legacy scores
-
-
-def test_executive_drivers_and_capacity_contracts(login):
-    c = login("analyst")
-    assert_contract(c.get("/api/executive/readmission-drivers"), ReadmissionDrivers, "executive_readmission_drivers")
-    assert_contract(c.get("/api/executive/capacity-plan"), CapacityPlan, "executive_capacity_plan")
+    assert {r["service"] for r in body["treatment"]} == {"Infusion chairs (chemo / immuno / targeted)", "Radiation sessions"}
+    mortality = next(m for m in body["models"] if m["model"] == "Death within 12 months")
+    assert "Stage + type" in mortality["baseline"]
+    assert not any("readmission" in m["model"].lower() for m in body["models"])
 
 
 def test_verdict_helper():
@@ -155,7 +159,7 @@ def test_role_access(login, role, path, status):
 
 def test_copilot_chat_contract(login):
     body = assert_contract(
-        login("analyst").post("/api/agents/healthanalyst/chat", json={"message": "Why did readmissions increase?"}),
+        login("analyst").post("/api/agents/healthanalyst/chat", json={"message": "How does survival differ by stage?"}),
         AgentReply,
         "agent_reply",
     )

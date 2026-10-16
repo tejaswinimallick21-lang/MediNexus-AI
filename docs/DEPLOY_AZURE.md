@@ -59,7 +59,7 @@ python deploy/pack_data.py
 ```
 
 This writes `medinexus_data.tar.gz` (about 280 MB): the database with all accounts, trained models,
-the Synthea download and the re-dated data. It skips your upload sandboxes and backups.
+the prepared dataset and the Gold layer files. It skips your upload sandboxes and backups.
 
 Windows only, once: SSH refuses a key file other users can read. In PowerShell:
 

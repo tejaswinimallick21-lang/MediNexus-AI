@@ -1,22 +1,22 @@
 {
   "window_days": 7,
-  "total_events": 1930,
+  "total_events": 1964,
   "failed_logins": 30,
-  "access_denied": 164,
+  "access_denied": 165,
   "lockouts": 2,
-  "patient_record_views": 61,
+  "patient_record_views": 67,
   "by_action": [
     {
       "label": "LOGIN",
-      "count": 1122
+      "count": 1127
     },
     {
       "label": "AGENT_PROPOSED_ACTION",
-      "count": 211
+      "count": 231
     },
     {
       "label": "ACCESS_DENIED",
-      "count": 164
+      "count": 165
     },
     {
       "label": "SANDBOX_UPLOAD",
@@ -24,7 +24,7 @@
     },
     {
       "label": "PATIENT_VIEW",
-      "count": 59
+      "count": 65
     },
     {
       "label": "AGENT_QUERY",
@@ -63,7 +63,7 @@
       "count": 8
     },
     {
-      "label": "AGENT_ACTION_REJECTED",
+      "label": "AGENT_ACTION_APPROVED",
       "count": 7
     }
   ],
@@ -94,9 +94,15 @@
     },
     {
       "day": "2026-10-15 00:00:00",
-      "events": 277,
+      "events": 42,
+      "failed_logins": 0,
+      "denied": 0
+    },
+    {
+      "day": "2026-10-16 00:00:00",
+      "events": 269,
       "failed_logins": 1,
-      "denied": 15
+      "denied": 16
     }
   ],
   "failed_login_accounts": [
@@ -120,7 +126,7 @@
   "denied_resources": [
     {
       "label": "API_DATA",
-      "count": 32
+      "count": 33
     },
     {
       "label": "AGENT_MEDICARE",

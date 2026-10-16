@@ -1,0 +1,50 @@
+[
+  {
+    "cancer_type": "Breast",
+    "patients": 1006,
+    "total_cost": 149758694.52,
+    "cost_per_patient": 148865.5
+  },
+  {
+    "cancer_type": "Colon",
+    "patients": 602,
+    "total_cost": 76882472.98,
+    "cost_per_patient": 127711.75
+  },
+  {
+    "cancer_type": "Lung",
+    "patients": 803,
+    "total_cost": 71151603.81,
+    "cost_per_patient": 88607.23
+  },
+  {
+    "cancer_type": "Lymphoma (NHL)",
+    "patients": 429,
+    "total_cost": 55692097.13,
+    "cost_per_patient": 129818.41
+  },
+  {
+    "cancer_type": "Prostate",
+    "patients": 908,
+    "total_cost": 53650056.05,
+    "cost_per_patient": 59085.96
+  },
+  {
+    "cancer_type": "Leukemia (CLL)",
+    "patients": 445,
+    "total_cost": 38038090.3,
+    "cost_per_patient": 85478.85
+  },
+  {
+    "cancer_type": "Melanoma",
+    "patients": 478,
+    "total_cost": 33028006.53,
+    "cost_per_patient": 69096.25
+  },
+  {
+    "cancer_type": "Pancreas",
+    "patients": 285,
+    "total_cost": 30375858.23,
+    "cost_per_patient": 106581.96
+  }
+]

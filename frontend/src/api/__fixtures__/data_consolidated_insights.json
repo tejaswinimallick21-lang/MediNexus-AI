@@ -1,10 +1,10 @@
 {
-  "upload_id": "afa443140f6243f18e246ccf0534b1d5",
+  "upload_id": "ac124f9490b24979afea6b8f562b8815",
   "filename": "admissions_consolidated.parquet",
   "size_bytes": 37059,
   "sha256": "abe0b9f40e65c63f22ac6416a8ea1f430bed10d6f9c305fc851aa5bc47e96ee7",
   "uploaded_by": "admin@medinexus.org",
-  "created_at": "2026-10-15T21:59:12",
+  "created_at": "2026-10-16T11:17:54",
   "status": "ready",
   "stage": "Ready",
   "rows": 900,
@@ -1536,25 +1536,25 @@
   "lineage": {
     "sources": [
       {
-        "upload_id": "1e77f06a96464f6eb725e9690f3ccc4c",
+        "upload_id": "d1af727a03fb436ca6af083c992104fa",
         "name": "patients",
         "filename": "patients.csv",
         "rows": 300
       },
       {
-        "upload_id": "34be0fa89c184709a19fd11fc54b59c1",
+        "upload_id": "e4f9d6fe9c354a31986db9804db46a3f",
         "name": "admissions",
         "filename": "admissions.csv",
         "rows": 900
       },
       {
-        "upload_id": "7b0a87520e4949a4962589ea0dccabaa",
+        "upload_id": "a0787a64fe7c4e9b8c0b5f060bba67b9",
         "name": "diagnoses",
         "filename": "diagnoses.csv",
         "rows": 2672
       },
       {
-        "upload_id": "8910b60c166c4718b04187ac9d2f2e0c",
+        "upload_id": "902c4c72c8704fdd907eb271d2a4680f",
         "name": "billing",
         "filename": "billing.csv",
         "rows": 900

@@ -1,50 +1,31 @@
 {
-  "outcome_scored_as_of": "2026-10-15 (end of data)",
-  "outcome_risks": [
-    {
-      "outcome": "hospitalized_12m",
-      "label": "Hospital admission within 12 months",
-      "probability_pct": 59.4,
-      "risk_level": "HIGH",
-      "cohort_rate_pct": 3.0,
-      "observed": null
-    },
-    {
-      "outcome": "died_12m",
-      "label": "Death within 12 months",
-      "probability_pct": 3.2,
-      "risk_level": "HIGH",
-      "cohort_rate_pct": 0.7,
-      "observed": null
-    }
+  "available": true,
+  "scored_as_of": "2026-10-16 (end of data)",
+  "mortality_12m_pct": 0.3,
+  "risk_level": "LOW",
+  "cohort_rate_pct": 6.5,
+  "method": "Stage + cancer type",
+  "drivers": [
+    "Age 92",
+    "Type 2 diabetes"
   ],
-  "outcome_drivers": [
-    "2 admissions in the past 5 years",
-    "Cancer history",
-    "Obesity",
-    "Hypertension"
-  ],
-  "readmission_available": true,
-  "readmission_probability_pct": 60.2,
-  "readmission_risk_level": "HIGH",
-  "readmission_base_rate_pct": 1.5,
-  "readmission_drivers": [
-    "Active oncology history"
-  ],
-  "readmission_admission_date": "2026-09-30",
-  "los_predicted_days": 1.0,
-  "los_observed_days": 1.02,
-  "los_interval": "0.5 - 1.8 days (\u00b1 holdout MAE)",
+  "survival_benchmark": {
+    "group": "Prostate, stage I",
+    "patients": 313,
+    "one_year_pct": 100.0,
+    "five_year_pct": 99.34
+  },
   "care_plan": {
-    "pathway": "HIGH Risk Management Pathway",
-    "primary_recommendation": "Initiate Comprehensive Transitional Care Protocol (TCP)",
+    "pathway": "Survivorship and surveillance pathway",
+    "primary_recommendation": "Follow up every 3-6 months and watch for recurrence",
     "checklist": [
-      "Schedule nurse telephone follow-up within 48 hours post-discharge.",
-      "Mandate specialist follow-up consultation within 7 days.",
-      "Perform complete medication reconciliation before discharge to prevent adverse drug events."
+      "Follow-up visit every 3-6 months for the first years after treatment.",
+      "Tumour marker and surveillance imaging per guideline for this cancer type.",
+      "Survivorship care plan shared with primary care.",
+      "Manage late effects of treatment and comorbidities."
     ],
     "rationale": [
-      "Patient exhibits high 30-day readmission probability (60.2%). Multidisciplinary follow-up significantly reduces acute bounce-backs."
+      "Treatment is complete or not needed now; the main risk is recurrence."
     ],
     "disclaimer": "Clinical decision support guidance only. Licensed medical practitioners retain sole responsibility for patient care plans."
   },

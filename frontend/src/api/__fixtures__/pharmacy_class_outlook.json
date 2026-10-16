@@ -1,89 +1,65 @@
 {
   "simulated_data": true,
-  "as_of": "2026-10-15",
+  "as_of": "2026-10-16",
   "items": [
     {
-      "drug_class": "Antihypertensive / Cardiovascular",
-      "forecast_daily_units": 114675.9,
-      "last_7d_daily_units": 114248.9,
-      "change_pct": 0.4
+      "drug_class": "Chemotherapy",
+      "forecast_daily_units": 3931.2,
+      "last_7d_daily_units": 4026.6,
+      "change_pct": -2.4
     },
     {
-      "drug_class": "Antidiabetic",
-      "forecast_daily_units": 57318.6,
-      "last_7d_daily_units": 57105.1,
-      "change_pct": 0.4
+      "drug_class": "Antiemetic",
+      "forecast_daily_units": 2276.7,
+      "last_7d_daily_units": 2264.3,
+      "change_pct": 0.5
     },
     {
-      "drug_class": "Respiratory",
-      "forecast_daily_units": 42004.2,
-      "last_7d_daily_units": 40005.1,
-      "change_pct": 5.0
+      "drug_class": "Targeted / Immunotherapy",
+      "forecast_daily_units": 1723.2,
+      "last_7d_daily_units": 1704.4,
+      "change_pct": 1.1
     },
     {
-      "drug_class": "Statin",
-      "forecast_daily_units": 27258.7,
-      "last_7d_daily_units": 27157.1,
-      "change_pct": 0.4
-    },
-    {
-      "drug_class": "Antibiotic",
-      "forecast_daily_units": 17342.1,
-      "last_7d_daily_units": 16693.1,
-      "change_pct": 3.9
-    },
-    {
-      "drug_class": "Anticoagulant / Antiplatelet",
-      "forecast_daily_units": 16868.1,
-      "last_7d_daily_units": 16823.3,
-      "change_pct": 0.3
-    },
-    {
-      "drug_class": "Cardiac",
-      "forecast_daily_units": 16775.7,
-      "last_7d_daily_units": 16731.1,
-      "change_pct": 0.3
+      "drug_class": "Corticosteroid",
+      "forecast_daily_units": 1697.3,
+      "last_7d_daily_units": 1707.3,
+      "change_pct": -0.6
     },
     {
       "drug_class": "Analgesic",
-      "forecast_daily_units": 13400.8,
-      "last_7d_daily_units": 13345.9,
-      "change_pct": 0.4
+      "forecast_daily_units": 1426.8,
+      "last_7d_daily_units": 1388.9,
+      "change_pct": 2.7
     },
     {
-      "drug_class": "Oncology",
-      "forecast_daily_units": 10284.6,
-      "last_7d_daily_units": 10204.4,
-      "change_pct": 0.8
+      "drug_class": "Antibiotic",
+      "forecast_daily_units": 1290.7,
+      "last_7d_daily_units": 1240.7,
+      "change_pct": 4.0
     },
     {
-      "drug_class": "Antihistamine / Allergy",
-      "forecast_daily_units": 9995.5,
-      "last_7d_daily_units": 10357.3,
-      "change_pct": -3.5
+      "drug_class": "Growth Factor (G-CSF)",
+      "forecast_daily_units": 1129.0,
+      "last_7d_daily_units": 1140.1,
+      "change_pct": -1.0
     },
     {
-      "drug_class": "Hematologic",
-      "forecast_daily_units": 6856.6,
-      "last_7d_daily_units": 6835.7,
-      "change_pct": 0.3
-    },
-    {
-      "drug_class": "Critical Care / Anesthesia",
-      "forecast_daily_units": 6767.2,
-      "last_7d_daily_units": 6724.7,
-      "change_pct": 0.6
+      "drug_class": "Antidiarrheal",
+      "forecast_daily_units": 725.7,
+      "last_7d_daily_units": 711.9,
+      "change_pct": 1.9
     }
   ],
   "forecast": {
     "serving_method": "model",
     "method_label": "Gradient-boosting model",
-    "holdout_mae": 294.921,
-    "holdout_baseline_mae": 771.053,
-    "holdout_surge_mae": 839.655,
-    "holdout_served_mae": 294.921,
+    "holdout_mae": 39.233,
+    "holdout_baseline_mae": 67.326,
+    "holdout_surge_mae": 60.721,
+    "holdout_served_mae": 39.233,
     "beats_baseline": true,
-    "test_period": "2025-10-13 to 2026-10-07",
-    "data_through": "2026-10-15"
+    "test_period": "2025-10-14 to 2026-10-08",
+    "data_through": "2026-10-16"
   }
 }

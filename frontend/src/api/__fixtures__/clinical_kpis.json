@@ -1,8 +1,8 @@
 {
-  "living_patients": 10323,
-  "high_tier_patients": 117,
-  "recent_discharges": 56,
-  "high_risk_recent_discharges": 7,
-  "open_care_gaps": 1319,
-  "data_through": "2026-10-15"
+  "active_patients": 3762,
+  "in_treatment": 208,
+  "awaiting_treatment": 244,
+  "high_mortality_risk": 273,
+  "open_care_gaps": 976,
+  "data_through": "2026-10-16"
 }

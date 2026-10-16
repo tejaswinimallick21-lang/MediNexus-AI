@@ -1,0 +1,83 @@
+{
+  "name": "Synthetic oncology EHR (Synthea CSV format)",
+  "as_of": "2026-10-16",
+  "patients": 5000,
+  "living": 3806,
+  "deceased": 1194,
+  "cancer_types": [
+    {
+      "label": "Breast",
+      "count": 1006
+    },
+    {
+      "label": "Prostate",
+      "count": 908
+    },
+    {
+      "label": "Lung",
+      "count": 803
+    },
+    {
+      "label": "Colon",
+      "count": 602
+    },
+    {
+      "label": "Melanoma",
+      "count": 478
+    },
+    {
+      "label": "Leukemia (CLL)",
+      "count": 445
+    },
+    {
+      "label": "Lymphoma (NHL)",
+      "count": 429
+    },
+    {
+      "label": "Pancreas",
+      "count": 285
+    },
+    {
+      "label": "Not yet diagnosed",
+      "count": 44
+    }
+  ],
+  "stages": [
+    {
+      "label": "Stage I",
+      "count": 1583
+    },
+    {
+      "label": "Stage II",
+      "count": 1377
+    },
+    {
+      "label": "Stage III",
+      "count": 1096
+    },
+    {
+      "label": "Stage IV",
+      "count": 900
+    }
+  ],
+  "repairs": {
+    "encounters_after_as_of_dropped": 5005,
+    "encounters_after_death_dropped": 2443,
+    "careplans_rows_removed": 44,
+    "conditions_rows_removed": 129,
+    "devices_rows_removed": 81,
+    "encounters_rows_removed": 7448,
+    "imaging_studies_rows_removed": 132,
+    "immunizations_rows_removed": 3828,
+    "medications_rows_removed": 12225,
+    "impossible_lab_values_dropped": 10371,
+    "observations_rows_removed": 56512,
+    "procedures_rows_removed": 3589
+  },
+  "known_limitations": [
+    "Every inpatient stay is a short surgical admission and no patient is admitted twice: no readmissions, length of stay not meaningful.",
+    "Emergency visits occur only in the last weeks before death, so they are not used as model features.",
+    "Lab values are drawn independently of treatment (no post-chemotherapy dip), so no toxicity model is trained.",
+    "Medication costs and dispense counts are near-uniform across drugs."
+  ]
+}

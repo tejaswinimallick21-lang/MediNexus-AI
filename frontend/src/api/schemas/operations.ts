@@ -112,19 +112,43 @@ export const PurchaseOrderSchema = z.object({
   created_at: z.string(),
 });
 
-// ---- Executive ----
+// ---- Executive (oncology outcomes) ----
 export const ExecutiveKpisSchema = z.object({
-  total_admissions: num,
-  patients_admitted: num,
-  unplanned_readmission_rate_pct: num,
-  average_los_days: num,
-  occupancy_rate_pct: nullableNum,
-  total_revenue: num,
-  collection_rate_pct: num,
+  patients: num,
+  living_patients: num,
+  new_diagnoses_12m: num,
+  five_year_survival_pct: nullableNum,
+  median_days_to_treatment: nullableNum,
+  treatment_sessions_30d: num,
+  cost_of_care: num,
   hospitals: num,
   data_through: z.string(),
 });
-export const RevenueListSchema = z.array(z.object({ department: z.string(), revenue: num, admissions: num }));
+export const SurvivalOverviewSchema = z.object({
+  curves: z.array(
+    z.object({
+      label: z.string(),
+      kind: z.string(),
+      patients: num,
+      points: z.array(z.object({ month: num, survival_pct: num, at_risk: num })),
+    }),
+  ),
+  by_type: z.array(
+    z.object({
+      cancer_type: z.string(),
+      patients: num,
+      one_year_pct: nullableNum,
+      three_year_pct: nullableNum,
+      five_year_pct: nullableNum,
+      stage_i_five_year_pct: nullableNum,
+      stage_iv_five_year_pct: nullableNum,
+    }),
+  ),
+  note: z.string(),
+});
+export type SurvivalOverview = z.infer<typeof SurvivalOverviewSchema>;
+export const StageMixListSchema = z.array(z.object({ cancer_type: z.string(), stage_i: num, stage_ii: num, stage_iii: num, stage_iv: num }));
+export const CostByTypeListSchema = z.array(z.object({ cancer_type: z.string(), patients: num, total_cost: num, cost_per_patient: num }));
 export const ModelScoreSchema = z.object({
   model: z.string(),
   purpose: z.string(),
@@ -134,26 +158,9 @@ export const ModelScoreSchema = z.object({
 });
 export type ModelScore = z.infer<typeof ModelScoreSchema>;
 export const ExecutiveForecastsSchema = z.object({
-  admissions_next_7d_daily: num,
-  admissions_last_7d_daily: num,
-  admissions_forecast: ForecastMetaSchema,
+  treatment: z.array(z.object({ service: z.string(), forecast_daily: num, last_7d_daily: num })),
+  treatment_forecast: ForecastMetaSchema,
   models: z.array(ModelScoreSchema),
-});
-const BreakdownRow = z.object({ label: z.string(), count: num, rate_pct: num });
-export const ReadmissionDriversSchema = z.object({
-  summary: z.string(),
-  findings: z.array(z.string()),
-  by_admission_type: z.array(BreakdownRow),
-  by_reason: z.array(BreakdownRow),
-});
-export const CapacityPlanSchema = z.object({
-  surge_tier: z.string(),
-  occupancy_pct: nullableNum,
-  projected_daily_admissions: num,
-  average_los_days: num,
-  directives: z.array(z.string()),
-  assessment: z.string(),
-  occupancy_note: z.string(),
 });
 
 // ---- Copilots ----

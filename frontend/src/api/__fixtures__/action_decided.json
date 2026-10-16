@@ -1,25 +1,25 @@
 {
-  "action_id": "695c2c1a45db41bc8da586ba379e12ef",
+  "action_id": "08d46fbab70343df97b5301a3fbd3c91",
   "kind": "purchase_order",
   "kind_label": "Purchase order",
-  "summary": "Purchase order: 12 units of Atenolol 50 MG / Chlorthalidone 25 MG Oral Tablet for ADAMS PHYSICAL THERAPY  LLC",
+  "summary": "Purchase order: 12 units of Dexamethasone 4 MG Oral Tablet for Capital Medical Oncology",
   "reason": "test",
   "payload": {
     "inventory_id": "INV_000001",
     "quantity": 12,
     "context": {
-      "site": "ADAMS PHYSICAL THERAPY  LLC",
-      "medication": "Atenolol 50 MG / Chlorthalidone 25 MG Oral Tablet"
+      "site": "Capital Medical Oncology",
+      "medication": "Dexamethasone 4 MG Oral Tablet"
     }
   },
   "agent": "pharmalab",
   "session_id": null,
   "requested_by": "hcp@medinexus.org",
   "status": "executed",
-  "created_at": "2026-10-15T21:58:17",
+  "created_at": "2026-10-16T11:16:42",
   "decided_by": "hcp@medinexus.org",
-  "decided_at": "2026-10-15T21:58:20",
+  "decided_at": "2026-10-16T11:16:46",
   "decision_note": "ok",
-  "result": "Purchase order PO_98938376 submitted: 12 units of Atenolol 50 MG / Chlorthalidone 25 MG Oral Tablet (est. $3,161.88).",
+  "result": "Purchase order PO_0EEC96BE submitted: 12 units of Dexamethasone 4 MG Oral Tablet (est. $4,804.80).",
   "can_decide": false
 }

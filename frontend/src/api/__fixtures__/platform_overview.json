@@ -29,7 +29,7 @@
     {
       "role": "hcp",
       "title": "Healthcare Professional",
-      "description": "Clinical decision support: patient 360, risk predictions, care plans, pharmacy stock and laboratory operations.",
+      "description": "Oncology decision support: tumour-board worklist, Patient 360 and treatment pathway, mortality risk, care gaps, chemotherapy stock and laboratory operations.",
       "routes": [
         "/doctor",
         "/pharmacy",
@@ -39,7 +39,7 @@
     {
       "role": "analyst",
       "title": "Operations Analyst",
-      "description": "Enterprise performance: occupancy, readmissions, revenue, capacity planning and outpatient patient access.",
+      "description": "Oncology outcomes and operations: survival by type and stage, time to treatment, cost of care, treatment capacity and outpatient access.",
       "routes": [
         "/executive",
         "/command-center",

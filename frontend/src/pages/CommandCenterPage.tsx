@@ -2,24 +2,22 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { commandApi } from "../api/command";
-import type { ModelMonitorRow, ReadmissionEconomics, WhatIfInput, WhatIfPeriod } from "../api/schemas/command";
+import type { ModelMonitorRow, WhatIfInput, WhatIfPeriod } from "../api/schemas/command";
 import { AreaTrend } from "../components/Charts";
 import { Badge, SelectField } from "../components/Controls";
 import { DataTable, type Column } from "../components/DataTable";
 import { Icon } from "../components/Icons";
-import { Grid, PageHeader, Panel } from "../components/Panel";
+import { PageHeader, Panel } from "../components/Panel";
 import { Skeleton, SkeletonText } from "../components/Skeleton";
 import { ErrorState } from "../components/StateViews";
 import { Tabs } from "../components/Tabs";
 import { useApi } from "../hooks/useApi";
-import { formatCompact, formatDate, formatNumber, formatPercent, formatUSD, formatUSDCompact } from "../lib/format";
-import { programmeEconomics, type ProgrammeResult } from "../lib/readmissionEconomics";
+import { formatCompact, formatDate, formatNumber, formatPercent, formatUSDCompact } from "../lib/format";
 import styles from "./CommandCenterPage.module.css";
 
-type TabId = "what-if" | "readmissions" | "models";
+type TabId = "what-if" | "models";
 const TABS: { id: TabId; label: string }[] = [
   { id: "what-if", label: "Capacity what-if" },
-  { id: "readmissions", label: "Readmission economics" },
   { id: "models", label: "Model monitor" },
 ];
 
@@ -29,13 +27,12 @@ export function CommandCenterPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Operations analyst"
+        eyebrow="Oncology analyst"
         title="Analyst Command Center"
-        subtitle="Test a decision before you make it: staffing and demand what-ifs, readmission programme economics and the health of every model."
+        subtitle="Test a decision before you make it: outpatient staffing and demand what-ifs, and the health of every model."
       />
       <Tabs tabs={TABS} value={tab} onChange={(id) => setParams(id === "what-if" ? {} : { tab: id }, { replace: true })} />
       {tab === "what-if" && <WhatIfTab />}
-      {tab === "readmissions" && <ReadmissionTab />}
       {tab === "models" && <ModelMonitorTab />}
     </div>
   );
@@ -222,81 +219,6 @@ function Compare({ label, base, scen, format, better }: { label: string; base: n
   );
 }
 
-// ---- Readmission economics ---------------------------------------------------------------------
-
-function ReadmissionTab() {
-  const facts = useApi((s) => commandApi.readmissionEconomics(s), []);
-  const [effectiveness, setEffectiveness] = useState<number | null>(null);
-  const [cost, setCost] = useState<number | null>(null);
-  const f = facts.data;
-  if (facts.error) return <ErrorState error={facts.error} onRetry={facts.reload} />;
-  if (!f) return <SkeletonText lines={12} />;
-  const inputs = { effectivenessPct: effectiveness ?? f.default_effectiveness_pct, costPerEnrolled: cost ?? f.default_cost_per_enrolled };
-  const targeted = programmeEconomics(f, inputs, true);
-  const everyone = programmeEconomics(f, inputs, false);
-  return (
-    <ReadmissionView f={f} inputs={inputs} targeted={targeted} everyone={everyone} setEffectiveness={setEffectiveness} setCost={setCost} />
-  );
-}
-
-function ReadmissionView({
-  f,
-  inputs,
-  targeted,
-  everyone,
-  setEffectiveness,
-  setCost,
-}: {
-  f: ReadmissionEconomics;
-  inputs: { effectivenessPct: number; costPerEnrolled: number };
-  targeted: ProgrammeResult;
-  everyone: ProgrammeResult;
-  setEffectiveness: (v: number) => void;
-  setCost: (v: number) => void;
-}) {
-  return (
-    <div className={styles.stack}>
-      <div className={styles.factRow}>
-        <Fact label="Discharges (12 months)" value={formatNumber(f.discharges)} />
-        <Fact label="Unplanned readmissions" value={formatNumber(f.unplanned_readmissions)} hint={`${formatPercent(f.readmission_rate_pct, 2)} of discharges`} />
-        <Fact label="Average cost per stay" value={formatUSD(f.avg_cost_per_stay, { whole: true })} hint={`${formatNumber(f.avg_los_days, 1)}-day average stay`} />
-        <Fact label="Readmission model" value={`AUC ${formatNumber(f.model_roc_auc, 2)}`} hint={`Flags ${formatPercent(f.model_flag_share_pct, 0)} of discharges, catching ${formatPercent(f.model_capture_pct, 0)} of readmissions`} />
-      </div>
-
-      <div className={styles.whatIf}>
-        <Panel title="Post-discharge programme" subtitle="Follow-up calls and early clinic visits after discharge" icon="Sliders" className={styles.controls}>
-          <div className={styles.controlStack}>
-            <Slider label="Readmissions prevented among enrolled" value={inputs.effectivenessPct} min={5} max={50} step={1} format={(v) => `${v}%`} onChange={setEffectiveness} />
-            <Slider label="Cost per enrolled patient" value={inputs.costPerEnrolled} min={0} max={1000} step={25} format={(v) => formatUSD(v, { whole: true })} onChange={setCost} />
-            <ul className={styles.notes}>
-              {f.notes.map((n) => (
-                <li key={n}>{n}</li>
-              ))}
-            </ul>
-          </div>
-        </Panel>
-        <Grid>
-          <ProgrammeCard title="Model-targeted" subtitle={`Enrol the ${formatPercent(f.model_flag_share_pct, 0)} of discharges the model flags`} r={targeted} highlight />
-          <ProgrammeCard title="Enrol everyone" subtitle="Every discharged patient" r={everyone} />
-        </Grid>
-      </div>
-      <Panel title="Reading the result" icon="Sparkle">
-        <ul className={styles.insights}>
-          <li>
-            Targeting lets the programme spend up to <strong>{formatUSD(targeted.breakEvenCostPerEnrolled, { whole: true })}</strong> per enrolled patient before it costs more than it
-            saves, against <strong>{formatUSD(everyone.breakEvenCostPerEnrolled, { whole: true })}</strong> when everyone is enrolled.
-          </li>
-          <li>
-            At the current readmission volume ({formatNumber(f.unplanned_readmissions)} a year) the financial case is {targeted.net >= 0 ? "positive" : "negative"} for the targeted programme;
-            the clinical case (fewer patients readmitted, {formatNumber(targeted.bedDaysFreed, 0)} bed-days freed) should be weighed alongside it.
-          </li>
-          <li>The model catches only part of the readmissions, so a targeted programme trades reach for cost; the right choice depends on budget and goals.</li>
-        </ul>
-      </Panel>
-    </div>
-  );
-}
-
 function Fact({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className={styles.fact}>
@@ -304,35 +226,6 @@ function Fact({ label, value, hint }: { label: string; value: string; hint?: str
       <strong>{value}</strong>
       {hint && <em>{hint}</em>}
     </div>
-  );
-}
-
-function ProgrammeCard({ title, subtitle, r, highlight }: { title: string; subtitle: string; r: ProgrammeResult; highlight?: boolean }) {
-  return (
-    <Panel title={title} subtitle={subtitle} icon={highlight ? "Radar" : "Users"} className={highlight ? styles.highlight : undefined}>
-      <div className={`${styles.net} ${r.net >= 0 ? styles.netGood : styles.netBad}`}>
-        <span>Net per year</span>
-        <strong>
-          {r.net >= 0 ? "+" : "−"}
-          {formatUSD(Math.abs(r.net), { whole: true })}
-        </strong>
-        <em>{r.roiPct === null ? "no programme cost" : `ROI ${formatNumber(r.roiPct, 0)}%`}</em>
-      </div>
-      <dl className={styles.dl}>
-        <dt>Patients enrolled</dt>
-        <dd>{formatNumber(r.enrolled)}</dd>
-        <dt>Readmissions reached</dt>
-        <dd>{formatNumber(r.readmissionsReached, 1)}</dd>
-        <dt>Readmissions prevented</dt>
-        <dd>{formatNumber(r.prevented, 1)}</dd>
-        <dt>Cost avoided</dt>
-        <dd>{formatUSD(r.savings, { whole: true })}</dd>
-        <dt>Programme cost</dt>
-        <dd>{formatUSD(r.programmeCost, { whole: true })}</dd>
-        <dt>Bed-days freed</dt>
-        <dd>{formatNumber(r.bedDaysFreed, 0)}</dd>
-      </dl>
-    </Panel>
   );
 }
 

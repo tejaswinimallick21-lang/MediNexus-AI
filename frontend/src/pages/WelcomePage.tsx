@@ -207,12 +207,12 @@ function Headline({ path }: { path: string }) {
 
 function ClinicalHeadline() {
   const k = useApi((s) => clinicalApi.kpis(s), []).data;
-  return k ? <Metric value={formatNumber(k.high_risk_recent_discharges)} label="high-risk recent discharges" /> : <Skeleton width="60%" height={20} />;
+  return k ? <Metric value={formatNumber(k.awaiting_treatment)} label="patients awaiting first treatment" /> : <Skeleton width="60%" height={20} />;
 }
 
 function ExecutiveHeadline() {
   const k = useApi((s) => executiveApi.kpis(s), []).data;
-  return k ? <Metric value={formatPercent(k.unplanned_readmission_rate_pct, 2)} label="unplanned 30-day readmissions" /> : <Skeleton width="60%" height={20} />;
+  return k ? <Metric value={k.five_year_survival_pct == null ? "—" : formatPercent(k.five_year_survival_pct)} label="5-year survival across all cancers" /> : <Skeleton width="60%" height={20} />;
 }
 
 function CommandHeadline() {

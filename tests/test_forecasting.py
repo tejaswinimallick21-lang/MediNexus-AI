@@ -7,7 +7,7 @@ import numpy as np
 
 from src.ml.forecasting import SURGE_THRESHOLD, surge_aware
 from src.ml.model_registry import load_model
-from src.ml.predict import forecast_admissions, forecast_lab_workload
+from src.ml.predict import forecast_lab_workload, forecast_treatment_demand
 
 
 def test_surge_aware_blends_when_stable_and_follows_a_surge():
@@ -20,7 +20,7 @@ def test_surge_aware_blends_when_stable_and_follows_a_surge():
 
 
 def test_served_method_is_the_most_accurate_in_the_backtest():
-    for name in ("lab_workload_model", "resource_demand_model", "outpatient_demand_model", "drug_class_demand_model"):
+    for name in ("lab_workload_model", "treatment_demand_model", "outpatient_demand_model", "drug_class_demand_model"):
         m = load_model(name)["metrics"]
         candidates = {"model": m["mae"], "surge_aware": m["surge_aware_mae"], "baseline_naive7": m["baseline_naive7_mae"]}
         assert m["serving_method"] == min(candidates, key=candidates.get), name
@@ -29,7 +29,7 @@ def test_served_method_is_the_most_accurate_in_the_backtest():
 
 
 def test_forecasts_report_the_served_method():
-    for f in (forecast_lab_workload(), forecast_admissions()):
+    for f in (forecast_lab_workload(), forecast_treatment_demand()):
         assert f["serving_method"] in {"model", "surge_aware", "baseline_naive7"}
         assert f["holdout_served_mae"] is not None and f["holdout_served_mae"] <= f["holdout_baseline_mae"]
         assert all(r["forecast_daily"] >= 0 for r in f["forecasts"])

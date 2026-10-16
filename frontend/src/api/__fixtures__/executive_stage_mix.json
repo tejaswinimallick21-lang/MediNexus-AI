@@ -1,0 +1,58 @@
+[
+  {
+    "cancer_type": "Breast",
+    "stage_i": 412,
+    "stage_ii": 348,
+    "stage_iii": 160,
+    "stage_iv": 86
+  },
+  {
+    "cancer_type": "Prostate",
+    "stage_i": 313,
+    "stage_ii": 367,
+    "stage_iii": 159,
+    "stage_iv": 69
+  },
+  {
+    "cancer_type": "Lung",
+    "stage_i": 170,
+    "stage_ii": 97,
+    "stage_iii": 241,
+    "stage_iv": 295
+  },
+  {
+    "cancer_type": "Colon",
+    "stage_i": 163,
+    "stage_ii": 158,
+    "stage_iii": 170,
+    "stage_iv": 111
+  },
+  {
+    "cancer_type": "Melanoma",
+    "stage_i": 261,
+    "stage_ii": 96,
+    "stage_iii": 78,
+    "stage_iv": 43
+  },
+  {
+    "cancer_type": "Leukemia (CLL)",
+    "stage_i": 126,
+    "stage_ii": 119,
+    "stage_iii": 122,
+    "stage_iv": 78
+  },
+  {
+    "cancer_type": "Lymphoma (NHL)",
+    "stage_i": 110,
+    "stage_ii": 122,
+    "stage_iii": 96,
+    "stage_iv": 101
+  },
+  {
+    "cancer_type": "Pancreas",
+    "stage_i": 28,
+    "stage_ii": 70,
+    "stage_iii": 70,
+    "stage_iv": 117
+  }
+]

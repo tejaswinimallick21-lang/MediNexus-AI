@@ -1,0 +1,2835 @@
+{
+  "curves": [
+    {
+      "label": "All patients",
+      "kind": "all",
+      "patients": 4956,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 4956
+        },
+        {
+          "month": 3,
+          "survival_pct": 99.18,
+          "at_risk": 4524
+        },
+        {
+          "month": 6,
+          "survival_pct": 97.96,
+          "at_risk": 4402
+        },
+        {
+          "month": 9,
+          "survival_pct": 96.33,
+          "at_risk": 4273
+        },
+        {
+          "month": 12,
+          "survival_pct": 94.71,
+          "at_risk": 4114
+        },
+        {
+          "month": 15,
+          "survival_pct": 93.43,
+          "at_risk": 3985
+        },
+        {
+          "month": 18,
+          "survival_pct": 91.94,
+          "at_risk": 3831
+        },
+        {
+          "month": 21,
+          "survival_pct": 90.87,
+          "at_risk": 3690
+        },
+        {
+          "month": 24,
+          "survival_pct": 89.58,
+          "at_risk": 3540
+        },
+        {
+          "month": 27,
+          "survival_pct": 88.24,
+          "at_risk": 3372
+        },
+        {
+          "month": 30,
+          "survival_pct": 86.59,
+          "at_risk": 3198
+        },
+        {
+          "month": 33,
+          "survival_pct": 85.05,
+          "at_risk": 3029
+        },
+        {
+          "month": 36,
+          "survival_pct": 83.47,
+          "at_risk": 2843
+        },
+        {
+          "month": 39,
+          "survival_pct": 81.82,
+          "at_risk": 2668
+        },
+        {
+          "month": 42,
+          "survival_pct": 80.38,
+          "at_risk": 2503
+        },
+        {
+          "month": 45,
+          "survival_pct": 78.9,
+          "at_risk": 2351
+        },
+        {
+          "month": 48,
+          "survival_pct": 77.31,
+          "at_risk": 2174
+        },
+        {
+          "month": 51,
+          "survival_pct": 76.33,
+          "at_risk": 2020
+        },
+        {
+          "month": 54,
+          "survival_pct": 75.47,
+          "at_risk": 1874
+        },
+        {
+          "month": 57,
+          "survival_pct": 74.03,
+          "at_risk": 1738
+        },
+        {
+          "month": 60,
+          "survival_pct": 72.79,
+          "at_risk": 1590
+        },
+        {
+          "month": 63,
+          "survival_pct": 71.54,
+          "at_risk": 1440
+        },
+        {
+          "month": 66,
+          "survival_pct": 70.66,
+          "at_risk": 1311
+        },
+        {
+          "month": 69,
+          "survival_pct": 69.32,
+          "at_risk": 1199
+        },
+        {
+          "month": 72,
+          "survival_pct": 67.57,
+          "at_risk": 1070
+        },
+        {
+          "month": 75,
+          "survival_pct": 66.66,
+          "at_risk": 957
+        },
+        {
+          "month": 78,
+          "survival_pct": 65.34,
+          "at_risk": 852
+        },
+        {
+          "month": 81,
+          "survival_pct": 64.22,
+          "at_risk": 748
+        },
+        {
+          "month": 84,
+          "survival_pct": 62.95,
+          "at_risk": 655
+        },
+        {
+          "month": 87,
+          "survival_pct": 62.03,
+          "at_risk": 572
+        },
+        {
+          "month": 90,
+          "survival_pct": 61.46,
+          "at_risk": 505
+        },
+        {
+          "month": 93,
+          "survival_pct": 60.43,
+          "at_risk": 442
+        },
+        {
+          "month": 96,
+          "survival_pct": 59.52,
+          "at_risk": 375
+        },
+        {
+          "month": 99,
+          "survival_pct": 58.14,
+          "at_risk": 324
+        },
+        {
+          "month": 102,
+          "survival_pct": 57.14,
+          "at_risk": 280
+        },
+        {
+          "month": 105,
+          "survival_pct": 56.92,
+          "at_risk": 245
+        },
+        {
+          "month": 108,
+          "survival_pct": 56.15,
+          "at_risk": 207
+        },
+        {
+          "month": 111,
+          "survival_pct": 55.27,
+          "at_risk": 169
+        },
+        {
+          "month": 114,
+          "survival_pct": 54.21,
+          "at_risk": 145
+        },
+        {
+          "month": 117,
+          "survival_pct": 54.21,
+          "at_risk": 122
+        },
+        {
+          "month": 120,
+          "survival_pct": 53.26,
+          "at_risk": 99
+        }
+      ]
+    },
+    {
+      "label": "Breast",
+      "kind": "cancer_type",
+      "patients": 1006,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 1006
+        },
+        {
+          "month": 3,
+          "survival_pct": 99.47,
+          "at_risk": 930
+        },
+        {
+          "month": 6,
+          "survival_pct": 98.71,
+          "at_risk": 904
+        },
+        {
+          "month": 9,
+          "survival_pct": 97.95,
+          "at_risk": 886
+        },
+        {
+          "month": 12,
+          "survival_pct": 97.39,
+          "at_risk": 861
+        },
+        {
+          "month": 15,
+          "survival_pct": 96.93,
+          "at_risk": 839
+        },
+        {
+          "month": 18,
+          "survival_pct": 96.34,
+          "at_risk": 818
+        },
+        {
+          "month": 21,
+          "survival_pct": 95.75,
+          "at_risk": 794
+        },
+        {
+          "month": 24,
+          "survival_pct": 95.5,
+          "at_risk": 769
+        },
+        {
+          "month": 27,
+          "survival_pct": 95.13,
+          "at_risk": 736
+        },
+        {
+          "month": 30,
+          "survival_pct": 94.47,
+          "at_risk": 706
+        },
+        {
+          "month": 33,
+          "survival_pct": 93.66,
+          "at_risk": 674
+        },
+        {
+          "month": 36,
+          "survival_pct": 92.8,
+          "at_risk": 635
+        },
+        {
+          "month": 39,
+          "survival_pct": 92.35,
+          "at_risk": 607
+        },
+        {
+          "month": 42,
+          "survival_pct": 92.04,
+          "at_risk": 576
+        },
+        {
+          "month": 45,
+          "survival_pct": 91.87,
+          "at_risk": 550
+        },
+        {
+          "month": 48,
+          "survival_pct": 91.18,
+          "at_risk": 515
+        },
+        {
+          "month": 51,
+          "survival_pct": 90.81,
+          "at_risk": 477
+        },
+        {
+          "month": 54,
+          "survival_pct": 90.22,
+          "at_risk": 443
+        },
+        {
+          "month": 57,
+          "survival_pct": 89.37,
+          "at_risk": 417
+        },
+        {
+          "month": 60,
+          "survival_pct": 88.7,
+          "at_risk": 388
+        },
+        {
+          "month": 63,
+          "survival_pct": 87.98,
+          "at_risk": 350
+        },
+        {
+          "month": 66,
+          "survival_pct": 87.46,
+          "at_risk": 315
+        },
+        {
+          "month": 69,
+          "survival_pct": 86.57,
+          "at_risk": 286
+        },
+        {
+          "month": 72,
+          "survival_pct": 86.27,
+          "at_risk": 263
+        },
+        {
+          "month": 75,
+          "survival_pct": 85.91,
+          "at_risk": 235
+        },
+        {
+          "month": 78,
+          "survival_pct": 84.77,
+          "at_risk": 217
+        },
+        {
+          "month": 81,
+          "survival_pct": 84.77,
+          "at_risk": 197
+        },
+        {
+          "month": 84,
+          "survival_pct": 83.87,
+          "at_risk": 176
+        },
+        {
+          "month": 87,
+          "survival_pct": 83.38,
+          "at_risk": 156
+        },
+        {
+          "month": 90,
+          "survival_pct": 83.38,
+          "at_risk": 138
+        },
+        {
+          "month": 93,
+          "survival_pct": 82.73,
+          "at_risk": 120
+        },
+        {
+          "month": 96,
+          "survival_pct": 82.73,
+          "at_risk": 107
+        },
+        {
+          "month": 99,
+          "survival_pct": 81.87,
+          "at_risk": 89
+        },
+        {
+          "month": 102,
+          "survival_pct": 81.87,
+          "at_risk": 73
+        },
+        {
+          "month": 105,
+          "survival_pct": 81.87,
+          "at_risk": 59
+        },
+        {
+          "month": 108,
+          "survival_pct": 81.87,
+          "at_risk": 50
+        },
+        {
+          "month": 111,
+          "survival_pct": 81.87,
+          "at_risk": 38
+        },
+        {
+          "month": 114,
+          "survival_pct": 81.87,
+          "at_risk": 32
+        },
+        {
+          "month": 117,
+          "survival_pct": 81.87,
+          "at_risk": 27
+        },
+        {
+          "month": 120,
+          "survival_pct": 81.87,
+          "at_risk": 22
+        }
+      ]
+    },
+    {
+      "label": "Colon",
+      "kind": "cancer_type",
+      "patients": 602,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 602
+        },
+        {
+          "month": 3,
+          "survival_pct": 99.09,
+          "at_risk": 544
+        },
+        {
+          "month": 6,
+          "survival_pct": 97.81,
+          "at_risk": 528
+        },
+        {
+          "month": 9,
+          "survival_pct": 95.56,
+          "at_risk": 507
+        },
+        {
+          "month": 12,
+          "survival_pct": 93.47,
+          "at_risk": 490
+        },
+        {
+          "month": 15,
+          "survival_pct": 91.55,
+          "at_risk": 470
+        },
+        {
+          "month": 18,
+          "survival_pct": 90.96,
+          "at_risk": 451
+        },
+        {
+          "month": 21,
+          "survival_pct": 89.75,
+          "at_risk": 438
+        },
+        {
+          "month": 24,
+          "survival_pct": 88.3,
+          "at_risk": 422
+        },
+        {
+          "month": 27,
+          "survival_pct": 87.45,
+          "at_risk": 406
+        },
+        {
+          "month": 30,
+          "survival_pct": 85.48,
+          "at_risk": 387
+        },
+        {
+          "month": 33,
+          "survival_pct": 84.81,
+          "at_risk": 370
+        },
+        {
+          "month": 36,
+          "survival_pct": 83.4,
+          "at_risk": 350
+        },
+        {
+          "month": 39,
+          "survival_pct": 81.72,
+          "at_risk": 328
+        },
+        {
+          "month": 42,
+          "survival_pct": 80.19,
+          "at_risk": 311
+        },
+        {
+          "month": 45,
+          "survival_pct": 77.3,
+          "at_risk": 285
+        },
+        {
+          "month": 48,
+          "survival_pct": 76.2,
+          "at_risk": 269
+        },
+        {
+          "month": 51,
+          "survival_pct": 75.61,
+          "at_risk": 247
+        },
+        {
+          "month": 54,
+          "survival_pct": 74.65,
+          "at_risk": 224
+        },
+        {
+          "month": 57,
+          "survival_pct": 72.97,
+          "at_risk": 205
+        },
+        {
+          "month": 60,
+          "survival_pct": 71.45,
+          "at_risk": 186
+        },
+        {
+          "month": 63,
+          "survival_pct": 71.45,
+          "at_risk": 169
+        },
+        {
+          "month": 66,
+          "survival_pct": 70.11,
+          "at_risk": 153
+        },
+        {
+          "month": 69,
+          "survival_pct": 69.12,
+          "at_risk": 137
+        },
+        {
+          "month": 72,
+          "survival_pct": 65.34,
+          "at_risk": 110
+        },
+        {
+          "month": 75,
+          "survival_pct": 65.34,
+          "at_risk": 101
+        },
+        {
+          "month": 78,
+          "survival_pct": 62.6,
+          "at_risk": 86
+        },
+        {
+          "month": 81,
+          "survival_pct": 62.6,
+          "at_risk": 73
+        },
+        {
+          "month": 84,
+          "survival_pct": 61.64,
+          "at_risk": 64
+        },
+        {
+          "month": 87,
+          "survival_pct": 61.64,
+          "at_risk": 53
+        },
+        {
+          "month": 90,
+          "survival_pct": 60.48,
+          "at_risk": 50
+        },
+        {
+          "month": 93,
+          "survival_pct": 59.22,
+          "at_risk": 47
+        },
+        {
+          "month": 96,
+          "survival_pct": 57.93,
+          "at_risk": 37
+        },
+        {
+          "month": 99,
+          "survival_pct": 56.27,
+          "at_risk": 31
+        },
+        {
+          "month": 102,
+          "survival_pct": 52.52,
+          "at_risk": 27
+        },
+        {
+          "month": 105,
+          "survival_pct": 50.5,
+          "at_risk": 25
+        },
+        {
+          "month": 108,
+          "survival_pct": 50.5,
+          "at_risk": 23
+        },
+        {
+          "month": 111,
+          "survival_pct": 50.5,
+          "at_risk": 21
+        },
+        {
+          "month": 114,
+          "survival_pct": 50.5,
+          "at_risk": 18
+        },
+        {
+          "month": 117,
+          "survival_pct": 50.5,
+          "at_risk": 16
+        },
+        {
+          "month": 120,
+          "survival_pct": 50.5,
+          "at_risk": 11
+        }
+      ]
+    },
+    {
+      "label": "Leukemia (CLL)",
+      "kind": "cancer_type",
+      "patients": 445,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 445
+        },
+        {
+          "month": 3,
+          "survival_pct": 100.0,
+          "at_risk": 408
+        },
+        {
+          "month": 6,
+          "survival_pct": 97.79,
+          "at_risk": 393
+        },
+        {
+          "month": 9,
+          "survival_pct": 96.29,
+          "at_risk": 385
+        },
+        {
+          "month": 12,
+          "survival_pct": 94.26,
+          "at_risk": 365
+        },
+        {
+          "month": 15,
+          "survival_pct": 93.48,
+          "at_risk": 358
+        },
+        {
+          "month": 18,
+          "survival_pct": 91.64,
+          "at_risk": 345
+        },
+        {
+          "month": 21,
+          "survival_pct": 90.83,
+          "at_risk": 333
+        },
+        {
+          "month": 24,
+          "survival_pct": 89.17,
+          "at_risk": 314
+        },
+        {
+          "month": 27,
+          "survival_pct": 87.43,
+          "at_risk": 294
+        },
+        {
+          "month": 30,
+          "survival_pct": 86.83,
+          "at_risk": 286
+        },
+        {
+          "month": 33,
+          "survival_pct": 84.03,
+          "at_risk": 267
+        },
+        {
+          "month": 36,
+          "survival_pct": 82.43,
+          "at_risk": 252
+        },
+        {
+          "month": 39,
+          "survival_pct": 80.38,
+          "at_risk": 233
+        },
+        {
+          "month": 42,
+          "survival_pct": 77.91,
+          "at_risk": 217
+        },
+        {
+          "month": 45,
+          "survival_pct": 76.82,
+          "at_risk": 207
+        },
+        {
+          "month": 48,
+          "survival_pct": 75.29,
+          "at_risk": 189
+        },
+        {
+          "month": 51,
+          "survival_pct": 74.48,
+          "at_risk": 177
+        },
+        {
+          "month": 54,
+          "survival_pct": 74.48,
+          "at_risk": 169
+        },
+        {
+          "month": 57,
+          "survival_pct": 73.1,
+          "at_risk": 152
+        },
+        {
+          "month": 60,
+          "survival_pct": 70.1,
+          "at_risk": 135
+        },
+        {
+          "month": 63,
+          "survival_pct": 69.56,
+          "at_risk": 120
+        },
+        {
+          "month": 66,
+          "survival_pct": 68.95,
+          "at_risk": 112
+        },
+        {
+          "month": 69,
+          "survival_pct": 67.07,
+          "at_risk": 101
+        },
+        {
+          "month": 72,
+          "survival_pct": 64.85,
+          "at_risk": 82
+        },
+        {
+          "month": 75,
+          "survival_pct": 63.23,
+          "at_risk": 74
+        },
+        {
+          "month": 78,
+          "survival_pct": 60.54,
+          "at_risk": 64
+        },
+        {
+          "month": 81,
+          "survival_pct": 56.33,
+          "at_risk": 50
+        },
+        {
+          "month": 84,
+          "survival_pct": 56.33,
+          "at_risk": 45
+        },
+        {
+          "month": 87,
+          "survival_pct": 56.33,
+          "at_risk": 41
+        },
+        {
+          "month": 90,
+          "survival_pct": 56.33,
+          "at_risk": 34
+        },
+        {
+          "month": 93,
+          "survival_pct": 56.33,
+          "at_risk": 30
+        },
+        {
+          "month": 96,
+          "survival_pct": 56.33,
+          "at_risk": 28
+        },
+        {
+          "month": 99,
+          "survival_pct": 56.33,
+          "at_risk": 24
+        },
+        {
+          "month": 102,
+          "survival_pct": 53.88,
+          "at_risk": 21
+        },
+        {
+          "month": 105,
+          "survival_pct": 53.88,
+          "at_risk": 18
+        },
+        {
+          "month": 108,
+          "survival_pct": 53.88,
+          "at_risk": 17
+        },
+        {
+          "month": 111,
+          "survival_pct": 53.88,
+          "at_risk": 14
+        },
+        {
+          "month": 114,
+          "survival_pct": 53.88,
+          "at_risk": 12
+        },
+        {
+          "month": 117,
+          "survival_pct": 53.88,
+          "at_risk": 9
+        },
+        {
+          "month": 120,
+          "survival_pct": 47.89,
+          "at_risk": 6
+        }
+      ]
+    },
+    {
+      "label": "Lung",
+      "kind": "cancer_type",
+      "patients": 803,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 803
+        },
+        {
+          "month": 3,
+          "survival_pct": 98.52,
+          "at_risk": 729
+        },
+        {
+          "month": 6,
+          "survival_pct": 96.21,
+          "at_risk": 706
+        },
+        {
+          "month": 9,
+          "survival_pct": 92.51,
+          "at_risk": 668
+        },
+        {
+          "month": 12,
+          "survival_pct": 89.57,
+          "at_risk": 633
+        },
+        {
+          "month": 15,
+          "survival_pct": 87.13,
+          "at_risk": 600
+        },
+        {
+          "month": 18,
+          "survival_pct": 83.46,
+          "at_risk": 562
+        },
+        {
+          "month": 21,
+          "survival_pct": 81.22,
+          "at_risk": 536
+        },
+        {
+          "month": 24,
+          "survival_pct": 78.76,
+          "at_risk": 503
+        },
+        {
+          "month": 27,
+          "survival_pct": 75.76,
+          "at_risk": 473
+        },
+        {
+          "month": 30,
+          "survival_pct": 71.56,
+          "at_risk": 436
+        },
+        {
+          "month": 33,
+          "survival_pct": 67.35,
+          "at_risk": 393
+        },
+        {
+          "month": 36,
+          "survival_pct": 63.66,
+          "at_risk": 353
+        },
+        {
+          "month": 39,
+          "survival_pct": 60.74,
+          "at_risk": 326
+        },
+        {
+          "month": 42,
+          "survival_pct": 57.5,
+          "at_risk": 296
+        },
+        {
+          "month": 45,
+          "survival_pct": 54.72,
+          "at_risk": 272
+        },
+        {
+          "month": 48,
+          "survival_pct": 51.22,
+          "at_risk": 241
+        },
+        {
+          "month": 51,
+          "survival_pct": 49.06,
+          "at_risk": 220
+        },
+        {
+          "month": 54,
+          "survival_pct": 47.48,
+          "at_risk": 207
+        },
+        {
+          "month": 57,
+          "survival_pct": 44.93,
+          "at_risk": 191
+        },
+        {
+          "month": 60,
+          "survival_pct": 42.53,
+          "at_risk": 171
+        },
+        {
+          "month": 63,
+          "survival_pct": 39.0,
+          "at_risk": 151
+        },
+        {
+          "month": 66,
+          "survival_pct": 38.2,
+          "at_risk": 139
+        },
+        {
+          "month": 69,
+          "survival_pct": 35.99,
+          "at_risk": 126
+        },
+        {
+          "month": 72,
+          "survival_pct": 32.99,
+          "at_risk": 105
+        },
+        {
+          "month": 75,
+          "survival_pct": 31.72,
+          "at_risk": 97
+        },
+        {
+          "month": 78,
+          "survival_pct": 30.72,
+          "at_risk": 88
+        },
+        {
+          "month": 81,
+          "survival_pct": 27.8,
+          "at_risk": 71
+        },
+        {
+          "month": 84,
+          "survival_pct": 26.59,
+          "at_risk": 63
+        },
+        {
+          "month": 87,
+          "survival_pct": 24.43,
+          "at_risk": 54
+        },
+        {
+          "month": 90,
+          "survival_pct": 22.99,
+          "at_risk": 46
+        },
+        {
+          "month": 93,
+          "survival_pct": 20.89,
+          "at_risk": 38
+        },
+        {
+          "month": 96,
+          "survival_pct": 20.89,
+          "at_risk": 32
+        },
+        {
+          "month": 99,
+          "survival_pct": 18.93,
+          "at_risk": 27
+        },
+        {
+          "month": 102,
+          "survival_pct": 17.41,
+          "at_risk": 23
+        },
+        {
+          "month": 105,
+          "survival_pct": 17.41,
+          "at_risk": 22
+        },
+        {
+          "month": 108,
+          "survival_pct": 15.83,
+          "at_risk": 19
+        },
+        {
+          "month": 111,
+          "survival_pct": 14.06,
+          "at_risk": 14
+        },
+        {
+          "month": 114,
+          "survival_pct": 11.9,
+          "at_risk": 11
+        },
+        {
+          "month": 117,
+          "survival_pct": 11.9,
+          "at_risk": 11
+        },
+        {
+          "month": 120,
+          "survival_pct": 10.71,
+          "at_risk": 8
+        }
+      ]
+    },
+    {
+      "label": "Lymphoma (NHL)",
+      "kind": "cancer_type",
+      "patients": 429,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 429
+        },
+        {
+          "month": 3,
+          "survival_pct": 98.99,
+          "at_risk": 384
+        },
+        {
+          "month": 6,
+          "survival_pct": 98.74,
+          "at_risk": 380
+        },
+        {
+          "month": 9,
+          "survival_pct": 97.68,
+          "at_risk": 368
+        },
+        {
+          "month": 12,
+          "survival_pct": 96.61,
+          "at_risk": 354
+        },
+        {
+          "month": 15,
+          "survival_pct": 94.96,
+          "at_risk": 343
+        },
+        {
+          "month": 18,
+          "survival_pct": 93.26,
+          "at_risk": 324
+        },
+        {
+          "month": 21,
+          "survival_pct": 91.8,
+          "at_risk": 308
+        },
+        {
+          "month": 24,
+          "survival_pct": 90.29,
+          "at_risk": 298
+        },
+        {
+          "month": 27,
+          "survival_pct": 89.99,
+          "at_risk": 286
+        },
+        {
+          "month": 30,
+          "survival_pct": 88.4,
+          "at_risk": 271
+        },
+        {
+          "month": 33,
+          "survival_pct": 87.41,
+          "at_risk": 258
+        },
+        {
+          "month": 36,
+          "survival_pct": 87.05,
+          "at_risk": 242
+        },
+        {
+          "month": 39,
+          "survival_pct": 84.11,
+          "at_risk": 225
+        },
+        {
+          "month": 42,
+          "survival_pct": 82.59,
+          "at_risk": 211
+        },
+        {
+          "month": 45,
+          "survival_pct": 80.59,
+          "at_risk": 196
+        },
+        {
+          "month": 48,
+          "survival_pct": 78.47,
+          "at_risk": 180
+        },
+        {
+          "month": 51,
+          "survival_pct": 76.69,
+          "at_risk": 161
+        },
+        {
+          "month": 54,
+          "survival_pct": 76.21,
+          "at_risk": 150
+        },
+        {
+          "month": 57,
+          "survival_pct": 75.15,
+          "at_risk": 137
+        },
+        {
+          "month": 60,
+          "survival_pct": 74.6,
+          "at_risk": 126
+        },
+        {
+          "month": 63,
+          "survival_pct": 73.95,
+          "at_risk": 111
+        },
+        {
+          "month": 66,
+          "survival_pct": 73.95,
+          "at_risk": 104
+        },
+        {
+          "month": 69,
+          "survival_pct": 71.8,
+          "at_risk": 94
+        },
+        {
+          "month": 72,
+          "survival_pct": 71.02,
+          "at_risk": 91
+        },
+        {
+          "month": 75,
+          "survival_pct": 68.66,
+          "at_risk": 78
+        },
+        {
+          "month": 78,
+          "survival_pct": 68.66,
+          "at_risk": 70
+        },
+        {
+          "month": 81,
+          "survival_pct": 68.66,
+          "at_risk": 64
+        },
+        {
+          "month": 84,
+          "survival_pct": 67.57,
+          "at_risk": 56
+        },
+        {
+          "month": 87,
+          "survival_pct": 65.05,
+          "at_risk": 48
+        },
+        {
+          "month": 90,
+          "survival_pct": 65.05,
+          "at_risk": 43
+        },
+        {
+          "month": 93,
+          "survival_pct": 65.05,
+          "at_risk": 36
+        },
+        {
+          "month": 96,
+          "survival_pct": 60.76,
+          "at_risk": 27
+        },
+        {
+          "month": 99,
+          "survival_pct": 53.75,
+          "at_risk": 23
+        },
+        {
+          "month": 102,
+          "survival_pct": 53.75,
+          "at_risk": 20
+        },
+        {
+          "month": 105,
+          "survival_pct": 53.75,
+          "at_risk": 16
+        },
+        {
+          "month": 108,
+          "survival_pct": 53.75,
+          "at_risk": 11
+        },
+        {
+          "month": 111,
+          "survival_pct": 48.86,
+          "at_risk": 9
+        },
+        {
+          "month": 114,
+          "survival_pct": 48.86,
+          "at_risk": 7
+        },
+        {
+          "month": 117,
+          "survival_pct": 48.86,
+          "at_risk": 7
+        },
+        {
+          "month": 120,
+          "survival_pct": 48.86,
+          "at_risk": 5
+        }
+      ]
+    },
+    {
+      "label": "Melanoma",
+      "kind": "cancer_type",
+      "patients": 478,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 478
+        },
+        {
+          "month": 3,
+          "survival_pct": 99.77,
+          "at_risk": 437
+        },
+        {
+          "month": 6,
+          "survival_pct": 99.08,
+          "at_risk": 425
+        },
+        {
+          "month": 9,
+          "survival_pct": 98.85,
+          "at_risk": 420
+        },
+        {
+          "month": 12,
+          "survival_pct": 98.37,
+          "at_risk": 407
+        },
+        {
+          "month": 15,
+          "survival_pct": 97.15,
+          "at_risk": 395
+        },
+        {
+          "month": 18,
+          "survival_pct": 95.91,
+          "at_risk": 385
+        },
+        {
+          "month": 21,
+          "survival_pct": 95.15,
+          "at_risk": 374
+        },
+        {
+          "month": 24,
+          "survival_pct": 93.61,
+          "at_risk": 359
+        },
+        {
+          "month": 27,
+          "survival_pct": 93.07,
+          "at_risk": 342
+        },
+        {
+          "month": 30,
+          "survival_pct": 92.23,
+          "at_risk": 322
+        },
+        {
+          "month": 33,
+          "survival_pct": 91.65,
+          "at_risk": 311
+        },
+        {
+          "month": 36,
+          "survival_pct": 91.06,
+          "at_risk": 294
+        },
+        {
+          "month": 39,
+          "survival_pct": 90.75,
+          "at_risk": 281
+        },
+        {
+          "month": 42,
+          "survival_pct": 90.42,
+          "at_risk": 274
+        },
+        {
+          "month": 45,
+          "survival_pct": 89.41,
+          "at_risk": 258
+        },
+        {
+          "month": 48,
+          "survival_pct": 88.0,
+          "at_risk": 241
+        },
+        {
+          "month": 51,
+          "survival_pct": 87.63,
+          "at_risk": 231
+        },
+        {
+          "month": 54,
+          "survival_pct": 86.44,
+          "at_risk": 210
+        },
+        {
+          "month": 57,
+          "survival_pct": 85.61,
+          "at_risk": 194
+        },
+        {
+          "month": 60,
+          "survival_pct": 84.72,
+          "at_risk": 183
+        },
+        {
+          "month": 63,
+          "survival_pct": 83.77,
+          "at_risk": 171
+        },
+        {
+          "month": 66,
+          "survival_pct": 82.21,
+          "at_risk": 151
+        },
+        {
+          "month": 69,
+          "survival_pct": 82.21,
+          "at_risk": 145
+        },
+        {
+          "month": 72,
+          "survival_pct": 82.21,
+          "at_risk": 140
+        },
+        {
+          "month": 75,
+          "survival_pct": 82.21,
+          "at_risk": 125
+        },
+        {
+          "month": 78,
+          "survival_pct": 80.81,
+          "at_risk": 107
+        },
+        {
+          "month": 81,
+          "survival_pct": 80.81,
+          "at_risk": 95
+        },
+        {
+          "month": 84,
+          "survival_pct": 79.96,
+          "at_risk": 78
+        },
+        {
+          "month": 87,
+          "survival_pct": 79.96,
+          "at_risk": 70
+        },
+        {
+          "month": 90,
+          "survival_pct": 79.96,
+          "at_risk": 60
+        },
+        {
+          "month": 93,
+          "survival_pct": 78.63,
+          "at_risk": 53
+        },
+        {
+          "month": 96,
+          "survival_pct": 75.38,
+          "at_risk": 45
+        },
+        {
+          "month": 99,
+          "survival_pct": 75.38,
+          "at_risk": 42
+        },
+        {
+          "month": 102,
+          "survival_pct": 75.38,
+          "at_risk": 34
+        },
+        {
+          "month": 105,
+          "survival_pct": 75.38,
+          "at_risk": 32
+        },
+        {
+          "month": 108,
+          "survival_pct": 75.38,
+          "at_risk": 25
+        },
+        {
+          "month": 111,
+          "survival_pct": 75.38,
+          "at_risk": 22
+        },
+        {
+          "month": 114,
+          "survival_pct": 75.38,
+          "at_risk": 19
+        },
+        {
+          "month": 117,
+          "survival_pct": 75.38,
+          "at_risk": 17
+        },
+        {
+          "month": 120,
+          "survival_pct": 75.38,
+          "at_risk": 14
+        }
+      ]
+    },
+    {
+      "label": "Pancreas",
+      "kind": "cancer_type",
+      "patients": 285,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 285
+        },
+        {
+          "month": 3,
+          "survival_pct": 96.3,
+          "at_risk": 259
+        },
+        {
+          "month": 6,
+          "survival_pct": 92.55,
+          "at_risk": 244
+        },
+        {
+          "month": 9,
+          "survival_pct": 87.56,
+          "at_risk": 225
+        },
+        {
+          "month": 12,
+          "survival_pct": 81.33,
+          "at_risk": 208
+        },
+        {
+          "month": 15,
+          "survival_pct": 78.56,
+          "at_risk": 197
+        },
+        {
+          "month": 18,
+          "survival_pct": 74.16,
+          "at_risk": 184
+        },
+        {
+          "month": 21,
+          "survival_pct": 71.7,
+          "at_risk": 168
+        },
+        {
+          "month": 24,
+          "survival_pct": 68.27,
+          "at_risk": 159
+        },
+        {
+          "month": 27,
+          "survival_pct": 63.88,
+          "at_risk": 143
+        },
+        {
+          "month": 30,
+          "survival_pct": 59.37,
+          "at_risk": 130
+        },
+        {
+          "month": 33,
+          "survival_pct": 57.06,
+          "at_risk": 123
+        },
+        {
+          "month": 36,
+          "survival_pct": 50.55,
+          "at_risk": 108
+        },
+        {
+          "month": 39,
+          "survival_pct": 44.9,
+          "at_risk": 95
+        },
+        {
+          "month": 42,
+          "survival_pct": 40.56,
+          "at_risk": 79
+        },
+        {
+          "month": 45,
+          "survival_pct": 37.36,
+          "at_risk": 68
+        },
+        {
+          "month": 48,
+          "survival_pct": 33.41,
+          "at_risk": 58
+        },
+        {
+          "month": 51,
+          "survival_pct": 30.49,
+          "at_risk": 52
+        },
+        {
+          "month": 54,
+          "survival_pct": 27.53,
+          "at_risk": 46
+        },
+        {
+          "month": 57,
+          "survival_pct": 24.54,
+          "at_risk": 41
+        },
+        {
+          "month": 60,
+          "survival_pct": 23.34,
+          "at_risk": 39
+        },
+        {
+          "month": 63,
+          "survival_pct": 20.9,
+          "at_risk": 33
+        },
+        {
+          "month": 66,
+          "survival_pct": 19.0,
+          "at_risk": 30
+        },
+        {
+          "month": 69,
+          "survival_pct": 16.46,
+          "at_risk": 26
+        },
+        {
+          "month": 72,
+          "survival_pct": 13.3,
+          "at_risk": 21
+        },
+        {
+          "month": 75,
+          "survival_pct": 10.76,
+          "at_risk": 17
+        },
+        {
+          "month": 78,
+          "survival_pct": 8.86,
+          "at_risk": 14
+        },
+        {
+          "month": 81,
+          "survival_pct": 7.55,
+          "at_risk": 11
+        },
+        {
+          "month": 84,
+          "survival_pct": 5.49,
+          "at_risk": 8
+        },
+        {
+          "month": 87,
+          "survival_pct": 4.8,
+          "at_risk": 7
+        },
+        {
+          "month": 90,
+          "survival_pct": 4.0,
+          "at_risk": 5
+        },
+        {
+          "month": 93,
+          "survival_pct": 3.2,
+          "at_risk": 4
+        },
+        {
+          "month": 96,
+          "survival_pct": 2.4,
+          "at_risk": 3
+        },
+        {
+          "month": 99,
+          "survival_pct": 2.4,
+          "at_risk": 2
+        },
+        {
+          "month": 102,
+          "survival_pct": 2.4,
+          "at_risk": 2
+        },
+        {
+          "month": 105,
+          "survival_pct": 2.4,
+          "at_risk": 2
+        },
+        {
+          "month": 108,
+          "survival_pct": 2.4,
+          "at_risk": 2
+        },
+        {
+          "month": 111,
+          "survival_pct": 2.4,
+          "at_risk": 1
+        },
+        {
+          "month": 114,
+          "survival_pct": 0.0,
+          "at_risk": 0
+        },
+        {
+          "month": 117,
+          "survival_pct": 0.0,
+          "at_risk": 0
+        },
+        {
+          "month": 120,
+          "survival_pct": 0.0,
+          "at_risk": 0
+        }
+      ]
+    },
+    {
+      "label": "Prostate",
+      "kind": "cancer_type",
+      "patients": 908,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 908
+        },
+        {
+          "month": 3,
+          "survival_pct": 99.77,
+          "at_risk": 833
+        },
+        {
+          "month": 6,
+          "survival_pct": 99.65,
+          "at_risk": 822
+        },
+        {
+          "month": 9,
+          "survival_pct": 99.29,
+          "at_risk": 814
+        },
+        {
+          "month": 12,
+          "survival_pct": 98.79,
+          "at_risk": 796
+        },
+        {
+          "month": 15,
+          "survival_pct": 98.42,
+          "at_risk": 783
+        },
+        {
+          "month": 18,
+          "survival_pct": 98.29,
+          "at_risk": 762
+        },
+        {
+          "month": 21,
+          "survival_pct": 98.16,
+          "at_risk": 739
+        },
+        {
+          "month": 24,
+          "survival_pct": 97.89,
+          "at_risk": 716
+        },
+        {
+          "month": 27,
+          "survival_pct": 96.93,
+          "at_risk": 692
+        },
+        {
+          "month": 30,
+          "survival_pct": 96.64,
+          "at_risk": 660
+        },
+        {
+          "month": 33,
+          "survival_pct": 96.19,
+          "at_risk": 633
+        },
+        {
+          "month": 36,
+          "survival_pct": 96.19,
+          "at_risk": 609
+        },
+        {
+          "month": 39,
+          "survival_pct": 95.86,
+          "at_risk": 573
+        },
+        {
+          "month": 42,
+          "survival_pct": 95.86,
+          "at_risk": 539
+        },
+        {
+          "month": 45,
+          "survival_pct": 95.5,
+          "at_risk": 515
+        },
+        {
+          "month": 48,
+          "survival_pct": 95.3,
+          "at_risk": 481
+        },
+        {
+          "month": 51,
+          "survival_pct": 95.1,
+          "at_risk": 455
+        },
+        {
+          "month": 54,
+          "survival_pct": 95.1,
+          "at_risk": 425
+        },
+        {
+          "month": 57,
+          "survival_pct": 94.41,
+          "at_risk": 401
+        },
+        {
+          "month": 60,
+          "survival_pct": 94.41,
+          "at_risk": 362
+        },
+        {
+          "month": 63,
+          "survival_pct": 94.13,
+          "at_risk": 335
+        },
+        {
+          "month": 66,
+          "survival_pct": 93.56,
+          "at_risk": 307
+        },
+        {
+          "month": 69,
+          "survival_pct": 93.24,
+          "at_risk": 284
+        },
+        {
+          "month": 72,
+          "survival_pct": 92.53,
+          "at_risk": 258
+        },
+        {
+          "month": 75,
+          "survival_pct": 92.53,
+          "at_risk": 230
+        },
+        {
+          "month": 78,
+          "survival_pct": 92.53,
+          "at_risk": 206
+        },
+        {
+          "month": 81,
+          "survival_pct": 92.53,
+          "at_risk": 187
+        },
+        {
+          "month": 84,
+          "survival_pct": 90.99,
+          "at_risk": 165
+        },
+        {
+          "month": 87,
+          "survival_pct": 90.99,
+          "at_risk": 143
+        },
+        {
+          "month": 90,
+          "survival_pct": 90.99,
+          "at_risk": 129
+        },
+        {
+          "month": 93,
+          "survival_pct": 90.99,
+          "at_risk": 114
+        },
+        {
+          "month": 96,
+          "survival_pct": 90.99,
+          "at_risk": 96
+        },
+        {
+          "month": 99,
+          "survival_pct": 90.99,
+          "at_risk": 86
+        },
+        {
+          "month": 102,
+          "survival_pct": 90.99,
+          "at_risk": 80
+        },
+        {
+          "month": 105,
+          "survival_pct": 90.99,
+          "at_risk": 71
+        },
+        {
+          "month": 108,
+          "survival_pct": 89.52,
+          "at_risk": 60
+        },
+        {
+          "month": 111,
+          "survival_pct": 89.52,
+          "at_risk": 50
+        },
+        {
+          "month": 114,
+          "survival_pct": 89.52,
+          "at_risk": 46
+        },
+        {
+          "month": 117,
+          "survival_pct": 89.52,
+          "at_risk": 35
+        },
+        {
+          "month": 120,
+          "survival_pct": 89.52,
+          "at_risk": 33
+        }
+      ]
+    },
+    {
+      "label": "Stage I",
+      "kind": "stage",
+      "patients": 1583,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 1583
+        },
+        {
+          "month": 3,
+          "survival_pct": 99.94,
+          "at_risk": 1471
+        },
+        {
+          "month": 6,
+          "survival_pct": 99.73,
+          "at_risk": 1444
+        },
+        {
+          "month": 9,
+          "survival_pct": 99.38,
+          "at_risk": 1422
+        },
+        {
+          "month": 12,
+          "survival_pct": 98.82,
+          "at_risk": 1387
+        },
+        {
+          "month": 15,
+          "survival_pct": 98.53,
+          "at_risk": 1362
+        },
+        {
+          "month": 18,
+          "survival_pct": 98.39,
+          "at_risk": 1330
+        },
+        {
+          "month": 21,
+          "survival_pct": 97.94,
+          "at_risk": 1292
+        },
+        {
+          "month": 24,
+          "survival_pct": 97.79,
+          "at_risk": 1256
+        },
+        {
+          "month": 27,
+          "survival_pct": 97.55,
+          "at_risk": 1201
+        },
+        {
+          "month": 30,
+          "survival_pct": 96.89,
+          "at_risk": 1146
+        },
+        {
+          "month": 33,
+          "survival_pct": 96.37,
+          "at_risk": 1101
+        },
+        {
+          "month": 36,
+          "survival_pct": 96.28,
+          "at_risk": 1039
+        },
+        {
+          "month": 39,
+          "survival_pct": 95.62,
+          "at_risk": 984
+        },
+        {
+          "month": 42,
+          "survival_pct": 95.02,
+          "at_risk": 925
+        },
+        {
+          "month": 45,
+          "survival_pct": 94.5,
+          "at_risk": 876
+        },
+        {
+          "month": 48,
+          "survival_pct": 94.28,
+          "at_risk": 825
+        },
+        {
+          "month": 51,
+          "survival_pct": 94.16,
+          "at_risk": 771
+        },
+        {
+          "month": 54,
+          "survival_pct": 94.16,
+          "at_risk": 725
+        },
+        {
+          "month": 57,
+          "survival_pct": 93.63,
+          "at_risk": 682
+        },
+        {
+          "month": 60,
+          "survival_pct": 93.63,
+          "at_risk": 640
+        },
+        {
+          "month": 63,
+          "survival_pct": 93.33,
+          "at_risk": 586
+        },
+        {
+          "month": 66,
+          "survival_pct": 93.33,
+          "at_risk": 535
+        },
+        {
+          "month": 69,
+          "survival_pct": 92.61,
+          "at_risk": 497
+        },
+        {
+          "month": 72,
+          "survival_pct": 92.42,
+          "at_risk": 467
+        },
+        {
+          "month": 75,
+          "survival_pct": 92.22,
+          "at_risk": 418
+        },
+        {
+          "month": 78,
+          "survival_pct": 91.76,
+          "at_risk": 384
+        },
+        {
+          "month": 81,
+          "survival_pct": 91.23,
+          "at_risk": 331
+        },
+        {
+          "month": 84,
+          "survival_pct": 90.93,
+          "at_risk": 294
+        },
+        {
+          "month": 87,
+          "survival_pct": 90.93,
+          "at_risk": 260
+        },
+        {
+          "month": 90,
+          "survival_pct": 90.93,
+          "at_risk": 230
+        },
+        {
+          "month": 93,
+          "survival_pct": 90.11,
+          "at_risk": 200
+        },
+        {
+          "month": 96,
+          "survival_pct": 89.65,
+          "at_risk": 176
+        },
+        {
+          "month": 99,
+          "survival_pct": 89.65,
+          "at_risk": 159
+        },
+        {
+          "month": 102,
+          "survival_pct": 89.65,
+          "at_risk": 139
+        },
+        {
+          "month": 105,
+          "survival_pct": 89.65,
+          "at_risk": 120
+        },
+        {
+          "month": 108,
+          "survival_pct": 88.87,
+          "at_risk": 102
+        },
+        {
+          "month": 111,
+          "survival_pct": 87.88,
+          "at_risk": 80
+        },
+        {
+          "month": 114,
+          "survival_pct": 87.88,
+          "at_risk": 65
+        },
+        {
+          "month": 117,
+          "survival_pct": 87.88,
+          "at_risk": 55
+        },
+        {
+          "month": 120,
+          "survival_pct": 87.88,
+          "at_risk": 44
+        }
+      ]
+    },
+    {
+      "label": "Stage II",
+      "kind": "stage",
+      "patients": 1377,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 1377
+        },
+        {
+          "month": 3,
+          "survival_pct": 99.45,
+          "at_risk": 1254
+        },
+        {
+          "month": 6,
+          "survival_pct": 98.73,
+          "at_risk": 1229
+        },
+        {
+          "month": 9,
+          "survival_pct": 97.19,
+          "at_risk": 1194
+        },
+        {
+          "month": 12,
+          "survival_pct": 96.45,
+          "at_risk": 1162
+        },
+        {
+          "month": 15,
+          "survival_pct": 95.95,
+          "at_risk": 1136
+        },
+        {
+          "month": 18,
+          "survival_pct": 95.1,
+          "at_risk": 1100
+        },
+        {
+          "month": 21,
+          "survival_pct": 94.49,
+          "at_risk": 1059
+        },
+        {
+          "month": 24,
+          "survival_pct": 93.68,
+          "at_risk": 1019
+        },
+        {
+          "month": 27,
+          "survival_pct": 92.93,
+          "at_risk": 985
+        },
+        {
+          "month": 30,
+          "survival_pct": 92.07,
+          "at_risk": 944
+        },
+        {
+          "month": 33,
+          "survival_pct": 90.98,
+          "at_risk": 895
+        },
+        {
+          "month": 36,
+          "survival_pct": 90.25,
+          "at_risk": 852
+        },
+        {
+          "month": 39,
+          "survival_pct": 88.95,
+          "at_risk": 801
+        },
+        {
+          "month": 42,
+          "survival_pct": 88.37,
+          "at_risk": 758
+        },
+        {
+          "month": 45,
+          "survival_pct": 87.42,
+          "at_risk": 721
+        },
+        {
+          "month": 48,
+          "survival_pct": 86.55,
+          "at_risk": 672
+        },
+        {
+          "month": 51,
+          "survival_pct": 86.02,
+          "at_risk": 626
+        },
+        {
+          "month": 54,
+          "survival_pct": 85.73,
+          "at_risk": 579
+        },
+        {
+          "month": 57,
+          "survival_pct": 84.97,
+          "at_risk": 541
+        },
+        {
+          "month": 60,
+          "survival_pct": 84.13,
+          "at_risk": 491
+        },
+        {
+          "month": 63,
+          "survival_pct": 82.87,
+          "at_risk": 445
+        },
+        {
+          "month": 66,
+          "survival_pct": 82.27,
+          "at_risk": 408
+        },
+        {
+          "month": 69,
+          "survival_pct": 81.63,
+          "at_risk": 369
+        },
+        {
+          "month": 72,
+          "survival_pct": 80.95,
+          "at_risk": 329
+        },
+        {
+          "month": 75,
+          "survival_pct": 79.95,
+          "at_risk": 289
+        },
+        {
+          "month": 78,
+          "survival_pct": 78.73,
+          "at_risk": 251
+        },
+        {
+          "month": 81,
+          "survival_pct": 78.41,
+          "at_risk": 230
+        },
+        {
+          "month": 84,
+          "survival_pct": 78.41,
+          "at_risk": 208
+        },
+        {
+          "month": 87,
+          "survival_pct": 78.41,
+          "at_risk": 184
+        },
+        {
+          "month": 90,
+          "survival_pct": 77.98,
+          "at_risk": 163
+        },
+        {
+          "month": 93,
+          "survival_pct": 77.48,
+          "at_risk": 145
+        },
+        {
+          "month": 96,
+          "survival_pct": 76.26,
+          "at_risk": 119
+        },
+        {
+          "month": 99,
+          "survival_pct": 74.82,
+          "at_risk": 99
+        },
+        {
+          "month": 102,
+          "survival_pct": 72.35,
+          "at_risk": 85
+        },
+        {
+          "month": 105,
+          "survival_pct": 72.35,
+          "at_risk": 75
+        },
+        {
+          "month": 108,
+          "survival_pct": 72.35,
+          "at_risk": 63
+        },
+        {
+          "month": 111,
+          "survival_pct": 72.35,
+          "at_risk": 55
+        },
+        {
+          "month": 114,
+          "survival_pct": 72.35,
+          "at_risk": 53
+        },
+        {
+          "month": 117,
+          "survival_pct": 72.35,
+          "at_risk": 43
+        },
+        {
+          "month": 120,
+          "survival_pct": 72.35,
+          "at_risk": 38
+        }
+      ]
+    },
+    {
+      "label": "Stage III",
+      "kind": "stage",
+      "patients": 1096,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 1096
+        },
+        {
+          "month": 3,
+          "survival_pct": 99.0,
+          "at_risk": 992
+        },
+        {
+          "month": 6,
+          "survival_pct": 97.39,
+          "at_risk": 958
+        },
+        {
+          "month": 9,
+          "survival_pct": 95.35,
+          "at_risk": 924
+        },
+        {
+          "month": 12,
+          "survival_pct": 93.37,
+          "at_risk": 889
+        },
+        {
+          "month": 15,
+          "survival_pct": 91.24,
+          "at_risk": 850
+        },
+        {
+          "month": 18,
+          "survival_pct": 89.5,
+          "at_risk": 814
+        },
+        {
+          "month": 21,
+          "survival_pct": 88.72,
+          "at_risk": 787
+        },
+        {
+          "month": 24,
+          "survival_pct": 87.35,
+          "at_risk": 753
+        },
+        {
+          "month": 27,
+          "survival_pct": 85.46,
+          "at_risk": 709
+        },
+        {
+          "month": 30,
+          "survival_pct": 83.13,
+          "at_risk": 667
+        },
+        {
+          "month": 33,
+          "survival_pct": 81.61,
+          "at_risk": 634
+        },
+        {
+          "month": 36,
+          "survival_pct": 79.13,
+          "at_risk": 592
+        },
+        {
+          "month": 39,
+          "survival_pct": 77.76,
+          "at_risk": 558
+        },
+        {
+          "month": 42,
+          "survival_pct": 75.77,
+          "at_risk": 520
+        },
+        {
+          "month": 45,
+          "survival_pct": 73.69,
+          "at_risk": 485
+        },
+        {
+          "month": 48,
+          "survival_pct": 71.66,
+          "at_risk": 449
+        },
+        {
+          "month": 51,
+          "survival_pct": 70.35,
+          "at_risk": 419
+        },
+        {
+          "month": 54,
+          "survival_pct": 69.13,
+          "at_risk": 385
+        },
+        {
+          "month": 57,
+          "survival_pct": 66.56,
+          "at_risk": 349
+        },
+        {
+          "month": 60,
+          "survival_pct": 64.39,
+          "at_risk": 319
+        },
+        {
+          "month": 63,
+          "survival_pct": 62.7,
+          "at_risk": 281
+        },
+        {
+          "month": 66,
+          "survival_pct": 61.99,
+          "at_risk": 256
+        },
+        {
+          "month": 69,
+          "survival_pct": 60.5,
+          "at_risk": 235
+        },
+        {
+          "month": 72,
+          "survival_pct": 57.2,
+          "at_risk": 200
+        },
+        {
+          "month": 75,
+          "survival_pct": 55.73,
+          "at_risk": 181
+        },
+        {
+          "month": 78,
+          "survival_pct": 54.13,
+          "at_risk": 159
+        },
+        {
+          "month": 81,
+          "survival_pct": 51.99,
+          "at_risk": 137
+        },
+        {
+          "month": 84,
+          "survival_pct": 50.83,
+          "at_risk": 117
+        },
+        {
+          "month": 87,
+          "survival_pct": 48.52,
+          "at_risk": 100
+        },
+        {
+          "month": 90,
+          "survival_pct": 47.46,
+          "at_risk": 87
+        },
+        {
+          "month": 93,
+          "survival_pct": 45.7,
+          "at_risk": 75
+        },
+        {
+          "month": 96,
+          "survival_pct": 45.7,
+          "at_risk": 64
+        },
+        {
+          "month": 99,
+          "survival_pct": 42.61,
+          "at_risk": 53
+        },
+        {
+          "month": 102,
+          "survival_pct": 40.85,
+          "at_risk": 46
+        },
+        {
+          "month": 105,
+          "survival_pct": 40.85,
+          "at_risk": 41
+        },
+        {
+          "month": 108,
+          "survival_pct": 40.85,
+          "at_risk": 35
+        },
+        {
+          "month": 111,
+          "survival_pct": 39.53,
+          "at_risk": 29
+        },
+        {
+          "month": 114,
+          "survival_pct": 35.17,
+          "at_risk": 23
+        },
+        {
+          "month": 117,
+          "survival_pct": 35.17,
+          "at_risk": 21
+        },
+        {
+          "month": 120,
+          "survival_pct": 33.42,
+          "at_risk": 15
+        }
+      ]
+    },
+    {
+      "label": "Stage IV",
+      "kind": "stage",
+      "patients": 900,
+      "points": [
+        {
+          "month": 0,
+          "survival_pct": 100.0,
+          "at_risk": 900
+        },
+        {
+          "month": 3,
+          "survival_pct": 97.61,
+          "at_risk": 807
+        },
+        {
+          "month": 6,
+          "survival_pct": 94.33,
+          "at_risk": 771
+        },
+        {
+          "month": 9,
+          "survival_pct": 90.76,
+          "at_risk": 733
+        },
+        {
+          "month": 12,
+          "survival_pct": 86.36,
+          "at_risk": 676
+        },
+        {
+          "month": 15,
+          "survival_pct": 83.14,
+          "at_risk": 637
+        },
+        {
+          "month": 18,
+          "survival_pct": 78.51,
+          "at_risk": 587
+        },
+        {
+          "month": 21,
+          "survival_pct": 75.27,
+          "at_risk": 552
+        },
+        {
+          "month": 24,
+          "survival_pct": 71.29,
+          "at_risk": 512
+        },
+        {
+          "month": 27,
+          "survival_pct": 67.78,
+          "at_risk": 477
+        },
+        {
+          "month": 30,
+          "survival_pct": 64.05,
+          "at_risk": 441
+        },
+        {
+          "month": 33,
+          "survival_pct": 60.05,
+          "at_risk": 399
+        },
+        {
+          "month": 36,
+          "survival_pct": 55.77,
+          "at_risk": 360
+        },
+        {
+          "month": 39,
+          "survival_pct": 51.72,
+          "at_risk": 325
+        },
+        {
+          "month": 42,
+          "survival_pct": 48.35,
+          "at_risk": 300
+        },
+        {
+          "month": 45,
+          "survival_pct": 45.39,
+          "at_risk": 269
+        },
+        {
+          "month": 48,
+          "survival_pct": 41.2,
+          "at_risk": 228
+        },
+        {
+          "month": 51,
+          "survival_pct": 38.64,
+          "at_risk": 204
+        },
+        {
+          "month": 54,
+          "survival_pct": 36.15,
+          "at_risk": 185
+        },
+        {
+          "month": 57,
+          "survival_pct": 33.77,
+          "at_risk": 166
+        },
+        {
+          "month": 60,
+          "survival_pct": 31.21,
+          "at_risk": 140
+        },
+        {
+          "month": 63,
+          "survival_pct": 29.19,
+          "at_risk": 128
+        },
+        {
+          "month": 66,
+          "survival_pct": 26.63,
+          "at_risk": 112
+        },
+        {
+          "month": 69,
+          "survival_pct": 23.96,
+          "at_risk": 98
+        },
+        {
+          "month": 72,
+          "survival_pct": 20.64,
+          "at_risk": 74
+        },
+        {
+          "month": 75,
+          "survival_pct": 19.53,
+          "at_risk": 69
+        },
+        {
+          "month": 78,
+          "survival_pct": 17.5,
+          "at_risk": 58
+        },
+        {
+          "month": 81,
+          "survival_pct": 15.97,
+          "at_risk": 50
+        },
+        {
+          "month": 84,
+          "survival_pct": 12.65,
+          "at_risk": 36
+        },
+        {
+          "month": 87,
+          "survival_pct": 11.18,
+          "at_risk": 28
+        },
+        {
+          "month": 90,
+          "survival_pct": 10.37,
+          "at_risk": 25
+        },
+        {
+          "month": 93,
+          "survival_pct": 9.5,
+          "at_risk": 22
+        },
+        {
+          "month": 96,
+          "survival_pct": 8.02,
+          "at_risk": 16
+        },
+        {
+          "month": 99,
+          "survival_pct": 6.95,
+          "at_risk": 13
+        },
+        {
+          "month": 102,
+          "survival_pct": 6.95,
+          "at_risk": 10
+        },
+        {
+          "month": 105,
+          "survival_pct": 6.26,
+          "at_risk": 9
+        },
+        {
+          "month": 108,
+          "survival_pct": 4.87,
+          "at_risk": 7
+        },
+        {
+          "month": 111,
+          "survival_pct": 4.17,
+          "at_risk": 5
+        },
+        {
+          "month": 114,
+          "survival_pct": 4.17,
+          "at_risk": 4
+        },
+        {
+          "month": 117,
+          "survival_pct": 4.17,
+          "at_risk": 3
+        },
+        {
+          "month": 120,
+          "survival_pct": 2.78,
+          "at_risk": 2
+        }
+      ]
+    }
+  ],
+  "by_type": [
+    {
+      "cancer_type": "Prostate",
+      "patients": 908,
+      "one_year_pct": 98.8,
+      "three_year_pct": 96.2,
+      "five_year_pct": 94.4,
+      "stage_i_five_year_pct": 99.3,
+      "stage_iv_five_year_pct": 47.3
+    },
+    {
+      "cancer_type": "Breast",
+      "patients": 1006,
+      "one_year_pct": 97.4,
+      "three_year_pct": 92.8,
+      "five_year_pct": 88.7,
+      "stage_i_five_year_pct": 98.5,
+      "stage_iv_five_year_pct": 47.8
+    },
+    {
+      "cancer_type": "Melanoma",
+      "patients": 478,
+      "one_year_pct": 98.4,
+      "three_year_pct": 91.1,
+      "five_year_pct": 84.7,
+      "stage_i_five_year_pct": 99.6,
+      "stage_iv_five_year_pct": 26.6
+    },
+    {
+      "cancer_type": "Lymphoma (NHL)",
+      "patients": 429,
+      "one_year_pct": 96.6,
+      "three_year_pct": 87.0,
+      "five_year_pct": 74.6,
+      "stage_i_five_year_pct": 90.3,
+      "stage_iv_five_year_pct": 58.3
+    },
+    {
+      "cancer_type": "Colon",
+      "patients": 602,
+      "one_year_pct": 93.5,
+      "three_year_pct": 83.4,
+      "five_year_pct": 71.5,
+      "stage_i_five_year_pct": 88.4,
+      "stage_iv_five_year_pct": 28.9
+    },
+    {
+      "cancer_type": "Leukemia (CLL)",
+      "patients": 445,
+      "one_year_pct": 94.3,
+      "three_year_pct": 82.4,
+      "five_year_pct": 70.1,
+      "stage_i_five_year_pct": 90.0,
+      "stage_iv_five_year_pct": 47.9
+    },
+    {
+      "cancer_type": "Lung",
+      "patients": 803,
+      "one_year_pct": 89.6,
+      "three_year_pct": 63.7,
+      "five_year_pct": 42.5,
+      "stage_i_five_year_pct": 81.5,
+      "stage_iv_five_year_pct": 17.9
+    },
+    {
+      "cancer_type": "Pancreas",
+      "patients": 285,
+      "one_year_pct": 81.3,
+      "three_year_pct": 50.5,
+      "five_year_pct": 23.3,
+      "stage_i_five_year_pct": 33.2,
+      "stage_iv_five_year_pct": 20.6
+    }
+  ],
+  "note": "Kaplan-Meier survival from the date of diagnosis; patients alive at the end of the data are censored."
+}

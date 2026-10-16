@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { CartesianGrid, Line, LineChart, ReferenceArea, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { patientApi } from "../api/clinical";
-import type { Encounter, LabResult, Medication } from "../api/schemas/clinical";
+import type { Encounter, LabResult, Medication, Patient360, TreatmentEvent } from "../api/schemas/clinical";
 import { Badge, Button, SelectField } from "../components/Controls";
 import { DataTable, type Column } from "../components/DataTable";
 import { Icon } from "../components/Icons";
@@ -14,11 +14,11 @@ import { Tabs } from "../components/Tabs";
 import { useApi } from "../hooks/useApi";
 import { useCursorPager } from "../hooks/useCursorPager";
 import { formatDate, formatNumber, formatUSD } from "../lib/format";
-import { TIER_TONE } from "./ClinicalPage";
+import { STATUS_TONE, TIER_TONE, TREND_ARROW } from "./ClinicalPage";
 import { Stat } from "./LaboratoryPage";
 import styles from "./PatientPage.module.css";
 
-type TabId = "risk" | "labs" | "meds" | "encounters";
+type TabId = "risk" | "treatment" | "labs" | "meds" | "encounters";
 const FLAG_TONE: Record<string, "bad" | "warn" | "good"> = { Critical: "bad", High: "warn", Low: "warn", Normal: "good" };
 const FLAG_LABEL: Record<string, string> = {
   has_hypertension: "Hypertension",
@@ -26,7 +26,6 @@ const FLAG_LABEL: Record<string, string> = {
   has_copd: "COPD",
   has_heart_failure: "Heart failure",
   has_ckd: "CKD",
-  has_cancer: "Cancer",
   has_obesity: "Obesity",
 };
 
@@ -39,7 +38,7 @@ export function PatientPage() {
   return (
     <div>
       <Link to="/doctor" className={styles.back}>
-        <Icon.Arrow size={14} style={{ transform: "rotate(180deg)" }} /> Clinical Workstation
+        <Icon.Arrow size={14} style={{ transform: "rotate(180deg)" }} /> Oncology Workstation
       </Link>
 
       {patient.error ? (
@@ -55,7 +54,17 @@ export function PatientPage() {
               <code>{p.patient_id}</code> · {p.age} y · {p.gender} · {p.blood_group ?? "—"} · {p.insurance_provider ?? "—"} · {p.city ?? "—"}
             </span>
             <div className={styles.flags}>
-              {p.is_deceased && <Badge>Deceased {p.death_date ? formatDate(p.death_date) : ""}</Badge>}
+              {p.cancer_type && (
+                <Badge tone="bad">
+                  {p.cancer_type}
+                  {p.cancer_stage ? ` · stage ${p.cancer_stage}` : ""}
+                </Badge>
+              )}
+              {p.is_deceased ? (
+                <Badge>Deceased {p.death_date ? formatDate(p.death_date) : ""}</Badge>
+              ) : (
+                p.treatment_status && <Badge tone={STATUS_TONE[p.treatment_status]}>{p.treatment_status}</Badge>
+              )}
               <Badge tone={TIER_TONE[p.clinical_risk_tier]}>{p.clinical_risk_tier} acuity</Badge>
               {Object.entries(p.flags)
                 .filter(([, on]) => on)
@@ -65,9 +74,12 @@ export function PatientPage() {
             </div>
           </div>
           <div className={styles.stats}>
-            <Stat label="Admissions" value={formatNumber(p.total_admissions)} />
-            <Stat label="Unplanned readmits" value={formatNumber(p.unplanned_readmissions)} />
-            <Stat label="Critical labs" value={formatNumber(p.critical_lab_count)} />
+            <Stat label="Diagnosed" value={p.diagnosis_date ? formatDate(p.diagnosis_date) : "—"} />
+            <Stat label="Days to treatment" value={p.days_to_treatment != null ? formatNumber(p.days_to_treatment) : "—"} />
+            <Stat
+              label={p.tumor_marker ?? "Tumour marker"}
+              value={p.marker_value != null ? `${formatNumber(p.marker_value, 1)} ${p.marker_trend ? TREND_ARROW[p.marker_trend] ?? "" : ""}` : "—"}
+            />
             <Stat label="Lifetime billing" value={formatUSD(p.lifetime_billing, { whole: true })} />
           </div>
         </section>
@@ -87,90 +99,91 @@ export function PatientPage() {
         onChange={setTab}
         tabs={[
           { id: "risk", label: "Risk & care plan" },
-          { id: "labs", label: "Labs & vitals" },
+          { id: "treatment", label: "Treatment timeline" },
+          { id: "labs", label: "Labs & tumour markers" },
           { id: "meds", label: "Medications" },
-          { id: "encounters", label: "Hospital stays" },
+          { id: "encounters", label: "Surgical stays" },
         ]}
       />
 
-      {tab === "risk" && <RiskTab patientId={patientId} comorbidities={p?.comorbidities} />}
-      {tab === "labs" && <LabsTab patientId={patientId} />}
+      {tab === "risk" && <RiskTab patientId={patientId} patient={p} />}
+      {tab === "treatment" && <TreatmentTab patientId={patientId} />}
+      {tab === "labs" && <LabsTab patientId={patientId} preferred={p?.tumor_marker ?? undefined} />}
       {tab === "meds" && <MedsTab patientId={patientId} />}
       {tab === "encounters" && <EncountersTab patientId={patientId} />}
     </div>
   );
 }
 
-function RiskTab({ patientId, comorbidities }: { patientId: string; comorbidities?: string[] }) {
+function RiskTab({ patientId, patient }: { patientId: string; patient?: Patient360 }) {
   const risk = useApi((s) => patientApi.risk(patientId, s), [patientId]);
   const [done, setDone] = useState<Record<string, boolean>>({});
   if (risk.error) return <ErrorState error={risk.error} onRetry={risk.reload} />;
   if (!risk.data) return <SkeletonText lines={10} />;
   const r = risk.data;
+  const b = r.survival_benchmark;
 
   return (
     <>
       <Grid columns={3}>
-        <Panel title="Unplanned readmission" subtitle={r.readmission_admission_date ? `Most recent stay · ${formatDate(r.readmission_admission_date)}` : "No inpatient stay"} icon="Alert">
-          {r.readmission_available && r.readmission_probability_pct != null ? (
+        <Panel title="12-month mortality risk" subtitle={r.scored_as_of ? `Scored on history up to ${r.scored_as_of}` : "Living cancer patients only"} icon="Alert">
+          {r.available && r.mortality_12m_pct != null ? (
             <div className={styles.riskBig}>
-              <strong>{r.readmission_probability_pct.toFixed(1)}%</strong>
-              <Badge tone={TIER_TONE[r.readmission_risk_level ?? "LOW"]}>{r.readmission_risk_level}</Badge>
-              <span>Network base rate {r.readmission_base_rate_pct}%</span>
-              <ul>{r.readmission_drivers.map((d) => <li key={d}>{d}</li>)}</ul>
+              <strong>{r.mortality_12m_pct.toFixed(1)}%</strong>
+              <Badge tone={TIER_TONE[r.risk_level ?? "LOW"]}>{r.risk_level}</Badge>
+              <span>
+                Population rate {r.cohort_rate_pct}% · method: {r.method}
+              </span>
+              <ul>{r.drivers.map((d) => <li key={d}>{d}</li>)}</ul>
             </div>
           ) : (
-            <EmptyState title="Not applicable" hint="The patient has no inpatient admission to score." />
+            <EmptyState title="Not scored" hint="Only living patients with a cancer diagnosis are scored." />
           )}
         </Panel>
-        <Panel title="Expected length of stay" subtitle="Admission-time model" icon="Clock">
-          {r.los_predicted_days != null ? (
+        <Panel title="Survival benchmark" subtitle={b ? `${b.group} · ${formatNumber(b.patients)} patients` : "Same cancer type and stage"} icon="Shield">
+          {b ? (
             <div className={styles.riskBig}>
-              <strong>{formatNumber(r.los_predicted_days, 1)} d</strong>
-              <span>Interval {r.los_interval}</span>
-              {r.los_observed_days != null && <span>Observed on that stay: {formatNumber(r.los_observed_days, 1)} d</span>}
+              <strong>{b.five_year_pct != null ? `${formatNumber(b.five_year_pct, 1)}%` : "—"}</strong>
+              <span>5-year survival from diagnosis (Kaplan-Meier)</span>
+              <span>1-year survival {b.one_year_pct != null ? `${formatNumber(b.one_year_pct, 1)}%` : "—"}</span>
             </div>
           ) : (
-            <EmptyState title="Not applicable" />
+            <EmptyState title="No benchmark" hint="Too few patients with this cancer type and stage." />
           )}
         </Panel>
-        <Panel title="Chronic conditions" subtitle="Moderate / severe diagnoses" icon="Pulse">
-          {comorbidities?.length ? (
-            <div className={styles.conditions}>{comorbidities.map((c) => <span key={c}>{c}</span>)}</div>
+        <Panel title="Treatment so far" subtitle={patient?.first_treatment_date ? `Started ${formatDate(patient.first_treatment_date)}` : "No treatment recorded"} icon="Pulse">
+          {patient ? (
+            <div className={styles.conditions}>
+              {patient.surgery_procedure && <span>Surgery: {patient.surgery_procedure}</span>}
+              {patient.systemic_regimen && <span>Regimen: {patient.systemic_regimen}</span>}
+              {patient.chemo_cycles > 0 && <span>{patient.chemo_cycles} chemotherapy cycles</span>}
+              {patient.immunotherapy_cycles > 0 && <span>{patient.immunotherapy_cycles} immunotherapy cycles</span>}
+              {patient.targeted_therapy_cycles > 0 && <span>{patient.targeted_therapy_cycles} targeted-therapy cycles</span>}
+              {patient.radiation_sessions > 0 && <span>{patient.radiation_sessions} radiation sessions</span>}
+              {patient.comorbidities.slice(0, 4).map((c) => <span key={c}>{c}</span>)}
+            </div>
           ) : (
-            <EmptyState title="None recorded" />
+            <SkeletonText lines={4} />
           )}
         </Panel>
       </Grid>
 
-      <Panel title="12-month outcome risk" subtitle={`Scored on history up to ${r.outcome_scored_as_of ?? "the end of the data"}`} icon="Shield">
-        <div className={styles.outlookGrid}>
-          {r.outcome_risks.map((o) => (
-            <div key={o.outcome} className={styles.outlookCard}>
-              <span className={styles.outlookLabel}>{o.label}</span>
-              <strong>{o.probability_pct.toFixed(1)}%</strong>
-              <Badge tone={TIER_TONE[o.risk_level]}>{o.risk_level}</Badge>
-              <span className={styles.outlookMeta}>
-                Population rate {o.cohort_rate_pct}%{o.observed != null ? ` · observed: ${o.observed ? "yes" : "no"}` : ""}
-              </span>
-            </div>
-          ))}
-        </div>
-        <p className={styles.note}>Main drivers: {r.outcome_drivers.join(", ")}</p>
-      </Panel>
-
       <div style={{ height: 20 }} />
       <Panel title={r.care_plan.primary_recommendation} subtitle={r.care_plan.pathway} icon="Check">
-        <ul className={styles.checklist}>
-          {r.care_plan.checklist.map((item) => (
-            <li key={item}>
-              <label>
-                <input type="checkbox" checked={!!done[item]} onChange={(e) => setDone((d) => ({ ...d, [item]: e.target.checked }))} />
-                <span className={done[item] ? styles.doneItem : undefined}>{item}</span>
-              </label>
-            </li>
-          ))}
-        </ul>
+        {r.care_plan.checklist.length > 0 ? (
+          <ul className={styles.checklist}>
+            {r.care_plan.checklist.map((item) => (
+              <li key={item}>
+                <label>
+                  <input type="checkbox" checked={!!done[item]} onChange={(e) => setDone((d) => ({ ...d, [item]: e.target.checked }))} />
+                  <span className={done[item] ? styles.doneItem : undefined}>{item}</span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <EmptyState title="No active care plan" />
+        )}
         <p className={styles.note}>{r.care_plan.rationale.join(" ")}</p>
         <p className={styles.note}>
           <Icon.Shield size={12} /> {r.disclaimer}
@@ -180,17 +193,55 @@ function RiskTab({ patientId, comorbidities }: { patientId: string; comorbiditie
   );
 }
 
+const EVENT_TONE: Record<string, "bad" | "warn" | "good" | "info" | "neutral"> = {
+  Surgery: "bad",
+  Chemotherapy: "info",
+  Immunotherapy: "good",
+  "Targeted therapy": "good",
+  Radiation: "warn",
+  Hospice: "neutral",
+};
+
+function TreatmentTab({ patientId }: { patientId: string }) {
+  const tx = useApi((s) => patientApi.treatments(patientId, s), [patientId]);
+  if (tx.error) return <ErrorState error={tx.error} onRetry={tx.reload} />;
+  if (!tx.data) return <SkeletonText lines={8} />;
+  if (tx.data.length === 0) return <EmptyState title="No treatment recorded" hint="No surgery, systemic therapy or radiation yet." />;
+  return (
+    <ol className={styles.timeline}>
+      {tx.data.map((e: TreatmentEvent, i) => (
+        <li key={`${e.event_date}-${e.event_type}-${i}`}>
+          <span className={styles.dot} />
+          <div className={styles.encCard}>
+            <div className={styles.encTop}>
+              <strong>
+                {e.event_type}
+                {e.cycle != null ? ` · cycle ${e.cycle}` : ""}
+              </strong>
+              <span>{formatDate(e.event_date)}</span>
+            </div>
+            <div className={styles.flags}>
+              <Badge tone={EVENT_TONE[e.event_type] ?? "neutral"}>{e.detail ?? e.event_type}</Badge>
+              {e.hospital_name && <Badge>{e.hospital_name}</Badge>}
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 function parseRange(range: string | null): [number, number] | null {
   const m = range ? /([\d.]+)\s*-\s*([\d.]+)/.exec(range) : null;
   return m ? [Number(m[1]), Number(m[2])] : null;
 }
 
-function LabsTab({ patientId }: { patientId: string }) {
+function LabsTab({ patientId, preferred }: { patientId: string; preferred?: string }) {
   const tests = useApi((s) => patientApi.labTests(patientId, s), [patientId]);
   const [test, setTest] = useState("");
   useEffect(() => {
-    if (!test && tests.data?.length) setTest(tests.data.includes("HbA1c") ? "HbA1c" : tests.data[0]);
-  }, [tests.data, test]);
+    if (!test && tests.data?.length) setTest(preferred && tests.data.includes(preferred) ? preferred : tests.data[0]);
+  }, [tests.data, test, preferred]);
   const series = useApi((s) => patientApi.labSeries(patientId, test, s), [patientId, test], { enabled: !!test });
   const pager = useCursorPager();
   const labs = useApi((s) => patientApi.labs(patientId, { limit: 15, cursor: pager.cursor }, s), [patientId, pager.cursor]);
@@ -298,7 +349,7 @@ function EncountersTab({ patientId }: { patientId: string }) {
   const enc = useApi((s) => patientApi.encounters(patientId, s), [patientId]);
   if (enc.error) return <ErrorState error={enc.error} onRetry={enc.reload} />;
   if (!enc.data) return <SkeletonText lines={8} />;
-  if (enc.data.length === 0) return <EmptyState title="No hospital stays" hint="This patient has outpatient care only." />;
+  if (enc.data.length === 0) return <EmptyState title="No surgical stays" hint="This patient has outpatient care only." />;
   return (
     <ol className={styles.timeline}>
       {enc.data.map((e: Encounter) => (
@@ -306,7 +357,7 @@ function EncountersTab({ patientId }: { patientId: string }) {
           <span className={styles.dot} />
           <div className={styles.encCard}>
             <div className={styles.encTop}>
-              <strong>{e.admission_reason ?? "Inpatient stay"}</strong>
+              <strong>{e.surgery_procedure ?? e.admission_reason ?? "Inpatient stay"}</strong>
               <span>
                 {formatDate(e.admission_date)} → {formatDate(e.discharge_date)} · {e.length_of_stay_days != null ? `${formatNumber(e.length_of_stay_days, 1)} d` : "—"}
               </span>
@@ -315,8 +366,7 @@ function EncountersTab({ patientId }: { patientId: string }) {
               <Badge tone="info">{e.department_name ?? "—"}</Badge>
               <Badge>{e.admission_type}</Badge>
               <Badge tone={e.discharge_disposition === "Deceased" ? "bad" : "neutral"}>{e.discharge_disposition}</Badge>
-              {e.is_icu && <Badge tone="bad">ICU</Badge>}
-              {e.readmitted_30d && <Badge tone="warn">Unplanned readmission followed</Badge>}
+              {e.admission_reason && <Badge>{e.admission_reason}</Badge>}
             </div>
             {e.diagnoses.length > 0 && <p className={styles.note}>{e.diagnoses.join(" · ")}</p>}
           </div>

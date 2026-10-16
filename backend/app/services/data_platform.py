@@ -28,6 +28,8 @@ from backend.app.core.users import UserRecord
 from backend.app.jobs import runner
 from backend.app.schemas.data_platform import (
     ConsolidateIn,
+    CountItem,
+    DatasetInfo,
     ForecastIn,
     LinkDiscovery,
     JobAccepted,
@@ -421,3 +423,31 @@ def report_html(upload_id: str, user: UserRecord) -> str:
         raise APIError(409, "upload_not_ready", "This upload has not finished processing.")
     log_audit_event(username=user.email, role=user.role, action="SANDBOX_REPORT", resource=upload_id, status="SUCCESS", details=m["filename"])
     return render_report(m)
+
+
+# ---- the live dataset --------------------------------------------------------------------------
+
+STAGE_ORDER = {"I": 1, "II": 2, "III": 3, "IV": 4}
+
+
+def dataset_info() -> DatasetInfo:
+    """Facts about the fixed oncology dataset every workspace reads (src/ingestion/oncology_dataset.py)."""
+    from src.ingestion.oncology_dataset import status
+
+    meta = status()
+    p = query_df_strict("""
+        SELECT count(*) AS n, count(*) FILTER (WHERE is_deceased = 0 OR is_deceased = '0') AS living FROM gold_patient_360
+    """).iloc[0]
+    types = query_df_strict("""
+        SELECT coalesce(cancer_type, 'Not yet diagnosed') AS label, count(*) AS count FROM gold_patient_360 GROUP BY 1 ORDER BY 2 DESC
+    """)
+    stages = query_df_strict("SELECT cancer_stage AS label, count(*) AS count FROM gold_patient_360 WHERE cancer_stage IS NOT NULL GROUP BY 1")
+    stages = stages.assign(_o=stages["label"].map(STAGE_ORDER)).sort_values("_o")
+    return DatasetInfo(
+        name=meta.get("dataset", "Oncology dataset"), as_of=meta.get("as_of"),
+        patients=int(p["n"]), living=int(p["living"]), deceased=int(p["n"]) - int(p["living"]),
+        cancer_types=[CountItem(label=r.label, count=int(r.count)) for r in types.itertuples()],
+        stages=[CountItem(label=f"Stage {r.label}", count=int(r.count)) for r in stages.itertuples()],
+        repairs={k: int(v) for k, v in (meta.get("repairs") or {}).items()},
+        known_limitations=list(meta.get("known_limitations") or []),
+    )

@@ -6,15 +6,13 @@ from fastapi import APIRouter, Depends, File, Path, Response, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
 
 from backend.app.core.deps import current_user, require_page
-from backend.app.core.errors import APIError
 from backend.app.jobs import runner
 from backend.app.core.pagination import Page, PageParams, page_params
 from backend.app.core.users import UserRecord
 from backend.app.schemas.common import ERROR_RESPONSES
 from backend.app.schemas.data_platform import (
     ConsolidateIn,
-    FeedRun,
-    FeedStatus,
+    DatasetInfo,
     ForecastIn,
     JobAccepted,
     LinkDiscovery,
@@ -24,7 +22,7 @@ from backend.app.schemas.data_platform import (
     UploadDetail,
     UploadSummary,
 )
-from backend.app.services import data_feed, data_platform
+from backend.app.services import data_platform
 
 router = APIRouter(prefix="/data", tags=["data-engineering"], responses=ERROR_RESPONSES, dependencies=[Depends(require_page("data"))])
 UploadId = Path(..., pattern="^[0-9a-f]{32}$")
@@ -86,24 +84,9 @@ def consolidate(body: ConsolidateIn, user: UserRecord = Depends(current_user)) -
     return data_platform.start_consolidation(body, user)
 
 
-# ---- live data feed --------------------------------------------------------------------------
+# ---- the dataset behind every workspace -----------------------------------------------------
 
-@router.get("/feed", response_model=FeedStatus)
-def feed() -> FeedStatus:
-    s = data_feed.feed_status()
-    redate, release = s.get("redate") or {}, s.get("release") or {}
-    return FeedStatus(
-        enabled=s["enabled"], released_through=release.get("released_through"), held_back_days=release.get("held_back_days"),
-        redated_end=redate.get("redated_end"), original_cutoff=redate.get("original_cutoff"), shift_days=redate.get("shift_days"),
-        next_run_at=s["next_run_at"], runs=[FeedRun(**r) for r in s["runs"]],
-    )
-
-
-@router.post("/feed/refresh", response_model=JobAccepted, status_code=202)
-def refresh_feed(user: UserRecord = Depends(current_user)) -> JobAccepted:
-    """Release records up to now and rebuild the lakehouse (runs as a background job)."""
-    if not data_feed.enabled():
-        raise APIError(409, "feed_disabled", "The dataset is fixed: the daily release is off (MEDINEXUS_FEED_ENABLED=1 turns it on).")
-    active = runner.active_job("data_feed")
-    job = active or runner.submit("data_feed", user.email, lambda ctx: data_feed.run_refresh("manual", ctx, user.email))
-    return JobAccepted(job_id=job.job_id)
+@router.get("/dataset", response_model=DatasetInfo)
+def dataset() -> DatasetInfo:
+    """The fixed oncology dataset: as-of date, size, cancer mix and the repairs made on preparation."""
+    return data_platform.dataset_info()

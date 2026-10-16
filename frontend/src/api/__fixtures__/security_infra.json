@@ -3,229 +3,229 @@
   "environment": "development",
   "python": "3.12.7",
   "platform": "Windows 11",
-  "uptime_minutes": 3,
-  "database_path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_7k925vuk\\healthcare_test.duckdb",
-  "database_size_mb": 174.8,
+  "uptime_minutes": 6,
+  "database_path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_jbr39wpc\\healthcare_test.duckdb",
+  "database_size_mb": 213.3,
   "tables": [
-    {
-      "name": "sim_pharmacy_daily_all",
-      "layer": "sim",
-      "rows": 1195740
-    },
-    {
-      "name": "sim_pharmacy_daily",
-      "layer": "sim",
-      "rows": 1167348
-    },
-    {
-      "name": "sim_equipment_daily_all",
-      "layer": "sim",
-      "rows": 697515
-    },
-    {
-      "name": "sim_equipment_daily",
-      "layer": "sim",
-      "rows": 680953
-    },
-    {
-      "name": "bronze_prescriptions",
-      "layer": "bronze",
-      "rows": 419619
-    },
-    {
-      "name": "silver_prescriptions",
-      "layer": "silver",
-      "rows": 415465
-    },
-    {
-      "name": "gold_prescriptions",
-      "layer": "gold",
-      "rows": 415465
-    },
-    {
-      "name": "bronze_appointments",
-      "layer": "bronze",
-      "rows": 313189
-    },
-    {
-      "name": "silver_appointments",
-      "layer": "silver",
-      "rows": 310089
-    },
-    {
-      "name": "gold_appointments",
-      "layer": "gold",
-      "rows": 310054
-    },
     {
       "name": "bronze_laboratory_results",
       "layer": "bronze",
-      "rows": 179557
+      "rows": 2033670
     },
     {
       "name": "silver_laboratory_results",
       "layer": "silver",
-      "rows": 177780
+      "rows": 2013535
     },
     {
       "name": "gold_laboratory",
       "layer": "gold",
-      "rows": 177780
+      "rows": 2013535
     },
     {
-      "name": "sim_outpatient_daily_all",
-      "layer": "sim",
-      "rows": 99645
+      "name": "bronze_appointments",
+      "layer": "bronze",
+      "rows": 229007
     },
     {
-      "name": "sim_outpatient_daily",
+      "name": "silver_appointments",
+      "layer": "silver",
+      "rows": 226740
+    },
+    {
+      "name": "gold_appointments",
+      "layer": "gold",
+      "rows": 226740
+    },
+    {
+      "name": "bronze_prescriptions",
+      "layer": "bronze",
+      "rows": 126736
+    },
+    {
+      "name": "silver_prescriptions",
+      "layer": "silver",
+      "rows": 125482
+    },
+    {
+      "name": "gold_prescriptions",
+      "layer": "gold",
+      "rows": 125482
+    },
+    {
+      "name": "sim_pharmacy_daily",
       "layer": "sim",
-      "rows": 97279
+      "rows": 78840
+    },
+    {
+      "name": "sim_equipment_daily",
+      "layer": "sim",
+      "rows": 59130
+    },
+    {
+      "name": "gold_treatment_events",
+      "layer": "gold",
+      "rows": 36457
     },
     {
       "name": "bronze_diagnoses",
       "layer": "bronze",
-      "rows": 48020
-    },
-    {
-      "name": "gold_clinical",
-      "layer": "gold",
-      "rows": 47545
+      "rows": 22839
     },
     {
       "name": "silver_diagnoses",
       "layer": "silver",
-      "rows": 47545
+      "rows": 22613
     },
     {
-      "name": "sim_equipment_assets",
-      "layer": "sim",
-      "rows": 30423
+      "name": "gold_clinical",
+      "layer": "gold",
+      "rows": 22613
     },
     {
-      "name": "sim_equipment_events_all",
+      "name": "sim_outpatient_daily",
       "layer": "sim",
-      "rows": 30339
-    },
-    {
-      "name": "sim_equipment_events",
-      "layer": "sim",
-      "rows": 29615
+      "rows": 9855
     },
     {
       "name": "gold_outcome_risk",
       "layer": "gold",
-      "rows": 20618
+      "rows": 7140
+    },
+    {
+      "name": "gold_survival",
+      "layer": "gold",
+      "rows": 5445
     },
     {
       "name": "bronze_patients",
       "layer": "bronze",
-      "rows": 12483
-    },
-    {
-      "name": "gold_patient_360",
-      "layer": "gold",
-      "rows": 12299
+      "rows": 5075
     },
     {
       "name": "silver_patients",
       "layer": "silver",
-      "rows": 12299
+      "rows": 5000
     },
     {
-      "name": "gold_hospital_operations",
+      "name": "gold_patient_360",
       "layer": "gold",
-      "rows": 11243
+      "rows": 5000
     },
     {
-      "name": "bronze_admissions",
-      "layer": "bronze",
-      "rows": 6852
-    },
-    {
-      "name": "bronze_billing",
-      "layer": "bronze",
-      "rows": 6838
-    },
-    {
-      "name": "gold_admissions",
+      "name": "gold_oncology_patients",
       "layer": "gold",
-      "rows": 6771
-    },
-    {
-      "name": "silver_billing",
-      "layer": "silver",
-      "rows": 6771
-    },
-    {
-      "name": "silver_admissions",
-      "layer": "silver",
-      "rows": 6771
-    },
-    {
-      "name": "gold_billing",
-      "layer": "gold",
-      "rows": 6770
-    },
-    {
-      "name": "gold_patient_risk_features",
-      "layer": "gold",
-      "rows": 6770
-    },
-    {
-      "name": "silver_departments",
-      "layer": "silver",
-      "rows": 5399
-    },
-    {
-      "name": "bronze_departments",
-      "layer": "bronze",
-      "rows": 5399
-    },
-    {
-      "name": "silver_doctors",
-      "layer": "silver",
-      "rows": 4940
-    },
-    {
-      "name": "bronze_doctors",
-      "layer": "bronze",
-      "rows": 4940
-    },
-    {
-      "name": "silver_hospitals",
-      "layer": "silver",
-      "rows": 4935
-    },
-    {
-      "name": "bronze_hospitals",
-      "layer": "bronze",
-      "rows": 4935
+      "rows": 4956
     },
     {
       "name": "audit_logs",
       "layer": "platform",
-      "rows": 2794
+      "rows": 2828
+    },
+    {
+      "name": "bronze_admissions",
+      "layer": "bronze",
+      "rows": 2612
+    },
+    {
+      "name": "bronze_billing",
+      "layer": "bronze",
+      "rows": 2607
+    },
+    {
+      "name": "silver_billing",
+      "layer": "silver",
+      "rows": 2582
+    },
+    {
+      "name": "gold_admissions",
+      "layer": "gold",
+      "rows": 2582
+    },
+    {
+      "name": "gold_billing",
+      "layer": "gold",
+      "rows": 2582
+    },
+    {
+      "name": "silver_admissions",
+      "layer": "silver",
+      "rows": 2582
+    },
+    {
+      "name": "gold_patient_risk_features",
+      "layer": "gold",
+      "rows": 2582
+    },
+    {
+      "name": "gold_hospital_operations",
+      "layer": "gold",
+      "rows": 2428
+    },
+    {
+      "name": "sim_equipment_assets",
+      "layer": "sim",
+      "rows": 1965
+    },
+    {
+      "name": "sim_equipment_events",
+      "layer": "sim",
+      "rows": 1802
+    },
+    {
+      "name": "ingestion_runs",
+      "layer": "platform",
+      "rows": 804
+    },
+    {
+      "name": "bronze_pharmacy_inventory",
+      "layer": "bronze",
+      "rows": 344
+    },
+    {
+      "name": "gold_pharmacy",
+      "layer": "gold",
+      "rows": 341
+    },
+    {
+      "name": "silver_pharmacy_inventory",
+      "layer": "silver",
+      "rows": 341
+    },
+    {
+      "name": "silver_quality_report",
+      "layer": "silver",
+      "rows": 340
+    },
+    {
+      "name": "model_registry",
+      "layer": "platform",
+      "rows": 160
+    },
+    {
+      "name": "silver_doctors",
+      "layer": "silver",
+      "rows": 142
     }
   ],
   "layer_rows": {
-    "sim": 4029767,
-    "bronze": 1003252,
-    "silver": 993718,
-    "gold": 1016573,
-    "platform": 3788
+    "bronze": 2423151,
+    "silver": 2399476,
+    "gold": 2457883,
+    "sim": 151655,
+    "platform": 3856
   },
   "storage": [
     {
       "label": "Synthea source CSV",
       "path": "data\\synthea",
-      "size_mb": 1058.4,
-      "files": 49
+      "size_mb": 937.6,
+      "files": 34
     },
     {
       "label": "Simulated operations",
       "path": "data\\ops",
-      "size_mb": 7.3,
+      "size_mb": 0.6,
       "files": 7
     },
     {
@@ -249,12 +249,12 @@
     {
       "label": "Model artifacts",
       "path": "models",
-      "size_mb": 4.4,
-      "files": 8
+      "size_mb": 4.2,
+      "files": 9
     },
     {
       "label": "Logs",
-      "path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_7k925vuk\\logs",
+      "path": "C:\\Users\\tejas\\AppData\\Local\\Temp\\medinexus_test_jbr39wpc\\logs",
       "size_mb": 0.0,
       "files": 2
     },
@@ -265,10 +265,10 @@
       "files": 21
     }
   ],
-  "active_models": 8,
-  "models_last_trained": "2026-10-15 10:21:51",
+  "active_models": 6,
+  "models_last_trained": "2026-10-16 10:32:17",
   "active_jobs": [],
-  "sweep_next_run": "2026-10-16T07:00",
+  "sweep_next_run": "2026-10-17T07:00",
   "sweep_last_status": "succeeded",
   "llm_provider": "Rules engine (no LLM key)",
   "embeddings": "Local LSA (TF-IDF + SVD)",

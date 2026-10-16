@@ -3,9 +3,9 @@ import { z } from "zod";
 import { request } from "./client";
 import {
   AgentReplySchema,
-  CapacityPlanSchema,
   CategoryWorkloadListSchema,
   ClassOutlookSchema,
+  CostByTypeListSchema,
   CriticalAlertPageSchema,
   DemandForecastSchema,
   ExecutiveForecastsSchema,
@@ -14,9 +14,9 @@ import {
   LabKpisSchema,
   PharmacyKpisSchema,
   PurchaseOrderSchema,
-  ReadmissionDriversSchema,
-  RevenueListSchema,
+  StageMixListSchema,
   StockPageSchema,
+  SurvivalOverviewSchema,
   TrendListSchema,
 } from "./schemas/operations";
 
@@ -46,11 +46,11 @@ export const pharmacyApi = {
 
 export const executiveApi = {
   kpis: (s?: AbortSignal) => request("/executive/kpis", ExecutiveKpisSchema, { signal: s }),
-  admissionsTrend: (months: number, s?: AbortSignal) => request("/executive/admissions-trend", TrendListSchema, { query: { months }, signal: s }),
-  revenue: (s?: AbortSignal) => request("/executive/revenue-by-department", RevenueListSchema, { signal: s }),
+  diagnosesTrend: (months: number, s?: AbortSignal) => request("/executive/diagnoses-trend", TrendListSchema, { query: { months }, signal: s }),
+  survival: (s?: AbortSignal) => request("/executive/survival", SurvivalOverviewSchema, { signal: s }),
+  stageMix: (s?: AbortSignal) => request("/executive/stage-mix", StageMixListSchema, { signal: s }),
+  costByType: (s?: AbortSignal) => request("/executive/cost-by-type", CostByTypeListSchema, { signal: s }),
   forecasts: (s?: AbortSignal) => request("/executive/forecasts", ExecutiveForecastsSchema, { signal: s }),
-  readmissionDrivers: (s?: AbortSignal) => request("/executive/readmission-drivers", ReadmissionDriversSchema, { signal: s }),
-  capacityPlan: (s?: AbortSignal) => request("/executive/capacity-plan", CapacityPlanSchema, { signal: s }),
 };
 
 export type AgentKey = "medicare" | "pharmalab" | "healthanalyst" | "ops";

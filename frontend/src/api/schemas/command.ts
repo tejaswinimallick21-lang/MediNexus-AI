@@ -52,25 +52,6 @@ export const WhatIfResultSchema = z.object({
 });
 export type WhatIfResult = z.infer<typeof WhatIfResultSchema>;
 
-export const ReadmissionEconomicsSchema = z.object({
-  period_start: z.string(),
-  period_end: z.string(),
-  discharges: num,
-  unplanned_readmissions: num,
-  readmission_rate_pct: num,
-  avg_cost_per_stay: num,
-  avg_los_days: num,
-  model_roc_auc: num,
-  model_flag_share_pct: num,
-  model_capture_pct: num,
-  model_precision_pct: num,
-  model_test_positives: num,
-  default_effectiveness_pct: num,
-  default_cost_per_enrolled: num,
-  notes: z.array(z.string()),
-});
-export type ReadmissionEconomics = z.infer<typeof ReadmissionEconomicsSchema>;
-
 export const ModelMonitorRowSchema = z.object({
   model_name: z.string(),
   label: z.string(),

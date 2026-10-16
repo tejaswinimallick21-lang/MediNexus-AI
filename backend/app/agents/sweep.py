@@ -21,6 +21,8 @@ import uuid
 from datetime import date, datetime, timedelta
 from typing import Any, Dict, List, Optional
 
+import pandas as pd
+
 from backend.app.agents import actions, learning, providers
 from backend.app.core.pagination import PageParams
 from src.utils.database import execute_query, query_df_strict
@@ -66,16 +68,26 @@ def _follow_up_candidates() -> List[Dict[str, Any]]:
     except Exception:  # care_tasks not created yet
         pass
     out = []
-    for p in clinical.get_huddle(25):
-        if p.risk_level == "HIGH" and not p.has_follow_up and p.patient_id not in taken:
-            out.append({
-                "kind": "follow_up", "key": p.patient_id, "priority": p.readmission_probability_pct,
-                "payload": {"patient_id": p.patient_id, "due_in_days": 7, "context": {"risk_band": learning.risk_band(p.readmission_probability_pct)}},
-                "summary": f"Follow-up for {p.patient_id} within 7 days ({p.readmission_probability_pct:.0f}% readmission risk)",
-                "facts": {"patient_id": p.patient_id, "age": p.age, "predicted_30d_readmission_risk_pct": p.readmission_probability_pct,
-                          "risk_level": p.risk_level, "discharged": p.discharge_date, "admission_reason": p.admission_reason,
-                          "model_drivers": p.drivers[:3], "follow_up_booked": False, "guideline": "High-risk discharges need a follow-up within 7 days (CPG-CLIN-001)"},
-            })
+    # Diagnosed more than 30 days ago and no treatment yet: propose a visit to start treatment
+    gaps = clinical._all_gaps()
+    delayed = gaps[gaps["gap"] == "treatment_delay"]
+    if delayed.empty:
+        return out
+    scored = clinical._scored_living().set_index("patient_id")
+    for g in delayed.itertuples():
+        if g.patient_id in taken or g.patient_id not in scored.index:
+            continue
+        p = scored.loc[g.patient_id]
+        risk_pct = round(float(p["mortality_risk"]) * 100, 1)
+        days = int((clinical._data_end() - pd.to_datetime(p["diagnosis_date"])).days)
+        out.append({
+            "kind": "follow_up", "key": g.patient_id, "priority": days + risk_pct,
+            "payload": {"patient_id": g.patient_id, "due_in_days": 7, "context": {"risk_band": learning.risk_band(risk_pct)}},
+            "summary": f"Follow-up for {g.patient_id} within 7 days to start treatment ({days} days since diagnosis)",
+            "facts": {"patient_id": g.patient_id, "age": int(p["age"]), "cancer_type": p["cancer_type"], "stage": p["cancer_stage"],
+                      "diagnosed": p["diagnosis_date"], "days_since_diagnosis": days, "treatment_started": False,
+                      "predicted_12m_mortality_pct": risk_pct, "guideline": "First treatment within 30 days of diagnosis (time-to-treatment standard)"},
+        })
     return out
 
 
@@ -131,8 +143,9 @@ def _lab_candidates() -> List[Dict[str, Any]]:
 def _template(c: Dict[str, Any]) -> str:
     f = c["facts"]
     if c["kind"] == "follow_up":
-        return (f"{f['patient_id']} (age {f['age']}) was discharged {f['discharged']} with a {f['predicted_30d_readmission_risk_pct']:.0f}% predicted 30-day "
-                f"readmission risk and no follow-up booked; guideline CPG-CLIN-001 calls for one within 7 days. Approving creates a follow-up task.")
+        return (f"{f['patient_id']} (age {f['age']}) was diagnosed with stage {f['stage']} {f['cancer_type']} cancer on {f['diagnosed']} "
+                f"({f['days_since_diagnosis']} days ago) and no treatment has started; the standard is first treatment within 30 days. "
+                f"Approving creates a follow-up task to book treatment.")
     if c["kind"] == "purchase_order":
         return (f"{f['medication']} at {f['site']} has {f['on_hand']} units on hand (reorder level {f['reorder_level']}, {f['days_of_supply']} days of supply) "
                 f"against a 30-day forecast of {f['forecast_30d_demand']}. Approving submits an order for {f['recommended_order']} units (≈${f['estimated_cost_usd']:,.0f}).")

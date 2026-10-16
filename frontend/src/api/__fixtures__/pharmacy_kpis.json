@@ -1,7 +1,7 @@
 {
-  "stock_lines": 1258,
-  "high_risk_lines": 217,
+  "stock_lines": 341,
+  "high_risk_lines": 37,
   "moderate_risk_lines": 0,
-  "dispensed_units_180d": 16855,
-  "active_prescriptions": 21885
+  "dispensed_units_180d": 24727,
+  "active_prescriptions": 189
 }

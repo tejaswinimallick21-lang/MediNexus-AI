@@ -76,35 +76,33 @@ def get_network_kpis(user: UserRecord) -> Dict[str, Any]:
     return _dump(executive.get_kpis())
 
 
-READMISSION_DIMENSIONS = {
-    "hospital": "hospital_name",
-    "department": "department_name",
-    "admission_type": "admission_type",
-    "admission_reason": "admission_reason",
-    "age_band": "CASE WHEN age < 18 THEN '0-17' WHEN age < 40 THEN '18-39' WHEN age < 65 THEN '40-64' WHEN age < 80 THEN '65-79' ELSE '80+' END",
+OUTCOME_DIMENSIONS = {
+    "cancer_type": "cancer_type",
+    "stage": "'Stage ' || cancer_stage",
+    "age_band": "CASE WHEN age_at_diagnosis < 50 THEN 'under 50' WHEN age_at_diagnosis < 65 THEN '50-64' WHEN age_at_diagnosis < 75 THEN '65-74' ELSE '75+' END",
+    "treatment_status": "treatment_status",
 }
 
 
-def get_readmissions_by(user: UserRecord, dimension: str, months: int = 0, min_admissions: int = 20, limit: int = 15) -> Dict[str, Any]:
-    if dimension not in READMISSION_DIMENSIONS:
-        raise ValueError(f"dimension must be one of {sorted(READMISSION_DIMENSIONS)}")
-    expr = READMISSION_DIMENSIONS[dimension]
-    window = ""
-    if months and months > 0:
-        window = f"WHERE CAST(admission_date AS DATE) > (SELECT max(CAST(admission_date AS DATE)) FROM gold_admissions) - INTERVAL {int(months)} MONTH"
+def get_outcomes_by(user: UserRecord, dimension: str, min_patients: int = 20, limit: int = 15) -> Dict[str, Any]:
+    if dimension not in OUTCOME_DIMENSIONS:
+        raise ValueError(f"dimension must be one of {sorted(OUTCOME_DIMENSIONS)}")
     df = query_df_strict(f"""
-        SELECT {expr} AS grp, COUNT(*) AS admissions, SUM(readmitted_30d) AS unplanned_readmissions,
-               ROUND(AVG(readmitted_30d) * 100, 2) AS rate_pct
-        FROM gold_admissions {window}
-        GROUP BY 1 HAVING COUNT(*) >= ? ORDER BY rate_pct DESC, admissions DESC LIMIT ?
-    """, [max(1, int(min_admissions)), max(1, min(int(limit), 50))])
+        SELECT {OUTCOME_DIMENSIONS[dimension]} AS grp, COUNT(*) AS patients, SUM(is_deceased) AS deaths,
+               ROUND(AVG(is_deceased) * 100, 1) AS died_pct,
+               median(days_to_treatment) FILTER (WHERE days_to_treatment >= 0) AS median_days_to_treatment,
+               COUNT(*) FILTER (WHERE treatment_status = 'In treatment') AS in_treatment
+        FROM gold_oncology_patients GROUP BY 1 HAVING COUNT(*) >= ? ORDER BY died_pct DESC, patients DESC LIMIT ?
+    """, [max(1, int(min_patients)), max(1, min(int(limit), 50))])
     return {
-        "dimension": dimension, "window": f"last {months} months of data" if months else "all data",
-        "definition": "Unplanned 30-day readmission (planned same-reason repeat stays, transfers and in-hospital deaths excluded).",
-        "groups_shown_have_at_least_admissions": int(min_admissions),
-        "reliability_note": "rate_pct is an observed rate; ci95 is its 95% Wilson confidence range. Small groups have wide ranges, so overlapping ranges mean the ranking is uncertain.",
-        "rows": [{"group": str(r.grp), "admissions": int(r.admissions), "unplanned_readmissions": int(r.unplanned_readmissions or 0),
-                  "rate_pct": float(r.rate_pct or 0), "ci95_pct": _wilson(int(r.unplanned_readmissions or 0), int(r.admissions))} for r in df.itertuples()],
+        "dimension": dimension,
+        "definition": "Crude share of patients who have died since diagnosis (follow-up time differs between patients; "
+                      "use get_survival_by_type for Kaplan-Meier survival, which accounts for that).",
+        "reliability_note": "died_pct is an observed share; ci95 is its 95% Wilson range. Small groups have wide ranges.",
+        "rows": [{"group": str(r.grp), "patients": int(r.patients), "deaths": int(r.deaths or 0), "died_pct": float(r.died_pct or 0),
+                  "ci95_pct": _wilson(int(r.deaths or 0), int(r.patients)),
+                  "median_days_to_treatment": None if r.median_days_to_treatment != r.median_days_to_treatment else float(r.median_days_to_treatment),
+                  "in_treatment": int(r.in_treatment)} for r in df.itertuples()],
     }
 
 
@@ -119,29 +117,32 @@ def _wilson(k: int, n: int, z: float = 1.96) -> List[float]:
     return [round(max(0.0, centre - half) * 100, 2), round(min(1.0, centre + half) * 100, 2)]
 
 
-def get_admissions_trend(user: UserRecord, months: int = 12) -> Dict[str, Any]:
+def get_diagnoses_trend(user: UserRecord, months: int = 12) -> Dict[str, Any]:
     from backend.app.services import executive
 
-    rows = executive.get_admissions_trend(max(6, min(int(months), 120)))
-    return {"unit": "monthly admissions (value) and unplanned readmissions (secondary)", "rows": _dump(rows)}
+    rows = executive.get_diagnoses_trend(max(6, min(int(months), 120)))
+    return {"unit": "new cancer diagnoses per month (value) and deaths per month (secondary)", "rows": _dump(rows)}
 
 
-def get_revenue_by_department(user: UserRecord) -> Dict[str, Any]:
+def get_survival_by_type(user: UserRecord) -> Dict[str, Any]:
     from backend.app.services import executive
 
-    return {"currency": "USD", "basis": "billed amount, all inpatient claims", "rows": _dump(executive.get_revenue_by_department())}
+    s = executive.get_survival()
+    return {"method": s.note, "rows": _dump(s.by_type)}
 
 
-def get_capacity_plan(user: UserRecord) -> Dict[str, Any]:
+def get_cost_by_cancer_type(user: UserRecord) -> Dict[str, Any]:
     from backend.app.services import executive
 
-    return _dump(executive.get_capacity_plan())
+    return {"currency": "USD", "basis": "recorded surgical claims, visits and medicines per patient (synthetic costs)", "rows": _dump(executive.get_cost_by_type())}
 
 
-def get_readmission_economics(user: UserRecord) -> Dict[str, Any]:
-    from backend.app.services import command
+def get_treatment_forecast(user: UserRecord) -> Dict[str, Any]:
+    from backend.app.services import executive
 
-    return _dump(command.get_readmission_economics())
+    f = executive.get_forecasts()
+    return {"horizon": "next 7 days, average sessions per day across the network", "rows": _dump(f.treatment),
+            "method": f.treatment_forecast.method_label}
 
 
 def list_hospitals_by_access_pressure(user: UserRecord, limit: int = 10) -> Dict[str, Any]:
@@ -170,11 +171,11 @@ def list_model_scores(user: UserRecord) -> Dict[str, Any]:
 
 # ---- care (clinical) ------------------------------------------------------------------------------
 
-def get_highest_risk_discharges(user: UserRecord, limit: int = 10) -> Dict[str, Any]:
+def get_tumour_board(user: UserRecord, limit: int = 10) -> Dict[str, Any]:
     from backend.app.services import clinical
 
-    rows = _strip_names(_dump(clinical.get_huddle(max(1, min(int(limit), 25)))))
-    return {"basis": "recent discharges ranked by the readmission model's predicted probability", "rows": rows}
+    rows = _strip_names(_dump(clinical.get_worklist(max(1, min(int(limit), 25)))))
+    return {"basis": "living cancer patients ranked by predicted 12-month mortality risk (served method: see list_model_scores)", "rows": rows}
 
 
 def get_patient_summary(user: UserRecord, patient_id: str) -> Dict[str, Any]:
@@ -274,8 +275,8 @@ def propose_follow_up(user: UserRecord, patient_id: str, reason: str, due_in_day
     from backend.app.agents import learning
 
     clinical._patient_row(patient_id)  # 404s on an unknown patient
-    huddle = {p.patient_id: p.readmission_probability_pct for p in clinical.get_huddle(25)}
-    context = {"risk_band": learning.risk_band(huddle.get(patient_id))}
+    scores = clinical._scored_living().set_index("patient_id")["mortality_risk"]
+    context = {"risk_band": learning.risk_band(float(scores[patient_id]) * 100 if patient_id in scores.index else None)}
     history = learning.history_for("follow_up", context).summary()
     a = actions.propose(
         kind="follow_up", requested_by=user, agent=(_ctx or {}).get("agent", ""), session_id=(_ctx or {}).get("session_id"),
@@ -306,19 +307,18 @@ TOOLS: List[Tool] = [
                      "Call ONLY when the user explicitly asks you to remember something. Never store patient data; patient IDs and personal details are refused.",
          {"text": _s("What to remember, as one short sentence")}, remember, "common", required=["text"]),
 
-    Tool("get_network_kpis", "Network-wide KPIs from Gold: admissions, patients, unplanned 30-day readmission rate, average length of stay, bed occupancy, billed revenue, collection rate, hospital count, data-through date.",
+    Tool("get_network_kpis", "Oncology network KPIs from Gold: cancer patients, living, new diagnoses in 12 months, 5-year survival, median days from diagnosis to first treatment, treatment sessions in 30 days, recorded cost of care, hospitals, data-through date.",
          {}, get_network_kpis, "insight", page="executive"),
-    Tool("get_readmissions_by", "Unplanned 30-day readmission rates grouped by hospital, department, admission_type, admission_reason or age_band, highest first. Use for 'which hospital/department has the highest readmission rate'.",
-         {"dimension": _s("Grouping", enum=sorted(READMISSION_DIMENSIONS)), "months": _i("Only the last N months of data; 0 = all data", minimum=0, maximum=120),
-          "min_admissions": _i("Hide groups with fewer admissions than this (small groups have noisy rates)", minimum=1, maximum=10000),
+    Tool("get_outcomes_by", "Patients, deaths, crude share died, median days to treatment and patients in treatment, grouped by cancer_type, stage, age_band (at diagnosis) or treatment_status.",
+         {"dimension": _s("Grouping", enum=sorted(OUTCOME_DIMENSIONS)),
+          "min_patients": _i("Hide groups with fewer patients than this", minimum=1, maximum=10000),
           "limit": _i("Max rows", minimum=1, maximum=50)},
-         get_readmissions_by, "insight", page="executive", required=["dimension"]),
-    Tool("get_admissions_trend", "Monthly admissions and unplanned readmissions for the last N months of data.",
-         {"months": _i("Months of history (6-120)", minimum=6, maximum=120)}, get_admissions_trend, "insight", page="executive"),
-    Tool("get_revenue_by_department", "Billed revenue (USD) and admissions per department.", {}, get_revenue_by_department, "insight", page="executive"),
-    Tool("get_capacity_plan", "Next-7-day capacity outlook: surge tier, occupancy, projected daily admissions, directives.", {}, get_capacity_plan, "insight", page="executive"),
-    Tool("get_readmission_economics", "Facts for a post-discharge programme: discharges, readmissions, cost per stay, model flag/capture rates.",
-         {}, get_readmission_economics, "insight", page="command"),
+         get_outcomes_by, "insight", page="executive", required=["dimension"]),
+    Tool("get_diagnoses_trend", "New cancer diagnoses and deaths per month for the last N months of data.",
+         {"months": _i("Months of history (6-120)", minimum=6, maximum=120)}, get_diagnoses_trend, "insight", page="executive"),
+    Tool("get_survival_by_type", "Kaplan-Meier survival at 1, 3 and 5 years per cancer type, with stage I and stage IV 5-year survival.", {}, get_survival_by_type, "insight", page="executive"),
+    Tool("get_cost_by_cancer_type", "Recorded cost of care (USD) per cancer type: total and per patient.", {}, get_cost_by_cancer_type, "insight", page="executive"),
+    Tool("get_treatment_forecast", "Next-7-day forecast of infusion-chair (chemo / immuno / targeted) and radiation sessions per day.", {}, get_treatment_forecast, "insight", page="executive"),
     Tool("list_hospitals_by_access_pressure", "Hospitals ranked by outpatient access pressure (share of demand served, wait days). SIMULATED operations data.",
          {"limit": _i("Max rows", minimum=1, maximum=91)}, list_hospitals_by_access_pressure, "insight", page="command"),
     Tool("run_capacity_what_if", "Replay a year of outpatient demand with changed staffing or demand and return waiting list, wait, lost patients, revenue and staffing cost vs baseline. SIMULATED operations data.",
@@ -330,13 +330,13 @@ TOOLS: List[Tool] = [
          run_capacity_what_if, "insight", page="command"),
     Tool("list_model_scores", "Every active ML model with its held-out score vs a baseline, data source, version and health.", {}, list_model_scores, "insight", page="command"),
 
-    Tool("get_highest_risk_discharges", "Recent discharges ranked by predicted 30-day readmission probability, with drivers and whether a follow-up exists. Pseudonymous patient IDs only.",
-         {"limit": _i("Max patients (1-25)", minimum=1, maximum=25)}, get_highest_risk_discharges, "care", page="doctor"),
-    Tool("get_patient_summary", "Patient 360 for one patient ID (e.g. P_04436): age, risk tier, admissions, labs, prescriptions, comorbidities, care gaps, 12-month outcome risk. Every call is audited.",
+    Tool("get_tumour_board", "Tumour-board worklist: living cancer patients ranked by predicted 12-month mortality risk, with cancer type, stage, treatment status, regimen, tumour-marker trend and drivers. Pseudonymous patient IDs only.",
+         {"limit": _i("Max patients (1-25)", minimum=1, maximum=25)}, get_tumour_board, "care", page="doctor"),
+    Tool("get_patient_summary", "Patient 360 for one patient ID (e.g. P_04436): cancer type, stage, diagnosis date, treatment pathway (surgery, chemo/immunotherapy cycles, radiation), tumour marker, labs, comorbidities, care gaps, 12-month mortality risk and care plan. Every call is audited.",
          {"patient_id": _s("Patient ID like P_04436", pattern=r"^P_\d{1,6}$")}, get_patient_summary, "care", page="doctor", required=["patient_id"]),
-    Tool("get_care_gap_summary", "Count of patients per care gap (overdue HbA1c, BP, eGFR, missing follow-up).", {}, get_care_gap_summary, "care", page="doctor"),
-    Tool("list_care_gaps", "Patients with a care gap, optionally one gap type.",
-         {"gap": _s("Gap code", enum=["diabetes_hba1c", "hypertension_bp", "ckd_egfr", "high_risk_no_follow_up"]), "limit": _i("Max rows", minimum=1, maximum=50)},
+    Tool("get_care_gap_summary", "Count of patients per oncology care gap (treatment not started within 30 days, cycle without a blood count, rising tumour marker, survivorship follow-up overdue, high risk without palliative review).", {}, get_care_gap_summary, "care", page="doctor"),
+    Tool("list_care_gaps", "Patients with an oncology care gap, optionally one gap type.",
+         {"gap": _s("Gap code", enum=["treatment_delay", "chemo_no_cbc", "rising_marker", "follow_up_overdue", "goals_of_care"]), "limit": _i("Max rows", minimum=1, maximum=50)},
          list_care_gaps, "care", page="doctor"),
     Tool("propose_follow_up", "PROPOSE a follow-up appointment/call for a patient. Creates a pending item in the approval inbox; nothing happens until a clinician approves.",
          {"patient_id": _s("Patient ID like P_04436", pattern=r"^P_\d{1,6}$"), "reason": _s("Why, citing the evidence"), "due_in_days": _i("Within N days (1-90)", minimum=1, maximum=90)},

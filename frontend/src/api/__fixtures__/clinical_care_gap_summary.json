@@ -1,26 +1,32 @@
 [
   {
-    "gap": "diabetes_hba1c",
-    "label": "Diabetes without HbA1c",
-    "patients": 181,
-    "guideline": "ADA: HbA1c at least every 6\u201312 months"
+    "gap": "treatment_delay",
+    "label": "Diagnosed, treatment not started",
+    "patients": 244,
+    "guideline": "First treatment within 30 days of diagnosis (time-to-treatment standard)"
   },
   {
-    "gap": "hypertension_bp",
-    "label": "Hypertension without BP check",
-    "patients": 1120,
-    "guideline": "Blood pressure reviewed at least yearly"
+    "gap": "chemo_no_cbc",
+    "label": "Systemic cycle without a recent blood count",
+    "patients": 2,
+    "guideline": "Full blood count within 7 days before each chemotherapy / immunotherapy cycle"
   },
   {
-    "gap": "ckd_egfr",
-    "label": "CKD without kidney function test",
-    "patients": 11,
-    "guideline": "KDIGO: eGFR / creatinine at least yearly"
+    "gap": "rising_marker",
+    "label": "Rising tumour marker after treatment",
+    "patients": 457,
+    "guideline": "Investigate a rising, above-range marker for recurrence"
   },
   {
-    "gap": "high_risk_no_follow_up",
-    "label": "High-risk discharge without follow-up",
-    "patients": 7,
-    "guideline": "TCP: follow-up visit within 7\u201314 days of discharge"
+    "gap": "follow_up_overdue",
+    "label": "Survivorship follow-up overdue",
+    "patients": 0,
+    "guideline": "Follow-up every 3-6 months after treatment"
+  },
+  {
+    "gap": "goals_of_care",
+    "label": "High risk, no palliative review",
+    "patients": 273,
+    "guideline": "Early palliative care for patients with a high risk of dying within a year"
   }
 ]

@@ -52,7 +52,7 @@ def test_suppression_rules_and_safety_exceptions(seeded):
 
 
 def test_sweep_skips_what_people_keep_rejecting(seeded, monkeypatch):
-    band = "very high (60%+)"
+    band = "moderate (<40%)"  # most patients waiting for treatment have a predicted mortality under 40%
     for _ in range(3):
         seeded("follow_up", {"risk_band": band}, "rejected", "patients already have specialist follow-up")
     monkeypatch.setattr(sweep, "MAX_PROPOSALS", 30)
@@ -65,11 +65,11 @@ def test_sweep_skips_what_people_keep_rejecting(seeded, monkeypatch):
 
 
 def test_proposals_carry_their_history(seeded, monkeypatch):
-    seeded("follow_up", {"risk_band": "high (40-60%)"}, "executed")
-    seeded("follow_up", {"risk_band": "high (40-60%)"}, "rejected", "duplicate booking")
+    seeded("follow_up", {"risk_band": "moderate (<40%)"}, "executed")
+    seeded("follow_up", {"risk_band": "moderate (<40%)"}, "rejected", "duplicate booking")
     monkeypatch.setattr(sweep, "MAX_PROPOSALS", 30)
     r = sweep.run_sweep("manual")
     rows = query_df_strict("SELECT payload, reason FROM agent_actions WHERE session_id = ? AND kind = 'follow_up'", [f"sweep:{r['run_id']}"])
-    high = [reason for p, reason in zip(rows["payload"], rows["reason"]) if json.loads(p)["context"]["risk_band"] == "high (40-60%)"]
-    if high:  # only when the current data has 40-60% risk discharges without follow-up
-        assert all("1 approved and 1 rejected" in x and "duplicate booking" in x for x in high)
+    moderate = [reason for p, reason in zip(rows["payload"], rows["reason"]) if json.loads(p)["context"]["risk_band"] == "moderate (<40%)"]
+    assert moderate, "the data has untreated patients diagnosed more than 30 days ago"
+    assert all("1 approved and 1 rejected" in x and "duplicate booking" in x for x in moderate)

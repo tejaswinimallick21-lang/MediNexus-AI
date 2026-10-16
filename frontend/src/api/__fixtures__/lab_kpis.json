@@ -1,8 +1,8 @@
 {
-  "total_tests": 177780,
-  "abnormal_tests": 50312,
-  "critical_tests": 2505,
-  "abnormal_pct": 28.3,
-  "critical_pct": 1.4,
-  "tests_last_30d": 13802
+  "total_tests": 2013535,
+  "abnormal_tests": 801200,
+  "critical_tests": 134466,
+  "abnormal_pct": 39.8,
+  "critical_pct": 6.7,
+  "tests_last_30d": 23283
 }

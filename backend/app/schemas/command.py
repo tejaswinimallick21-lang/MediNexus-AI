@@ -1,4 +1,4 @@
-"""Schemas for the Analyst Command Center: what-if capacity simulation, readmission economics, model monitor."""
+"""Schemas for the Analyst Command Center: what-if capacity simulation and model monitor."""
 
 from typing import List, Literal, Optional
 
@@ -58,26 +58,6 @@ class WhatIfResult(BaseModel):
     insights: List[str]
     assumptions: List[str]
     daily: List[WhatIfDay]
-
-
-class ReadmissionEconomics(BaseModel):
-    """Facts for the readmission-programme calculator; the scenario itself is computed client-side."""
-
-    period_start: str
-    period_end: str
-    discharges: int
-    unplanned_readmissions: int
-    readmission_rate_pct: float
-    avg_cost_per_stay: float
-    avg_los_days: float
-    model_roc_auc: float
-    model_flag_share_pct: float = Field(description="Share of discharges the model flags as high risk (held-out)")
-    model_capture_pct: float = Field(description="Share of readmissions among flagged discharges (held-out recall)")
-    model_precision_pct: float
-    model_test_positives: int
-    default_effectiveness_pct: float
-    default_cost_per_enrolled: float
-    notes: List[str]
 
 
 class ModelMonitorRow(BaseModel):

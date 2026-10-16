@@ -1,28 +1,27 @@
 {
   "agent": "healthanalyst",
-  "answer": "Network KPIs [Gold]. Shown as returned by the platform (rules engine, no AI interpretation):",
+  "answer": "Kaplan-Meier survival by cancer type [Gold survival]. Shown as returned by the platform (rules engine, no AI interpretation):",
   "facts": [
-    "total admissions: 6,771",
-    "patients admitted: 2,418",
-    "unplanned readmission rate pct: 1.37",
-    "average los days: 1.70",
-    "occupancy rate pct: 43.20",
-    "total revenue: 57,473,615.37",
-    "collection rate pct: 38.60",
-    "hospitals: 91",
-    "data through: 2026-10-15"
+    "cancer type: Prostate \u00b7 patients: 908 \u00b7 one year pct: 98.80 \u00b7 five year pct: 94.40 \u00b7 stage iv five year pct: 47.30",
+    "cancer type: Breast \u00b7 patients: 1,006 \u00b7 one year pct: 97.40 \u00b7 five year pct: 88.70 \u00b7 stage iv five year pct: 47.80",
+    "cancer type: Melanoma \u00b7 patients: 478 \u00b7 one year pct: 98.40 \u00b7 five year pct: 84.70 \u00b7 stage iv five year pct: 26.60",
+    "cancer type: Lymphoma (NHL) \u00b7 patients: 429 \u00b7 one year pct: 96.60 \u00b7 five year pct: 74.60 \u00b7 stage iv five year pct: 58.30",
+    "cancer type: Colon \u00b7 patients: 602 \u00b7 one year pct: 93.50 \u00b7 five year pct: 71.50 \u00b7 stage iv five year pct: 28.90",
+    "cancer type: Leukemia (CLL) \u00b7 patients: 445 \u00b7 one year pct: 94.30 \u00b7 five year pct: 70.10 \u00b7 stage iv five year pct: 47.90",
+    "cancer type: Lung \u00b7 patients: 803 \u00b7 one year pct: 89.60 \u00b7 five year pct: 42.50 \u00b7 stage iv five year pct: 17.90",
+    "cancer type: Pancreas \u00b7 patients: 285 \u00b7 one year pct: 81.30 \u00b7 five year pct: 23.30 \u00b7 stage iv five year pct: 20.60"
   ],
   "predictions": [],
   "recommendations": [],
   "evidence": [
-    "Tool get_network_kpis"
+    "Tool get_survival_by_type"
   ],
   "notes": "",
-  "latency_ms": 131.7,
+  "latency_ms": 159.2,
   "engine": "Rules engine (no LLM key)",
   "tool_calls": [
     {
-      "name": "get_network_kpis",
+      "name": "get_survival_by_type",
       "args": {},
       "ok": true,
       "error": null

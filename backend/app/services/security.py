@@ -45,8 +45,8 @@ from src.utils.database import query_df_strict
 STARTED = time.time()
 DEMO_PASSWORD = "MediNexus@2026"
 KEY_PATTERN = re.compile(r"sk-(?:proj-|ant-)?[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{30,}")
-ROUTE_LABELS = {"/data": "Data Engineering", "/it": "Security & Infrastructure", "/doctor": "Clinical Workstation", "/pharmacy": "Pharmacy & Supply Chain",
-                "/laboratory": "Laboratory Operations", "/executive": "Executive Operations", "/command-center": "Analyst Command Center",
+ROUTE_LABELS = {"/data": "Data Engineering", "/it": "Security & Infrastructure", "/doctor": "Oncology Workstation", "/pharmacy": "Pharmacy & Supply Chain",
+                "/laboratory": "Laboratory Operations", "/executive": "Oncology Outcomes", "/command-center": "Analyst Command Center",
                 "/reception": "Patient Access"}
 
 

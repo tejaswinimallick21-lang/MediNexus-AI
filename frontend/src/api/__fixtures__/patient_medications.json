@@ -1,49 +1,49 @@
 {
   "items": [
     {
-      "prescription_date": "2026-07-26",
-      "end_date": null,
-      "medication_name": "Errin 28 Day Pack",
-      "category": "Contraceptive",
+      "prescription_date": "2019-07-18",
+      "end_date": "2019-07-19",
+      "medication_name": "Docetaxel (75 mg/m2 IV q3w)",
+      "category": "Chemotherapy",
       "dosage": null,
-      "status": "Active",
-      "indication": null
-    },
-    {
-      "prescription_date": "2026-06-26",
-      "end_date": null,
-      "medication_name": "amLODIPine 5 MG / Hydrochlorothiazide 12.5 MG / Olmesartan medoxomil 20 MG Oral Tablet",
-      "category": "Antihypertensive / Cardiovascular",
-      "dosage": "5 MG",
-      "status": "Active",
-      "indication": "Hypertension"
-    },
-    {
-      "prescription_date": "2025-07-31",
-      "end_date": "2026-07-26",
-      "medication_name": "1 ML medroxyprogesterone acetate 150 MG/ML Injection",
-      "category": "Contraceptive",
-      "dosage": "150 MG/ML",
       "status": "Completed",
-      "indication": null
+      "indication": "Malignant tumor of prostate (disorder)"
     },
     {
-      "prescription_date": "2025-06-20",
-      "end_date": "2026-06-26",
-      "medication_name": "amLODIPine 5 MG / Hydrochlorothiazide 12.5 MG / Olmesartan medoxomil 20 MG Oral Tablet",
-      "category": "Antihypertensive / Cardiovascular",
-      "dosage": "5 MG",
+      "prescription_date": "2019-07-18",
+      "end_date": "2019-07-19",
+      "medication_name": "Prednisone (5 mg PO BID)",
+      "category": "Corticosteroid",
+      "dosage": null,
       "status": "Completed",
-      "indication": "Hypertension"
+      "indication": "Malignant tumor of prostate (disorder)"
     },
     {
-      "prescription_date": "2025-06-20",
-      "end_date": "2025-06-20",
-      "medication_name": "amLODIPine 5 MG / Hydrochlorothiazide 12.5 MG / Olmesartan medoxomil 20 MG Oral Tablet",
-      "category": "Antihypertensive / Cardiovascular",
-      "dosage": "5 MG",
+      "prescription_date": "2019-07-18",
+      "end_date": "2019-07-25",
+      "medication_name": "Dexamethasone 4 MG Oral Tablet",
+      "category": "Corticosteroid",
+      "dosage": "4 MG",
       "status": "Completed",
-      "indication": "Hypertension"
+      "indication": "Malignant tumor of prostate (disorder)"
+    },
+    {
+      "prescription_date": "2019-07-18",
+      "end_date": "2019-07-25",
+      "medication_name": "Pegfilgrastim 10 MG/ML Injectable Solution",
+      "category": "Growth Factor (G-Csf)",
+      "dosage": "10 MG/ML",
+      "status": "Completed",
+      "indication": "Malignant tumor of prostate (disorder)"
+    },
+    {
+      "prescription_date": "2019-07-18",
+      "end_date": "2019-07-25",
+      "medication_name": "Filgrastim 300 UG/ML Injectable Solution",
+      "category": "Growth Factor (G-Csf)",
+      "dosage": null,
+      "status": "Completed",
+      "indication": "Malignant tumor of prostate (disorder)"
     }
   ],
   "next_cursor": "bzo1"

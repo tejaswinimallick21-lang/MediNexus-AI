@@ -17,28 +17,28 @@ from backend.app.core.users import UserRecord
 from src.security.audit import log_audit_event
 
 AGENT_SCOPE = {
-    "medicare": "You are Nexa Care, the clinical assistant for healthcare professionals: readmission risk, Patient 360, care gaps, follow-ups and clinical guidelines.",
-    "pharmalab": "You are Nexa Care · Lab & Pharmacy: stock-out risk, demand forecasts, purchase orders, critical lab values and lab/pharmacy policy.",
-    "healthanalyst": "You are Nexa Insight, the operations analyst assistant: admissions, readmissions, revenue, capacity, what-if simulations, readmission economics and model quality.",
+    "medicare": "You are Nexa Care, the oncology clinical assistant: the tumour-board worklist, 12-month mortality risk, Patient 360 and treatment pathways, oncology care gaps, follow-ups and clinical guidelines.",
+    "pharmalab": "You are Nexa Care · Lab & Pharmacy: chemotherapy and supportive-care stock, demand forecasts, purchase orders, critical lab values, tumour markers and lab/pharmacy policy.",
+    "healthanalyst": "You are Nexa Insight, the oncology analyst assistant: survival and outcomes by cancer type and stage, diagnoses, time to treatment, cost of care, treatment demand, what-if simulations and model quality.",
     "ops": "You are Nexa Ops, the administrator's assistant with oversight of every workspace: operations, clinical, pharmacy, laboratory and model quality.",
 }
 
 RULES = """
 How you work (these rules are not negotiable):
 1. Every number, name, ranking or claim about this hospital network must come from a tool result in this conversation. If no tool gives the answer, say plainly that you do not have that data and say what you can answer instead. Never estimate, extrapolate or invent figures, trends, percentages, guidelines or patient details.
-2. Call tools before answering factual questions. Prefer the most specific tool (e.g. get_readmissions_by with dimension=hospital for "which hospital…"). If a tool returns an error or an empty list, report that honestly.
+2. Call tools before answering factual questions. Prefer the most specific tool (e.g. get_outcomes_by with dimension=stage for "which stage…"). If a tool returns an error or an empty list, report that honestly.
 3. After each fact, name its source in brackets, e.g. [Gold admissions], [Policy: Discharge policy], [Model registry], [SIMULATED operations data]. Always label simulated data as simulated.
 4. Patients are identified only by pseudonymous IDs like P_04436. Never ask for or reveal names.
 5. Actions: you cannot perform actions. You may only PROPOSE them with a propose_* tool when the user asks for one or the evidence clearly supports it, and you must say it is pending human approval in the approval inbox. Never claim something was ordered, booked or done.
 6. You provide decision support, not diagnosis or treatment. For clinical questions, cite the guideline excerpt and recommend clinician review.
 7. Questions outside the hospital platform (weather, news, general trivia, coding) are out of scope: decline in one sentence.
 8. Observed rates (counts from the data) and model predictions are different things. To judge how reliable an observed rate is, use its sample size and ci95 range, not model accuracy metrics.
-9. Be concise: a direct answer first, then up to 5 bullet points of evidence. Use plain language; explain any metric you mention (e.g. "AUC 0.80 means the model ranks a readmitted patient above a non-readmitted one 80% of the time").
+9. Be concise: a direct answer first, then up to 5 bullet points of evidence. Use plain language; explain any metric you mention (e.g. "AUC 0.89 means the score ranks a patient who dies within a year above one who survives 89% of the time").
 """.strip()
 
 
 def system_prompt(agent: str, memories: str = "") -> str:
-    prompt = f"{AGENT_SCOPE.get(agent, AGENT_SCOPE['ops'])}\n\nYou work inside MediNexus AI, a hospital-network platform. Currency is USD. Data comes from the Gold lakehouse (Synthea clinical data), simulated operations tables (clearly labelled), the model registry and the hospital policy library.\n\n{RULES}"
+    prompt = f"{AGENT_SCOPE.get(agent, AGENT_SCOPE['ops'])}\n\nYou work inside MediNexus AI, a hospital-network platform. Currency is USD. Data comes from the Gold lakehouse (synthetic oncology records in the Synthea format), simulated operations tables (clearly labelled), the model registry and the hospital policy library.\n\n{RULES}"
     return f"{prompt}\n\n{memories}" if memories else prompt
 
 
@@ -58,15 +58,15 @@ def _route(agent: str, message: str, allowed: Dict[str, Tool]) -> Optional[Tuple
         return "get_patient_summary", {"patient_id": pid.group(0).upper()}
     if POLICY_WORDS.search(m) and "search_policies" in allowed:
         return "search_policies", {"query": message}
-    if "readmi" in m and "get_readmissions_by" in allowed:
-        for word, dim in (("hospital", "hospital"), ("department", "department"), ("ward", "department"), ("reason", "admission_reason"),
-                          ("diagnos", "admission_reason"), ("age", "age_band"), ("type", "admission_type"), ("emergency", "admission_type")):
+    if re.search(r"surviv", m) and "get_survival_by_type" in allowed:
+        return "get_survival_by_type", {}
+    if re.search(r"mortality|died|deaths?|outcome", m) and "get_outcomes_by" in allowed:
+        for word, dim in (("stage", "stage"), ("type", "cancer_type"), ("cancer", "cancer_type"), ("age", "age_band"), ("status", "treatment_status")):
             if word in m:
-                return "get_readmissions_by", {"dimension": dim}
-        if "get_network_kpis" in allowed:
-            return "get_network_kpis", {}
-    if re.search(r"high(est)?[- ]risk|risk(iest)? patients|huddle", m) and "get_highest_risk_discharges" in allowed:
-        return "get_highest_risk_discharges", {"limit": 10}
+                return "get_outcomes_by", {"dimension": dim}
+        return "get_outcomes_by", {"dimension": "cancer_type"}
+    if re.search(r"high(est)?[- ]risk|risk(iest)? patients|tumou?r board|worklist", m) and "get_tumour_board" in allowed:
+        return "get_tumour_board", {"limit": 10}
     if "care gap" in m and "get_care_gap_summary" in allowed:
         return "get_care_gap_summary", {}
     if re.search(r"replenish|stock[- ]?out|reorder|low stock|running out", m) and "find_stock" in allowed:
@@ -80,17 +80,17 @@ def _route(agent: str, message: str, allowed: Dict[str, Tool]) -> Optional[Tuple
         return "get_drug_class_outlook", {}
     if re.search(r"\blab\b|laborator", m) and "get_lab_kpis" in allowed:
         return "get_lab_kpis", {}
-    if re.search(r"revenue|billing|billed", m) and "get_revenue_by_department" in allowed:
-        return "get_revenue_by_department", {}
-    if re.search(r"capacity|surge|occupancy|\bbeds?\b", m) and "get_capacity_plan" in allowed:
-        return "get_capacity_plan", {}
-    if re.search(r"trend|per month|monthly", m) and "get_admissions_trend" in allowed:
-        return "get_admissions_trend", {"months": 12}
+    if re.search(r"cost|revenue|billing|billed|spend", m) and "get_cost_by_cancer_type" in allowed:
+        return "get_cost_by_cancer_type", {}
+    if re.search(r"capacity|infusion|chairs?|radiation|treatment demand|forecast", m) and "get_treatment_forecast" in allowed:
+        return "get_treatment_forecast", {}
+    if re.search(r"trend|per month|monthly|new diagnos", m) and "get_diagnoses_trend" in allowed:
+        return "get_diagnoses_trend", {"months": 12}
     if re.search(r"model|accuracy|auc", m) and "list_model_scores" in allowed:
         return "list_model_scores", {}
     if re.search(r"access pressure|waiting|wait time", m) and "list_hospitals_by_access_pressure" in allowed:
         return "list_hospitals_by_access_pressure", {"limit": 10}
-    if re.search(r"kpi|overview|admission|admitted|patients", m) and "get_network_kpis" in allowed:
+    if re.search(r"kpi|overview|patients|how many", m) and "get_network_kpis" in allowed:
         return "get_network_kpis", {}
     if re.search(r"pharmacy|prescription|dispens", m) and "get_pharmacy_kpis" in allowed:
         return "get_pharmacy_kpis", {}
@@ -101,14 +101,15 @@ LABELS = {
     "search_policies": ("Policy library", None),
     "remember": ("Saved to long-term memory", None),
     "get_network_kpis": ("Network KPIs [Gold]", None),
-    "get_readmissions_by": ("Unplanned 30-day readmission rates, highest first [Gold admissions]", ["group", "rate_pct", "unplanned_readmissions", "admissions"]),
-    "get_admissions_trend": ("Monthly admissions [Gold]", ["period", "value", "secondary"]),
-    "get_revenue_by_department": ("Billed revenue by department, USD [Gold billing]", ["department", "revenue", "admissions"]),
-    "get_capacity_plan": ("Capacity outlook", None),
+    "get_outcomes_by": ("Outcomes by group [Gold oncology patients]", ["group", "patients", "deaths", "died_pct", "median_days_to_treatment"]),
+    "get_diagnoses_trend": ("New diagnoses and deaths per month [Gold]", ["period", "value", "secondary"]),
+    "get_survival_by_type": ("Kaplan-Meier survival by cancer type [Gold survival]", ["cancer_type", "patients", "one_year_pct", "five_year_pct", "stage_iv_five_year_pct"]),
+    "get_cost_by_cancer_type": ("Cost of care by cancer type, USD [Gold]", ["cancer_type", "patients", "total_cost", "cost_per_patient"]),
+    "get_treatment_forecast": ("Treatment sessions per day, next 7 days [forecast]", ["service", "forecast_daily", "last_7d_daily"]),
     "list_model_scores": ("Model registry", ["label", "primary_metric", "baseline", "verdict", "serving"]),
     "list_hospitals_by_access_pressure": ("Outpatient access pressure [SIMULATED operations data]", ["hospital_name", "served_pct", "avg_wait_days", "avg_daily_demand"]),
-    "get_highest_risk_discharges": ("Highest-risk recent discharges [readmission model]",
-                                    ["patient_id", "readmission_probability_pct", "risk_level", "age", "admission_reason", "discharge_date", "has_follow_up"]),
+    "get_tumour_board": ("Tumour-board worklist [12-month mortality risk]",
+                         ["patient_id", "cancer_type", "cancer_stage", "mortality_risk_pct", "risk_level", "treatment_status", "marker_trend"]),
     "get_patient_summary": ("Patient 360 [Gold]", None),
     "get_care_gap_summary": ("Care gaps", ["label", "patients", "guideline"]),
     "list_care_gaps": ("Patients with care gaps", ["patient_id", "label", "detail", "last_done"]),
@@ -158,14 +159,15 @@ def _facts(name: str, data: Any) -> List[str]:
 
 def _capabilities(allowed: Dict[str, Tool]) -> str:
     examples = {
-        "get_readmissions_by": "readmission rates by hospital, department, reason or age band",
-        "get_network_kpis": "network KPIs (admissions, readmission rate, length of stay, revenue)",
-        "get_highest_risk_discharges": "the highest-risk recent discharges",
+        "get_survival_by_type": "survival by cancer type",
+        "get_outcomes_by": "outcomes by cancer type, stage or age band",
+        "get_network_kpis": "network KPIs (patients, new diagnoses, 5-year survival, time to treatment)",
+        "get_tumour_board": "the tumour-board worklist of highest-risk patients",
         "get_patient_summary": "a patient summary by ID (e.g. P_04436)",
         "find_stock": "stock levels for a medicine or lines at stock-out risk",
         "list_critical_lab_alerts": "recent critical lab values",
         "search_policies": "what a hospital policy or guideline says",
-        "get_capacity_plan": "the capacity and surge outlook",
+        "get_treatment_forecast": "infusion and radiation demand for the next week",
     }
     items = [v for k, v in examples.items() if k in allowed]
     return "I can answer questions about: " + "; ".join(items) + "."

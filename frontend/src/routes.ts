@@ -15,24 +15,24 @@ export const CONSOLE_ROUTES: ConsoleRoute[] = [
     description: "Medallion pipeline (Bronze → Silver → Gold), data quality checks, lineage and model training runs.",
   },
   {
-    path: "/doctor", label: "Clinical Workstation", short: "Clinical", icon: "Stethoscope",
-    description: "Morning huddle ranked by readmission risk, care-gap radar and the Patient 360 record.",
+    path: "/doctor", label: "Oncology Workstation", short: "Oncology", icon: "Stethoscope",
+    description: "Tumour-board worklist ranked by 12-month mortality risk, oncology care gaps and the Patient 360 treatment record.",
   },
   {
-    path: "/executive", label: "Executive Operations", short: "Executive", icon: "Building",
-    description: "Admissions, readmissions, revenue and capacity across the network, with every model scored against a baseline.",
+    path: "/executive", label: "Oncology Outcomes", short: "Outcomes", icon: "Building",
+    description: "Survival by cancer type and stage, diagnoses, time to treatment, cost of care and treatment capacity, with every model scored against a baseline.",
   },
   {
     path: "/command-center", label: "Analyst Command Center", short: "Command Center", icon: "Radar",
-    description: "Test decisions before making them: staffing and demand what-ifs, readmission programme economics and model health.",
+    description: "Test decisions before making them: outpatient staffing and demand what-ifs and model health.",
   },
   {
     path: "/pharmacy", label: "Pharmacy & Supply Chain", short: "Pharmacy", icon: "Pill",
-    description: "Stock-out risk, demand outlook by drug class and one-click purchase orders.",
+    description: "Chemotherapy and supportive-care stock-out risk, demand outlook by drug class and one-click purchase orders.",
   },
   {
     path: "/laboratory", label: "Laboratory Operations", short: "Laboratory", icon: "Flask",
-    description: "Test volumes, critical-value escalation and capacity planning per discipline.",
+    description: "Test volumes including tumour markers, critical-value escalation and capacity planning per discipline.",
   },
   {
     path: "/reception", label: "Patient Access", short: "Patient Access", icon: "Clipboard",

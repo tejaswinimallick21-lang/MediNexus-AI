@@ -1,0 +1,127 @@
+[
+  {
+    "period": "2024-10",
+    "value": 21.0,
+    "secondary": 10.0
+  },
+  {
+    "period": "2024-11",
+    "value": 37.0,
+    "secondary": 16.0
+  },
+  {
+    "period": "2024-12",
+    "value": 39.0,
+    "secondary": 20.0
+  },
+  {
+    "period": "2025-01",
+    "value": 26.0,
+    "secondary": 30.0
+  },
+  {
+    "period": "2025-02",
+    "value": 46.0,
+    "secondary": 16.0
+  },
+  {
+    "period": "2025-03",
+    "value": 28.0,
+    "secondary": 22.0
+  },
+  {
+    "period": "2025-04",
+    "value": 27.0,
+    "secondary": 21.0
+  },
+  {
+    "period": "2025-05",
+    "value": 25.0,
+    "secondary": 17.0
+  },
+  {
+    "period": "2025-06",
+    "value": 37.0,
+    "secondary": 20.0
+  },
+  {
+    "period": "2025-07",
+    "value": 32.0,
+    "secondary": 27.0
+  },
+  {
+    "period": "2025-08",
+    "value": 32.0,
+    "secondary": 23.0
+  },
+  {
+    "period": "2025-09",
+    "value": 24.0,
+    "secondary": 20.0
+  },
+  {
+    "period": "2025-10",
+    "value": 34.0,
+    "secondary": 17.0
+  },
+  {
+    "period": "2025-11",
+    "value": 24.0,
+    "secondary": 17.0
+  },
+  {
+    "period": "2025-12",
+    "value": 27.0,
+    "secondary": 14.0
+  },
+  {
+    "period": "2026-01",
+    "value": 23.0,
+    "secondary": 29.0
+  },
+  {
+    "period": "2026-02",
+    "value": 19.0,
+    "secondary": 18.0
+  },
+  {
+    "period": "2026-03",
+    "value": 23.0,
+    "secondary": 16.0
+  },
+  {
+    "period": "2026-04",
+    "value": 13.0,
+    "secondary": 12.0
+  },
+  {
+    "period": "2026-05",
+    "value": 28.0,
+    "secondary": 19.0
+  },
+  {
+    "period": "2026-06",
+    "value": 22.0,
+    "secondary": 21.0
+  },
+  {
+    "period": "2026-07",
+    "value": 19.0,
+    "secondary": 19.0
+  },
+  {
+    "period": "2026-08",
+    "value": 23.0,
+    "secondary": 18.0
+  },
+  {
+    "period": "2026-09",
+    "value": 362.0,
+    "secondary": 18.0
+  },
+  {
+    "period": "2026-10",
+    "value": 0.0,
+    "secondary": 10.0
+  }
+]

@@ -1,6 +1,6 @@
 """Schemas for the Data Engineering workspace: upload sandbox, cleaning report and ML insights."""
 
-from typing import Annotated, List, Literal, Optional
+from typing import Annotated, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -318,29 +318,23 @@ class ConsolidateIn(LinkIn):
     relationships: Optional[List[Relationship]] = Field(None, description="Omit to use every discovered relationship")
 
 
-class FeedRun(BaseModel):
-    run_id: str
-    trigger: str
-    started_at: Optional[str] = None
-    finished_at: Optional[str] = None
-    status: str
-    released_through: Optional[str] = None
-    held_back_days: Optional[int] = None
-    reanchored: Optional[bool] = None
-    error: Optional[str] = None
+class CountItem(BaseModel):
+    label: str
+    count: int
 
 
-class FeedStatus(BaseModel):
-    """Live data feed: re-dated Synthea released day by day (src/ingestion/redate_synthea.py)."""
+class DatasetInfo(BaseModel):
+    """The fixed oncology dataset (src/ingestion/oncology_dataset.py)."""
 
-    enabled: bool
-    released_through: Optional[str] = None
-    held_back_days: Optional[int] = None
-    redated_end: Optional[str] = None
-    original_cutoff: Optional[str] = None
-    shift_days: Optional[int] = None
-    next_run_at: str
-    runs: List[FeedRun]
+    name: str
+    as_of: Optional[str] = None
+    patients: int
+    living: int
+    deceased: int
+    cancer_types: List[CountItem]
+    stages: List[CountItem]
+    repairs: Dict[str, int]
+    known_limitations: List[str]
 
 
 class ForecastIn(BaseModel):

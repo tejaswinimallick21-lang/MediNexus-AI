@@ -157,8 +157,9 @@ def predict_patient_los(patient_id: str) -> Dict[str, Any]:
 
 def predict_patient_outcome_risk(patient_id: str) -> Dict[str, Any]:
     """
-    12-month outcome risks (unplanned admission, death) for a living patient, from history up to
-    the end of the data. Trained one year earlier, when the outcomes are known.
+    12-month mortality risk for a living cancer patient, from history up to the end of the data.
+    Trained one year earlier, when the outcomes are known; the served method (model, or the stage +
+    cancer-type baseline when the model does not beat it) is the one that won on held-out patients.
     """
     artifact = load_model("outcome_risk_model")
     if not artifact:
@@ -174,8 +175,14 @@ def predict_patient_outcome_risk(patient_id: str) -> Dict[str, Any]:
     metrics = artifact.get("metrics", {})
     outcomes = {}
     for outcome, spec in artifact["models"].items():
-        proba = float(spec["model"].predict_proba(X_vec)[0, 1])
+        if spec.get("serving_method") == "stage_type_baseline":
+            cols = spec["baseline_features"]
+            Xb = df_row.reindex(columns=cols).apply(pd.to_numeric, errors="coerce").fillna(spec["baseline_fill"])
+            proba = float(spec["baseline_model"].predict_proba(Xb)[0, 1])
+        else:
+            proba = float(spec["model"].predict_proba(X_vec)[0, 1])
         outcomes[outcome] = {
+            "method": "Stage + cancer type" if spec.get("serving_method") == "stage_type_baseline" else "Gradient-boosting model",
             "label": spec["label"],
             "probability": round(proba * 100, 1),
             "risk_level": _risk_level(proba, spec["risk_bands"]),
@@ -184,13 +191,17 @@ def predict_patient_outcome_risk(patient_id: str) -> Dict[str, Any]:
         }
 
     drivers = []
-    if row.get("age_at_index", 0) >= 65:
+    stage = int(row.get("stage_num") or 0)
+    if stage >= 3:
+        drivers.append(f"Stage {'IV' if stage == 4 else 'III'} {row.get('cancer_type', 'cancer')}")
+    if row.get("cancer_type") in ("Pancreas", "Lung"):
+        drivers.append(f"{row.get('cancer_type')} cancer: low survival at every stage")
+    if row.get("age_at_index", 0) >= 75:
         drivers.append(f"Age {int(row.get('age_at_index'))}")
-    if row.get("prior_admissions_5y", 0) >= 2:
-        drivers.append(f"{int(row.get('prior_admissions_5y'))} admissions in the past 5 years")
+    if row.get("marker_elevated", 0) == 1:
+        drivers.append("Latest tumour marker above the reference range")
     for flag, text in [("has_heart_failure", "Heart failure"), ("has_copd", "COPD"), ("has_ckd", "Chronic kidney disease"),
-                       ("has_cancer", "Cancer history"), ("has_diabetes", "Type 2 diabetes"), ("has_dementia", "Dementia"),
-                       ("has_stroke", "Previous stroke"), ("has_obesity", "Obesity"), ("has_hypertension", "Hypertension")]:
+                       ("has_coronary_disease", "Coronary heart disease"), ("has_diabetes", "Type 2 diabetes")]:
         if row.get(flag, 0) == 1:
             drivers.append(text)
 
@@ -200,7 +211,7 @@ def predict_patient_outcome_risk(patient_id: str) -> Dict[str, Any]:
         "index_date": row.get("index_date"),
         "scored_as_of": f"{row.get('index_date')} (end of data)",
         "outcomes": outcomes,
-        "risk_drivers": drivers[:5] or ["No major pre-existing risk factors recorded"],
+        "risk_drivers": drivers[:5] or ["Early stage and no major risk factors recorded"],
         "model_version": artifact.get("version", "1.0.0"),
         "timestamp": datetime.now().isoformat(),
         "disclaimer": CLINICAL_DISCLAIMER,
@@ -283,11 +294,11 @@ def forecast_drug_class_demand() -> Dict[str, Any]:
     return _daily_forecast("drug_class_demand_model", pharmacy_class_series)
 
 
-def forecast_admissions() -> Dict[str, Any]:
-    """Average daily inpatient admissions across the network for the next 7 days."""
-    from src.ml.forecasting import admissions_daily_series
+def forecast_treatment_demand() -> Dict[str, Any]:
+    """Average daily infusion-chair and radiation sessions across the network for the next 7 days."""
+    from src.ml.forecasting import treatment_daily_series
 
-    return _daily_forecast("resource_demand_model", admissions_daily_series)
+    return _daily_forecast("treatment_demand_model", treatment_daily_series)
 
 
 def predict_drug_demand(medication_id: str, hospital_id: Optional[str] = None) -> Dict[str, Any]:

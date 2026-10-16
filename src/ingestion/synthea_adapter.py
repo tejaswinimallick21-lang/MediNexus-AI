@@ -115,6 +115,22 @@ SNOMED_TO_ICD10 = {
     "19169002": ("O03.9", "Moderate"),      # Miscarriage in first trimester
     "72892002": ("Z34.90", "Mild"),         # Normal pregnancy
     "449868002": ("F17.210", "Mild"),       # Smokes tobacco daily
+    # Oncology dataset (src/ingestion/oncology_dataset.py); stage rows carry the code + I..IV
+    "38341003": ("I10", "Moderate"),        # Hypertension
+    "13645005": ("J44.9", "Severe"),        # COPD
+    "709044004": ("N18.9", "Severe"),       # Chronic kidney disease
+    "197321007": ("K76.0", "Mild"),         # Steatosis of liver
+    "399068003": ("C61", "Severe"),         # Malignant tumor of prostate
+    "372244006": ("C43.9", "Severe"),       # Malignant melanoma
+    "92814006": ("C91.10", "Severe"),       # Chronic lymphoid leukemia
+    "118601006": ("C85.90", "Severe"),      # Non-Hodgkin lymphoma
+    "363418001": ("C25.9", "Severe"),       # Malignant tumor of pancreas
+}
+
+# Primary cancer SNOMED -> the platform's cancer type label
+CANCER_TYPES = {
+    "254837009": "Breast", "399068003": "Prostate", "254637007": "Lung", "363406005": "Colon",
+    "372244006": "Melanoma", "92814006": "Leukemia (CLL)", "118601006": "Lymphoma (NHL)", "363418001": "Pancreas",
 }
 
 # LOINC reference intervals (adult). crit_* = None means no critical threshold on that side.
@@ -181,8 +197,41 @@ LAB_REFERENCE = {
     "1960-4": ("Bicarbonate (Arterial)", "Blood Gas", 22, 26, 10, 40),
 }
 
+# The oncology dataset reuses some LOINC codes for different tests (CA 15-3 and CA 19-9 share one,
+# PSA and S-100 another, NSE carries the eGFR code), so its observations are matched by test name.
+# name: (test_name, category, low, high, crit_low, crit_high); tumour-marker upper limits are the
+# usual adult cut-offs.
+LAB_BY_NAME = {
+    "Systolic BP": ("Systolic Blood Pressure", "Vital Signs", 90, 120, 70, 180),
+    "Diastolic BP": ("Diastolic Blood Pressure", "Vital Signs", 60, 80, 40, 120),
+    "Heart rate": ("Heart Rate", "Vital Signs", 60, 100, 40, 130),
+    "Body temperature": ("Body Temperature", "Vital Signs", 36.1, 37.8, 35.0, 40.0),
+    "Body Mass Index": ("Body Mass Index", "Vital Signs", 18.5, 24.9, 15.0, 40.0),
+    "WBC": ("White Blood Cell Count", "Hematology", 4.5, 11.0, 2.0, 30.0),
+    "Hemoglobin": ("Hemoglobin", "Hematology", 12.0, 17.5, 7.0, 20.0),
+    "Hematocrit": ("Hematocrit", "Hematology", 36, 50, 21, 60),
+    "Platelets": ("Platelet Count", "Hematology", 150, 450, 50, 1000),
+    "Lymphocytes %": ("Lymphocytes %", "Hematology", 20, 40, None, None),
+    "Sodium": ("Sodium", "Chemistry", 135, 145, 120, 160),
+    "Potassium": ("Potassium", "Chemistry", 3.5, 5.1, 2.5, 6.5),
+    "Creatinine": ("Creatinine", "Chemistry", 0.6, 1.3, None, 5.0),
+    "Urea Nitrogen": ("Urea Nitrogen (BUN)", "Chemistry", 7, 20, None, 100),
+    "Glucose": ("Glucose", "Chemistry", 70, 99, 50, 400),
+    "ALT": ("ALT", "Liver Function", 7, 56, None, 1000),
+    "AST": ("AST", "Liver Function", 10, 40, None, 1000),
+    "LDH": ("Lactate Dehydrogenase", "Tumor Markers", 140, 280, None, None),
+    "PSA": ("PSA", "Tumor Markers", 0, 4.0, None, None),
+    "CEA": ("CEA", "Tumor Markers", 0, 3.0, None, None),
+    "CA 15-3": ("CA 15-3", "Tumor Markers", 0, 30, None, None),
+    "CA 19-9": ("CA 19-9", "Tumor Markers", 0, 37, None, None),
+    "NSE": ("NSE", "Tumor Markers", 0, 16.3, None, None),
+    "S-100": ("S-100", "Tumor Markers", 0, 0.15, None, None),
+    "Beta-2 microglobulin": ("Beta-2 Microglobulin", "Tumor Markers", 0.7, 1.8, None, None),
+}
+
 # Ordered keyword rules: first match wins.
 REASON_TO_DEPARTMENT = [
+    (r"admission for surgery", "Surgical Oncology"),
     (r"intensive care", "Critical Care"),
     (r"neoplasm|cancer|carcinoma|malignant|tumor|metasta", "Oncology"),
     (r"covid|isolation|pneumonia|respirat|asthma|emphysema|bronch|pulmonary|lung", "Pulmonology"),
@@ -196,6 +245,12 @@ REASON_TO_DEPARTMENT = [
 ]
 
 SPECIALITY_TO_DEPARTMENT = [
+    (r"SURGICAL ONCOLOG", "Surgical Oncology"),
+    (r"RADIATION ONCOLOG", "Radiation Oncology"),
+    (r"MEDICAL ONCOLOG", "Medical Oncology"),
+    (r"HEMATOLOG", "Hematology"),
+    (r"PATHOLOG", "Pathology"),
+    (r"FAMILY MEDICINE", "Primary Care"),
     (r"CRITICAL CARE", "Critical Care"),
     (r"ONCOLOG|HEMATOLOG", "Oncology"),
     (r"PULMON|SLEEP", "Pulmonology"),
@@ -231,6 +286,15 @@ SPECIALITY_TO_QUALIFICATION = [
 ]
 
 MED_CATEGORY_RULES = [
+    # Oncology dataset first: regimens and supportive care
+    (r"trastuzumab|rituximab|pembrolizumab|nivolumab|ipilimumab|ibrutinib", "Targeted / Immunotherapy"),
+    (r"doxorubicin|cyclophosphamide|paclitaxel|carboplatin|docetaxel|vincristine|pemetrexed|irinotecan|oxaliplatin|"
+     r"fluorouracil|leucovorin|gemcitabine|fludarabine|cabazitaxel", "Chemotherapy"),
+    (r"filgrastim|pegfilgrastim", "Growth Factor (G-CSF)"),
+    (r"ondansetron|lorazepam", "Antiemetic"),
+    (r"dexamethasone|prednisone", "Corticosteroid"),
+    (r"allopurinol", "Tumour Lysis Prophylaxis"),
+    (r"loperamide", "Antidiarrheal"),
     (r"insulin|metformin|liraglutide", "Antidiabetic"),
     (r"hydrochlorothiazide|amlodipine|atenolol|olmesartan|chlorthalidone|verapamil|captopril|metoprolol|furosemide", "Antihypertensive / Cardiovascular"),
     (r"simvastatin|atorvastatin", "Statin"),
@@ -252,6 +316,7 @@ MED_CATEGORY_RULES = [
 ]
 
 MED_FORM_RULES = [
+    (r"\bpo\b", "Oral"),
     (r"inhaler|inhalation|actuat", "Inhaler"),
     (r"injection|injectable|syringe|infusion|\biv\b|pen injector", "Injection"),
     (r"capsule", "Capsule"),
@@ -353,9 +418,13 @@ def convert_synthea_to_raw(
     con.execute("""
         CREATE TABLE enc AS
         SELECT e.Id AS src_id,
-               CASE ENCOUNTERCLASS WHEN 'inpatient' THEN 'ADM' WHEN 'emergency' THEN 'ED'
-                                   WHEN 'urgentcare' THEN 'UC' ELSE 'APT' END AS prefix,
-               e.ENCOUNTERCLASS AS enc_class, p.patient_id, e.PATIENT AS src_patient,
+               CASE lower(ENCOUNTERCLASS) WHEN 'inpatient' THEN 'ADM' WHEN 'imp' THEN 'ADM'
+                                          WHEN 'emergency' THEN 'ED' WHEN 'emer' THEN 'ED'
+                                          WHEN 'urgentcare' THEN 'UC' ELSE 'APT' END AS prefix,
+               -- the oncology dataset uses HL7 class codes (AMB / IMP / EMER)
+               CASE lower(ENCOUNTERCLASS) WHEN 'imp' THEN 'inpatient' WHEN 'emer' THEN 'emergency'
+                                          WHEN 'amb' THEN 'ambulatory' ELSE lower(ENCOUNTERCLASS) END AS enc_class,
+               p.patient_id, e.PATIENT AS src_patient,
                e.ORGANIZATION AS src_org, e.PROVIDER AS src_provider, e.PAYER AS src_payer,
                e.START::TIMESTAMP AS start_ts, e.STOP::TIMESTAMP AS stop_ts,
                e.DESCRIPTION AS description, e.REASONCODE AS reason_code, e.REASONDESCRIPTION AS reason_desc,
@@ -398,6 +467,10 @@ def convert_synthea_to_raw(
         xfer AS (SELECT DISTINCT i.src_id FROM inp i JOIN inp n
                  ON n.src_patient = i.src_patient AND n.src_id <> i.src_id
                 AND n.start_ts BETWEEN i.stop_ts - INTERVAL 1 HOUR AND i.stop_ts + INTERVAL 1 DAY),
+        surg AS (SELECT ENCOUNTER AS src_id, string_agg(DISTINCT DESCRIPTION, ' + ' ORDER BY DESCRIPTION) AS surgery_procedure
+                 FROM s_procedures
+                 WHERE NOT regexp_matches(DESCRIPTION, '(?i)biopsy|chemotherapy|radiation|catheter|^(CT|MR|MG|US|NM|PT) of')
+                 GROUP BY 1),
         vent AS (SELECT DISTINCT ENCOUNTER AS src_id FROM s_procedures
                  WHERE DESCRIPTION ILIKE '%endotracheal%' OR DESCRIPTION ILIKE '%controlled ventilation%'
                  UNION SELECT DISTINCT ENCOUNTER FROM s_devices WHERE DESCRIPTION ILIKE '%ventilator%')
@@ -418,9 +491,11 @@ def convert_synthea_to_raw(
                i.description AS encounter_type,
                CAST(i.description ILIKE '%intensive care%' AS INTEGER) AS is_icu,
                CAST(i.src_id IN (SELECT src_id FROM vent) AS INTEGER) AS mechanical_ventilation,
+               sg.surgery_procedure,
                i.src_id AS _src_encounter
         FROM inp i
         JOIN s_patients p ON p.Id = i.src_patient
+        LEFT JOIN surg sg ON sg.src_id = i.src_id
         LEFT JOIN omap o ON o.src_id = i.src_org
         LEFT JOIN dmap d ON d.src_id = i.src_provider
         ORDER BY i.start_ts
@@ -492,7 +567,7 @@ def convert_synthea_to_raw(
                p.ADDRESS || ', ' || p.CITY AS address, p.CITY AS city, p.COUNTY AS county, p.STATE AS state,
                p.RACE AS race, p.ETHNICITY AS ethnicity, p.MARITAL AS marital_status,
                coalesce(py.NAME, 'NO_INSURANCE') AS insurance_provider,
-               strftime(p.DEATHDATE, '%Y-%m-%d') AS death_date,
+               strftime(TRY_CAST(p.DEATHDATE AS DATE), '%Y-%m-%d') AS death_date,
                CAST(p.DEATHDATE IS NOT NULL AS INTEGER) AS is_deceased,
                round(p.HEALTHCARE_EXPENSES, 2) AS healthcare_expenses,
                round(p.HEALTHCARE_COVERAGE, 2) AS healthcare_coverage,
@@ -522,28 +597,49 @@ def convert_synthea_to_raw(
                e.encounter_id, m.patient_id,
                CAST(c.CODE AS VARCHAR) AS snomed_code, c.DESCRIPTION AS diagnosis_description,
                CASE WHEN CAST(e.reason_code AS VARCHAR) = CAST(c.CODE AS VARCHAR) THEN 'Primary' ELSE 'Secondary' END AS diagnosis_type,
-               strftime(c.START, '%Y-%m-%d') AS diagnosis_date,
-               strftime(c.STOP, '%Y-%m-%d') AS resolved_date
+               strftime(TRY_CAST(c.START AS DATE), '%Y-%m-%d') AS diagnosis_date,
+               strftime(TRY_CAST(c.STOP AS DATE), '%Y-%m-%d') AS resolved_date
         FROM s_conditions c
         JOIN pmap m ON m.src_id = c.PATIENT
         LEFT JOIN enc2 e ON e.src_id = c.ENCOUNTER
     """).df()
-    xwalk = pd.DataFrame([(k, v[0], v[1]) for k, v in SNOMED_TO_ICD10.items()], columns=["snomed_code", "icd10_code", "severity"])
-    df_dx = df_dx.merge(xwalk, on="snomed_code", how="left")
+    xwalk = pd.DataFrame([(k, v[0], v[1]) for k, v in SNOMED_TO_ICD10.items()], columns=["_base_code", "icd10_code", "severity"])
+    # Stage rows in the oncology dataset are the cancer code + a Roman numeral (e.g. 254837009III)
+    df_dx["cancer_stage"] = df_dx["snomed_code"].str.extract(r"^\d+(IV|I{1,3})$", expand=False)
+    df_dx["_base_code"] = df_dx["snomed_code"].str.replace(r"(IV|I{1,3})$", "", regex=True)
+    df_dx = df_dx.merge(xwalk, on="_base_code", how="left").drop(columns=["_base_code"])
     is_finding = df_dx["diagnosis_description"].str.contains(r"\((?:finding|situation)\)", regex=True, na=False)
     df_dx["severity"] = df_dx["severity"].fillna(pd.Series(np.where(is_finding, "Mild", "Moderate"), index=df_dx.index))
+
+    # Primary cancer per patient (oncology dataset): type and diagnosis date from the cancer row,
+    # TNM stage from its stage row. Only diagnoses recorded by the end of the data count, so the
+    # source's denormalised CANCER_TYPE column (which also names cancers diagnosed later) is not used.
+    base = df_dx["snomed_code"].str.replace(r"(IV|I{1,3})$", "", regex=True)
+    cancer_rows = df_dx[base.isin(CANCER_TYPES.keys())].assign(_type=base.map(CANCER_TYPES))
+    primary = (cancer_rows[cancer_rows["cancer_stage"].isna()].sort_values("diagnosis_date")
+               .groupby("patient_id").agg(cancer_type=("_type", "first"), cancer_diagnosis_date=("diagnosis_date", "first")))
+    stage = cancer_rows.dropna(subset=["cancer_stage"]).sort_values("diagnosis_date").groupby("patient_id")["cancer_stage"].last()
+    df_pat = df_pat.merge(primary, left_on="patient_id", right_index=True, how="left")
+    df_pat["cancer_stage"] = df_pat["patient_id"].map(stage)
 
     # ------------------------------------------------------------------
     # LABORATORY RESULTS (numeric LOINC observations with reference intervals)
     # ------------------------------------------------------------------
-    ref = pd.DataFrame(
-        [(k, *v) for k, v in LAB_REFERENCE.items()],
-        columns=["loinc_code", "test_name", "test_category", "low", "high", "crit_low", "crit_high"],
-    )
+    # Match by test name where the source names its tests (oncology dataset), else by LOINC code
+    by_name = bool(con.execute(
+        f"SELECT count(*) FROM s_observations WHERE DESCRIPTION IN ({', '.join(repr(n) for n in LAB_BY_NAME)})").fetchone()[0])
+    if by_name:
+        ref = pd.DataFrame([(k, *v) for k, v in LAB_BY_NAME.items()],
+                           columns=["match_key", "test_name", "test_category", "low", "high", "crit_low", "crit_high"])
+        match = "r.match_key = o.DESCRIPTION"
+    else:
+        ref = pd.DataFrame([(k, *v) for k, v in LAB_REFERENCE.items()],
+                           columns=["match_key", "test_name", "test_category", "low", "high", "crit_low", "crit_high"])
+        match = "r.match_key = CAST(o.CODE AS VARCHAR)"
     ref[["low", "high", "crit_low", "crit_high"]] = ref[["low", "high", "crit_low", "crit_high"]].astype(float)
     con.register("lab_ref", ref)
-    df_lab = con.execute("""
-        SELECT 'LAB_' || lpad(CAST(row_number() OVER (ORDER BY o."DATE", m.patient_id, o.CODE) AS VARCHAR), 8, '0') AS lab_id,
+    df_lab = con.execute(f"""
+        SELECT 'LAB_' || lpad(CAST(row_number() OVER (ORDER BY o."DATE", m.patient_id, o.CODE, o.DESCRIPTION) AS VARCHAR), 8, '0') AS lab_id,
                m.patient_id,
                CASE WHEN e.enc_class = 'inpatient' THEN e.encounter_id END AS admission_id,
                e.encounter_id, CAST(o.CODE AS VARCHAR) AS loinc_code,
@@ -553,7 +649,7 @@ def convert_synthea_to_raw(
                strftime(o."DATE"::TIMESTAMP, '%Y-%m-%d') AS test_date,
                r.low, r.high, r.crit_low, r.crit_high
         FROM s_observations o
-        JOIN lab_ref r ON r.loinc_code = CAST(o.CODE AS VARCHAR)
+        JOIN lab_ref r ON {match}
         JOIN pmap m ON m.src_id = o.PATIENT
         LEFT JOIN enc2 e ON e.src_id = o.ENCOUNTER
         WHERE try_cast(o.VALUE AS DOUBLE) IS NOT NULL
@@ -569,17 +665,18 @@ def convert_synthea_to_raw(
     # ------------------------------------------------------------------
     # MEDICATIONS catalog & PRESCRIPTIONS
     # ------------------------------------------------------------------
+    # One catalogue entry per drug description: the oncology dataset reuses RxNorm codes across drugs
     df_med = con.execute("""
-        SELECT CAST(CODE AS VARCHAR) AS rxnorm_code, first(DESCRIPTION) AS medication_name,
+        SELECT first(CAST(CODE AS VARCHAR)) AS rxnorm_code, DESCRIPTION AS medication_name,
                round(median(BASE_COST), 2) AS unit_cost, count(*) AS n_orders
-        FROM s_medications GROUP BY 1 ORDER BY n_orders DESC
+        FROM s_medications GROUP BY DESCRIPTION ORDER BY n_orders DESC, medication_name
     """).df()
     df_med["medication_id"] = [f"MED_{i + 1:04d}" for i in range(len(df_med))]
     df_med["category"] = _first_match(df_med["medication_name"], MED_CATEGORY_RULES, "Other")
     df_med["dosage_form"] = _first_match(df_med["medication_name"], MED_FORM_RULES, "Other")
     strength = df_med["medication_name"].str.extract(r"(\d+(?:\.\d+)?)\s*MG", expand=False)
     df_med["standard_daily_dose"] = pd.to_numeric(strength, errors="coerce")  # strength per unit (mg) where stated
-    con.register("med_cat", df_med[["rxnorm_code", "medication_id"]])
+    con.register("med_cat", df_med[["medication_name", "medication_id"]])
 
     df_rx = con.execute(f"""
         SELECT 'RX_' || lpad(CAST(row_number() OVER (ORDER BY md.START, m.patient_id, md.CODE) AS VARCHAR), 7, '0') AS prescription_id,
@@ -598,7 +695,7 @@ def convert_synthea_to_raw(
                md.REASONDESCRIPTION AS indication
         FROM s_medications md
         JOIN pmap m ON m.src_id = md.PATIENT
-        JOIN med_cat mc ON mc.rxnorm_code = CAST(md.CODE AS VARCHAR)
+        JOIN med_cat mc ON mc.medication_name = md.DESCRIPTION
         LEFT JOIN enc2 e ON e.src_id = md.ENCOUNTER
         LEFT JOIN dmap d ON d.src_id = e.src_provider
         LEFT JOIN omap o ON o.src_id = e.src_org
@@ -647,6 +744,7 @@ def convert_synthea_to_raw(
                'Completed' AS status,
                coalesce(e.reason_desc, e.description) AS reason_for_visit,
                e.enc_class AS visit_type,
+               e.description AS encounter_type,
                round(e.claim_cost, 2) AS visit_cost,
                0 AS is_simulated
         FROM enc2 e
@@ -752,7 +850,7 @@ def convert_synthea_to_raw(
     summary = {
         "generated_at": datetime.now().isoformat(),
         "source": "synthea",
-        "source_dir": str(synthea_dir),
+        "source_dir": synthea_dir.resolve().relative_to(DATA_DIR.parent.resolve()).as_posix() if synthea_dir.resolve().is_relative_to(DATA_DIR.parent.resolve()) else synthea_dir.name,
         "data_through": str(data_end.date()),
         "seed": seed,
         "counts": counts,

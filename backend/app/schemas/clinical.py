@@ -1,4 +1,4 @@
-"""Schemas for the HCP Clinical Workstation (Care Console)."""
+"""Schemas for the Oncology Workstation (Clinical workspace)."""
 
 from typing import Dict, List, Optional
 
@@ -6,27 +6,33 @@ from pydantic import BaseModel
 
 
 class ClinicalKpis(BaseModel):
-    living_patients: int
-    high_tier_patients: int
-    recent_discharges: int
-    high_risk_recent_discharges: int
+    active_patients: int          # living patients with a cancer diagnosis
+    in_treatment: int             # a treatment session in the last 30 days
+    awaiting_treatment: int       # diagnosed in the last 90 days, no treatment yet
+    high_mortality_risk: int      # 12-month mortality risk in the top band
     open_care_gaps: int
     data_through: str
 
 
-class HuddlePatient(BaseModel):
+class WorklistPatient(BaseModel):
+    """One row of the tumour-board worklist: living patients ranked by 12-month mortality risk."""
+
     patient_id: str
     name: str
     age: int
     gender: str
-    admission_id: str
-    discharge_date: str
-    admission_reason: Optional[str]
-    department_name: Optional[str]
-    readmission_probability_pct: float
+    cancer_type: str
+    cancer_stage: Optional[str]
+    treatment_status: str
+    systemic_regimen: Optional[str]
+    days_since_diagnosis: Optional[int]
+    last_treatment_date: Optional[str]
+    mortality_risk_pct: float
     risk_level: str
     drivers: List[str]
-    has_follow_up: bool
+    tumor_marker: Optional[str]
+    marker_value: Optional[float]
+    marker_trend: Optional[str]
 
 
 class CareGapSummary(BaseModel):
@@ -51,8 +57,10 @@ class PatientSummary(BaseModel):
     name: str
     age: int
     gender: str
+    cancer_type: Optional[str]
+    cancer_stage: Optional[str]
+    treatment_status: Optional[str]
     clinical_risk_tier: str
-    total_admissions: int
     is_deceased: bool
 
 
@@ -67,9 +75,26 @@ class Patient360(BaseModel):
     is_deceased: bool
     death_date: Optional[str]
     clinical_risk_tier: str
-    total_admissions: int
-    average_los_days: float
-    unplanned_readmissions: int
+    # Oncology summary
+    cancer_type: Optional[str]
+    cancer_stage: Optional[str]
+    diagnosis_date: Optional[str]
+    age_at_diagnosis: Optional[int]
+    treatment_status: Optional[str]
+    systemic_regimen: Optional[str]
+    surgery_procedure: Optional[str]
+    surgery_date: Optional[str]
+    first_treatment_date: Optional[str]
+    days_to_treatment: Optional[int]
+    chemo_cycles: int
+    immunotherapy_cycles: int
+    targeted_therapy_cycles: int
+    radiation_sessions: int
+    tumor_marker: Optional[str]
+    marker_value: Optional[float]
+    marker_flag: Optional[str]
+    marker_trend: Optional[str]
+    # Record counts
     total_lab_tests: int
     abnormal_lab_count: int
     critical_lab_count: int
@@ -80,15 +105,6 @@ class Patient360(BaseModel):
     care_gaps: List[CareGap]
 
 
-class OutcomeRisk(BaseModel):
-    outcome: str
-    label: str
-    probability_pct: float
-    risk_level: str
-    cohort_rate_pct: float
-    observed: Optional[int]
-
-
 class CarePlan(BaseModel):
     pathway: str
     primary_recommendation: str
@@ -97,21 +113,32 @@ class CarePlan(BaseModel):
     disclaimer: str
 
 
+class SurvivalBenchmark(BaseModel):
+    group: str
+    patients: int
+    one_year_pct: Optional[float]
+    five_year_pct: Optional[float]
+
+
 class PatientRisk(BaseModel):
-    outcome_scored_as_of: Optional[str]
-    outcome_risks: List[OutcomeRisk]
-    outcome_drivers: List[str]
-    readmission_available: bool
-    readmission_probability_pct: Optional[float]
-    readmission_risk_level: Optional[str]
-    readmission_base_rate_pct: Optional[float]
-    readmission_drivers: List[str]
-    readmission_admission_date: Optional[str]
-    los_predicted_days: Optional[float]
-    los_observed_days: Optional[float]
-    los_interval: Optional[str]
+    available: bool
+    scored_as_of: Optional[str]
+    mortality_12m_pct: Optional[float]
+    risk_level: Optional[str]
+    cohort_rate_pct: Optional[float]
+    method: Optional[str]
+    drivers: List[str]
+    survival_benchmark: Optional[SurvivalBenchmark]
     care_plan: CarePlan
     disclaimer: str
+
+
+class TreatmentEvent(BaseModel):
+    event_date: str
+    event_type: str
+    detail: Optional[str]
+    cycle: Optional[int]
+    hospital_name: Optional[str]
 
 
 class LabPoint(BaseModel):
@@ -155,6 +182,5 @@ class EncounterRow(BaseModel):
     admission_reason: Optional[str]
     department_name: Optional[str]
     discharge_disposition: str
-    is_icu: bool
-    readmitted_30d: bool
+    surgery_procedure: Optional[str]
     diagnoses: List[str]

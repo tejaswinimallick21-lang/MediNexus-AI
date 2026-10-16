@@ -11,7 +11,10 @@ Produces business-ready, AI-ready, and role-specific analytical data models:
 - gold_billing
 - gold_hospital_operations
 - gold_patient_risk_features
-- gold_outcome_risk (12-month outcome risk: train and score snapshots)
+- gold_outcome_risk (12-month mortality risk: train and score snapshots)
+- gold_treatment_events (every surgery, chemotherapy / immunotherapy cycle, radiation session, hospice start)
+- gold_oncology_patients (one row per cancer patient: type, stage, treatment pathway, tumour marker, survival)
+- gold_survival (Kaplan-Meier survival by cancer type and stage)
 
 Outcome labels are derived only from observed event dates (admissions, diagnoses, deaths).
 ML features are computed strictly from information available at the prediction time.
@@ -58,6 +61,50 @@ COMORBIDITY_ICD10 = {
 }
 CORE_COMORBIDITIES = ["has_hypertension", "has_diabetes", "has_copd", "has_heart_failure"]
 OUTCOME_HORIZON_DAYS = 365  # 12-month outcome-risk window
+
+# Oncology
+CANCER_TYPES = ["Breast", "Prostate", "Lung", "Colon", "Melanoma", "Leukemia (CLL)", "Lymphoma (NHL)", "Pancreas"]
+STAGE_NUM = {"I": 1, "II": 2, "III": 3, "IV": 4}
+PRIMARY_MARKER = {  # the tumour marker followed for each cancer type
+    "Breast": "CA 15-3", "Prostate": "PSA", "Lung": "CEA", "Colon": "CEA", "Pancreas": "CA 19-9",
+    "Melanoma": "S-100", "Lymphoma (NHL)": "Lactate Dehydrogenase", "Leukemia (CLL)": "White Blood Cell Count",  # CLL: lymphocytosis
+}
+IMMUNOTHERAPY_REGIMENS = {"Pembrolizumab", "Nivolumab", "Ipilimumab + Nivolumab"}
+TARGETED_REGIMENS = {"Ibrutinib"}
+TREATMENT_TYPES = ["Surgery", "Chemotherapy", "Immunotherapy", "Targeted therapy", "Radiation"]
+ACTIVE_TREATMENT_DAYS = 30
+NEW_DIAGNOSIS_DAYS = 90  # untreated beyond this = watchful waiting, not awaiting treatment
+
+
+def _type_column(cancer_type: str) -> str:
+    """Feature column name for a cancer type (e.g. 'Leukemia (CLL)' -> 'type_leukemia')."""
+    return "type_" + cancer_type.split(" ")[0].lower()
+
+
+def kaplan_meier(durations_days: pd.Series, events: pd.Series, max_months: int = 120) -> pd.DataFrame:
+    """Kaplan-Meier survival at each whole month (product-limit over daily event times)."""
+    d = pd.DataFrame({"t": durations_days.clip(lower=0).to_numpy(), "e": events.astype(int).to_numpy()}).sort_values("t")
+    n = len(d)
+    surv, out, i = 1.0, [], 0
+    deaths = d[d["e"] == 1].groupby("t").size()
+    removed = d.groupby("t").size()
+    at_risk = n
+    times = removed.index.to_numpy()
+    month_marks = {m: None for m in range(0, max_months + 1)}
+    j = 0
+    for m in range(0, max_months + 1):
+        horizon = m * 30.4375
+        while j < len(times) and times[j] <= horizon:
+            t = times[j]
+            dt = int(deaths.get(t, 0))
+            if at_risk > 0 and dt:
+                surv *= 1 - dt / at_risk
+            at_risk -= int(removed[t])
+            j += 1
+        month_marks[m] = (surv, at_risk)
+    for m, (sv, ar) in month_marks.items():
+        out.append({"month": m, "survival_pct": round(sv * 100, 2), "at_risk": int(ar)})
+    return pd.DataFrame(out)
 
 
 def load_silver_table(table_name: str, silver_dir: Path = SILVER_DATA_DIR) -> pd.DataFrame:
@@ -157,6 +204,12 @@ def generate_gold_models(
     df_inv = load_silver_table("pharmacy_inventory", silver_dir)
     df_apts = load_silver_table("appointments", silver_dir)
     df_billing = load_silver_table("billing", silver_dir)
+
+    # Join keys are text everywhere; an all-empty key column (e.g. no diagnosis made during a stay) loads as float
+    for frame in (df_admissions, df_diagnoses, df_labs, df_rx, df_apts, df_billing):
+        for key in ("admission_id", "encounter_id"):
+            if key in frame.columns:
+                frame[key] = frame[key].astype(object).where(frame[key].notna(), None)
 
     # Typed working copies
     df_patients["age"] = _num(df_patients, "age", 0).astype(int)
@@ -396,15 +449,17 @@ def generate_gold_models(
     df_p360["lifetime_billing"] = df_p360["lifetime_billing"].fillna(0.0).round(2)
     df_p360["outstanding_due"] = df_p360["outstanding_due"].fillna(0.0).round(2)
 
-    # Rule-based (not ML) clinical acuity tier for worklist triage
+    # Rule-based (not ML) oncology acuity tier for worklist triage: stage, age, aggressive tumour
+    # types (lung, pancreas), comorbidity burden
+    stage_num = df_p360.get("cancer_stage", pd.Series(index=df_p360.index, dtype=object)).map(STAGE_NUM).fillna(0)
+    ctype = df_p360.get("cancer_type", pd.Series(index=df_p360.index, dtype=object)).fillna("")
     scores = (
-        np.where(df_p360["age"] >= 65, 2, np.where(df_p360["age"] >= 50, 1, 0)) +
-        np.where(df_p360["total_admissions"] >= 3, 3, np.where(df_p360["total_admissions"] >= 2, 1, 0)) +
-        np.where(df_p360["prior_readmissions"] >= 1, 3, 0) +
-        np.where(df_p360[CORE_COMORBIDITIES].sum(axis=1) >= 2, 2, 0) +
-        np.where(df_p360["critical_lab_count"] >= 1, 2, np.where(df_p360["abnormal_lab_count"] >= 3, 1, 0))
+        np.select([stage_num == 4, stage_num == 3, stage_num == 2], [4, 2, 1], 0) +
+        np.where(df_p360["age"] >= 75, 2, np.where(df_p360["age"] >= 65, 1, 0)) +
+        np.where(ctype.isin(["Lung", "Pancreas"]), 1, 0) +
+        np.where(df_p360[CORE_COMORBIDITIES].sum(axis=1) >= 2, 1, 0)
     )
-    df_p360["clinical_risk_tier"] = np.where(scores >= 6, "High", np.where(scores >= 3, "Moderate", "Low"))
+    df_p360["clinical_risk_tier"] = np.where(scores >= 5, "High", np.where(scores >= 3, "Moderate", "Low"))
     persist("gold_patient_360", df_p360)
 
     # -------------------------------------------------------------
@@ -444,7 +499,100 @@ def generate_gold_models(
     persist("gold_hospital_operations", ops)
 
     # -------------------------------------------------------------
-    # 10 & 11. ML FEATURE STORES (point-in-time correct, computed in DuckDB)
+    # 10. ONCOLOGY: treatment events, patient mart, survival
+    # -------------------------------------------------------------
+    hosp_names = df_hospitals.set_index("hospital_id")["hospital_name"] if "hospital_name" in df_hospitals.columns else pd.Series(dtype=object)
+    cancer_pat = df_patients[df_patients.get("cancer_type", pd.Series(index=df_patients.index, dtype=object)).notna()].copy()
+    cancer_pat["_dx"] = pd.to_datetime(cancer_pat.get("cancer_diagnosis_date"), errors="coerce")
+
+    apt_done = df_apts[df_apts.get("status", pd.Series("Completed", index=df_apts.index)) == "Completed"].copy()
+    apt_done["_d"] = pd.to_datetime(apt_done.get("appointment_date"), errors="coerce")
+    etype = apt_done.get("encounter_type", pd.Series("", index=apt_done.index)).fillna("")
+    chemo = apt_done[etype.str.startswith("Chemotherapy cycle")].copy()
+    chemo["detail"] = chemo["encounter_type"].str.extract(r"\((.*)\)", expand=False)
+    chemo["cycle"] = pd.to_numeric(chemo["encounter_type"].str.extract(r"cycle (\d+)", expand=False), errors="coerce")
+    chemo["event_type"] = np.where(chemo["detail"].isin(IMMUNOTHERAPY_REGIMENS), "Immunotherapy",
+                                   np.where(chemo["detail"].isin(TARGETED_REGIMENS), "Targeted therapy", "Chemotherapy"))
+    radiation = apt_done[etype == "Encounter for radiation therapy"].assign(event_type="Radiation", detail="External beam radiation", cycle=np.nan)
+    hospice = apt_done[etype == "Hospice care encounter"].assign(event_type="Hospice", detail="Hospice care", cycle=np.nan)
+    surgery = df_admissions[df_admissions.get("surgery_procedure", pd.Series(index=df_admissions.index, dtype=object)).notna()].copy()
+    surgery = surgery.assign(_d=surgery["_adm_ts"].dt.normalize(), event_type="Surgery", detail=surgery["surgery_procedure"], cycle=np.nan)
+    ev_cols = ["patient_id", "_d", "event_type", "detail", "cycle", "hospital_id"]
+    events = pd.concat([x[[c for c in ev_cols if c in x.columns]] for x in (chemo, radiation, hospice, surgery)], ignore_index=True)
+    events = events.dropna(subset=["_d"]).merge(cancer_pat[["patient_id", "cancer_type", "cancer_stage"]], on="patient_id", how="inner")
+    events["hospital_name"] = events["hospital_id"].map(hosp_names)
+    events = events.sort_values(["_d", "patient_id", "event_type"]).reset_index(drop=True)
+    df_events = events.assign(event_date=events["_d"].dt.strftime("%Y-%m-%d")).drop(columns=["_d"])
+    persist("gold_treatment_events", df_events)
+
+    treat = events[events["event_type"].isin(TREATMENT_TYPES)]
+    first_tx = treat.sort_values("_d").groupby("patient_id").first()[["_d", "event_type"]].rename(columns={"_d": "_first_tx", "event_type": "first_treatment_type"})
+    last_tx = treat.groupby("patient_id")["_d"].max().rename("_last_tx")
+    counts = treat.pivot_table(index="patient_id", columns="event_type", values="_d", aggfunc="count", fill_value=0)
+    counts = counts.reindex(columns=TREATMENT_TYPES, fill_value=0)
+    regimen = (treat[treat["event_type"].isin(["Chemotherapy", "Immunotherapy", "Targeted therapy"])]
+               .sort_values("_d").groupby("patient_id")["detail"].last().rename("systemic_regimen"))
+    surg_first = surgery.sort_values("_d").groupby("patient_id").first()[["_d", "detail"]].rename(columns={"_d": "_surgery", "detail": "surgery_procedure"})
+    hospice_start = hospice.groupby("patient_id")["_d"].min().rename("_hospice")
+    last_visit = apt_done.groupby("patient_id")["_d"].max().rename("_last_visit")
+
+    labs_t = df_gold_laboratory[["patient_id", "test_name", "test_value", "abnormal_flag", "test_date"]].assign(
+        _t=pd.to_datetime(df_gold_laboratory["test_date"], errors="coerce"))
+    marker_rows = cancer_pat[["patient_id", "cancer_type"]].assign(marker=cancer_pat["cancer_type"].map(PRIMARY_MARKER))
+    mk = labs_t.merge(marker_rows, left_on=["patient_id", "test_name"], right_on=["patient_id", "marker"], how="inner").sort_values("_t")
+    mk_last = mk.groupby("patient_id").tail(2).groupby("patient_id").agg(
+        tumor_marker=("marker", "last"), marker_value=("test_value", "last"), marker_prev=("test_value", "first"),
+        marker_flag=("abnormal_flag", "last"), _marker_date=("_t", "last"))
+
+    onc = cancer_pat[["patient_id", "name", "gender", "age", "cancer_type", "cancer_stage", "_dob", "_death", "_dx",
+                      "insurance_provider"]].copy() if "insurance_provider" in cancer_pat.columns else cancer_pat[
+        ["patient_id", "name", "gender", "age", "cancer_type", "cancer_stage", "_dob", "_death", "_dx"]].copy()
+    for frame in (first_tx, last_tx, counts, regimen, surg_first, hospice_start, last_visit, mk_last):
+        onc = onc.merge(frame, left_on="patient_id", right_index=True, how="left")
+    for col in TREATMENT_TYPES:
+        onc[col] = onc[col].fillna(0).astype(int)
+    onc = onc.rename(columns={"Surgery": "surgeries", "Chemotherapy": "chemo_cycles", "Immunotherapy": "immunotherapy_cycles",
+                              "Targeted therapy": "targeted_therapy_cycles", "Radiation": "radiation_sessions"})
+    onc["stage_num"] = onc["cancer_stage"].map(STAGE_NUM)
+    onc["is_deceased"] = onc["_death"].notna().astype(int)
+    onc["age_at_diagnosis"] = np.floor((onc["_dx"] - onc["_dob"]).dt.days / 365.25).astype("Int64")
+    onc["survival_days"] = ((onc["_death"].fillna(data_end) - onc["_dx"]).dt.days).clip(lower=0)
+    onc["days_to_treatment"] = (onc["_first_tx"] - onc["_dx"]).dt.days
+    onc["days_since_last_treatment"] = (data_end - onc["_last_tx"]).dt.days
+    active = (onc["days_since_last_treatment"] <= ACTIVE_TREATMENT_DAYS) & (onc["is_deceased"] == 0)
+    untreated = onc["_first_tx"].isna()
+    recent_dx = (data_end - onc["_dx"]).dt.days <= NEW_DIAGNOSIS_DAYS
+    onc["treatment_status"] = np.select(
+        [onc["is_deceased"] == 1, onc["_hospice"].notna(), active, untreated & recent_dx, untreated],
+        ["Deceased", "Hospice", "In treatment", "Awaiting treatment", "Watchful waiting"], "Surveillance")
+    onc["marker_trend"] = np.select(
+        [onc["marker_value"] > onc["marker_prev"] * 1.1, onc["marker_value"] < onc["marker_prev"] * 0.9],
+        ["Rising", "Falling"], np.where(onc["marker_value"].notna(), "Stable", None))
+    for c, src in [("diagnosis_date", "_dx"), ("death_date", "_death"), ("first_treatment_date", "_first_tx"),
+                   ("last_treatment_date", "_last_tx"), ("surgery_date", "_surgery"), ("hospice_start_date", "_hospice"),
+                   ("last_visit_date", "_last_visit"), ("marker_date", "_marker_date")]:
+        onc[c] = onc[src].dt.strftime("%Y-%m-%d")
+    onc = onc.drop(columns=["_dob", "_death", "_dx", "_first_tx", "_last_tx", "_surgery", "_hospice", "_last_visit", "_marker_date", "marker_prev"])
+    persist("gold_oncology_patients", onc)
+
+    surv_rows = []
+    groups = [("All patients", "all", onc)] + [(t, "cancer_type", onc[onc["cancer_type"] == t]) for t in CANCER_TYPES] + \
+             [(f"Stage {s}", "stage", onc[onc["cancer_stage"] == s]) for s in STAGE_NUM]
+    for label, kind, g in groups:
+        if len(g) < 20:
+            continue
+        km = kaplan_meier(g["survival_days"], g["is_deceased"]).assign(group_type=kind, group_label=label, patients=len(g))
+        surv_rows.append(km)
+    for t in CANCER_TYPES:  # type x stage, for the stage-specific survival table
+        for st in STAGE_NUM:
+            g = onc[(onc["cancer_type"] == t) & (onc["cancer_stage"] == st)]
+            if len(g) >= 20:
+                surv_rows.append(kaplan_meier(g["survival_days"], g["is_deceased"]).assign(
+                    group_type="type_stage", group_label=f"{t} | Stage {st}", patients=len(g)))
+    persist("gold_survival", pd.concat(surv_rows, ignore_index=True))
+
+    # -------------------------------------------------------------
+    # 11 & 12. ML FEATURE STORES (point-in-time correct, computed in DuckDB)
     # -------------------------------------------------------------
     con = duckdb.connect()
     con.execute("SET enable_progress_bar=false")
@@ -453,6 +601,11 @@ def generate_gold_models(
                                    "is_icu", "mechanical_ventilation", "readmitted_30d", "readmitted_30d_all_cause",
                                    "planned_readmission_30d", "followup_complete"]])
     con.register("pat", df_patients[["patient_id", "gender", "_dob", "_death"]])
+    con.register("onc", cancer_pat[["patient_id", "cancer_type", "cancer_stage", "_dx"]].assign(
+        stage_num=cancer_pat["cancer_stage"].map(STAGE_NUM)))
+    con.register("tx", events[events["event_type"].isin(TREATMENT_TYPES)][["patient_id", "_d", "event_type"]])
+    con.register("marker", mk[["patient_id", "_t", "abnormal_flag"]] if len(mk) else
+                 pd.DataFrame({"patient_id": pd.Series(dtype=str), "_t": pd.Series(dtype="datetime64[ns]"), "abnormal_flag": pd.Series(dtype=str)}))
     dx_frame = df_diagnoses[["patient_id", "icd10_code"]].assign(_dx_date=pd.to_datetime(df_diagnoses["diagnosis_date"], errors="coerce"))
     con.register("dx", dx_frame)
     con.register("labs", df_gold_laboratory[["patient_id", "admission_id", "test_name", "test_value", "is_abnormal", "is_critical"]]
@@ -513,17 +666,36 @@ def generate_gold_models(
     """).df()
     persist("gold_patient_risk_features", df_features)
 
-    # 11. 12-month outcome risk: two snapshots of every living patient, features strictly before the index date.
-    #     train: index = one year before the end of the data, outcomes observed over the following 365 days.
-    #     score: index = end of the data (today, after re-dating); outcomes not yet known.
+    # 12. 12-month mortality risk: two snapshots of every living cancer patient diagnosed before the
+    #     index date, features strictly before it.
+    #     train: index = one year before the end of the data, deaths observed over the following 365 days.
+    #     score: index = end of the data; outcomes not yet known.
+    #     Emergency and hospice visits are NOT features: in this synthetic data they occur only in the
+    #     last weeks before death, so they would leak the outcome.
     def outcome_snapshot(index_ts: pd.Timestamp, snapshot: str):
         idx = index_ts.strftime("%Y-%m-%d %H:%M:%S")
         labelled = snapshot == "train"
         return con.execute(f"""
         WITH cohort AS (
-            SELECT p.patient_id, p.gender, p._dob, p._death, TIMESTAMP '{idx}' AS index_date
-            FROM pat p
-            WHERE p._dob <= TIMESTAMP '{idx}' AND (p._death IS NULL OR p._death > TIMESTAMP '{idx}')),
+            SELECT p.patient_id, p.gender, p._dob, p._death, TIMESTAMP '{idx}' AS index_date,
+                   o.cancer_type, o.stage_num, o._dx
+            FROM pat p JOIN onc o USING (patient_id)
+            WHERE o._dx < TIMESTAMP '{idx}' AND (p._death IS NULL OR p._death > TIMESTAMP '{idx}')),
+        treatment AS (
+            SELECT c.patient_id,
+                   count(t._d) FILTER (WHERE t.event_type = 'Surgery') AS surgeries_before,
+                   count(t._d) FILTER (WHERE t.event_type = 'Chemotherapy') AS chemo_cycles_before,
+                   count(t._d) FILTER (WHERE t.event_type IN ('Immunotherapy', 'Targeted therapy')) AS immuno_targeted_cycles_before,
+                   count(t._d) FILTER (WHERE t.event_type = 'Radiation') AS radiation_sessions_before,
+                   count(t._d) FILTER (WHERE t._d >= c.index_date - INTERVAL 90 DAY) AS treatments_last_90d
+            FROM cohort c LEFT JOIN tx t ON t.patient_id = c.patient_id AND t._d < c.index_date
+            GROUP BY c.patient_id),
+        markers AS (
+            SELECT c.patient_id,
+                   arg_max(CASE WHEN m.abnormal_flag IN ('High', 'Critical') THEN 1 ELSE 0 END, m._t) AS marker_elevated,
+                   avg(CASE WHEN m.abnormal_flag IN ('High', 'Critical') THEN 1.0 ELSE 0.0 END) AS marker_elevated_share
+            FROM cohort c LEFT JOIN marker m ON m.patient_id = c.patient_id AND m._t < c.index_date
+            GROUP BY c.patient_id),
         comorb AS (
             SELECT c.patient_id, {flag_sql}
             FROM cohort c LEFT JOIN dx d ON d.patient_id = c.patient_id AND d._dx_date < c.index_date
@@ -540,31 +712,33 @@ def generate_gold_models(
         vitals AS (
             SELECT c.patient_id,
                    arg_max(l.test_value, l._t) FILTER (WHERE l.test_name = 'Body Mass Index') AS last_bmi,
-                   arg_max(l.test_value, l._t) FILTER (WHERE l.test_name = 'Systolic Blood Pressure') AS last_systolic_bp,
-                   arg_max(l.test_value, l._t) FILTER (WHERE l.test_name = 'HbA1c') AS last_hba1c,
-                   arg_max(l.test_value, l._t) FILTER (WHERE l.test_name = 'eGFR') AS last_egfr
+                   arg_max(l.test_value, l._t) FILTER (WHERE l.test_name = 'Hemoglobin') AS last_hemoglobin,
+                   arg_max(l.test_value, l._t) FILTER (WHERE l.test_name = 'Lactate Dehydrogenase') AS last_ldh,
+                   arg_max(l.test_value, l._t) FILTER (WHERE l.test_name = 'Creatinine') AS last_creatinine
             FROM cohort c LEFT JOIN labs l ON l.patient_id = c.patient_id AND l._t < c.index_date
-            GROUP BY c.patient_id),
-        outcomes AS (
-            SELECT c.patient_id,
-                   max(CASE WHEN a._adm_ts > c.index_date
-                            AND a._adm_ts <= c.index_date + INTERVAL {OUTCOME_HORIZON_DAYS} DAY THEN 1 ELSE 0 END) AS hospitalized_12m
-            FROM cohort c LEFT JOIN adm a ON a.patient_id = c.patient_id GROUP BY c.patient_id)
+            GROUP BY c.patient_id)
         SELECT '{snapshot}' AS snapshot, c.patient_id, strftime(c.index_date, '%Y-%m-%d') AS index_date,
                CAST(floor(date_diff('day', c._dob, c.index_date) / 365.25) AS INTEGER) AS age_at_index,
                CASE WHEN c.gender = 'Male' THEN 1 ELSE 0 END AS gender_encoded,
                cm.* EXCLUDE (patient_id),
-               {' + '.join(f'cm.{f}' for f in COMORBIDITY_ICD10)} AS comorbidity_count,
+               {' + '.join(f'cm.{f}' for f in COMORBIDITY_ICD10 if f != 'has_cancer')} AS comorbidity_count,
+               c.cancer_type, c.stage_num,
+               {', '.join(f"CASE WHEN c.cancer_type = '{t}' THEN 1 ELSE 0 END AS {_type_column(t)}" for t in CANCER_TYPES)},
+               CAST(floor(date_diff('day', c._dx, c.index_date) / 30.4375) AS INTEGER) AS months_since_diagnosis,
+               CAST(floor(date_diff('day', c._dob, c._dx) / 365.25) AS INTEGER) AS age_at_diagnosis,
+               tr.surgeries_before, tr.chemo_cycles_before, tr.immuno_targeted_cycles_before,
+               tr.radiation_sessions_before, tr.treatments_last_90d,
+               coalesce(mk.marker_elevated, 0) AS marker_elevated, coalesce(mk.marker_elevated_share, 0) AS marker_elevated_share,
                h.prior_admissions_5y, m.active_medications,
-               v.last_bmi, v.last_systolic_bp, v.last_hba1c, v.last_egfr,
-               {'o.hospitalized_12m' if labelled else 'NULL'} AS hospitalized_12m,
+               v.last_bmi, v.last_hemoglobin, v.last_ldh, v.last_creatinine,
                {f"CASE WHEN c._death > c.index_date AND c._death <= c.index_date + INTERVAL {OUTCOME_HORIZON_DAYS} DAY THEN 1 ELSE 0 END" if labelled else 'NULL'} AS died_12m
         FROM cohort c
         JOIN comorb cm USING (patient_id)
         JOIN hist h USING (patient_id)
         JOIN meds m USING (patient_id)
         JOIN vitals v USING (patient_id)
-        JOIN outcomes o USING (patient_id)
+        JOIN treatment tr USING (patient_id)
+        JOIN markers mk USING (patient_id)
         ORDER BY c.patient_id
         """).df()
 

@@ -1,25 +1,518 @@
 {
-  "pending": 23,
+  "pending": 43,
   "items": [
     {
-      "action_id": "695c2c1a45db41bc8da586ba379e12ef",
+      "action_id": "08d46fbab70343df97b5301a3fbd3c91",
       "kind": "purchase_order",
       "kind_label": "Purchase order",
-      "summary": "Purchase order: 12 units of Atenolol 50 MG / Chlorthalidone 25 MG Oral Tablet for ADAMS PHYSICAL THERAPY  LLC",
+      "summary": "Purchase order: 12 units of Dexamethasone 4 MG Oral Tablet for Capital Medical Oncology",
       "reason": "test",
       "payload": {
         "inventory_id": "INV_000001",
         "quantity": 12,
         "context": {
-          "site": "ADAMS PHYSICAL THERAPY  LLC",
-          "medication": "Atenolol 50 MG / Chlorthalidone 25 MG Oral Tablet"
+          "site": "Capital Medical Oncology",
+          "medication": "Dexamethasone 4 MG Oral Tablet"
         }
       },
       "agent": "pharmalab",
       "session_id": null,
       "requested_by": "hcp@medinexus.org",
       "status": "pending",
-      "created_at": "2026-10-15T21:58:17",
+      "created_at": "2026-10-16T11:16:42",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "fc56e45540174840a7ccf45a56e30b4e",
+      "kind": "purchase_order",
+      "kind_label": "Purchase order",
+      "summary": "Purchase order: 12 units of Pemetrexed (500 mg/m2 IV q3w) for City General Oncology",
+      "reason": "We currently have only 1 unit of Pemetrexed on hand, which is below the reorder level of 6, and we are projected to have a shortfall of 4 units based on the forecasted demand. Approving the purchase order for 12 units will ensure we have sufficient supply to meet patient needs at City General Oncology.",
+      "payload": {
+        "inventory_id": "INV_000065",
+        "quantity": 12,
+        "context": {
+          "site": "City General Oncology",
+          "medication": "Pemetrexed (500 mg/m2 IV q3w)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:15:20",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "5199138e9aa1436d9680f94eea52916d",
+      "kind": "follow_up",
+      "kind_label": "Patient follow-up",
+      "summary": "Follow-up for P_03794 within 7 days to start treatment (36 days since diagnosis)",
+      "reason": "Following up with patient P_03794 within 7 days is crucial as it has been 36 days since their diagnosis of stage IV pancreatic cancer, exceeding the guideline of starting treatment within 30 days. Approving this action will help initiate treatment promptly, potentially improving the patient's outcomes.",
+      "payload": {
+        "patient_id": "P_03794",
+        "due_in_days": 7,
+        "context": {
+          "risk_band": "high (40-60%)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:15:17",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "4fd9cd6fa462461584479bcdda8c6d57",
+      "kind": "lab_escalation",
+      "kind_label": "Critical lab escalation",
+      "summary": "Escalate critical Glucose for P_01248",
+      "reason": "The glucose level for patient P_01248 is 42.15 mg/dL, which is below the reference range of 70.0 - 99.0 mg/dL, indicating a critical value. Approving this escalation will ensure that the physician is notified as per policy POL-LAB-001.",
+      "payload": {
+        "lab_id": "LAB_02013454",
+        "patient_id": "P_01248",
+        "test_name": "Glucose",
+        "context": {
+          "test": "Glucose"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:15:14",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "3ae2b334f8b94dac8defe135d2a8516f",
+      "kind": "purchase_order",
+      "kind_label": "Purchase order",
+      "summary": "Purchase order: 26 units of Pembrolizumab (200 mg IV q3w) for Capital Medical Oncology",
+      "reason": "We need to order 26 units of Pembrolizumab for Capital Medical Oncology because we currently have only 3 units on hand, which is below the reorder level of 12, and we are projected to have a shortfall of 14 units based on a 30-day demand forecast of 17 units. Approving this purchase will ensure we have adequate supply to meet patient needs.",
+      "payload": {
+        "inventory_id": "INV_000023",
+        "quantity": 26,
+        "context": {
+          "site": "Capital Medical Oncology",
+          "medication": "Pembrolizumab (200 mg IV q3w)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:15:12",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "b64dd480451148cd8973ea93c57ac5ff",
+      "kind": "follow_up",
+      "kind_label": "Patient follow-up",
+      "summary": "Follow-up for P_03090 within 7 days to start treatment (36 days since diagnosis)",
+      "reason": "Following up with patient P_03090 within 7 days is crucial as it has been 36 days since their diagnosis of stage IV pancreatic cancer, exceeding the guideline of starting treatment within 30 days. Approving this action will ensure timely intervention, potentially improving their prognosis.",
+      "payload": {
+        "patient_id": "P_03090",
+        "due_in_days": 7,
+        "context": {
+          "risk_band": "high (40-60%)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:15:09",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "a2bdfcdbb22649198be68959e9ec65f0",
+      "kind": "lab_escalation",
+      "kind_label": "Critical lab escalation",
+      "summary": "Escalate critical Glucose for P_01280",
+      "reason": "The glucose level for patient P_01280 is 47.61 mg/dL, which is below the reference range of 70.0 - 99.0 mg/dL, indicating a critical value. Approving this escalation will ensure that the physician is notified as required by policy POL-LAB-001.",
+      "payload": {
+        "lab_id": "LAB_02013472",
+        "patient_id": "P_01280",
+        "test_name": "Glucose",
+        "context": {
+          "test": "Glucose"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:15:06",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "3afeaa472bc44cb39b39af74aabb6873",
+      "kind": "purchase_order",
+      "kind_label": "Purchase order",
+      "summary": "Purchase order: 14 units of Cyclophosphamide (750 mg/m2 IV) for Northside Medical Center",
+      "reason": "We need to order 14 units of Cyclophosphamide for Northside Medical Center because we currently have only 1 unit on hand, which is below the reorder level of 7, and we are projected to have a shortfall of 6 units based on the forecasted demand. Approving this purchase will ensure we have adequate supply to meet patient needs.",
+      "payload": {
+        "inventory_id": "INV_000210",
+        "quantity": 14,
+        "context": {
+          "site": "Northside Medical Center",
+          "medication": "Cyclophosphamide (750 mg/m2 IV)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:15:03",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "ecc3f80a8ebe4835b61b53a523434f78",
+      "kind": "follow_up",
+      "kind_label": "Patient follow-up",
+      "summary": "Follow-up for P_01642 within 7 days to start treatment (36 days since diagnosis)",
+      "reason": "Following up with patient P_01642 within 7 days is crucial as it has been 36 days since their diagnosis of stage IV pancreatic cancer, exceeding the guideline of starting treatment within 30 days. Approving this action will help initiate timely treatment and potentially improve the patient's outcomes.",
+      "payload": {
+        "patient_id": "P_01642",
+        "due_in_days": 7,
+        "context": {
+          "risk_band": "high (40-60%)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:15:00",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "8bb31b64827142de803ec6613dd01db6",
+      "kind": "lab_escalation",
+      "kind_label": "Critical lab escalation",
+      "summary": "Escalate critical Potassium for P_01356",
+      "reason": "The potassium level for patient P_01356 is 6.81 mmol/L, which is significantly above the reference range of 3.5 - 5.1 mmol/L. Approving the escalation will ensure that the physician is notified as required by policy POL-LAB-001.",
+      "payload": {
+        "lab_id": "LAB_02013489",
+        "patient_id": "P_01356",
+        "test_name": "Potassium",
+        "context": {
+          "test": "Potassium"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:57",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "9239ccdcd9324152a08ef1186a163e46",
+      "kind": "purchase_order",
+      "kind_label": "Purchase order",
+      "summary": "Purchase order: 22 units of Ondansetron 8 MG Oral Tablet for Pacific Cancer Clinic",
+      "reason": "We need to place a purchase order for 22 units of Ondansetron 8 MG Oral Tablet for the Pacific Cancer Clinic because we currently have only 2 units on hand, which is below the reorder level of 10, and we are projected to have a shortfall of 12 units based on the forecasted demand. Approving this order will ensure we maintain adequate supply for patient needs.",
+      "payload": {
+        "inventory_id": "INV_000240",
+        "quantity": 22,
+        "context": {
+          "site": "Pacific Cancer Clinic",
+          "medication": "Ondansetron 8 MG Oral Tablet"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:54",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "106cd9dbb60641cebe10a3fdae853217",
+      "kind": "follow_up",
+      "kind_label": "Patient follow-up",
+      "summary": "Follow-up for P_01589 within 7 days to start treatment (36 days since diagnosis)",
+      "reason": "Following up with patient P_01589 within 7 days is crucial as it has been 36 days since their diagnosis of stage IV pancreatic cancer, exceeding the guideline of starting treatment within 30 days. Approving this action will ensure timely intervention, which is vital given the patient's high predicted mortality rate.",
+      "payload": {
+        "patient_id": "P_01589",
+        "due_in_days": 7,
+        "context": {
+          "risk_band": "high (40-60%)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:52",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "b4c372b7014249b9964eb1d07793f768",
+      "kind": "lab_escalation",
+      "kind_label": "Critical lab escalation",
+      "summary": "Escalate critical Sodium for P_01356",
+      "reason": "The Sodium level for patient P_01356 is critically low at 82.57 mmol/L, which is outside the reference range of 135.0 - 145.0. According to policy POL-LAB-001, critical values require verbal physician notification. Approving this action will ensure timely communication and intervention for the patient\u2019s safety.",
+      "payload": {
+        "lab_id": "LAB_02013490",
+        "patient_id": "P_01356",
+        "test_name": "Sodium",
+        "context": {
+          "test": "Sodium"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:48",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "a5b6960797d74bc2bee4ef892f3ff5d4",
+      "kind": "purchase_order",
+      "kind_label": "Purchase order",
+      "summary": "Purchase order: 30 units of Docetaxel (75 mg/m2 IV) for Capital Medical Oncology",
+      "reason": "We currently have only 1 unit of Docetaxel on hand, which is below the reorder level of 12, and the forecast indicates a demand of 19 units over the next 30 days, leading to a projected shortfall of 18 units. Approving the purchase order for 30 units will ensure we meet patient needs and avoid any treatment delays.",
+      "payload": {
+        "inventory_id": "INV_000017",
+        "quantity": 30,
+        "context": {
+          "site": "Capital Medical Oncology",
+          "medication": "Docetaxel (75 mg/m2 IV)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:46",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "fc738efcd37143458228697b4438d588",
+      "kind": "follow_up",
+      "kind_label": "Patient follow-up",
+      "summary": "Follow-up for P_01513 within 7 days to start treatment (36 days since diagnosis)",
+      "reason": "Following up with patient P_01513 within 7 days is crucial as it has been 36 days since their diagnosis of stage IV pancreatic cancer, exceeding the guideline of starting treatment within 30 days. Approving this action will help ensure timely intervention, which is essential given the patient's high predicted mortality rate.",
+      "payload": {
+        "patient_id": "P_01513",
+        "due_in_days": 7,
+        "context": {
+          "risk_band": "high (40-60%)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:42",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "545878802e8446ec8d570b61b9079f7f",
+      "kind": "lab_escalation",
+      "kind_label": "Critical lab escalation",
+      "summary": "Escalate critical Hematocrit for P_02114",
+      "reason": "The Hematocrit value for patient P_02114 is 66.02%, which is significantly above the reference range of 36.0 - 50.0%. According to policy POL-LAB-001, critical values require verbal physician notification. Approving this action will ensure timely communication of this critical result to the physician.",
+      "payload": {
+        "lab_id": "LAB_02013510",
+        "patient_id": "P_02114",
+        "test_name": "Hematocrit",
+        "context": {
+          "test": "Hematocrit"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:39",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "eafc0cc7980741c8b9ce13432bfb3d29",
+      "kind": "purchase_order",
+      "kind_label": "Purchase order",
+      "summary": "Purchase order: 4 units of Cyclophosphamide (250 mg/m2 IV) for Lakeview Cancer Center",
+      "reason": "We need to place a purchase order for 4 units of Cyclophosphamide at Lakeview Cancer Center because we currently have only 2 units on hand, which is below the reorder level of 4. Approving this order will ensure we have adequate supply to meet potential patient needs.",
+      "payload": {
+        "inventory_id": "INV_000142",
+        "quantity": 4,
+        "context": {
+          "site": "Lakeview Cancer Center",
+          "medication": "Cyclophosphamide (250 mg/m2 IV)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:36",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "efbfee8b4c9f4cef84188efe82a0e1dd",
+      "kind": "follow_up",
+      "kind_label": "Patient follow-up",
+      "summary": "Follow-up for P_00205 within 7 days to start treatment (36 days since diagnosis)",
+      "reason": "Following up with patient P_00205 within 7 days is crucial as it has been 36 days since their diagnosis of stage IV pancreatic cancer, exceeding the guideline of starting treatment within 30 days. Approving this action will ensure timely intervention, which is essential given the patient's high predicted mortality rate.",
+      "payload": {
+        "patient_id": "P_00205",
+        "due_in_days": 7,
+        "context": {
+          "risk_band": "high (40-60%)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:33",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "4f176ea600ba4ccf83e0f44d7b872f6a",
+      "kind": "lab_escalation",
+      "kind_label": "Critical lab escalation",
+      "summary": "Escalate critical Hemoglobin for P_03224",
+      "reason": "The Hemoglobin level for patient P_03224 is 5.59 g/dL, which is significantly below the reference range of 12.0 - 17.5 g/dL. Approving this escalation will ensure that the physician is notified as required by policy POL-LAB-001 for critical values.",
+      "payload": {
+        "lab_id": "LAB_02013530",
+        "patient_id": "P_03224",
+        "test_name": "Hemoglobin",
+        "context": {
+          "test": "Hemoglobin"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:29",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "083d8039b31e4da1bf47f8dedb5821a3",
+      "kind": "purchase_order",
+      "kind_label": "Purchase order",
+      "summary": "Purchase order: 6 units of Nivolumab (1 mg/kg IV q3w) for Riverside Cancer Hospital",
+      "reason": "We need to place a purchase order for 6 units of Nivolumab for Riverside Cancer Hospital because we currently have none on hand, and our forecast indicates a projected shortfall of 3 units. Approving this order will ensure we have adequate supply to meet patient needs.",
+      "payload": {
+        "inventory_id": "INV_000302",
+        "quantity": 6,
+        "context": {
+          "site": "Riverside Cancer Hospital",
+          "medication": "Nivolumab (1 mg/kg IV q3w)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:26",
+      "decided_by": null,
+      "decided_at": null,
+      "decision_note": null,
+      "result": null,
+      "can_decide": true
+    },
+    {
+      "action_id": "58cf2f5bac3a419f9555dfb6ae0bd3b3",
+      "kind": "follow_up",
+      "kind_label": "Patient follow-up",
+      "summary": "Follow-up for P_04662 within 7 days to start treatment (63 days since diagnosis)",
+      "reason": "Following up for patient P_04662 within 7 days is crucial as it has been 63 days since their lung cancer diagnosis, exceeding the guideline of starting treatment within 30 days. Approving this action will help initiate timely treatment and potentially improve the patient's prognosis.",
+      "payload": {
+        "patient_id": "P_04662",
+        "due_in_days": 7,
+        "context": {
+          "risk_band": "high (40-60%)"
+        }
+      },
+      "agent": "sweep",
+      "session_id": "sweep:1fa371fc1028",
+      "requested_by": "nexa-sweep@medinexus.org",
+      "status": "pending",
+      "created_at": "2026-10-16T11:14:22",
       "decided_by": null,
       "decided_at": null,
       "decision_note": null,

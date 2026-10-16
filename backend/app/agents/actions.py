@@ -2,7 +2,7 @@
 Approval inbox: actions proposed by Nexa agents, executed only after a person approves.
 
 Who may approve is decided by page access (purchase orders need Pharmacy, follow-ups need the
-Clinical Workstation). Every proposal, approval, rejection and execution is written to the audit log.
+Oncology Workstation). Every proposal, approval, rejection and execution is written to the audit log.
 """
 
 import json

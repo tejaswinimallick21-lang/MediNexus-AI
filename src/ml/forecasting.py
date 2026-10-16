@@ -69,6 +69,23 @@ def admissions_daily_series() -> Tuple[pd.DataFrame, pd.Timestamp]:
     return _complete_daily(df, end), end
 
 
+INFUSION_TYPES = ("Chemotherapy", "Immunotherapy", "Targeted therapy")
+
+
+def treatment_daily_series() -> Tuple[pd.DataFrame, pd.Timestamp]:
+    """Daily treatment sessions across the network: infusion chairs (chemo / immuno / targeted) and radiation."""
+    end = pd.Timestamp(query_df_strict("SELECT max(event_date) AS d FROM gold_treatment_events").iloc[0]["d"])
+    infusion = ", ".join(f"'{t}'" for t in INFUSION_TYPES)
+    df = query_df_strict(
+        f"SELECT CAST(event_date AS DATE) AS day, CASE WHEN event_type IN ({infusion}) THEN 'Infusion' ELSE 'Radiation' END AS grp, "
+        "COUNT(*) AS n FROM gold_treatment_events "
+        f"WHERE event_date >= ? AND (event_type IN ({infusion}) OR event_type = 'Radiation') GROUP BY 1, 2",
+        [str((end - pd.Timedelta(days=HISTORY_DAYS)).date())],
+    ).rename(columns={"grp": "group"})
+    df["day"] = pd.to_datetime(df["day"])
+    return _complete_daily(df, end), end
+
+
 def daily_supervised(series: pd.DataFrame) -> pd.DataFrame:
     """One row per (group, day t): trailing-window features at t and the next-7-day average target."""
     out = []

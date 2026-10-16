@@ -1,0 +1,107 @@
+[
+  {
+    "event_date": "2019-07-18",
+    "event_type": "Chemotherapy",
+    "detail": "Docetaxel + Prednisone",
+    "cycle": 7,
+    "hospital_name": "Mountain View Cancer Care"
+  },
+  {
+    "event_date": "2019-06-27",
+    "event_type": "Chemotherapy",
+    "detail": "Docetaxel + Prednisone",
+    "cycle": 6,
+    "hospital_name": "St. Jude Cancer Institute"
+  },
+  {
+    "event_date": "2019-06-06",
+    "event_type": "Chemotherapy",
+    "detail": "Docetaxel + Prednisone",
+    "cycle": 5,
+    "hospital_name": "St. Jude Cancer Institute"
+  },
+  {
+    "event_date": "2019-05-16",
+    "event_type": "Chemotherapy",
+    "detail": "Docetaxel + Prednisone",
+    "cycle": 4,
+    "hospital_name": "Pacific Cancer Clinic"
+  },
+  {
+    "event_date": "2019-05-14",
+    "event_type": "Radiation",
+    "detail": "External beam radiation",
+    "cycle": null,
+    "hospital_name": "Northside Medical Center"
+  },
+  {
+    "event_date": "2019-05-04",
+    "event_type": "Radiation",
+    "detail": "External beam radiation",
+    "cycle": null,
+    "hospital_name": "City General Oncology"
+  },
+  {
+    "event_date": "2019-04-25",
+    "event_type": "Chemotherapy",
+    "detail": "Docetaxel + Prednisone",
+    "cycle": 3,
+    "hospital_name": "Mountain View Cancer Care"
+  },
+  {
+    "event_date": "2019-04-24",
+    "event_type": "Radiation",
+    "detail": "External beam radiation",
+    "cycle": null,
+    "hospital_name": "City General Oncology"
+  },
+  {
+    "event_date": "2019-04-14",
+    "event_type": "Radiation",
+    "detail": "External beam radiation",
+    "cycle": null,
+    "hospital_name": "St. Jude Cancer Institute"
+  },
+  {
+    "event_date": "2019-04-04",
+    "event_type": "Chemotherapy",
+    "detail": "Docetaxel + Prednisone",
+    "cycle": 2,
+    "hospital_name": "Capital Medical Oncology"
+  },
+  {
+    "event_date": "2019-04-04",
+    "event_type": "Radiation",
+    "detail": "External beam radiation",
+    "cycle": null,
+    "hospital_name": "Bayshore Oncology Associates"
+  },
+  {
+    "event_date": "2019-03-25",
+    "event_type": "Radiation",
+    "detail": "External beam radiation",
+    "cycle": null,
+    "hospital_name": "Bayshore Oncology Associates"
+  },
+  {
+    "event_date": "2019-03-15",
+    "event_type": "Radiation",
+    "detail": "External beam radiation",
+    "cycle": null,
+    "hospital_name": "City General Oncology"
+  },
+  {
+    "event_date": "2019-03-14",
+    "event_type": "Chemotherapy",
+    "detail": "Docetaxel + Prednisone",
+    "cycle": 1,
+    "hospital_name": "Capital Medical Oncology"
+  },
+  {
+    "event_date": "2019-02-20",
+    "event_type": "Surgery",
+    "detail": "Prostatectomy",
+    "cycle": null,
+    "hospital_name": "Pacific Cancer Clinic"
+  }
+]

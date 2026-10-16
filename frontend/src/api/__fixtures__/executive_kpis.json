@@ -1,11 +1,11 @@
 {
-  "total_admissions": 6771,
-  "patients_admitted": 2418,
-  "unplanned_readmission_rate_pct": 1.37,
-  "average_los_days": 1.7,
-  "occupancy_rate_pct": 43.2,
-  "total_revenue": 57473615.37,
-  "collection_rate_pct": 38.6,
-  "hospitals": 91,
-  "data_through": "2026-10-15"
+  "patients": 4956,
+  "living_patients": 3762,
+  "new_diagnoses_12m": 603,
+  "five_year_survival_pct": 72.8,
+  "median_days_to_treatment": 42.0,
+  "treatment_sessions_30d": 289,
+  "cost_of_care": 508738736.78,
+  "hospitals": 12,
+  "data_through": "2026-10-16"
 }
